@@ -1,0 +1,17 @@
+[
+  {"name": "五粮液", "ticker": "000858", "pe": 8.25, "ps": 3.07, "pb": 2.01,
+   "ev_ebitda": 5.6, "revenue_growth": 0.05, "ebitda_margin": 0.42,
+   "note": "浓香龙头，同为高端白酒双寡头"},
+  {"name": "泸州老窖", "ticker": "000568", "pe": 9.69, "ps": 4.09, "pb": 2.11,
+   "ev_ebitda": 6.2, "revenue_growth": 0.08, "ebitda_margin": 0.45,
+   "note": "国窖 1573 与茅台同处千元价格带"},
+  {"name": "山西汾酒", "ticker": "600809", "pe": 11.48, "ps": 3.65, "pb": 3.52,
+   "ev_ebitda": 7.1, "revenue_growth": 0.12, "ebitda_margin": 0.38,
+   "note": "清香龙头，次高端到高端通吃"},
+  {"name": "洋河股份", "ticker": "002304", "pe": 8.42, "ps": 1.94, "pb": 1.09,
+   "ev_ebitda": 5.1, "revenue_growth": -0.05, "ebitda_margin": 0.30,
+   "note": "苏酒龙头，体量接近千亿"},
+  {"name": "古井贡酒", "ticker": "000596", "pe": 13.45, "ps": 2.60, "pb": 1.88,
+   "ev_ebitda": 8.3, "revenue_growth": 0.10, "ebitda_margin": 0.31,
+   "note": "徽酒龙头，区域强势品牌"}
+]

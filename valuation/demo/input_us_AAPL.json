@@ -1,0 +1,66 @@
+{
+  "_说明": "美股演示输入。market 设为 US 会自动套用美股口径（rf 4.28%、ERP 4.28%、永续 g 上限 3%）。",
+  "company": {
+    "name": "Apple Inc.",
+    "ticker": "AAPL",
+    "market": "US",
+    "currency": "USD",
+    "industry": "Consumer Electronics",
+    "sector": "Technology",
+    "report_period": "2025-09-30",
+    "price_date": "2026-10-10"
+  },
+  "financials": {
+    "years": [2021, 2022, 2023, 2024, 2025],
+    "revenue": [365817000000, 394328000000, 383285000000, 391035000000, 408000000000],
+    "cogs": [212981000000, 223546000000, 214137000000, 210352000000, 220000000000],
+    "ebit": [108949000000, 119437000000, 114301000000, 123216000000, 129000000000],
+    "pretax_income": [109207000000, 119103000000, 113736000000, 123485000000, 129500000000],
+    "tax_provision": [14527000000, 19300000000, 16741000000, 29749000000, 31000000000],
+    "net_income": [94680000000, 99803000000, 96995000000, 93736000000, 98500000000],
+    "interest_expense": [2645000000, 2931000000, 3933000000, 3200000000, 3100000000],
+    "da": [11284000000, 11104000000, 11519000000, 11445000000, 11800000000],
+    "capex": [11085000000, 10708000000, 10959000000, 9447000000, 10100000000],
+    "delta_nwc": [-4731000000, 1207000000, -6071000000, 4653000000, 1000000000],
+    "total_debt": 96714000000,
+    "cash": 65171000000,
+    "minority_interest": 0,
+    "preferred_stock": 0,
+    "total_assets": 364980000000,
+    "total_equity": 56950000000,
+    "price": 245.0,
+    "shares_outstanding": 14900000000,
+    "market_cap": 3650500000000,
+    "beta": 1.24
+  },
+  "peers": [
+    {"name": "Microsoft", "ticker": "MSFT", "pe_forward": 31.2, "pb": 11.4,
+     "ev_ebitda": 22.1, "revenue_growth": 0.15, "ebitda_margin": 0.53,
+     "note": "同为万亿美元级科技平台"},
+    {"name": "Alphabet", "ticker": "GOOGL", "pe_forward": 20.4, "pb": 6.8,
+     "ev_ebitda": 15.9, "revenue_growth": 0.13, "ebitda_margin": 0.38,
+     "note": "硬件+服务+广告的多元平台"},
+    {"name": "Samsung Electronics", "ticker": "005930.KS", "pe_forward": 12.1, "pb": 1.4,
+     "ev_ebitda": 6.2, "revenue_growth": 0.08, "ebitda_margin": 0.22,
+     "note": "全球消费电子与半导体龙头，估值锚"},
+    {"name": "Meta Platforms", "ticker": "META", "pe_forward": 22.8, "pb": 8.1,
+     "ev_ebitda": 14.6, "revenue_growth": 0.19, "ebitda_margin": 0.47,
+     "note": "高毛利平台型公司，对照盈利能力"},
+    {"name": "Sony Group", "ticker": "SONY", "pe_forward": 16.9, "pb": 2.6,
+     "ev_ebitda": 9.4, "revenue_growth": 0.06, "ebitda_margin": 0.16,
+     "note": "硬件+内容+金融的集团折价参照"}
+  ],
+  "assumptions": {
+    "forecast_years": 5,
+    "terminal_growth": 0.025,
+    "sbc_is_cash": true
+  },
+  "relative_multiples": ["pe_forward", "pb", "ev_ebitda"],
+  "sources": [
+    {"name": "yfinance（Yahoo Finance）· 三大报表与行情", "as_of": "2026-10-10",
+     "official": false, "purpose": "财务报表与市场数据"},
+    {"name": "Damodaran 美国隐含 ERP", "as_of": "2026-08-01",
+     "official": true, "purpose": "股权风险溢价"}
+  ],
+  "meta": {"note": "演示数据为近似量级，正式使用请用 cli.py value AAPL 实时取数"}
+}

@@ -1,0 +1,22 @@
+# 凭证 —— 绝不提交
+.env
+*.env
+!.env.example
+
+# 运行产物（重跑自动生成）
+output/
+*.pyc
+__pycache__/
+
+# iFinD / Choice 厂商接口包（有版权，且体积大）
+_extract/
+iFinDPy.py
+iFinDSubPy.py
+EmQuantAPI.py
+libs/
+
+# 临时文件
+~$*
+*.tmp
+.DS_Store
+Thumbs.db

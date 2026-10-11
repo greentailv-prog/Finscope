@@ -1,0 +1,45 @@
+{
+  "_说明": [
+    "iFinD 的指标 ID 映射表。",
+    "这里列的是**候选值**，未经实测——iFinD 的官方指标手册需从量化官网下载，本包不内置。",
+    "请先运行 tools/probe_ifind.py 逐个验证，把可用的填进 verified_map，并把 verified 置为 true。",
+    "验证之前，适配器不会启用 iFinD，会自动回退到 akshare，不会用错误的字段糊弄。"
+  ],
+  "verified": false,
+
+  "_候选指标": {
+    "revenue": ["ths_operating_total_revenue_stock", "ths_revenue_stock", "ths_operating_revenue_stock"],
+    "cogs": ["ths_operating_cost_stock", "ths_cost_of_sales_stock"],
+    "ebit": ["ths_operating_profit_stock"],
+    "pretax_income": ["ths_total_profit_stock"],
+    "tax_provision": ["ths_income_tax_expense_stock"],
+    "net_income": ["ths_np_stock", "ths_net_profit_stock"],
+    "net_income_parent": ["ths_np_atoopc_stock"],
+    "interest_expense": ["ths_interest_expense_stock", "ths_financial_expense_stock"],
+    "da": ["ths_depreciation_amortization_stock", "ths_fa_co_stock"],
+    "capex": ["ths_cash_paid_fixed_assets_stock", "ths_capex_stock"],
+    "total_assets": ["ths_total_assets_stock"],
+    "total_liab": ["ths_total_liab_stock"],
+    "total_equity": ["ths_total_equity_stock", "ths_total_shareholder_equity_stock"],
+    "cash": ["ths_cash_stock", "ths_monetary_fund_stock"],
+    "short_debt": ["ths_short_loan_stock"],
+    "long_debt": ["ths_long_loan_stock"],
+    "shares": ["ths_total_shares_stock"],
+    "pe": ["ths_pe_stock"],
+    "pb": ["ths_pb_stock"],
+    "ps": ["ths_ps_stock"],
+    "price": ["ths_close_price_stock", "ths_latest_price_stock"],
+    "ocf": ["ths_cash_flow_net_operating_stock", "ths_ocf_stock"]
+  },
+
+  "_已验证指标": {},
+
+  "api": {
+    "基础数据": "THS_BasicData(thsCode, indicatorName, paramOption)",
+    "日期序列": "THS_DateSerial(thscode, jsonIndicator, jsonparam, globalparam, begintime, endtime)",
+    "板块成分": "THS_DataPool('block', '日期;板块ID', 'date:Y,thscode:Y,security_name:Y')",
+    "宏观EDB": "THS_EDB(indicators, param, begintime, endtime)",
+    "自然语言": "THS_iwencai(query, domain)",
+    "转DataFrame": "THS_Trans2DataFrame(data)"
+  }
+}
