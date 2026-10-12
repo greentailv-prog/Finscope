@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FinRadar · B 模块演示看板 · 财务诊断与风险雷达</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#ffffff; --line:#e4e7ec; --line2:#eef0f3;
+  --tx:#16191d; --tx2:#5b6472; --tx3:#8b94a3;
+  --blue:#1f4fd8; --blue-l:#eef3ff;
+  --red:#d92d20; --red-l:#fef3f2;
+  --org:#e07b00; --org-l:#fff8ec;
+  --grn:#0e9f6e; --grn-l:#ecfdf3;
+  --gry:#98a2b3; --gry-l:#f4f6f8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+  font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 72px}
+a{color:var(--blue);text-decoration:none}
+
+/* ---------- header ---------- */
+.hero{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin-bottom:18px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.tag{display:inline-block;font-size:11px;letter-spacing:.08em;color:var(--blue);background:var(--blue-l);
+  border:1px solid #d7e2ff;border-radius:5px;padding:3px 9px;font-weight:600;margin-bottom:10px}
+h1{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.sub{color:var(--tx2);font-size:13px;margin-top:5px}
+.meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--line2)}
+.meta div{font-size:12px;color:var(--tx3)}
+.meta b{display:block;font-size:15px;color:var(--tx);font-weight:600;margin-top:2px}
+.gauge{text-align:center;min-width:132px}
+.gauge .num{font-size:40px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.gauge .lv{font-size:13px;font-weight:700;margin-top:8px}
+.gauge .hint{font-size:11px;color:var(--tx3);margin-top:4px;max-width:190px;line-height:1.5}
+
+/* ---------- nav ---------- */
+.nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:11px;
+  padding:5px;margin-bottom:18px;position:sticky;top:12px;z-index:20}
+.nav button{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:8px;font-size:13px;
+  color:var(--tx2);cursor:pointer;font-weight:600;font-family:inherit;transition:.15s}
+.nav button:hover{background:var(--gry-l)}
+.nav button.on{background:var(--blue);color:#fff}
+
+/* ---------- generic ---------- */
+section{display:none}
+section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px;margin-bottom:16px}
+.card h2{font-size:15px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.card h2 .dot{width:6px;height:6px;border-radius:50%;background:var(--blue)}
+.card .desc{font-size:12px;color:var(--tx3);margin-bottom:16px}
+.card .warn{background:var(--blue-l);border:1px solid #d5e2ff;border-radius:8px;
+  padding:10px 12px;font-size:12px;color:var(--tx2);margin-bottom:16px;line-height:1.65}
+.mrow.na{opacity:.55}
+.na-tag{font-size:10px;font-weight:700;color:var(--tx3);background:var(--gry-l);
+  border:1px solid var(--line);border-radius:4px;padding:1px 6px}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g5{grid-template-columns:repeat(5,1fr)}
+@media(max-width:960px){.g4,.g5,.g2{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- metric card ---------- */
+.mc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.mc .cat{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--blue);margin-bottom:12px}
+.mc .cat.growth{color:#7a5af8}.mc .cat.profitability{color:#0e9f6e}
+.mc .cat.solvency{color:#e07b00}.mc .cat.efficiency{color:#1f4fd8}.mc .cat.cashflow_quality{color:#0ba5a5}
+.mrow{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;
+  border-top:1px dashed var(--line2);width:100%;background:none;border-left:0;border-right:0;border-bottom:0;
+  font-family:inherit;cursor:pointer;text-align:left;border-radius:6px;transition:background .12s}
+.mrow:hover{background:var(--blue-l)}
+.mrow:first-of-type{border-top:0}
+.mrow:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.mrow .k{font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:5px}
+.mrow .k::before{content:'▸';font-size:9px;color:var(--tx3);transition:transform .15s}
+.mrow[aria-expanded="true"]{background:var(--blue-l)}
+.mrow[aria-expanded="true"] .k{color:var(--blue);font-weight:700}
+.mrow[aria-expanded="true"] .k::before{transform:rotate(90deg);color:var(--blue)}
+.mrow .v{font-variant-numeric:tabular-nums;font-weight:700;font-size:14px}
+.mrow .d{font-size:11px;font-variant-numeric:tabular-nums;margin-left:6px;font-weight:600}
+.up{color:var(--red)}.dn{color:var(--grn)}.flat{color:var(--tx3)}
+
+/* ---------- 指标详情（点击展开） ---------- */
+.mdet{background:var(--blue-l);border:1px solid #d5e2ff;border-radius:9px;
+  padding:11px 13px;margin:6px 0 8px;animation:fadeIn .16s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+.mf{margin-bottom:9px}
+.mf:last-of-type{margin-bottom:0}
+.mdet-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  padding-bottom:8px;margin-bottom:10px;border-bottom:1px solid #d5e2ff}
+.mdet-h b{font-size:13px;color:var(--tx)}
+.mdet-c{font-size:10.5px;color:var(--tx3);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.mf .ml{display:block;font-size:10px;font-weight:700;letter-spacing:.05em;
+  color:var(--blue);margin-bottom:4px}
+.mf code{display:block;background:#fff;border:1px solid #e0e8ff;border-radius:6px;
+  padding:6px 9px;font-size:11.5px;color:var(--tx2);line-height:1.55;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-all}
+.mt{width:100%;border-collapse:collapse;font-size:11.5px}
+.mt th{text-align:left;font-weight:700;color:var(--tx3);padding:3px 8px 4px 0;
+  border-bottom:1px solid #dbe4fb;font-size:10px}
+.mt td{padding:3px 8px 3px 0;color:var(--tx2);border-bottom:1px solid #e8eefc;vertical-align:top}
+.mt tr:last-child td{border-bottom:0}
+.mt .mv{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--tx);white-space:nowrap}
+.mt .ms{color:var(--tx3);font-size:10.5px;white-space:nowrap}
+.mnote{font-size:10.5px;color:var(--tx3);background:#fff;border:1px dashed #d5e2ff;
+  border-radius:6px;padding:5px 8px;margin-top:8px;line-height:1.55}
+
+/* ---------- risk summary ---------- */
+.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:960px){.sum{grid-template-columns:repeat(2,1fr)}}
+.sc{border:1px solid var(--line);border-radius:11px;padding:14px 16px;background:var(--card)}
+.sc .l{font-size:12px;color:var(--tx3)}
+.sc .n{font-size:26px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}
+.sc.h .n{color:var(--red)}.sc.m .n{color:var(--org)}.sc.p .n{color:var(--grn)}.sc.x .n{color:var(--gry)}
+
+.bar{display:flex;height:26px;border-radius:7px;overflow:hidden;margin:10px 0 8px;background:var(--line2)}
+.bar span{display:block;height:100%}
+.legend{display:flex;gap:16px;font-size:11px;color:var(--tx2);flex-wrap:wrap}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
+th{text-align:left;padding:8px 10px;background:var(--gry-l);color:var(--tx2);font-weight:600;
+   border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--line2);font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+
+/* ---------- risk item ---------- */
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.filters button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 13px;
+  font-size:12px;color:var(--tx2);cursor:pointer;font-weight:600;font-family:inherit}
+.filters button.on{background:var(--tx);border-color:var(--tx);color:#fff}
+.ri{border:1px solid var(--line);border-radius:11px;background:var(--card);margin-bottom:9px;overflow:hidden}
+.ri.pass{opacity:.62}
+.ri-head{display:flex;align-items:center;gap:11px;padding:13px 15px;cursor:pointer;user-select:none}
+.ri-head:hover{background:#fafbfc}
+.badge{flex:0 0 auto;font-size:11px;font-weight:700;border-radius:5px;padding:3px 8px;white-space:nowrap}
+.b-high{background:var(--red-l);color:var(--red);border:1px solid #fda29b}
+.b-medium{background:var(--org-l);color:var(--org);border:1px solid #f7d9a0}
+.b-low{background:var(--grn-l);color:var(--grn);border:1px solid #a6f4c5}
+.b-pass{background:var(--gry-l);color:var(--gry);border:1px solid var(--line)}
+.b-ne{background:#f4f6f8;color:var(--tx2);border:1px solid var(--line);border-style:dashed}
+.ri-title{flex:1;min-width:0}
+.ri-title .t{font-size:13.5px;font-weight:600}
+.ri-title .c{font-size:11px;color:var(--tx3);margin-top:1px}
+.ri-id{font-size:11px;color:var(--tx3);font-weight:700;flex:0 0 auto}
+.arrow{flex:0 0 auto;color:var(--tx3);font-size:11px;transition:transform .18s}
+.ri.open .arrow{transform:rotate(90deg)}
+.ri-body{display:none;padding:0 15px 16px;border-top:1px solid var(--line2)}
+.ri.open .ri-body{display:block}
+.expl{background:#fafbfc;border-left:3px solid var(--blue);border-radius:0 7px 7px 0;
+  padding:11px 13px;margin:14px 0;font-size:13px;line-height:1.75}
+.step{margin:14px 0}
+.step .sh{font-size:12px;font-weight:700;color:var(--tx);margin-bottom:7px;display:flex;align-items:center;gap:7px}
+.step .sn{width:17px;height:17px;border-radius:4px;background:var(--blue);color:#fff;font-size:10px;
+  display:inline-flex;align-items:center;justify-content:center;font-weight:700}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{background:var(--gry-l);border:1px solid var(--line);border-radius:6px;padding:5px 9px;font-size:11.5px}
+.chip b{font-weight:700;font-variant-numeric:tabular-nums}
+.chip .pg{color:var(--blue);font-weight:600;margin-left:5px}
+.fml{background:#0f1729;color:#c8d3e6;border-radius:8px;padding:11px 13px;font-size:12px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;overflow-x:auto;line-height:1.7}
+.fml .cm{color:#6b7a99}
+ul.acts{margin:0;padding-left:17px}
+ul.acts li{font-size:12.5px;color:var(--tx2);margin-bottom:5px;line-height:1.65}
+.tagline{font-size:11px;color:var(--tx3);margin-top:8px}
+
+/* ---------- attribution ---------- */
+.attr{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:960px){.attr{grid-template-columns:1fr}}
+.abox{border:1px solid var(--line);border-radius:11px;padding:15px}
+.abox h3{font-size:13px;font-weight:700;margin-bottom:3px}
+.abox p.h{font-size:11.5px;color:var(--tx3);margin-bottom:12px;line-height:1.6}
+.wrow{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px}
+.wrow .wl{flex:0 0 92px;color:var(--tx2)}
+.wrow .wb{flex:1;height:19px;background:var(--line2);border-radius:4px;position:relative;overflow:hidden}
+.wrow .wf{position:absolute;top:0;height:100%;border-radius:4px}
+.wrow .wv{flex:0 0 78px;text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.cb{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line2);font-size:12.5px}
+.cb:last-child{border-bottom:0}
+.cb .ck{color:var(--tx2)}
+.cb .cv{font-variant-numeric:tabular-nums;font-weight:700}
+.cb.sum-row{border-top:1px solid var(--line);border-bottom:0;margin-top:4px;padding-top:9px;font-weight:700}
+
+/* ---------- 三表勾稽 ---------- */
+.kdet-btn{background:none;border:0;padding:0;font-family:inherit;font-size:11.5px;font-weight:700;
+  color:var(--blue);cursor:pointer;border-radius:5px;transition:background .12s}
+.kdet-btn:hover{background:var(--blue-l)}
+.kdet-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.kdet{background:var(--blue-l);border:1px solid #d5e2ff;border-radius:8px;padding:9px 11px;margin-top:7px}
+.kdet .cb{border-bottom-color:#e8eefc;font-size:11.5px;padding:4px 0}
+.kdet .cb .cv{white-space:nowrap}
+
+/* ---------- queue ---------- */
+.q{border:1px solid var(--line);border-left:3px solid var(--org);border-radius:0 9px 9px 0;
+  padding:12px 14px;margin-bottom:9px;background:var(--card)}
+.q .qt{font-size:13px;font-weight:600}
+.q .qr{font-size:12px;color:var(--tx2);margin-top:4px;line-height:1.65}
+.q .qs{font-size:11.5px;color:var(--tx3);margin-top:5px}
+.empty{padding:26px;text-align:center;color:var(--tx3);font-size:13px;background:var(--gry-l);
+  border-radius:10px;border:1px dashed var(--line)}
+.foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--tx3);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <span class="tag">FinRadar · B 模块</span>
+        <h1 id="co-name">—</h1>
+        <div class="sub" id="co-sub">—</div>
+        <div class="meta" id="co-meta"></div>
+      </div>
+      <div class="gauge">
+        <div class="num" id="g-num">—</div>
+        <div class="lv" id="g-lv">—</div>
+        <div class="hint" id="g-hint">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="on" data-s="s1">指标总览</button>
+    <button data-s="s2">风险雷达</button>
+    <button data-s="s3">业绩归因</button>
+    <button data-s="s5">三表勾稽</button>
+    <button data-s="s4">待核验队列</button>
+  </div>
+
+  <!-- ============ 1. 指标总览 ============ -->
+  <section id="s1" class="on">
+    <div class="card">
+      <h2><span class="dot"></span>五类财务指标<span id="m-prof" style="font-size:12px;font-weight:600;color:var(--tx3);margin-left:10px"></span></h2>
+      <div class="desc">共 <b id="m-count">—</b> 个指标，由 <code>scripts/compute_ratios.py</code> 实算生成。<b>点击任意指标</b>可展开它的计算公式、代入数据与年报出处，逐项复算。</div>
+      <div class="warn" id="m-note" style="display:none"></div>
+      <div class="grid g5" id="m-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ 2. 风险雷达 ============ -->
+  <section id="s2">
+    <div class="card">
+      <h2><span class="dot" style="background:var(--red)"></span>风险概览</h2>
+      <div class="desc">规则库 <code>risk_rules.json</code> 共 <b id="r-total">—</b> 条。未触发的规则同样输出，用于证明「查过且无异常」。</div>
+      <div class="sum" id="r-sum"></div>
+      <div class="bar" id="r-bar"></div>
+      <div class="legend">
+        <span><i style="background:var(--red)"></i>重大</span>
+        <span><i style="background:var(--org)"></i>关注</span>
+        <span><i style="background:var(--grn)"></i>通过</span>
+        <span><i style="background:var(--gry)"></i>不可评估</span>
+      </div>
+      <table id="r-cat"><thead><tr><th>类别</th><th>触发</th><th>重大</th><th>关注</th><th>提示</th></tr></thead><tbody></tbody></table>
+    </div>
+
+    <div class="card">
+      <h2><span class="dot" style="background:var(--org)"></span>风险清单</h2>
+      <div class="desc">点击任意一条展开完整证据链：<b>数据 → 计算 → 出处 → 判断 → 归因 → 建议</b>。这是 E 前端「Risk Radar」页面的数据基础。</div>
+      <div class="filters" id="filters">
+        <button class="on" data-f="all">全部</button>
+        <button data-f="high">重大</button>
+        <button data-f="medium">关注</button>
+        <button data-f="passed">通过</button>
+        <button data-f="not_evaluable">不可评估</button>
+      </div>
+      <div id="r-list"></div>
+    </div>
+  </section>
+
+  <!-- ============ 3. 业绩归因 ============ -->
+  <section id="s3">
+    <div class="card">
+      <h2><span class="dot" style="background:#7a5af8"></span>三段业绩归因</h2>
+      <div class="desc">分工文档要求 B 做「指标变动的原因分析、业绩归因」。三段分别回答：ROE 变动由什么驱动、利润变动由什么驱动、钱去哪了。</div>
+      <div class="attr">
+        <div class="abox">
+          <h3>① 杜邦分解 —— ROE 变动由什么驱动</h3>
+          <p class="h">ROE = 净利率 × 总资产周转率 × 权益乘数（平均口径，三项相乘严格闭合）</p>
+          <div id="a-dupont"></div>
+        </div>
+        <div class="abox">
+          <h3>② 营业利润桥 —— 利润变动由什么驱动</h3>
+          <p class="h">规模效应 + 毛利率效应 + 费用率效应 + 其他 = Δ营业利润（单位：亿元）</p>
+          <div id="a-bridge"></div>
+        </div>
+      </div>
+      <div class="abox" style="margin-top:14px">
+        <h3>③ 净利润 → 经营现金流桥 —— 利润和现金的缺口从哪来</h3>
+        <p class="h">按间接法逐项拆解，最后一项倒轧。单位：亿元</p>
+        <div id="a-cash"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. 待核验队列 ============ -->
+  <section id="s4">
+    <div class="card">
+      <h2><span class="dot" style="background:var(--gry)"></span>待核验队列</h2>
+      <div class="desc">所有「算不出来」的项目都停在这里，等待人工确认后重算下游。<b>绝不因为算不出来就默认安全。</b></div>
+      <div id="q-list"></div>
+    </div>
+  </section>
+
+  <!-- ============ 5. 三表勾稽自检 ============ -->
+  <section id="s5">
+    <div class="card">
+      <h2><span class="dot" style="background:#0d9488"></span>三表勾稽自检</h2>
+      <div class="desc">
+        检验三张报表之间的恒等关系，用来<b>在算指标之前先验证抽取结果是否可信</b>。
+        任一项差异超过对应科目绝对值的 <b>1%</b> 即判为不平，进待核验队列。
+        <b>B 只负责查出不平，不自动修正</b>——修数归 A。
+      </div>
+      <div class="sum" id="k-sum"></div>
+      <div id="k-list"></div>
+    </div>
+  </section>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script id="payload" type="application/json">{"diag":{"schema_version":"finradar.diagnosis/1.0","generated_at":"2026-10-10T20:57:23+08:00","generator":"financial-diagnosis/scripts/compute_ratios.py","company":{"name":"华衍智能装备股份有限公司","ticker":"DEMO.SH","industry":"专用设备制造业","report_period":"2025","report_source":"2025年年度报告"},"period":{"current":"2025","previous":"2024","all":["2023","2024","2025"]},"meta":{"default_unit":"亿元","currency":"CNY","periods":["2023","2024","2025"],"report_period":"2025","wacc":0.085,"days_in_year":365,"industry":"专用设备制造业","industry_gross_margin_benchmark":null,"audit_opinion":"标准无保留意见"},"industry_profile":"general","assumptions":{"wacc":0.085,"days_in_year":365.0,"average_balance":"所有周转率 / 回报率类指标的分母一律使用 (期初 + 期末) / 2","unit_normalized_to":"元"},"derived":{"2023":{"gross_profit":2440000000.0,"ebit":1020000000.0,"effective_tax_rate":0.134078,"ebitda":1805000000.0,"nopat":883240223.463687,"interest_bearing_debt":4460000000.0,"short_term_interest_bearing_debt":1980000000.0,"net_debt":1570000000.0,"invested_capital":10270000000.0,"working_capital":3959999999.999999,"ar_total":4040000000.0,"fcf":-218000000.0,"period_expense":1410000000.0},"2024":{"gross_profit":2880000000.000001,"ebit":1213000000.0,"effective_tax_rate":0.13806,"ebitda":2073000000.0,"nopat":1045533582.089552,"interest_bearing_debt":4970000000.0,"short_term_interest_bearing_debt":2320000000.0,"net_debt":1810000000.0,"invested_capital":11500000000.0,"working_capital":4440000000.0,"ar_total":4630000000.0,"fcf":-396000000.0,"period_expense":1611000000.0},"2025":{"gross_profit":2970000000.0,"ebit":1057000000.0,"effective_tax_rate":0.160804,"ebitda":1997000000.0,"nopat":887030150.753769,"interest_bearing_debt":6920000000.0,"short_term_interest_bearing_debt":3500000000.0,"net_debt":4680000000.0,"invested_capital":13810000000.0,"working_capital":4439999999.999998,"ar_total":6450000000.0,"fcf":-1395000000.0,"period_expense":1956000000.0}},"ratios":{"growth":{"revenue_growth":{"value":0.144128,"unit":"ratio","formula":"营业收入（本期）/ 营业收入（上期）- 1","inputs":{"revenue_t":12860000000.0,"revenue_t_1":11240000000.0},"prev":null,"delta":null,"higher_is_better":true,"status":"ok","inputs_prev":{"revenue_t":11240000000.0,"revenue_t_1":9860000000.0}},"net_income_growth":{"value":-0.277056,"unit":"ratio","formula":"净利润（本期）/ 净利润（上期）- 1","inputs":{"net_income_t":668000000.0,"net_income_t_1":924000000.0},"prev":null,"delta":null,"higher_is_better":true,"status":"ok","inputs_prev":{"net_income_t":924000000.0,"net_income_t_1":775000000.0}},"net_income_parent_growth":{"value":-0.263341,"unit":"ratio","formula":"归母净利润（本期）/ 归母净利润（上期）- 1","inputs":{"ni_parent_t":635000000.0,"ni_parent_t_1":862000000.0},"prev":null,"delta":null,"higher_is_better":true,"status":"ok","inputs_prev":{"ni_parent_t":null,"ni_parent_t_1":null}},"net_income_deducted_growth":{"value":-0.381366,"unit":"ratio","formula":"扣非净利润（本期）/ 扣非净利润（上期）- 1","inputs":{"ni_ded_t":498000000.0,"ni_ded_t_1":805000000.0},"prev":null,"delta":null,"higher_is_better":true,"status":"ok","inputs_prev":{"ni_ded_t":null,"ni_ded_t_1":null}},"cost_of_revenue_growth":{"value":0.183014,"unit":"ratio","formula":"营业成本（本期）/ 营业成本（上期）- 1","inputs":{"cogs_t":9890000000.0,"cogs_t_1":8359999999.999999},"prev":null,"delta":null,"status":"ok","inputs_prev":{"cogs_t":null,"cogs_t_1":null}},"total_assets_growth":{"value":0.172932,"unit":"ratio","formula":"总资产（本期）/ 总资产（上期）- 1","inputs":{"ta_t":21840000000.0,"ta_t_1":18620000000.0},"prev":null,"delta":null,"status":"ok","inputs_prev":{"ta_t":null,"ta_t_1":null}},"equity_parent_growth":{"value":0.05513,"unit":"ratio","formula":"归母净资产（本期）/ 归母净资产（上期）- 1","inputs":{"eq_t":6890000000.000001,"eq_t_1":6530000000.0},"prev":null,"delta":null,"status":"ok","inputs_prev":{"eq_t":null,"eq_t_1":null}},"ocf_growth":{"value":-0.606354,"unit":"ratio","formula":"经营活动现金流量净额（本期）/ 经营活动现金流量净额（上期）- 1","inputs":{"ocf_t":285000000.0,"ocf_t_1":724000000.0},"prev":null,"delta":null,"higher_is_better":true,"status":"ok","inputs_prev":{"ocf_t":724000000.0,"ocf_t_1":642000000.0}},"profit_revenue_scissors":{"value":0.407469,"unit":"ratio","formula":"收入增速 - 归母净利润增速（>0 表示增收不增利）","inputs":{"revenue_growth":0.144128,"net_income_parent_growth":-0.263341},"prev":null,"delta":null,"higher_is_better":false,"status":"ok","inputs_prev":{"revenue_growth":null,"net_income_parent_growth":null}}},"profitability":{"gross_margin":{"value":0.230949,"unit":"ratio","formula":"(营业收入 - 营业成本) / 营业收入","inputs":{"revenue":12860000000.0,"cost_of_revenue":9890000000.0},"prev":0.256228,"delta":-0.025279,"higher_is_better":true,"status":"ok","inputs_prev":{"revenue":11240000000.0,"cost_of_revenue":8359999999.999999}},"net_margin":{"value":0.051944,"unit":"ratio","formula":"净利润 / 营业收入","inputs":{"net_income":668000000.0,"revenue":12860000000.0},"prev":0.082206,"delta":-0.030262,"higher_is_better":true,"status":"ok","inputs_prev":{"net_income":924000000.0,"revenue":11240000000.0}},"net_margin_parent":{"value":0.049378,"unit":"ratio","formula":"归母净利润 / 营业收入","inputs":{"net_income_parent":635000000.0,"revenue":12860000000.0},"prev":0.07669,"delta":-0.027312,"higher_is_better":true,"status":"ok","inputs_prev":{"net_income_parent":862000000.0,"revenue":11240000000.0}},"net_margin_deducted":{"value":0.038725,"unit":"ratio","formula":"扣非净利润 / 营业收入","inputs":{"net_income_deducted":498000000.0,"revenue":12860000000.0},"prev":0.071619,"delta":-0.032894,"higher_is_better":true,"status":"ok","inputs_prev":{"net_income_deducted":805000000.0,"revenue":11240000000.0}},"operating_margin":{"value":0.065474,"unit":"ratio","formula":"营业利润 / 营业收入","inputs":{"operating_profit":842000000.0,"revenue":12860000000.0},"prev":0.09653,"delta":-0.031056,"higher_is_better":true,"status":"ok","inputs_prev":{"operating_profit":1085000000.0,"revenue":11240000000.0}},"ebit_margin":{"value":0.082193,"unit":"ratio","formula":"EBIT / 营业收入，EBIT = 营业利润 + 财务费用","inputs":{"ebit":1057000000.0,"revenue":12860000000.0},"prev":0.107918,"delta":-0.025725,"higher_is_better":true,"status":"ok","inputs_prev":{"ebit":1213000000.0,"revenue":11240000000.0}},"selling_expense_ratio":{"value":0.047589,"unit":"ratio","formula":"销售费用 / 营业收入","inputs":{"selling_expense":612000000.0,"revenue":12860000000.0},"prev":0.044929,"delta":0.002661,"higher_is_better":false,"status":"ok","inputs_prev":{"selling_expense":505000000.0,"revenue":11240000000.0}},"admin_expense_ratio":{"value":0.042224,"unit":"ratio","formula":"管理费用 / 营业收入","inputs":{"admin_expense":543000000.0,"revenue":12860000000.0},"prev":0.040925,"delta":0.001299,"higher_is_better":false,"status":"ok","inputs_prev":{"admin_expense":460000000.0,"revenue":11240000000.0}},"rd_expense_ratio":{"value":0.045568,"unit":"ratio","formula":"研发费用 / 营业收入","inputs":{"rd_expense":586000000.0,"revenue":12860000000.0},"prev":0.046085,"delta":-0.000518,"status":"ok","inputs_prev":{"rd_expense":518000000.0,"revenue":11240000000.0}},"finance_expense_ratio":{"value":0.016719,"unit":"ratio","formula":"财务费用 / 营业收入","inputs":{"finance_expense":215000000.0,"revenue":12860000000.0},"prev":0.011388,"delta":0.005331,"higher_is_better":false,"status":"ok","inputs_prev":{"finance_expense":128000000.0,"revenue":11240000000.0}},"period_expense_ratio":{"value":0.1521,"unit":"ratio","formula":"(销售+管理+研发+财务费用) / 营业收入","inputs":{"period_expense":1956000000.0,"revenue":12860000000.0},"prev":0.143327,"delta":0.008772,"higher_is_better":false,"status":"ok","inputs_prev":{"period_expense":1611000000.0,"revenue":11240000000.0}},"roe":{"value":0.094635,"unit":"ratio","formula":"归母净利润 / ((期初归母净资产 + 期末归母净资产) / 2)","inputs":{"net_income_parent":635000000.0,"avg_equity_parent":6710000000.0},"prev":0.139708,"delta":-0.045073,"higher_is_better":true,"status":"ok","inputs_prev":{"net_income_parent":862000000.0,"avg_equity_parent":6170000000.0}},"roa":{"value":0.03302,"unit":"ratio","formula":"净利润 / 平均总资产（净利润含少数股东损益，与总资产口径匹配）","inputs":{"net_income":668000000.0,"avg_total_assets":20230000000.0},"prev":0.0521,"delta":-0.01908,"higher_is_better":true,"status":"ok","inputs_prev":{"net_income":924000000.0,"avg_total_assets":17735000000.0}},"roic":{"value":0.070093,"unit":"ratio","formula":"NOPAT / 平均投入资本；NOPAT = EBIT x (1 - 有效税率)；投入资本 = 有息负债 + 归母净资产","inputs":{"nopat":887030150.753769,"avg_invested_capital":12655000000.0},"prev":0.096053,"delta":-0.025959,"higher_is_better":true,"status":"ok","inputs_prev":{"nopat":1045533582.089552,"avg_invested_capital":null}},"effective_tax_rate":{"value":0.160804,"unit":"ratio","formula":"所得税费用 / 利润总额","inputs":{"income_tax_expense":128000000.0,"pretax_profit":796000000.0},"prev":0.13806,"delta":0.022744,"status":"ok","inputs_prev":{"income_tax_expense":148000000.0,"pretax_profit":1072000000.0}},"deducted_to_parent":{"value":0.784252,"unit":"ratio","formula":"扣非净利润 / 归母净利润（衡量盈利含金量）","inputs":{"net_income_deducted":498000000.0,"net_income_parent":635000000.0},"prev":0.933875,"delta":-0.149623,"higher_is_better":true,"status":"ok","inputs_prev":{"net_income_deducted":805000000.0,"net_income_parent":862000000.0}},"roic_minus_wacc":{"value":-0.014907,"unit":"ratio","formula":"ROIC - WACC（<0 表示当期未创造经济价值）","inputs":{"roic":0.070093,"wacc":0.085},"prev":0.011053,"delta":-0.025959,"higher_is_better":true,"status":"ok","inputs_prev":{"roic":null,"wacc":0.085}}},"solvency":{"current_ratio":{"value":1.458678,"unit":"ratio","formula":"流动资产 / 流动负债","inputs":{"total_current_assets":14119999999.999998,"total_current_liabilities":9680000000.0},"prev":1.597577,"delta":-0.1389,"higher_is_better":true,"status":"ok","inputs_prev":{"total_current_assets":11870000000.0,"total_current_liabilities":7430000000.0}},"quick_ratio":{"value":1.049587,"unit":"ratio","formula":"(流动资产 - 存货) / 流动负债","inputs":{"total_current_assets":14119999999.999998,"inventory":3960000000.0,"total_current_liabilities":9680000000.0},"prev":1.200538,"delta":-0.150952,"higher_is_better":true,"status":"ok","inputs_prev":{"total_current_assets":11870000000.0,"inventory":2950000000.0,"total_current_liabilities":7430000000.0}},"cash_ratio":{"value":0.231405,"unit":"ratio","formula":"货币资金 / 流动负债","inputs":{"cash_and_equivalents":2240000000.0,"total_current_liabilities":9680000000.0},"prev":0.425303,"delta":-0.193898,"higher_is_better":true,"status":"ok","inputs_prev":{"cash_and_equivalents":3160000000.0,"total_current_liabilities":7430000000.0}},"debt_to_assets":{"value":0.619048,"unit":"ratio","formula":"总负债 / 总资产","inputs":{"total_liabilities":13519999999.999998,"total_assets":21840000000.0},"prev":0.55102,"delta":0.068027,"higher_is_better":false,"status":"ok","inputs_prev":{"total_liabilities":10260000000.0,"total_assets":18620000000.0}},"equity_multiplier":{"value":3.169811,"unit":"ratio","formula":"总资产 / 归母净资产（期末口径，杜邦分解用平均口径）","inputs":{"total_assets":21840000000.0,"equity_parent":6890000000.000001},"prev":2.851455,"delta":0.318356,"status":"ok","inputs_prev":{"total_assets":18620000000.0,"equity_parent":6530000000.0}},"interest_bearing_debt":{"value":6920000000.0,"unit":"CNY","formula":"短期借款 + 一年内到期非流动负债 + 长期借款 + 应付债券","inputs":{"short_term_borrowings":2860000000.0,"current_portion_lt_debt":640000000.0,"long_term_borrowings":3420000000.0,"bonds_payable":0.0},"prev":4970000000.0,"delta":1950000000.0,"status":"ok","inputs_prev":{"short_term_borrowings":1840000000.0,"current_portion_lt_debt":480000000.0,"long_term_borrowings":2650000000.0,"bonds_payable":0.0}},"interest_bearing_debt_ratio":{"value":0.31685,"unit":"ratio","formula":"有息负债 / 总资产","inputs":{"interest_bearing_debt":6920000000.0,"total_assets":21840000000.0},"prev":0.266917,"delta":0.049933,"higher_is_better":false,"status":"ok","inputs_prev":{"interest_bearing_debt":4970000000.0,"total_assets":18620000000.0}},"interest_bearing_debt_growth":{"value":0.392354,"unit":"ratio","formula":"有息负债（本期）/ 有息负债（上期）- 1","inputs":{"ibd_t":6920000000.0,"ibd_t_1":4970000000.0},"prev":null,"delta":null,"higher_is_better":false,"status":"ok","inputs_prev":{"ibd_t":null,"ibd_t_1":null}},"net_debt":{"value":4680000000.0,"unit":"CNY","formula":"有息负债 - 货币资金","inputs":{"interest_bearing_debt":6920000000.0,"cash_and_equivalents":2240000000.0},"prev":1810000000.0,"delta":2870000000.0,"status":"ok","inputs_prev":{"interest_bearing_debt":4970000000.0,"cash_and_equivalents":3160000000.0}},"cash_to_short_term_debt":{"value":0.64,"unit":"ratio","formula":"货币资金 / (短期借款 + 一年内到期非流动负债)","inputs":{"cash_and_equivalents":2240000000.0,"short_term_interest_bearing_debt":3500000000.0},"prev":1.362069,"delta":-0.722069,"higher_is_better":true,"status":"ok","inputs_prev":{"cash_and_equivalents":3160000000.0,"short_term_interest_bearing_debt":2320000000.0}},"interest_coverage":{"value":5.156098,"unit":"x","formula":"EBIT / 利息费用","inputs":{"ebit":1057000000.0,"interest_expense":205000000.0},"prev":9.942623,"delta":-4.786525,"higher_is_better":true,"status":"ok","inputs_prev":{"ebit":1213000000.0,"interest_expense":122000000.0}},"net_debt_to_ebitda":{"value":2.343515,"unit":"x","formula":"净负债 / EBITDA","inputs":{"net_debt":4680000000.0,"ebitda":1997000000.0},"prev":0.873131,"delta":1.470385,"higher_is_better":false,"status":"ok","inputs_prev":{"net_debt":1810000000.0,"ebitda":2073000000.0}},"restricted_cash_ratio":{"value":0.138393,"unit":"ratio","formula":"受限货币资金 / 货币资金","inputs":{"restricted_cash":310000000.0,"cash_and_equivalents":2240000000.0},"prev":0.075949,"delta":0.062443,"higher_is_better":false,"status":"ok","inputs_prev":{"restricted_cash":240000000.0,"cash_and_equivalents":3160000000.0}},"working_capital":{"value":4439999999.999998,"unit":"CNY","formula":"流动资产 - 流动负债","inputs":{"total_current_assets":14119999999.999998,"total_current_liabilities":9680000000.0},"prev":4440000000.0,"delta":-2e-06,"status":"ok","inputs_prev":{"total_current_assets":11870000000.0,"total_current_liabilities":7430000000.0}}},"efficiency":{"ar_turnover":{"value":2.584925,"unit":"x","formula":"营业收入 / 平均应收账款","inputs":{"revenue":12860000000.0,"avg_accounts_receivable":4975000000.0},"prev":2.919481,"delta":-0.334556,"higher_is_better":true,"status":"ok","inputs_prev":{"revenue":11240000000.0,"avg_accounts_receivable":3850000000.0}},"inventory_turnover":{"value":2.862518,"unit":"x","formula":"营业成本 / 平均存货","inputs":{"cost_of_revenue":9890000000.0,"avg_inventory":3455000000.0},"prev":2.991055,"delta":-0.128537,"higher_is_better":true,"status":"ok","inputs_prev":{"cost_of_revenue":8359999999.999999,"avg_inventory":2795000000.0}},"ap_turnover":{"value":2.510152,"unit":"x","formula":"营业成本 / 平均应付账款","inputs":{"cost_of_revenue":9890000000.0,"avg_accounts_payable":3940000000.0},"prev":2.412698,"delta":0.097454,"status":"ok","inputs_prev":{"cost_of_revenue":8359999999.999999,"avg_accounts_payable":3465000000.0}},"dso":{"value":141.203344,"unit":"days","formula":"365 / 应收账款周转率（应收账款口径，不含票据与合同资产）","inputs":{"days":365.0,"ar_turnover":2.584925},"prev":125.022242,"delta":16.181102,"higher_is_better":false,"status":"ok","inputs_prev":{"days":365.0,"ar_turnover":null}},"dio":{"value":127.510111,"unit":"days","formula":"365 / 存货周转率","inputs":{"days":365.0,"inventory_turnover":2.862518},"prev":122.030502,"delta":5.479609,"higher_is_better":false,"status":"ok","inputs_prev":{"days":365.0,"inventory_turnover":null}},"dpo":{"value":145.409505,"unit":"days","formula":"365 / 应付账款周转率","inputs":{"days":365.0,"ap_turnover":2.510152},"prev":151.282895,"delta":-5.87339,"status":"ok","inputs_prev":{"days":365.0,"ap_turnover":null}},"cash_conversion_cycle":{"value":123.30395,"unit":"days","formula":"DSO + DIO - DPO","inputs":{"dso":141.203344,"dio":127.510111,"dpo":145.409505},"prev":95.76985,"delta":27.534101,"higher_is_better":false,"status":"ok","inputs_prev":{"dso":null,"dio":null,"dpo":null}},"total_asset_turnover":{"value":0.63569,"unit":"x","formula":"营业收入 / 平均总资产","inputs":{"revenue":12860000000.0,"avg_total_assets":20230000000.0},"prev":0.633775,"delta":0.001915,"higher_is_better":true,"status":"ok","inputs_prev":{"revenue":11240000000.0,"avg_total_assets":17735000000.0}},"fixed_asset_turnover":{"value":2.91941,"unit":"x","formula":"营业收入 / 平均固定资产","inputs":{"revenue":12860000000.0,"avg_fixed_assets":4405000000.0},"prev":null,"delta":null,"higher_is_better":true,"status":"ok","inputs_prev":{"revenue":11240000000.0,"avg_fixed_assets":4100000000.0}},"accounts_receivable_growth":{"value":0.415049,"unit":"ratio","formula":"应收账款（本期）/ 应收账款（上期）- 1","inputs":{"ar_t":5830000000.0,"ar_t_1":4120000000.0},"prev":null,"delta":null,"higher_is_better":false,"status":"ok","inputs_prev":{"ar_t":null,"ar_t_1":null}},"inventory_growth":{"value":0.342373,"unit":"ratio","formula":"存货（本期）/ 存货（上期）- 1","inputs":{"inv_t":3960000000.0,"inv_t_1":2950000000.0},"prev":null,"delta":null,"higher_is_better":false,"status":"ok","inputs_prev":{"inv_t":null,"inv_t_1":null}},"ar_and_inventory_to_assets":{"value":0.476648,"unit":"ratio","formula":"(应收账款+应收票据+合同资产+存货) / 总资产","inputs":{"ar_total":6450000000.0,"inventory":3960000000.0,"total_assets":21840000000.0},"prev":0.407089,"delta":0.069559,"higher_is_better":false,"status":"ok","inputs_prev":{"ar_total":4630000000.0,"inventory":2950000000.0,"total_assets":18620000000.0}}},"cashflow_quality":{"ocf":{"value":285000000.0,"unit":"CNY","formula":"经营活动产生的现金流量净额（原值）","inputs":{"ocf":285000000.0},"prev":724000000.0,"delta":-439000000.0,"higher_is_better":true,"status":"ok","inputs_prev":{"ocf":724000000.0}},"ocf_to_net_income":{"value":0.426647,"unit":"ratio","formula":"经营活动现金流净额 / 净利润","inputs":{"ocf":285000000.0,"net_income":668000000.0},"prev":0.78355,"delta":-0.356903,"higher_is_better":true,"status":"ok","inputs_prev":{"ocf":724000000.0,"net_income":924000000.0}},"ocf_to_net_income_parent":{"value":0.448819,"unit":"ratio","formula":"经营活动现金流净额 / 归母净利润（净现比）","inputs":{"ocf":285000000.0,"net_income_parent":635000000.0},"prev":0.839907,"delta":-0.391088,"higher_is_better":true,"status":"ok","inputs_prev":{"ocf":724000000.0,"net_income_parent":862000000.0}},"ocf_to_revenue":{"value":0.022162,"unit":"ratio","formula":"经营活动现金流净额 / 营业收入","inputs":{"ocf":285000000.0,"revenue":12860000000.0},"prev":0.064413,"delta":-0.042251,"higher_is_better":true,"status":"ok","inputs_prev":{"ocf":724000000.0,"revenue":11240000000.0}},"sales_cash_ratio":{"value":0.880249,"unit":"ratio","formula":"销售商品、提供劳务收到的现金 / 营业收入（收现比）","inputs":{"cash_received_from_sales":11320000000.0,"revenue":12860000000.0},"prev":0.966192,"delta":-0.085943,"higher_is_better":true,"status":"ok","inputs_prev":{"cash_received_from_sales":10860000000.0,"revenue":11240000000.0}},"capex":{"value":1680000000.0,"unit":"CNY","formula":"购建固定资产、无形资产等支付的现金","inputs":{"capex":1680000000.0},"prev":1120000000.0,"delta":560000000.0,"status":"ok","inputs_prev":{"capex":1120000000.0}},"capex_to_ocf":{"value":5.894737,"unit":"ratio","formula":"资本开支 / 经营活动现金流净额（>1 表示投资靠外部融资输血）","inputs":{"capex":1680000000.0,"ocf":285000000.0},"prev":1.546961,"delta":4.347776,"higher_is_better":false,"status":"ok","inputs_prev":{"capex":1120000000.0,"ocf":724000000.0}},"free_cash_flow":{"value":-1395000000.0,"unit":"CNY","formula":"经营活动现金流净额 - 资本开支","inputs":{"ocf":285000000.0,"capex":1680000000.0},"prev":-396000000.0,"delta":-999000000.0,"higher_is_better":true,"status":"ok","inputs_prev":{"ocf":724000000.0,"capex":1120000000.0}},"fcf_to_revenue":{"value":-0.108476,"unit":"ratio","formula":"自由现金流 / 营业收入","inputs":{"fcf":-1395000000.0,"revenue":12860000000.0},"prev":-0.035231,"delta":-0.073245,"higher_is_better":true,"status":"ok","inputs_prev":{"fcf":-396000000.0,"revenue":11240000000.0}},"ocf_to_interest_paid":{"value":1.454082,"unit":"x","formula":"经营活动现金流净额 / 已付利息","inputs":{"ocf":285000000.0,"interest_paid":196000000.0},"prev":6.135593,"delta":-4.681512,"higher_is_better":true,"status":"ok","inputs_prev":{"ocf":724000000.0,"interest_paid":118000000.0}},"payout_ratio":{"value":0.433071,"unit":"ratio","formula":"已派发现金股利 / 归母净利润","inputs":{"dividend_paid":275000000.0,"net_income_parent":635000000.0},"prev":0.164733,"delta":0.268338,"status":"ok","inputs_prev":{"dividend_paid":142000000.0,"net_income_parent":862000000.0}},"cf_financing_dependency":{"value":0.846774,"unit":"ratio","formula":"(投资现金流出 - 经营现金流) / 投资现金流出，>0 说明投资缺口需外部融资弥补","inputs":{"cf_investing":-1860000000.0,"ocf":285000000.0},"prev":null,"delta":null,"higher_is_better":false,"status":"ok","inputs_prev":{"cf_investing":-1240000000.0,"ocf":724000000.0}},"goodwill_to_equity":{"value":0.269956,"unit":"ratio","formula":"商誉 / 归母净资产（商誉占归母净资产比，供风险诊断使用）","inputs":{"goodwill":1860000000.0,"equity_parent":6890000000.000001},"prev":0.284839,"delta":-0.014883,"higher_is_better":false,"status":"ok","inputs_prev":{"goodwill":1860000000.0,"equity_parent":6530000000.0}}},"banking":{}},"checks":{"schema":"三表勾稽自检","tolerance_pct":0.01,"tolerance_basis":"差异 |左 − 右| 超过对应科目绝对值的 1% 视为不平","policy":"B 只查出不平，不自动修正；不平项写入 review_queue 交回 A 核对抽取结果","overall":"balanced","summary":{"total":11,"balanced":11,"imbalanced":0,"not_evaluable":0},"items":[{"id":"bs_balance","name":"资产负债表平衡","statement":"资产负债表","period":"2023","formula":"总资产 = 总负债 + 归母股东权益 + 少数股东权益","formula_symbolic":"total_assets - (total_liabilities + equity_parent + minority_interest)","status":"balanced","left":16850000000.0,"right":16850000000.0,"diff":0.0,"diff_pct":0.0,"tolerance_pct":0.01,"tolerance_abs":168500000.0,"tolerance_basis":16850000000.0,"inputs":{"总资产":{"value":16850000000.0,"unit":"元","unit_normalized":"元","display_value":168.5,"display_unit":"亿元","source":"2023年年度报告","page":81,"derived":false},"总负债":{"value":9540000000.0,"unit":"元","unit_normalized":"元","display_value":95.4,"display_unit":"亿元","source":"2023年年度报告","page":81,"derived":false},"归母股东权益":{"value":5810000000.0,"unit":"元","unit_normalized":"元","display_value":58.1,"display_unit":"亿元","source":"2023年年度报告","page":81,"derived":false},"少数股东权益":{"value":1499999999.999999,"derived":true,"derived_from":"所有者权益合计 − 归母股东权益","display_value":15.0,"display_unit":"亿元","source":null,"page":null}}},{"id":"bs_balance","name":"资产负债表平衡","statement":"资产负债表","period":"2024","formula":"总资产 = 总负债 + 归母股东权益 + 少数股东权益","formula_symbolic":"total_assets - (total_liabilities + equity_parent + minority_interest)","status":"balanced","left":18620000000.0,"right":18620000000.0,"diff":0.0,"diff_pct":0.0,"tolerance_pct":0.01,"tolerance_abs":186200000.0,"tolerance_basis":18620000000.0,"inputs":{"总资产":{"value":18620000000.0,"unit":"元","unit_normalized":"元","display_value":186.2,"display_unit":"亿元","source":"2024年年度报告","page":80,"derived":false},"总负债":{"value":10260000000.0,"unit":"元","unit_normalized":"元","display_value":102.6,"display_unit":"亿元","source":"2024年年度报告","page":80,"derived":false},"归母股东权益":{"value":6530000000.0,"unit":"元","unit_normalized":"元","display_value":65.3,"display_unit":"亿元","source":"2024年年度报告","page":80,"derived":false},"少数股东权益":{"value":1829999999.999999,"derived":true,"derived_from":"所有者权益合计 − 归母股东权益","display_value":18.3,"display_unit":"亿元","source":null,"page":null}}},{"id":"bs_balance","name":"资产负债表平衡","statement":"资产负债表","period":"2025","formula":"总资产 = 总负债 + 归母股东权益 + 少数股东权益","formula_symbolic":"total_assets - (total_liabilities + equity_parent + minority_interest)","status":"balanced","left":21840000000.0,"right":21840000000.0,"diff":0.0,"diff_pct":0.0,"tolerance_pct":0.01,"tolerance_abs":218400000.0,"tolerance_basis":21840000000.0,"inputs":{"总资产":{"value":21840000000.0,"unit":"元","unit_normalized":"元","display_value":218.4,"display_unit":"亿元","source":"2025年年度报告","page":81,"derived":false},"总负债":{"value":13519999999.999998,"unit":"元","unit_normalized":"元","display_value":135.2,"display_unit":"亿元","source":"2025年年度报告","page":81,"derived":false},"归母股东权益":{"value":6890000000.000001,"unit":"元","unit_normalized":"元","display_value":68.9,"display_unit":"亿元","source":"2025年年度报告","page":81,"derived":false},"少数股东权益":{"value":1429999999.999999,"derived":true,"derived_from":"所有者权益合计 − 归母股东权益","display_value":14.3,"display_unit":"亿元","source":null,"page":null}}},{"id":"is_tax_bridge","name":"利润表勾稽·利润总额→净利润","statement":"利润表","period":"2023","formula":"利润总额 − 所得税费用 = 净利润","formula_symbolic":"pretax_profit - income_tax_expense - net_income","status":"balanced","left":775000000.0,"right":775000000.0,"diff":-0.0,"diff_pct":-0.0,"tolerance_pct":0.01,"tolerance_abs":8950000.0,"tolerance_basis":895000000.0,"inputs":{"利润总额":{"value":895000000.0,"unit":"元","unit_normalized":"元","display_value":8.95,"display_unit":"亿元","source":"2023年年度报告","page":83,"derived":false},"所得税费用":{"value":120000000.0,"unit":"元","unit_normalized":"元","display_value":1.2,"display_unit":"亿元","source":"2023年年度报告","page":115,"derived":false},"净利润":{"value":775000000.0,"unit":"元","unit_normalized":"元","display_value":7.75,"display_unit":"亿元","source":"2023年年度报告","page":83,"derived":false}}},{"id":"is_tax_bridge","name":"利润表勾稽·利润总额→净利润","statement":"利润表","period":"2024","formula":"利润总额 − 所得税费用 = 净利润","formula_symbolic":"pretax_profit - income_tax_expense - net_income","status":"balanced","left":924000000.0,"right":924000000.0,"diff":0.0,"diff_pct":0.0,"tolerance_pct":0.01,"tolerance_abs":10720000.0,"tolerance_basis":1072000000.0,"inputs":{"利润总额":{"value":1072000000.0,"unit":"元","unit_normalized":"元","display_value":10.72,"display_unit":"亿元","source":"2024年年度报告","page":82,"derived":false},"所得税费用":{"value":148000000.0,"unit":"元","unit_normalized":"元","display_value":1.48,"display_unit":"亿元","source":"2024年年度报告","page":116,"derived":false},"净利润":{"value":924000000.0,"unit":"元","unit_normalized":"元","display_value":9.24,"display_unit":"亿元","source":"2024年年度报告","page":82,"derived":false}}},{"id":"is_tax_bridge","name":"利润表勾稽·利润总额→净利润","statement":"利润表","period":"2025","formula":"利润总额 − 所得税费用 = 净利润","formula_symbolic":"pretax_profit - income_tax_expense - net_income","status":"balanced","left":668000000.0,"right":668000000.0,"diff":0.0,"diff_pct":0.0,"tolerance_pct":0.01,"tolerance_abs":7960000.0,"tolerance_basis":796000000.0,"inputs":{"利润总额":{"value":796000000.0,"unit":"元","unit_normalized":"元","display_value":7.96,"display_unit":"亿元","source":"2025年年度报告","page":83,"derived":false},"所得税费用":{"value":128000000.0,"unit":"元","unit_normalized":"元","display_value":1.28,"display_unit":"亿元","source":"2025年年度报告","page":118,"derived":false},"净利润":{"value":668000000.0,"unit":"元","unit_normalized":"元","display_value":6.68,"display_unit":"亿元","source":"2025年年度报告","page":83,"derived":false}}},{"id":"is_minority_split","name":"利润表勾稽·净利润→归母+少数股东","statement":"利润表","period":"2023","formula":"净利润 − 归母净利润 = 少数股东损益（与附注独立披露值核对）","formula_symbolic":"(net_income - net_income_parent) - minority_pnl","status":"balanced","left":33000000.0,"right":33000000.0,"diff":0.0,"diff_pct":0.0,"tolerance_pct":0.01,"tolerance_abs":7750000.0,"tolerance_basis":775000000.0,"inputs":{"净利润":{"value":775000000.0,"unit":"元","unit_normalized":"元","display_value":7.75,"display_unit":"亿元","source":"2023年年度报告","page":83,"derived":false},"归母净利润":{"value":742000000.0,"unit":"元","unit_normalized":"元","display_value":7.42,"display_unit":"亿元","source":"2023年年度报告","page":83,"derived":false},"少数股东损益（独立披露）":{"value":33000000.0,"unit":"元","unit_normalized":"元","display_value":0.33,"display_unit":"亿元","source":"2023年年度报告","page":83,"derived":false}}},{"id":"is_minority_split","name":"利润表勾稽·净利润→归母+少数股东","statement":"利润表","period":"2024","formula":"净利润 − 归母净利润 = 少数股东损益（与附注独立披露值核对）","formula_symbolic":"(net_income - net_income_parent) - minority_pnl","status":"balanced","left":62000000.0,"right":62000000.0,"diff":0.0,"diff_pct":0.0,"tolerance_pct":0.01,"tolerance_abs":9240000.0,"tolerance_basis":924000000.0,"inputs":{"净利润":{"value":924000000.0,"unit":"元","unit_normalized":"元","display_value":9.24,"display_unit":"亿元","source":"2024年年度报告","page":82,"derived":false},"归母净利润":{"value":862000000.0,"unit":"元","unit_normalized":"元","display_value":8.62,"display_unit":"亿元","source":"2024年年度报告","page":82,"derived":false},"少数股东损益（独立披露）":{"value":62000000.0,"unit":"元","unit_normalized":"元","display_value":0.62,"display_unit":"亿元","source":"2024年年度报告","page":82,"derived":false}}},{"id":"is_minority_split","name":"利润表勾稽·净利润→归母+少数股东","statement":"利润表","period":"2025","formula":"净利润 − 归母净利润 = 少数股东损益（与附注独立披露值核对）","formula_symbolic":"(net_income - net_income_parent) - minority_pnl","status":"balanced","left":33000000.0,"right":33000000.0,"diff":0.0,"diff_pct":0.0,"tolerance_pct":0.01,"tolerance_abs":6680000.0,"tolerance_basis":668000000.0,"inputs":{"净利润":{"value":668000000.0,"unit":"元","unit_normalized":"元","display_value":6.68,"display_unit":"亿元","source":"2025年年度报告","page":83,"derived":false},"归母净利润":{"value":635000000.0,"unit":"元","unit_normalized":"元","display_value":6.35,"display_unit":"亿元","source":"2025年年度报告","page":83,"derived":false},"少数股东损益（独立披露）":{"value":33000000.0,"unit":"元","unit_normalized":"元","display_value":0.33,"display_unit":"亿元","source":"2025年年度报告","page":83,"derived":false}}},{"id":"cf_reconcile","name":"现金净变动勾稽","statement":"现金流量表","period":"2023→2024","formula":"期末现金 − 期初现金 = 经营活动 + 投资活动 + 筹资活动 + 汇率影响","formula_symbolic":"(cash_end - cash_begin) - (ocf + cf_investing + cf_financing + fx_effect)","status":"balanced","left":270000000.0,"right":270000000.0,"diff":0.0,"diff_pct":0.0,"tolerance_pct":0.01,"tolerance_abs":2700000.0,"tolerance_basis":270000000.0,"inputs":{"期初现金及现金等价物":{"value":2890000000.0,"unit":"元","unit_normalized":"元","display_value":28.9,"display_unit":"亿元","source":"2023年年度报告","page":81,"derived":false},"期末现金及现金等价物":{"value":3160000000.0,"unit":"元","unit_normalized":"元","display_value":31.6,"display_unit":"亿元","source":"2024年年度报告","page":80,"derived":false},"经营活动现金流净额":{"value":724000000.0,"unit":"元","unit_normalized":"元","display_value":7.24,"display_unit":"亿元","source":"2024年年度报告","page":84,"derived":false},"投资活动现金流净额":{"value":-1240000000.0,"unit":"元","unit_normalized":"元","display_value":-12.4,"display_unit":"亿元","source":"2024年年度报告","page":84,"derived":false},"筹资活动现金流净额":{"value":786000000.0,"unit":"元","unit_normalized":"元","display_value":7.86,"display_unit":"亿元","source":"2024年年度报告","page":84,"derived":false}},"note":"未抽取'汇率变动对现金及现金等价物的影响'，该项按 0 参与勾稽；若差异超容差需人工核对"},{"id":"cf_reconcile","name":"现金净变动勾稽","statement":"现金流量表","period":"2024→2025","formula":"期末现金 − 期初现金 = 经营活动 + 投资活动 + 筹资活动 + 汇率影响","formula_symbolic":"(cash_end - cash_begin) - (ocf + cf_investing + cf_financing + fx_effect)","status":"balanced","left":-920000000.0,"right":-920000000.0,"diff":0.0,"diff_pct":0.0,"tolerance_pct":0.01,"tolerance_abs":9200000.0,"tolerance_basis":920000000.0,"inputs":{"期初现金及现金等价物":{"value":3160000000.0,"unit":"元","unit_normalized":"元","display_value":31.6,"display_unit":"亿元","source":"2024年年度报告","page":80,"derived":false},"期末现金及现金等价物":{"value":2240000000.0,"unit":"元","unit_normalized":"元","display_value":22.4,"display_unit":"亿元","source":"2025年年度报告","page":81,"derived":false},"经营活动现金流净额":{"value":285000000.0,"unit":"元","unit_normalized":"元","display_value":2.85,"display_unit":"亿元","source":"2025年年度报告","page":85,"derived":false},"投资活动现金流净额":{"value":-1860000000.0,"unit":"元","unit_normalized":"元","display_value":-18.6,"display_unit":"亿元","source":"2025年年度报告","page":85,"derived":false},"筹资活动现金流净额":{"value":655000000.0,"unit":"元","unit_normalized":"元","display_value":6.55,"display_unit":"亿元","source":"2025年年度报告","page":85,"derived":false}},"note":"未抽取'汇率变动对现金及现金等价物的影响'，该项按 0 参与勾稽；若差异超容差需人工核对"}]},"attribution":{"dupont":{"current":{"net_margin":0.049378,"asset_turnover":0.63569,"equity_multiplier":3.014903,"roe":0.094635},"previous":{"net_margin":0.07669,"asset_turnover":0.633775,"equity_multiplier":2.874392,"roe":0.139708},"contribution":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073}},"operating_profit_bridge":{"delta_operating_profit":-243000000.0,"scale_effect":156379003.558719,"gross_margin_effect":-325088967.971531,"expense_ratio_effect":-112809608.540925,"other_effect":38519572.953737,"note":"规模效应=Δ收入×基期营业利润率；毛利率效应=当期收入×Δ毛利率；费用率效应=当期收入×(基期费用率-当期费用率)；其他=残差（减值、其他收益、投资收益、营业外等）"},"cash_flow_bridge":{"net_income":668000000.0,"ocf":285000000.0,"items":[{"item":"净利润","amount":668000000.0},{"item":"折旧与摊销","amount":940000000.0},{"item":"资产减值损失","amount":380000000.0},{"item":"财务费用（利息支出）","amount":215000000.0},{"item":"存货的增加","amount":-1010000000.0},{"item":"经营性应收项目的增加","amount":-1820000000.0},{"item":"经营性应付项目的增加","amount":640000000.0},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount":272000000.0}],"gap":-383000000.0,"note":"用于定位'利润有现金没现金'：若缺口主要由应收/存货占用造成，属营运资金扩张；若由减值等倒轧项造成，需进一步核查"},"narrative_hint":"三段归因分别回答：ROE 变动由什么驱动（杜邦）、利润变动由什么驱动（毛利/费用/规模）、利润与现金的缺口从哪来（现金流桥）。Risk Radar 的证据链会直接引用这三段。"},"evidence":{"accounts_payable":{"2023":{"value":3310000000.0,"unit":"元","unit_normalized":"元","display_value":33.1,"display_unit":"亿元","source":"2023年年度报告","page":107},"2024":{"value":3620000000.0,"unit":"元","unit_normalized":"元","display_value":36.2,"display_unit":"亿元","source":"2024年年度报告","page":108},"2025":{"value":4260000000.0,"unit":"元","unit_normalized":"元","display_value":42.6,"display_unit":"亿元","source":"2025年年度报告","page":110}},"accounts_receivable":{"2023":{"value":3580000000.0,"unit":"元","unit_normalized":"元","display_value":35.8,"display_unit":"亿元","source":"2023年年度报告","page":96},"2024":{"value":4120000000.0,"unit":"元","unit_normalized":"元","display_value":41.2,"display_unit":"亿元","source":"2024年年度报告","page":97},"2025":{"value":5830000000.0,"unit":"元","unit_normalized":"元","display_value":58.3,"display_unit":"亿元","source":"2025年年度报告","page":99}},"admin_expense":{"2023":{"value":405000000.0,"unit":"元","unit_normalized":"元","display_value":4.05,"display_unit":"亿元","source":"2023年年度报告","page":110},"2024":{"value":460000000.0,"unit":"元","unit_normalized":"元","display_value":4.6,"display_unit":"亿元","source":"2024年年度报告","page":111},"2025":{"value":543000000.0,"unit":"元","unit_normalized":"元","display_value":5.43,"display_unit":"亿元","source":"2025年年度报告","page":113}},"bonds_payable":{"2023":{"value":0.0,"unit":"元","unit_normalized":"元","display_value":0.0,"display_unit":"亿元","source":"2023年年度报告","page":130},"2024":{"value":0.0,"unit":"元","unit_normalized":"元","display_value":0.0,"display_unit":"亿元","source":"2024年年度报告","page":132},"2025":{"value":0.0,"unit":"元","unit_normalized":"元","display_value":0.0,"display_unit":"亿元","source":"2025年年度报告","page":134}},"capex":{"2023":{"value":860000000.0,"unit":"元","unit_normalized":"元","display_value":8.6,"display_unit":"亿元","source":"2023年年度报告","page":85},"2024":{"value":1120000000.0,"unit":"元","unit_normalized":"元","display_value":11.2,"display_unit":"亿元","source":"2024年年度报告","page":84},"2025":{"value":1680000000.0,"unit":"元","unit_normalized":"元","display_value":16.8,"display_unit":"亿元","source":"2025年年度报告","page":85}},"cash_and_equivalents":{"2023":{"value":2890000000.0,"unit":"元","unit_normalized":"元","display_value":28.9,"display_unit":"亿元","source":"2023年年度报告","page":81},"2024":{"value":3160000000.0,"unit":"元","unit_normalized":"元","display_value":31.6,"display_unit":"亿元","source":"2024年年度报告","page":80},"2025":{"value":2240000000.0,"unit":"元","unit_normalized":"元","display_value":22.4,"display_unit":"亿元","source":"2025年年度报告","page":81}},"cash_received_from_sales":{"2023":{"value":9540000000.0,"unit":"元","unit_normalized":"元","display_value":95.4,"display_unit":"亿元","source":"2023年年度报告","page":142},"2024":{"value":10860000000.0,"unit":"元","unit_normalized":"元","display_value":108.6,"display_unit":"亿元","source":"2024年年度报告","page":143},"2025":{"value":11320000000.0,"unit":"元","unit_normalized":"元","display_value":113.2,"display_unit":"亿元","source":"2025年年度报告","page":145}},"cf_financing":{"2023":{"value":310000000.0,"unit":"元","unit_normalized":"元","display_value":3.1,"display_unit":"亿元","source":"2023年年度报告","page":85},"2024":{"value":786000000.0,"unit":"元","unit_normalized":"元","display_value":7.86,"display_unit":"亿元","source":"2024年年度报告","page":84},"2025":{"value":655000000.0,"unit":"元","unit_normalized":"元","display_value":6.55,"display_unit":"亿元","source":"2025年年度报告","page":85}},"cf_investing":{"2023":{"value":-985000000.0,"unit":"元","unit_normalized":"元","display_value":-9.85,"display_unit":"亿元","source":"2023年年度报告","page":85},"2024":{"value":-1240000000.0,"unit":"元","unit_normalized":"元","display_value":-12.4,"display_unit":"亿元","source":"2024年年度报告","page":84},"2025":{"value":-1860000000.0,"unit":"元","unit_normalized":"元","display_value":-18.6,"display_unit":"亿元","source":"2025年年度报告","page":85}},"contract_assets":{"2023":{"value":0.0,"unit":"元","unit_normalized":"元","display_value":0.0,"display_unit":"亿元","source":"2023年年度报告","page":96},"2024":{"value":0.0,"unit":"元","unit_normalized":"元","display_value":0.0,"display_unit":"亿元","source":"2024年年度报告","page":97},"2025":{"value":0.0,"unit":"元","unit_normalized":"元","display_value":0.0,"display_unit":"亿元","source":"2025年年度报告","page":99}},"cost_of_revenue":{"2023":{"value":7420000000.0,"unit":"元","unit_normalized":"元","display_value":74.2,"display_unit":"亿元","source":"2023年年度报告","page":83},"2024":{"value":8359999999.999999,"unit":"元","unit_normalized":"元","display_value":83.6,"display_unit":"亿元","source":"2024年年度报告","page":82},"2025":{"value":9890000000.0,"unit":"元","unit_normalized":"元","display_value":98.9,"display_unit":"亿元","source":"2025年年度报告","page":83}},"current_portion_lt_debt":{"2023":{"value":360000000.0,"unit":"元","unit_normalized":"元","display_value":3.6,"display_unit":"亿元","source":"2023年年度报告","page":130},"2024":{"value":480000000.0,"unit":"元","unit_normalized":"元","display_value":4.8,"display_unit":"亿元","source":"2024年年度报告","page":132},"2025":{"value":640000000.0,"unit":"元","unit_normalized":"元","display_value":6.4,"display_unit":"亿元","source":"2025年年度报告","page":134}},"depreciation_amortization":{"2023":{"value":785000000.0,"unit":"元","unit_normalized":"元","display_value":7.85,"display_unit":"亿元","source":"2023年年度报告","page":92},"2024":{"value":860000000.0,"unit":"元","unit_normalized":"元","display_value":8.6,"display_unit":"亿元","source":"2024年年度报告","page":93},"2025":{"value":940000000.0,"unit":"元","unit_normalized":"元","display_value":9.4,"display_unit":"亿元","source":"2025年年度报告","page":94}},"dividend_paid":{"2023":{"value":110000000.0,"unit":"元","unit_normalized":"元","display_value":1.1,"display_unit":"亿元","source":"2023年年度报告","page":138},"2024":{"value":142000000.0,"unit":"元","unit_normalized":"元","display_value":1.42,"display_unit":"亿元","source":"2024年年度报告","page":139},"2025":{"value":275000000.0,"unit":"元","unit_normalized":"元","display_value":2.75,"display_unit":"亿元","source":"2025年年度报告","page":141}},"equity_parent":{"2023":{"value":5810000000.0,"unit":"元","unit_normalized":"元","display_value":58.1,"display_unit":"亿元","source":"2023年年度报告","page":81},"2024":{"value":6530000000.0,"unit":"元","unit_normalized":"元","display_value":65.3,"display_unit":"亿元","source":"2024年年度报告","page":80},"2025":{"value":6890000000.000001,"unit":"元","unit_normalized":"元","display_value":68.9,"display_unit":"亿元","source":"2025年年度报告","page":81}},"finance_expense":{"2023":{"value":115000000.0,"unit":"元","unit_normalized":"元","display_value":1.15,"display_unit":"亿元","source":"2023年年度报告","page":110},"2024":{"value":128000000.0,"unit":"元","unit_normalized":"元","display_value":1.28,"display_unit":"亿元","source":"2024年年度报告","page":111},"2025":{"value":215000000.0,"unit":"元","unit_normalized":"元","display_value":2.15,"display_unit":"亿元","source":"2025年年度报告","page":113}},"fixed_assets":{"2023":{"value":4020000000.0,"unit":"元","unit_normalized":"元","display_value":40.2,"display_unit":"亿元","source":"2023年年度报告","page":103},"2024":{"value":4180000000.0,"unit":"元","unit_normalized":"元","display_value":41.8,"display_unit":"亿元","source":"2024年年度报告","page":104},"2025":{"value":4630000000.0,"unit":"元","unit_normalized":"元","display_value":46.3,"display_unit":"亿元","source":"2025年年度报告","page":106}},"goodwill":{"2023":{"value":420000000.0,"unit":"元","unit_normalized":"元","display_value":4.2,"display_unit":"亿元","source":"2023年年度报告","page":124},"2024":{"value":1860000000.0,"unit":"元","unit_normalized":"元","display_value":18.6,"display_unit":"亿元","source":"2024年年度报告","page":126},"2025":{"value":1860000000.0,"unit":"元","unit_normalized":"元","display_value":18.6,"display_unit":"亿元","source":"2025年年度报告","page":128}},"impairment_loss":{"2023":{"value":160000000.0,"unit":"元","unit_normalized":"元","display_value":1.6,"display_unit":"亿元","source":"2023年年度报告","page":108},"2024":{"value":195000000.0,"unit":"元","unit_normalized":"元","display_value":1.95,"display_unit":"亿元","source":"2024年年度报告","page":109},"2025":{"value":380000000.0,"unit":"元","unit_normalized":"元","display_value":3.8,"display_unit":"亿元","source":"2025年年度报告","page":111}},"income_tax_expense":{"2023":{"value":120000000.0,"unit":"元","unit_normalized":"元","display_value":1.2,"display_unit":"亿元","source":"2023年年度报告","page":115},"2024":{"value":148000000.0,"unit":"元","unit_normalized":"元","display_value":1.48,"display_unit":"亿元","source":"2024年年度报告","page":116},"2025":{"value":128000000.0,"unit":"元","unit_normalized":"元","display_value":1.28,"display_unit":"亿元","source":"2025年年度报告","page":118}},"interest_expense":{"2023":{"value":110000000.0,"unit":"元","unit_normalized":"元","display_value":1.1,"display_unit":"亿元","source":"2023年年度报告","page":132},"2024":{"value":122000000.0,"unit":"元","unit_normalized":"元","display_value":1.22,"display_unit":"亿元","source":"2024年年度报告","page":134},"2025":{"value":205000000.0,"unit":"元","unit_normalized":"元","display_value":2.05,"display_unit":"亿元","source":"2025年年度报告","page":136}},"interest_paid":{"2023":{"value":105000000.0,"unit":"元","unit_normalized":"元","display_value":1.05,"display_unit":"亿元","source":"2023年年度报告","page":142},"2024":{"value":118000000.0,"unit":"元","unit_normalized":"元","display_value":1.18,"display_unit":"亿元","source":"2024年年度报告","page":143},"2025":{"value":196000000.0,"unit":"元","unit_normalized":"元","display_value":1.96,"display_unit":"亿元","source":"2025年年度报告","page":145}},"inventory":{"2023":{"value":2640000000.0,"unit":"元","unit_normalized":"元","display_value":26.4,"display_unit":"亿元","source":"2023年年度报告","page":101},"2024":{"value":2950000000.0,"unit":"元","unit_normalized":"元","display_value":29.5,"display_unit":"亿元","source":"2024年年度报告","page":102},"2025":{"value":3960000000.0,"unit":"元","unit_normalized":"元","display_value":39.6,"display_unit":"亿元","source":"2025年年度报告","page":104}},"long_term_borrowings":{"2023":{"value":2480000000.0,"unit":"元","unit_normalized":"元","display_value":24.8,"display_unit":"亿元","source":"2023年年度报告","page":130},"2024":{"value":2650000000.0,"unit":"元","unit_normalized":"元","display_value":26.5,"display_unit":"亿元","source":"2024年年度报告","page":132},"2025":{"value":3420000000.0,"unit":"元","unit_normalized":"元","display_value":34.2,"display_unit":"亿元","source":"2025年年度报告","page":134}},"minority_pnl":{"2023":{"value":33000000.0,"unit":"元","unit_normalized":"元","display_value":0.33,"display_unit":"亿元","source":"2023年年度报告","page":83},"2024":{"value":62000000.0,"unit":"元","unit_normalized":"元","display_value":0.62,"display_unit":"亿元","source":"2024年年度报告","page":82},"2025":{"value":33000000.0,"unit":"元","unit_normalized":"元","display_value":0.33,"display_unit":"亿元","source":"2025年年度报告","page":83}},"net_income":{"2023":{"value":775000000.0,"unit":"元","unit_normalized":"元","display_value":7.75,"display_unit":"亿元","source":"2023年年度报告","page":83},"2024":{"value":924000000.0,"unit":"元","unit_normalized":"元","display_value":9.24,"display_unit":"亿元","source":"2024年年度报告","page":82},"2025":{"value":668000000.0,"unit":"元","unit_normalized":"元","display_value":6.68,"display_unit":"亿元","source":"2025年年度报告","page":83}},"net_income_deducted":{"2023":{"value":695000000.0,"unit":"元","unit_normalized":"元","display_value":6.95,"display_unit":"亿元","source":"2023年年度报告","page":86},"2024":{"value":805000000.0,"unit":"元","unit_normalized":"元","display_value":8.05,"display_unit":"亿元","source":"2024年年度报告","page":85},"2025":{"value":498000000.0,"unit":"元","unit_normalized":"元","display_value":4.98,"display_unit":"亿元","source":"2025年年度报告","page":87}},"net_income_parent":{"2023":{"value":742000000.0,"unit":"元","unit_normalized":"元","display_value":7.42,"display_unit":"亿元","source":"2023年年度报告","page":83},"2024":{"value":862000000.0,"unit":"元","unit_normalized":"元","display_value":8.62,"display_unit":"亿元","source":"2024年年度报告","page":82},"2025":{"value":635000000.0,"unit":"元","unit_normalized":"元","display_value":6.35,"display_unit":"亿元","source":"2025年年度报告","page":83}},"notes_receivable":{"2023":{"value":460000000.0,"unit":"元","unit_normalized":"元","display_value":4.6,"display_unit":"亿元","source":"2023年年度报告","page":96},"2024":{"value":510000000.0,"unit":"元","unit_normalized":"元","display_value":5.1,"display_unit":"亿元","source":"2024年年度报告","page":97},"2025":{"value":620000000.0,"unit":"元","unit_normalized":"元","display_value":6.2,"display_unit":"亿元","source":"2025年年度报告","page":99}},"ocf":{"2023":{"value":642000000.0,"unit":"元","unit_normalized":"元","display_value":6.42,"display_unit":"亿元","source":"2023年年度报告","page":85},"2024":{"value":724000000.0,"unit":"元","unit_normalized":"元","display_value":7.24,"display_unit":"亿元","source":"2024年年度报告","page":84},"2025":{"value":285000000.0,"unit":"元","unit_normalized":"元","display_value":2.85,"display_unit":"亿元","source":"2025年年度报告","page":85}},"operating_profit":{"2023":{"value":905000000.0,"unit":"元","unit_normalized":"元","display_value":9.05,"display_unit":"亿元","source":"2023年年度报告","page":83},"2024":{"value":1085000000.0,"unit":"元","unit_normalized":"元","display_value":10.85,"display_unit":"亿元","source":"2024年年度报告","page":82},"2025":{"value":842000000.0,"unit":"元","unit_normalized":"元","display_value":8.42,"display_unit":"亿元","source":"2025年年度报告","page":83}},"pretax_profit":{"2023":{"value":895000000.0,"unit":"元","unit_normalized":"元","display_value":8.95,"display_unit":"亿元","source":"2023年年度报告","page":83},"2024":{"value":1072000000.0,"unit":"元","unit_normalized":"元","display_value":10.72,"display_unit":"亿元","source":"2024年年度报告","page":82},"2025":{"value":796000000.0,"unit":"元","unit_normalized":"元","display_value":7.96,"display_unit":"亿元","source":"2025年年度报告","page":83}},"rd_expense":{"2023":{"value":452000000.0,"unit":"元","unit_normalized":"元","display_value":4.52,"display_unit":"亿元","source":"2023年年度报告","page":110},"2024":{"value":518000000.0,"unit":"元","unit_normalized":"元","display_value":5.18,"display_unit":"亿元","source":"2024年年度报告","page":111},"2025":{"value":586000000.0,"unit":"元","unit_normalized":"元","display_value":5.86,"display_unit":"亿元","source":"2025年年度报告","page":113}},"restricted_cash":{"2023":{"value":200000000.0,"unit":"元","unit_normalized":"元","display_value":2.0,"display_unit":"亿元","source":"2023年年度报告","page":104},"2024":{"value":240000000.0,"unit":"元","unit_normalized":"元","display_value":2.4,"display_unit":"亿元","source":"2024年年度报告","page":105},"2025":{"value":310000000.0,"unit":"元","unit_normalized":"元","display_value":3.1,"display_unit":"亿元","source":"2025年年度报告","page":107}},"revenue":{"2023":{"value":9860000000.0,"unit":"元","unit_normalized":"元","display_value":98.6,"display_unit":"亿元","source":"2023年年度报告","page":83},"2024":{"value":11240000000.0,"unit":"元","unit_normalized":"元","display_value":112.4,"display_unit":"亿元","source":"2024年年度报告","page":82},"2025":{"value":12860000000.0,"unit":"元","unit_normalized":"元","display_value":128.6,"display_unit":"亿元","source":"2025年年度报告","page":83}},"selling_expense":{"2023":{"value":438000000.0,"unit":"元","unit_normalized":"元","display_value":4.38,"display_unit":"亿元","source":"2023年年度报告","page":110},"2024":{"value":505000000.0,"unit":"元","unit_normalized":"元","display_value":5.05,"display_unit":"亿元","source":"2024年年度报告","page":111},"2025":{"value":612000000.0,"unit":"元","unit_normalized":"元","display_value":6.12,"display_unit":"亿元","source":"2025年年度报告","page":113}},"short_term_borrowings":{"2023":{"value":1620000000.0,"unit":"元","unit_normalized":"元","display_value":16.2,"display_unit":"亿元","source":"2023年年度报告","page":130},"2024":{"value":1840000000.0,"unit":"元","unit_normalized":"元","display_value":18.4,"display_unit":"亿元","source":"2024年年度报告","page":132},"2025":{"value":2860000000.0,"unit":"元","unit_normalized":"元","display_value":28.6,"display_unit":"亿元","source":"2025年年度报告","page":134}},"total_assets":{"2023":{"value":16850000000.0,"unit":"元","unit_normalized":"元","display_value":168.5,"display_unit":"亿元","source":"2023年年度报告","page":81},"2024":{"value":18620000000.0,"unit":"元","unit_normalized":"元","display_value":186.2,"display_unit":"亿元","source":"2024年年度报告","page":80},"2025":{"value":21840000000.0,"unit":"元","unit_normalized":"元","display_value":218.4,"display_unit":"亿元","source":"2025年年度报告","page":81}},"total_current_assets":{"2023":{"value":10850000000.0,"unit":"元","unit_normalized":"元","display_value":108.5,"display_unit":"亿元","source":"2023年年度报告","page":81},"2024":{"value":11870000000.0,"unit":"元","unit_normalized":"元","display_value":118.7,"display_unit":"亿元","source":"2024年年度报告","page":80},"2025":{"value":14119999999.999998,"unit":"元","unit_normalized":"元","display_value":141.2,"display_unit":"亿元","source":"2025年年度报告","page":81}},"total_current_liabilities":{"2023":{"value":6890000000.000001,"unit":"元","unit_normalized":"元","display_value":68.9,"display_unit":"亿元","source":"2023年年度报告","page":81},"2024":{"value":7430000000.0,"unit":"元","unit_normalized":"元","display_value":74.3,"display_unit":"亿元","source":"2024年年度报告","page":80},"2025":{"value":9680000000.0,"unit":"元","unit_normalized":"元","display_value":96.8,"display_unit":"亿元","source":"2025年年度报告","page":81}},"total_equity":{"2023":{"value":7309999999.999999,"unit":"元","unit_normalized":"元","display_value":73.1,"display_unit":"亿元","source":"2023年年度报告","page":81},"2024":{"value":8359999999.999999,"unit":"元","unit_normalized":"元","display_value":83.6,"display_unit":"亿元","source":"2024年年度报告","page":80},"2025":{"value":8320000000.0,"unit":"元","unit_normalized":"元","display_value":83.2,"display_unit":"亿元","source":"2025年年度报告","page":81}},"total_liabilities":{"2023":{"value":9540000000.0,"unit":"元","unit_normalized":"元","display_value":95.4,"display_unit":"亿元","source":"2023年年度报告","page":81},"2024":{"value":10260000000.0,"unit":"元","unit_normalized":"元","display_value":102.6,"display_unit":"亿元","source":"2024年年度报告","page":80},"2025":{"value":13519999999.999998,"unit":"元","unit_normalized":"元","display_value":135.2,"display_unit":"亿元","source":"2025年年度报告","page":81}}},"review_queue":[],"sources":[{"source":"2023年年度报告","pages":[81,83,85,86,92,96,101,103,104,107,108,110,115,124,130,132,138,142]},{"source":"2024年年度报告","pages":[80,82,84,85,93,97,102,104,105,108,109,111,116,126,132,134,139,143]},{"source":"2025年年度报告","pages":[81,83,85,87,94,99,104,106,107,110,111,113,118,128,134,136,141,145]}]},"risk":{"schema_version":"finradar.risk/1.0","generated_at":"2026-10-10T20:57:24+08:00","generator":"risk-radar/scripts/detect_risks.py","rules_version":"finradar.risk-rules/1.0","company":{"name":"华衍智能装备股份有限公司","ticker":"DEMO.SH","industry":"专用设备制造业","report_period":"2025","report_source":"2025年年度报告"},"period":{"current":"2025","previous":"2024","all":["2023","2024","2025"]},"industry_profile":{"profile_id":"manufacturing","label":"制造业（通用档，默认剖面）","statement_model":"general","resolved_from":"未匹配到行业，回落默认剖面 'manufacturing'","benchmarks_calibrated":false,"metrics_marked_not_applicable":[],"rules_disabled_or_skipped":0,"extra_rules_added":0,"not_applicable_detail":[],"regulatory_basis":null},"summary":{"total_rules":40,"in_scope_rules":40,"triggered":27,"passed":11,"not_evaluable":2,"not_applicable":0,"by_severity":{"high":7,"medium":20,"low":0},"by_category":{"growth":{"triggered":4,"high":2,"medium":2,"low":0},"profitability":{"triggered":4,"high":0,"medium":4,"low":0},"solvency":{"triggered":5,"high":1,"medium":4,"low":0},"efficiency":{"triggered":6,"high":1,"medium":5,"low":0},"cashflow_quality":{"triggered":6,"high":3,"medium":3,"low":0},"asset_quality":{"triggered":1,"high":0,"medium":1,"low":0},"governance":{"triggered":1,"high":0,"medium":1,"low":0}},"overall_risk_score":78.9,"overall_risk_level":"高","suggested_action":"投研简报须以'风险提示'开篇，并逐条给出证据链","top_risks":[{"risk_id":"C01","risk_name":"净现比偏低，利润缺乏现金支撑","severity":"high","severity_tag":"重大","score":85.0},{"risk_id":"C03","risk_name":"自由现金流连续为负","severity":"high","severity_tag":"重大","score":85.0},{"risk_id":"C04","risk_name":"资本开支大幅超出经营现金流","severity":"high","severity_tag":"重大","score":85.0},{"risk_id":"E01","risk_name":"应收账款增速显著高于收入增速","severity":"high","severity_tag":"重大","score":85.0},{"risk_id":"G02","risk_name":"归母净利润下滑","severity":"high","severity_tag":"重大","score":85.0}]},"risks":[{"risk_id":"G01","risk_name":"营业收入下滑","risk_name_en":"Revenue Decline","category":"growth","category_label":"成长性风险：收入 / 利润 / 扣非利润的增速与结构","status":"passed","severity":null,"severity_tag":null,"score":null,"trigger":"revenue_growth < 0","trigger_display":"营业收入同比增速 < 0；跌破 -10% 升级为重大","threshold":0,"evidence_required":["revenue"],"confidence":0.92,"explanation":"规则已执行，条件不成立，本项无异常。","evidence_chain":[],"trigger_values":{"revenue_growth":0.144128}},{"risk_id":"G02","risk_name":"归母净利润下滑","risk_name_en":"Net Income Decline","category":"growth","category_label":"成长性风险：收入 / 利润 / 扣非利润的增速与结构","status":"triggered","severity":"high","severity_tag":"重大","score":85.0,"trigger":"net_income_parent_growth < 0","trigger_display":"归母净利润同比增速 < 0；跌破 -20% 升级为重大","threshold":0,"evidence_required":["net_income_parent"],"confidence":0.9,"explanation":"归母净利润同比增长 -26.3%。结合杜邦分解，本期 ROE 变动 -4.5 个百分点，其中净利率贡献 -4.98 个百分点。","suggestions":["用 operating_profit_bridge 拆出：规模效应 / 毛利率效应 / 费用率效应 / 其他（减值、其他收益）","确认下滑是否来自一次性因素（资产减值、商誉减值、汇兑损失）","若为一次性因素，需测算'还原后的可持续利润'供 C 的估值模块使用"],"evidence_chain":[{"step":"数据","item":"net_income_parent","value":6.35,"unit":"亿元","value_cny":635000000.0,"prev_value":8.62,"prev_value_cny":862000000.0,"source":"2025年年度报告","page":83},{"step":"计算","item":"触发表达式","formula":"net_income_parent_growth < 0","values":{"net_income_parent_growth":-0.263341}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83]},{"step":"判断","item":"归母净利润同比增速 < 0；跌破 -20% 升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["用 operating_profit_bridge 拆出：规模效应 / 毛利率效应 / 费用率效应 / 其他（减值、其他收益）","确认下滑是否来自一次性因素（资产减值、商誉减值、汇兑损失）","若为一次性因素，需测算'还原后的可持续利润'供 C 的估值模块使用"]}],"trigger_values":{"net_income_parent_growth":-0.263341}},{"risk_id":"G03","risk_name":"增收不增利","risk_name_en":"Growth Without Profit","category":"growth","category_label":"成长性风险：收入 / 利润 / 扣非利润的增速与结构","status":"triggered","severity":"high","severity_tag":"重大","score":85.0,"trigger":"revenue_growth > 0.05 and profit_revenue_scissors > 0.20","trigger_display":"收入增速 > 5% 且（收入增速 - 归母净利增速）> 20pp","threshold":0.2,"evidence_required":["revenue","net_income_parent","operating_profit"],"confidence":0.88,"explanation":"营业收入增长 14.4%，但归母净利润增长 -26.3%，剪刀差达 40.7 个百分点。收入扩张没有转化为利润，通常指向毛利率下行、费用前置投放或减值计提。","suggestions":["优先看毛利率：本期 {gross_margin:.2%}，较上期变动 {gross_margin_delta_pp:.2f} 个百分点","再看期间费用率：本期 {period_expense_ratio:.2%}，较上期变动 {period_expense_ratio_delta_pp:.2f} 个百分点","检查资产减值损失与信用减值损失，确认是否存在集中计提","向 C 明确：估值时使用可持续口径利润率，不要用当期已失真的利润率外推"],"evidence_chain":[{"step":"数据","item":"revenue","value":128.6,"unit":"亿元","value_cny":12860000000.0,"prev_value":112.4,"prev_value_cny":11240000000.0,"source":"2025年年度报告","page":83},{"step":"数据","item":"net_income_parent","value":6.35,"unit":"亿元","value_cny":635000000.0,"prev_value":8.62,"prev_value_cny":862000000.0,"source":"2025年年度报告","page":83},{"step":"数据","item":"operating_profit","value":8.42,"unit":"亿元","value_cny":842000000.0,"prev_value":10.85,"prev_value_cny":1085000000.0,"source":"2025年年度报告","page":83},{"step":"计算","item":"触发表达式","formula":"revenue_growth > 0.05 and profit_revenue_scissors > 0.20","values":{"revenue_growth":0.144128,"profit_revenue_scissors":0.407469}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83]},{"step":"判断","item":"收入增速 > 5% 且（收入增速 - 归母净利增速）> 20pp","result":"触发","severity":"high"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["优先看毛利率：本期 {gross_margin:.2%}，较上期变动 {gross_margin_delta_pp:.2f} 个百分点","再看期间费用率：本期 {period_expense_ratio:.2%}，较上期变动 {period_expense_ratio_delta_pp:.2f} 个百分点","检查资产减值损失与信用减值损失，确认是否存在集中计提","向 C 明确：估值时使用可持续口径利润率，不要用当期已失真的利润率外推"]}],"trigger_values":{"revenue_growth":0.144128,"profit_revenue_scissors":0.407469}},{"risk_id":"G04","risk_name":"扣非净利润占比偏低，盈利含金量不足","risk_name_en":"Low Quality Earnings","category":"growth","category_label":"成长性风险：收入 / 利润 / 扣非利润的增速与结构","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"deducted_to_parent < 0.90","trigger_display":"扣非净利润 / 归母净利润 < 90%；低于 70% 升级为重大","threshold":0.9,"evidence_required":["net_income_parent","net_income_deducted"],"confidence":0.86,"explanation":"扣非净利润 78.4% 归母净利润，即约 21.6% 的利润来自非经常性损益（政府补助、资产处置、公允价值变动等）。这类收益不具备持续性。","suggestions":["读取年报'非经常性损益项目及金额'附注，逐项列明构成与金额","判断非经常性项目是否连续三年出现（如年年靠政府补助，则实质上是经常性补贴）","向 C 明确：DCF / Comps 口径下应使用扣非净利润"],"evidence_chain":[{"step":"数据","item":"net_income_parent","value":6.35,"unit":"亿元","value_cny":635000000.0,"prev_value":8.62,"prev_value_cny":862000000.0,"source":"2025年年度报告","page":83},{"step":"数据","item":"net_income_deducted","value":4.98,"unit":"亿元","value_cny":498000000.0,"prev_value":8.05,"prev_value_cny":805000000.0,"source":"2025年年度报告","page":87},{"step":"计算","item":"触发表达式","formula":"deducted_to_parent < 0.90","values":{"deducted_to_parent":0.784252}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83,85,87]},{"step":"判断","item":"扣非净利润 / 归母净利润 < 90%；低于 70% 升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["读取年报'非经常性损益项目及金额'附注，逐项列明构成与金额","判断非经常性项目是否连续三年出现（如年年靠政府补助，则实质上是经常性补贴）","向 C 明确：DCF / Comps 口径下应使用扣非净利润"]}],"trigger_values":{"deducted_to_parent":0.784252}},{"risk_id":"G05","risk_name":"经营现金流与收入走势显著背离","risk_name_en":"OCF Revenue Divergence","category":"growth","category_label":"成长性风险：收入 / 利润 / 扣非利润的增速与结构","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"ocf_growth < -0.30 and revenue_growth > 0","trigger_display":"经营现金流同比增速 < -30% 且收入仍为正增长","threshold":-0.3,"evidence_required":["ocf","revenue"],"confidence":0.85,"explanation":"收入增长 14.4%，但经营活动现金流净额同比变动 -60.6%。收入在增长而现金在流出，是营运资金被大量占用的典型特征。","suggestions":["用 cash_flow_bridge 逐项拆解：应收占用、存货占用、应付释放各贡献多少","检查是否存在为冲收入而放宽信用条件的迹象（DSO 变动 {dso_delta:.1f} 天）","确认是否存在票据结算、供应链金融等表外安排"],"evidence_chain":[{"step":"数据","item":"ocf","value":2.85,"unit":"亿元","value_cny":285000000.0,"prev_value":7.24,"prev_value_cny":724000000.0,"source":"2025年年度报告","page":85},{"step":"数据","item":"revenue","value":128.6,"unit":"亿元","value_cny":12860000000.0,"prev_value":112.4,"prev_value_cny":11240000000.0,"source":"2025年年度报告","page":83},{"step":"计算","item":"触发表达式","formula":"ocf_growth < -0.30 and revenue_growth > 0","values":{"ocf_growth":-0.606354,"revenue_growth":0.144128}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83,84,85]},{"step":"判断","item":"经营现金流同比增速 < -30% 且收入仍为正增长","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["用 cash_flow_bridge 逐项拆解：应收占用、存货占用、应付释放各贡献多少","检查是否存在为冲收入而放宽信用条件的迹象（DSO 变动 {dso_delta:.1f} 天）","确认是否存在票据结算、供应链金融等表外安排"]}],"trigger_values":{"ocf_growth":-0.606354,"revenue_growth":0.144128}},{"risk_id":"P01","risk_name":"毛利率下滑","risk_name_en":"Gross Margin Compression","category":"profitability","category_label":"盈利能力风险：毛利率、回报率、费用率与资本回报","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"gross_margin_delta < -0.02","trigger_display":"毛利率较上期下降超过 2 个百分点；超过 3 个百分点升级为重大","threshold":-0.02,"evidence_required":["revenue","cost_of_revenue"],"confidence":0.9,"explanation":"毛利率由 25.62% 降至 23.09%，下降 -2.53 个百分点；同期营业成本增速 18.3% 高于收入增速 14.4%。","suggestions":["拆分量价：产品均价变动 vs 单位成本变动，判断是售价压力还是成本压力","检查原材料价格、产能利用率（固定资产周转率 {fixed_asset_turnover:.2f}）与折旧政策","若为产能爬坡期，需判断毛利率下滑是阶段性还是趋势性"],"evidence_chain":[{"step":"数据","item":"revenue","value":128.6,"unit":"亿元","value_cny":12860000000.0,"prev_value":112.4,"prev_value_cny":11240000000.0,"source":"2025年年度报告","page":83},{"step":"数据","item":"cost_of_revenue","value":98.9,"unit":"亿元","value_cny":9890000000.0,"prev_value":83.6,"prev_value_cny":8359999999.999999,"source":"2025年年度报告","page":83},{"step":"计算","item":"触发表达式","formula":"gross_margin_delta < -0.02","values":{"gross_margin_delta":-0.025279}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83]},{"step":"判断","item":"毛利率较上期下降超过 2 个百分点；超过 3 个百分点升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["拆分量价：产品均价变动 vs 单位成本变动，判断是售价压力还是成本压力","检查原材料价格、产能利用率（固定资产周转率 {fixed_asset_turnover:.2f}）与折旧政策","若为产能爬坡期，需判断毛利率下滑是阶段性还是趋势性"]}],"trigger_values":{"gross_margin_delta":-0.025279}},{"risk_id":"P02","risk_name":"ROE 明显下滑","risk_name_en":"ROE Deterioration","category":"profitability","category_label":"盈利能力风险：毛利率、回报率、费用率与资本回报","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"roe_delta < -0.03","trigger_display":"ROE 较上期下降超过 3 个百分点；超过 5 个百分点升级为重大","threshold":-0.03,"evidence_required":["net_income_parent","equity_parent"],"confidence":0.88,"explanation":"ROE 由 13.97% 降至 9.46%。杜邦归因：净利率贡献 -4.98pp、总资产周转贡献 0.03pp、权益乘数贡献 0.44pp。","suggestions":["若下滑主要由净利率驱动，回到 P01 追毛利率与费用率","若主要由权益乘数驱动，注意'杠杆下降'未必是坏事，需结合偿债能力一起看","向 C 明确：ROE 是 Comps 估值中 PB 的核心驱动，下滑需同步下调 PB 溢价"],"evidence_chain":[{"step":"数据","item":"net_income_parent","value":6.35,"unit":"亿元","value_cny":635000000.0,"prev_value":8.62,"prev_value_cny":862000000.0,"source":"2025年年度报告","page":83},{"step":"数据","item":"equity_parent","value":68.9,"unit":"亿元","value_cny":6890000000.000001,"prev_value":65.3,"prev_value_cny":6530000000.0,"source":"2025年年度报告","page":81},{"step":"计算","item":"触发表达式","formula":"roe_delta < -0.03","values":{"roe_delta":-0.045073}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[80,81,82,83]},{"step":"判断","item":"ROE 较上期下降超过 3 个百分点；超过 5 个百分点升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["若下滑主要由净利率驱动，回到 P01 追毛利率与费用率","若主要由权益乘数驱动，注意'杠杆下降'未必是坏事，需结合偿债能力一起看","向 C 明确：ROE 是 Comps 估值中 PB 的核心驱动，下滑需同步下调 PB 溢价"]}],"trigger_values":{"roe_delta":-0.045073}},{"risk_id":"P03","risk_name":"ROE 低于资本成本","risk_name_en":"ROE Below Cost of Equity","category":"profitability","category_label":"盈利能力风险：毛利率、回报率、费用率与资本回报","status":"passed","severity":null,"severity_tag":null,"score":null,"trigger":"roe < wacc","trigger_display":"ROE < WACC（WACC 由 C 的估值模块提供，缺失时本规则不可评估）","threshold":"wacc","evidence_required":["net_income_parent","equity_parent"],"confidence":0.8,"explanation":"规则已执行，条件不成立，本项无异常。","evidence_chain":[],"trigger_values":{"roe":0.094635,"wacc":0.085}},{"risk_id":"P04","risk_name":"ROIC 低于 WACC，当期未创造经济价值","risk_name_en":"ROIC Below WACC","category":"profitability","category_label":"盈利能力风险：毛利率、回报率、费用率与资本回报","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"roic_minus_wacc < 0","trigger_display":"ROIC - WACC < 0；低于 -3 个百分点升级为重大","threshold":0,"evidence_required":["operating_profit","finance_expense","income_tax_expense","pretax_profit","equity_parent"],"confidence":0.82,"explanation":"ROIC 为 7.01%，低于 WACC 8.50%，差额 -1.49 个百分点。当期投入资本未能创造经济利润，扩张规模反而在摊薄价值。","suggestions":["结合 E 类营运指标看：是周转拖累还是毛利拖累","重点追问 C：正在扩产的项目，其回报率是否高于 WACC；若否，应下修成长性假设","向 C 明确：DCF 终值假设不应建立在'高投入低回报'的扩张路径上"],"evidence_chain":[{"step":"数据","item":"operating_profit","value":8.42,"unit":"亿元","value_cny":842000000.0,"prev_value":10.85,"prev_value_cny":1085000000.0,"source":"2025年年度报告","page":83},{"step":"数据","item":"finance_expense","value":2.15,"unit":"亿元","value_cny":215000000.0,"prev_value":1.28,"prev_value_cny":128000000.0,"source":"2025年年度报告","page":113},{"step":"数据","item":"income_tax_expense","value":1.28,"unit":"亿元","value_cny":128000000.0,"prev_value":1.48,"prev_value_cny":148000000.0,"source":"2025年年度报告","page":118},{"step":"数据","item":"pretax_profit","value":7.96,"unit":"亿元","value_cny":796000000.0,"prev_value":10.72,"prev_value_cny":1072000000.0,"source":"2025年年度报告","page":83},{"step":"数据","item":"equity_parent","value":68.9,"unit":"亿元","value_cny":6890000000.000001,"prev_value":65.3,"prev_value_cny":6530000000.0,"source":"2025年年度报告","page":81},{"step":"计算","item":"触发表达式","formula":"roic_minus_wacc < 0","values":{"roic_minus_wacc":-0.014907}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[80,81,82,83,111,113,116,118]},{"step":"判断","item":"ROIC - WACC < 0；低于 -3 个百分点升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["结合 E 类营运指标看：是周转拖累还是毛利拖累","重点追问 C：正在扩产的项目，其回报率是否高于 WACC；若否，应下修成长性假设","向 C 明确：DCF 终值假设不应建立在'高投入低回报'的扩张路径上"]}],"trigger_values":{"roic_minus_wacc":-0.014907}},{"risk_id":"P05","risk_name":"期间费用率明显上升","risk_name_en":"Expense Ratio Spike","category":"profitability","category_label":"盈利能力风险：毛利率、回报率、费用率与资本回报","status":"passed","severity":null,"severity_tag":null,"score":null,"trigger":"period_expense_ratio_delta > 0.02","trigger_display":"期间费用率（销售+管理+研发+财务）较上期上升超过 2 个百分点","threshold":0.02,"evidence_required":["selling_expense","admin_expense","rd_expense","finance_expense","revenue"],"confidence":0.84,"explanation":"规则已执行，条件不成立，本项无异常。","evidence_chain":[],"trigger_values":{"period_expense_ratio_delta":0.008772}},{"risk_id":"P06","risk_name":"毛利率低于行业中位数","risk_name_en":"Below Industry Margin","category":"profitability","category_label":"盈利能力风险：毛利率、回报率、费用率与资本回报","status":"not_evaluable","severity":null,"severity_tag":null,"score":null,"trigger":"gross_margin < industry_gross_margin_benchmark","trigger_display":"毛利率 < 行业中位数（需要外部行业基准数据，缺失时不可评估）","threshold":"industry_gross_margin_benchmark","evidence_required":["revenue","cost_of_revenue"],"confidence":0.6,"explanation":"无法判定：表达式引用的变量缺失（industry_gross_margin_benchmark），已转人工核验，不做'无风险'假设。","evidence_chain":[],"trigger_values":{}},{"risk_id":"P07","risk_name":"财务费用率快速上升","risk_name_en":"Finance Cost Ratio Spike","category":"profitability","category_label":"盈利能力风险：毛利率、回报率、费用率与资本回报","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"finance_expense_ratio_delta > 0.005","trigger_display":"财务费用率较上期上升超过 0.5 个百分点","threshold":0.005,"evidence_required":["finance_expense","revenue"],"confidence":0.83,"explanation":"财务费用率由 1.14% 升至 1.67%，上升 0.53 个百分点，与有息负债扩张（增速 39.2%）相互印证。","suggestions":["拆分汇兑损益与利息支出，避免把汇兑损失误判为融资成本上升","与 S05（有息负债扩张）、S04（利息保障倍数）联动查看","向 C 明确：债务成本上升需同步上调 WACC 中的 Kd"],"evidence_chain":[{"step":"数据","item":"finance_expense","value":2.15,"unit":"亿元","value_cny":215000000.0,"prev_value":1.28,"prev_value_cny":128000000.0,"source":"2025年年度报告","page":113},{"step":"数据","item":"revenue","value":128.6,"unit":"亿元","value_cny":12860000000.0,"prev_value":112.4,"prev_value_cny":11240000000.0,"source":"2025年年度报告","page":83},{"step":"计算","item":"触发表达式","formula":"finance_expense_ratio_delta > 0.005","values":{"finance_expense_ratio_delta":0.005331}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83,111,113]},{"step":"判断","item":"财务费用率较上期上升超过 0.5 个百分点","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["拆分汇兑损益与利息支出，避免把汇兑损失误判为融资成本上升","与 S05（有息负债扩张）、S04（利息保障倍数）联动查看","向 C 明确：债务成本上升需同步上调 WACC 中的 Kd"]}],"trigger_values":{"finance_expense_ratio_delta":0.005331}},{"risk_id":"S01","risk_name":"资产负债率偏高","risk_name_en":"High Leverage","category":"solvency","category_label":"偿债风险：杠杆水平、期限错配、利息覆盖与再融资压力","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"debt_to_assets > 0.60","trigger_display":"资产负债率 > 60%；超过 70% 升级为重大（金融、地产、公用事业需按行业重设阈值）","threshold":0.6,"evidence_required":["total_liabilities","total_assets"],"confidence":0.85,"explanation":"资产负债率 61.90%，较上期 55.10% 上升 6.80 个百分点。","suggestions":["剔除预收款 / 合同负债后的'真实杠杆'往往更低，需读附注区分经营性负债与有息负债","行业属性决定阈值：银行地产 80% 属常态，制造业 60% 已偏高，必须做行业校准","向 C 明确：杠杆上行需同步上调 WACC 与财务风险溢价"],"evidence_chain":[{"step":"数据","item":"total_liabilities","value":135.2,"unit":"亿元","value_cny":13519999999.999998,"prev_value":102.6,"prev_value_cny":10260000000.0,"source":"2025年年度报告","page":81},{"step":"数据","item":"total_assets","value":218.4,"unit":"亿元","value_cny":21840000000.0,"prev_value":186.2,"prev_value_cny":18620000000.0,"source":"2025年年度报告","page":81},{"step":"计算","item":"触发表达式","formula":"debt_to_assets > 0.60","values":{"debt_to_assets":0.619048}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[80,81]},{"step":"判断","item":"资产负债率 > 60%；超过 70% 升级为重大（金融、地产、公用事业需按行业重设阈值）","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["剔除预收款 / 合同负债后的'真实杠杆'往往更低，需读附注区分经营性负债与有息负债","行业属性决定阈值：银行地产 80% 属常态，制造业 60% 已偏高，必须做行业校准","向 C 明确：杠杆上行需同步上调 WACC 与财务风险溢价"]}],"trigger_values":{"debt_to_assets":0.619048}},{"risk_id":"S02","risk_name":"杠杆水平快速抬升","risk_name_en":"Rapid Leverage Build-up","category":"solvency","category_label":"偿债风险：杠杆水平、期限错配、利息覆盖与再融资压力","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"debt_to_assets_delta > 0.05","trigger_display":"资产负债率较上期上升超过 5 个百分点","threshold":0.05,"evidence_required":["total_liabilities","total_assets"],"confidence":0.86,"explanation":"资产负债率一年内上升 6.80 个百分点，有息负债增速 39.2%，净负债由 18.10 亿元增至 46.80 亿元。","suggestions":["核查负债扩张的资金去向：是投入在建工程（扩张），还是弥补经营现金流缺口（被动加杠杆）","若配合 C03/C04 同时触发，基本可确认为被动加杠杆，风险等级应上调","检查受限资产与担保情况，确认未抵押资产还剩多少"],"evidence_chain":[{"step":"数据","item":"total_liabilities","value":135.2,"unit":"亿元","value_cny":13519999999.999998,"prev_value":102.6,"prev_value_cny":10260000000.0,"source":"2025年年度报告","page":81},{"step":"数据","item":"total_assets","value":218.4,"unit":"亿元","value_cny":21840000000.0,"prev_value":186.2,"prev_value_cny":18620000000.0,"source":"2025年年度报告","page":81},{"step":"计算","item":"触发表达式","formula":"debt_to_assets_delta > 0.05","values":{"debt_to_assets_delta":0.068027}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[80,81]},{"step":"判断","item":"资产负债率较上期上升超过 5 个百分点","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["核查负债扩张的资金去向：是投入在建工程（扩张），还是弥补经营现金流缺口（被动加杠杆）","若配合 C03/C04 同时触发，基本可确认为被动加杠杆，风险等级应上调","检查受限资产与担保情况，确认未抵押资产还剩多少"]}],"trigger_values":{"debt_to_assets_delta":0.068027}},{"risk_id":"S03","risk_name":"货币资金无法覆盖短期有息债务","risk_name_en":"Short-term Liquidity Gap","category":"solvency","category_label":"偿债风险：杠杆水平、期限错配、利息覆盖与再融资压力","status":"triggered","severity":"high","severity_tag":"重大","score":85.0,"trigger":"cash_to_short_term_debt < 1.5","trigger_display":"货币资金 /（短期借款 + 一年内到期非流动负债）< 1.5 倍；低于 1.0 倍升级为重大","threshold":1.5,"evidence_required":["cash_and_equivalents","short_term_borrowings","current_portion_lt_debt"],"confidence":0.9,"explanation":"货币资金 22.40 亿元，短期有息债务合计 35.00 亿元，覆盖倍数仅 0.64 倍，存在期限错配。","suggestions":["必须扣掉受限资金（受限比例 {restricted_cash_ratio:.1%}）后再算可动用资金","检查未使用银行授信额度与续贷能力，这是最直接的缓冲垫","检查一年内到期债务的分布（集中在哪个季度），判断再融资窗口是否足够","向 C 明确：流动性紧张时，DCF 应加入再融资失败的敏感性情景"],"evidence_chain":[{"step":"数据","item":"cash_and_equivalents","value":22.4,"unit":"亿元","value_cny":2240000000.0,"prev_value":31.6,"prev_value_cny":3160000000.0,"source":"2025年年度报告","page":81},{"step":"数据","item":"short_term_borrowings","value":28.6,"unit":"亿元","value_cny":2860000000.0,"prev_value":18.4,"prev_value_cny":1840000000.0,"source":"2025年年度报告","page":134},{"step":"数据","item":"current_portion_lt_debt","value":6.4,"unit":"亿元","value_cny":640000000.0,"prev_value":4.8,"prev_value_cny":480000000.0,"source":"2025年年度报告","page":134},{"step":"计算","item":"触发表达式","formula":"cash_to_short_term_debt < 1.5","values":{"cash_to_short_term_debt":0.64}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[80,81,132,134]},{"step":"判断","item":"货币资金 /（短期借款 + 一年内到期非流动负债）< 1.5 倍；低于 1.0 倍升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["必须扣掉受限资金（受限比例 {restricted_cash_ratio:.1%}）后再算可动用资金","检查未使用银行授信额度与续贷能力，这是最直接的缓冲垫","检查一年内到期债务的分布（集中在哪个季度），判断再融资窗口是否足够","向 C 明确：流动性紧张时，DCF 应加入再融资失败的敏感性情景"]}],"trigger_values":{"cash_to_short_term_debt":0.64}},{"risk_id":"S04","risk_name":"利息保障倍数偏低","risk_name_en":"Weak Interest Coverage","category":"solvency","category_label":"偿债风险：杠杆水平、期限错配、利息覆盖与再融资压力","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"interest_coverage < 6","trigger_display":"EBIT / 利息费用 < 6 倍；低于 3 倍升级为重大","threshold":6,"evidence_required":["operating_profit","finance_expense","interest_expense"],"confidence":0.87,"explanation":"利息保障倍数由 9.94 倍降至 5.16 倍（EBIT 10.57 亿元 / 利息费用 2.05 亿元）。","suggestions":["用'经营现金流 / 已付利息'（{ocf_to_interest_paid:.2f} 倍）做交叉验证，现金流口径比利润口径更严格","确认利息费用是否包含资本化利息，资本化的部分会虚增保障倍数","若评级下调触发交叉违约条款，需立刻提示"],"evidence_chain":[{"step":"数据","item":"operating_profit","value":8.42,"unit":"亿元","value_cny":842000000.0,"prev_value":10.85,"prev_value_cny":1085000000.0,"source":"2025年年度报告","page":83},{"step":"数据","item":"finance_expense","value":2.15,"unit":"亿元","value_cny":215000000.0,"prev_value":1.28,"prev_value_cny":128000000.0,"source":"2025年年度报告","page":113},{"step":"数据","item":"interest_expense","value":2.05,"unit":"亿元","value_cny":205000000.0,"prev_value":1.22,"prev_value_cny":122000000.0,"source":"2025年年度报告","page":136},{"step":"计算","item":"触发表达式","formula":"interest_coverage < 6","values":{"interest_coverage":5.156098}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83,111,113,134,136]},{"step":"判断","item":"EBIT / 利息费用 < 6 倍；低于 3 倍升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["用'经营现金流 / 已付利息'（{ocf_to_interest_paid:.2f} 倍）做交叉验证，现金流口径比利润口径更严格","确认利息费用是否包含资本化利息，资本化的部分会虚增保障倍数","若评级下调触发交叉违约条款，需立刻提示"]}],"trigger_values":{"interest_coverage":5.156098}},{"risk_id":"S05","risk_name":"有息负债快速扩张","risk_name_en":"Interest-bearing Debt Expansion","category":"solvency","category_label":"偿债风险：杠杆水平、期限错配、利息覆盖与再融资压力","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"interest_bearing_debt_growth > 0.30","trigger_display":"有息负债同比增速 > 30%","threshold":0.3,"evidence_required":["short_term_borrowings","long_term_borrowings","current_portion_lt_debt"],"confidence":0.88,"explanation":"有息负债由 49.70 亿元增至 69.20 亿元，增速 39.2%，有息负债占总资产 31.7%。","suggestions":["区分用途：并购、产能建设，还是补充流动资金（后者是被动加杠杆的强信号）","检查债务期限结构：短期化（短期占比上升）会显著放大再融资风险","向 C 明确：净负债是 Comps 估值中 EV 计算的关键项，必须取最新值"],"evidence_chain":[{"step":"数据","item":"short_term_borrowings","value":28.6,"unit":"亿元","value_cny":2860000000.0,"prev_value":18.4,"prev_value_cny":1840000000.0,"source":"2025年年度报告","page":134},{"step":"数据","item":"long_term_borrowings","value":34.2,"unit":"亿元","value_cny":3420000000.0,"prev_value":26.5,"prev_value_cny":2650000000.0,"source":"2025年年度报告","page":134},{"step":"数据","item":"current_portion_lt_debt","value":6.4,"unit":"亿元","value_cny":640000000.0,"prev_value":4.8,"prev_value_cny":480000000.0,"source":"2025年年度报告","page":134},{"step":"计算","item":"触发表达式","formula":"interest_bearing_debt_growth > 0.30","values":{"interest_bearing_debt_growth":0.392354}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[132,134]},{"step":"判断","item":"有息负债同比增速 > 30%","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["区分用途：并购、产能建设，还是补充流动资金（后者是被动加杠杆的强信号）","检查债务期限结构：短期化（短期占比上升）会显著放大再融资风险","向 C 明确：净负债是 Comps 估值中 EV 计算的关键项，必须取最新值"]}],"trigger_values":{"interest_bearing_debt_growth":0.392354}},{"risk_id":"S06","risk_name":"流动比率偏低","risk_name_en":"Weak Current Ratio","category":"solvency","category_label":"偿债风险：杠杆水平、期限错配、利息覆盖与再融资压力","status":"passed","severity":null,"severity_tag":null,"score":null,"trigger":"current_ratio < 1.2","trigger_display":"流动比率 < 1.2；低于 1.0 升级为重大","threshold":1.2,"evidence_required":["total_current_assets","total_current_liabilities"],"confidence":0.8,"explanation":"规则已执行，条件不成立，本项无异常。","evidence_chain":[],"trigger_values":{"current_ratio":1.458678}},{"risk_id":"S07","risk_name":"净负债 / EBITDA 偏高","risk_name_en":"High Net Debt to EBITDA","category":"solvency","category_label":"偿债风险：杠杆水平、期限错配、利息覆盖与再融资压力","status":"passed","severity":null,"severity_tag":null,"score":null,"trigger":"net_debt_to_ebitda > 3","trigger_display":"净负债 / EBITDA > 3 倍；超过 4 倍升级为重大","threshold":3,"evidence_required":["cash_and_equivalents","short_term_borrowings","long_term_borrowings","operating_profit"],"confidence":0.85,"explanation":"规则已执行，条件不成立，本项无异常。","evidence_chain":[],"trigger_values":{"net_debt_to_ebitda":2.343515}},{"risk_id":"S08","risk_name":"受限货币资金占比偏高","risk_name_en":"High Restricted Cash","category":"solvency","category_label":"偿债风险：杠杆水平、期限错配、利息覆盖与再融资压力","status":"passed","severity":null,"severity_tag":null,"score":null,"trigger":"restricted_cash_ratio > 0.30","trigger_display":"受限货币资金 / 货币资金 > 30%","threshold":0.3,"evidence_required":["cash_and_equivalents","restricted_cash"],"confidence":0.82,"explanation":"规则已执行，条件不成立，本项无异常。","evidence_chain":[],"trigger_values":{"restricted_cash_ratio":0.138393}},{"risk_id":"E01","risk_name":"应收账款增速显著高于收入增速","risk_name_en":"Receivables Growth","category":"efficiency","category_label":"营运风险：应收、存货、应付周转与现金转换周期","status":"triggered","severity":"high","severity_tag":"重大","score":85.0,"trigger":"(accounts_receivable_growth - revenue_growth) > 0.05","trigger_display":"应收账款增速 - 收入增速 > 5pp；超过 15pp 升级为重大（分工文档示例规则的原始阈值即 15pp）","threshold":0.05,"evidence_required":["revenue","accounts_receivable"],"confidence":0.9,"explanation":"应收账款同比增长 41.5%，收入增长 14.4%，差额 27.1 个百分点。应收账款周转天数由 125.0 天升至 141.2 天，延长 16.2 天。","suggestions":["读取'应收账款'附注，按账龄结构看 1 年以上占比是否上升","检查前五大客户集中度与关联方占比，判断是否存在渠道压货","检查坏账计提比例是否随账龄恶化同步提高（计提不足会虚增利润）","若伴随 C01 净现比走低，基本可确认为放宽信用条件换取收入"],"evidence_chain":[{"step":"数据","item":"revenue","value":128.6,"unit":"亿元","value_cny":12860000000.0,"prev_value":112.4,"prev_value_cny":11240000000.0,"source":"2025年年度报告","page":83},{"step":"数据","item":"accounts_receivable","value":58.3,"unit":"亿元","value_cny":5830000000.0,"prev_value":41.2,"prev_value_cny":4120000000.0,"source":"2025年年度报告","page":99},{"step":"计算","item":"触发表达式","formula":"(accounts_receivable_growth - revenue_growth) > 0.05","values":{"accounts_receivable_growth":0.415049,"revenue_growth":0.144128}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83,97,99]},{"step":"判断","item":"应收账款增速 - 收入增速 > 5pp；超过 15pp 升级为重大（分工文档示例规则的原始阈值即 15pp）","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["读取'应收账款'附注，按账龄结构看 1 年以上占比是否上升","检查前五大客户集中度与关联方占比，判断是否存在渠道压货","检查坏账计提比例是否随账龄恶化同步提高（计提不足会虚增利润）","若伴随 C01 净现比走低，基本可确认为放宽信用条件换取收入"]}],"trigger_values":{"accounts_receivable_growth":0.415049,"revenue_growth":0.144128}},{"risk_id":"E02","risk_name":"应收账款周转天数明显延长","risk_name_en":"DSO Extension","category":"efficiency","category_label":"营运风险：应收、存货、应付周转与现金转换周期","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"dso_delta > 15","trigger_display":"DSO 较上期延长超过 15 天；超过 30 天升级为重大","threshold":15,"evidence_required":["revenue","accounts_receivable"],"confidence":0.88,"explanation":"应收账款周转天数（DSO）由 125.0 天升至 141.2 天，延长 16.2 天，回款速度放缓。","suggestions":["与客户结构变化、结算方式变化（票据占比上升）交叉验证","检查是否存在通过供应链金融 / 保理出表后回购的安排","DSO 延长会直接压低经营现金流，需与现金流桥的'经营性应收项目增加'对账"],"evidence_chain":[{"step":"数据","item":"revenue","value":128.6,"unit":"亿元","value_cny":12860000000.0,"prev_value":112.4,"prev_value_cny":11240000000.0,"source":"2025年年度报告","page":83},{"step":"数据","item":"accounts_receivable","value":58.3,"unit":"亿元","value_cny":5830000000.0,"prev_value":41.2,"prev_value_cny":4120000000.0,"source":"2025年年度报告","page":99},{"step":"计算","item":"触发表达式","formula":"dso_delta > 15","values":{"dso_delta":16.181102}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83,97,99]},{"step":"判断","item":"DSO 较上期延长超过 15 天；超过 30 天升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["与客户结构变化、结算方式变化（票据占比上升）交叉验证","检查是否存在通过供应链金融 / 保理出表后回购的安排","DSO 延长会直接压低经营现金流，需与现金流桥的'经营性应收项目增加'对账"]}],"trigger_values":{"dso_delta":16.181102}},{"risk_id":"E03","risk_name":"应收账款周转天数绝对水平偏高","risk_name_en":"High Absolute DSO","category":"efficiency","category_label":"营运风险：应收、存货、应付周转与现金转换周期","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"dso > 120","trigger_display":"DSO > 120 天；超过 180 天升级为重大（工程类、军工类行业需上调阈值）","threshold":120,"evidence_required":["revenue","accounts_receivable"],"confidence":0.8,"explanation":"应收账款周转天数达 141.2 天，意味着平均销售后近 4.6 个月才收回现金，营运资金被大量占用。","suggestions":["行业属性至关重要：工程设备、军工、政府客户的账期天然更长，必须做行业校准","结合现金转换周期 {cash_conversion_cycle:.1f} 天，判断整体营运资金压力","向 C 明确：营运资金占用高，DCF 中需把营运资金增加额作为持续的现金流出"],"evidence_chain":[{"step":"数据","item":"revenue","value":128.6,"unit":"亿元","value_cny":12860000000.0,"prev_value":112.4,"prev_value_cny":11240000000.0,"source":"2025年年度报告","page":83},{"step":"数据","item":"accounts_receivable","value":58.3,"unit":"亿元","value_cny":5830000000.0,"prev_value":41.2,"prev_value_cny":4120000000.0,"source":"2025年年度报告","page":99},{"step":"计算","item":"触发表达式","formula":"dso > 120","values":{"dso":141.203344}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83,97,99]},{"step":"判断","item":"DSO > 120 天；超过 180 天升级为重大（工程类、军工类行业需上调阈值）","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["行业属性至关重要：工程设备、军工、政府客户的账期天然更长，必须做行业校准","结合现金转换周期 {cash_conversion_cycle:.1f} 天，判断整体营运资金压力","向 C 明确：营运资金占用高，DCF 中需把营运资金增加额作为持续的现金流出"]}],"trigger_values":{"dso":141.203344}},{"risk_id":"E04","risk_name":"存货增速显著高于营业成本增速","risk_name_en":"Inventory Build-up","category":"efficiency","category_label":"营运风险：应收、存货、应付周转与现金转换周期","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"(inventory_growth - cost_of_revenue_growth) > 0.10","trigger_display":"存货增速 - 营业成本增速 > 10pp；超过 20pp 升级为重大","threshold":0.1,"evidence_required":["inventory","cost_of_revenue"],"confidence":0.86,"explanation":"存货同比增长 34.2%，高于营业成本增速 18.3% 约 15.9 个百分点；存货周转天数 127.5 天。","suggestions":["读取'存货'附注，看原材料 / 在产品 / 库存商品的构成变化","区分主动备货（订单饱满）与被动积压（需求不及预期）","检查存货跌价准备计提是否充分，滞销库龄是否拉长","若为在产品大幅增加，需确认是否存在'已发货未验收'的收入确认口径问题"],"evidence_chain":[{"step":"数据","item":"inventory","value":39.6,"unit":"亿元","value_cny":3960000000.0,"prev_value":29.5,"prev_value_cny":2950000000.0,"source":"2025年年度报告","page":104},{"step":"数据","item":"cost_of_revenue","value":98.9,"unit":"亿元","value_cny":9890000000.0,"prev_value":83.6,"prev_value_cny":8359999999.999999,"source":"2025年年度报告","page":83},{"step":"计算","item":"触发表达式","formula":"(inventory_growth - cost_of_revenue_growth) > 0.10","values":{"inventory_growth":0.342373,"cost_of_revenue_growth":0.183014}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83,102,104]},{"step":"判断","item":"存货增速 - 营业成本增速 > 10pp；超过 20pp 升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["读取'存货'附注，看原材料 / 在产品 / 库存商品的构成变化","区分主动备货（订单饱满）与被动积压（需求不及预期）","检查存货跌价准备计提是否充分，滞销库龄是否拉长","若为在产品大幅增加，需确认是否存在'已发货未验收'的收入确认口径问题"]}],"trigger_values":{"inventory_growth":0.342373,"cost_of_revenue_growth":0.183014}},{"risk_id":"E05","risk_name":"现金转换周期明显拉长","risk_name_en":"Cash Conversion Cycle Extension","category":"efficiency","category_label":"营运风险：应收、存货、应付周转与现金转换周期","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"cash_conversion_cycle_delta > 20","trigger_display":"现金转换周期（DSO + DIO - DPO）较上期延长超过 20 天","threshold":20,"evidence_required":["accounts_receivable","inventory","accounts_payable"],"confidence":0.87,"explanation":"现金转换周期由 95.8 天升至 123.3 天，延长 27.5 天。分解：应收端 16.2 天、存货端 5.5 天、应付端 -5.9 天。","suggestions":["应付天数缩短（{dpo_delta:.1f} 天）说明对上游议价能力下降或付款条件收紧，是流动性压力的另一面","CCC 每拉长一天，就等于多占用一天的营运资金，可直接换算为资金占用额","向 C 明确：CCC 的变动方向决定了 DCF 中营运资金变动的符号"],"evidence_chain":[{"step":"数据","item":"accounts_receivable","value":58.3,"unit":"亿元","value_cny":5830000000.0,"prev_value":41.2,"prev_value_cny":4120000000.0,"source":"2025年年度报告","page":99},{"step":"数据","item":"inventory","value":39.6,"unit":"亿元","value_cny":3960000000.0,"prev_value":29.5,"prev_value_cny":2950000000.0,"source":"2025年年度报告","page":104},{"step":"数据","item":"accounts_payable","value":42.6,"unit":"亿元","value_cny":4260000000.0,"prev_value":36.2,"prev_value_cny":3620000000.0,"source":"2025年年度报告","page":110},{"step":"计算","item":"触发表达式","formula":"cash_conversion_cycle_delta > 20","values":{"cash_conversion_cycle_delta":27.534101}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[97,99,102,104,108,110]},{"step":"判断","item":"现金转换周期（DSO + DIO - DPO）较上期延长超过 20 天","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["应付天数缩短（{dpo_delta:.1f} 天）说明对上游议价能力下降或付款条件收紧，是流动性压力的另一面","CCC 每拉长一天，就等于多占用一天的营运资金，可直接换算为资金占用额","向 C 明确：CCC 的变动方向决定了 DCF 中营运资金变动的符号"]}],"trigger_values":{"cash_conversion_cycle_delta":27.534101}},{"risk_id":"E06","risk_name":"总资产周转率下滑","risk_name_en":"Asset Turnover Decline","category":"efficiency","category_label":"营运风险：应收、存货、应付周转与现金转换周期","status":"passed","severity":null,"severity_tag":null,"score":null,"trigger":"total_asset_turnover_delta < -0.10","trigger_display":"总资产周转率较上期下降超过 0.10 次","threshold":-0.1,"evidence_required":["revenue","total_assets"],"confidence":0.82,"explanation":"规则已执行，条件不成立，本项无异常。","evidence_chain":[],"trigger_values":{"total_asset_turnover_delta":0.001915}},{"risk_id":"E07","risk_name":"应收与存货合计占总资产比例过高","risk_name_en":"Working Capital Heavy","category":"efficiency","category_label":"营运风险：应收、存货、应付周转与现金转换周期","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"ar_and_inventory_to_assets > 0.40","trigger_display":"（应收账款+应收票据+合同资产+存货）/ 总资产 > 40%","threshold":0.4,"evidence_required":["accounts_receivable","inventory","total_assets"],"confidence":0.8,"explanation":"应收账款与存货合计占总资产 47.7%（上期 40.7%），资产结构中营运资金占比过高，'重'在账面上而非产能上。","suggestions":["这类资产的变现能力弱于固定资产抵押能力，会削弱实际融资能力","结合 A01 商誉占比一起看，评估净资产的'硬'度","向 C 明确：重营运资金结构下，PB 估值的安全边际应打折"],"evidence_chain":[{"step":"数据","item":"accounts_receivable","value":58.3,"unit":"亿元","value_cny":5830000000.0,"prev_value":41.2,"prev_value_cny":4120000000.0,"source":"2025年年度报告","page":99},{"step":"数据","item":"inventory","value":39.6,"unit":"亿元","value_cny":3960000000.0,"prev_value":29.5,"prev_value_cny":2950000000.0,"source":"2025年年度报告","page":104},{"step":"数据","item":"total_assets","value":218.4,"unit":"亿元","value_cny":21840000000.0,"prev_value":186.2,"prev_value_cny":18620000000.0,"source":"2025年年度报告","page":81},{"step":"计算","item":"触发表达式","formula":"ar_and_inventory_to_assets > 0.40","values":{"ar_and_inventory_to_assets":0.476648}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[80,81,97,99,102,104]},{"step":"判断","item":"（应收账款+应收票据+合同资产+存货）/ 总资产 > 40%","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["这类资产的变现能力弱于固定资产抵押能力，会削弱实际融资能力","结合 A01 商誉占比一起看，评估净资产的'硬'度","向 C 明确：重营运资金结构下，PB 估值的安全边际应打折"]}],"trigger_values":{"ar_and_inventory_to_assets":0.476648}},{"risk_id":"C01","risk_name":"净现比偏低，利润缺乏现金支撑","risk_name_en":"Weak Cash Conversion","category":"cashflow_quality","category_label":"现金流质量风险：利润的现金含量、收现比、自由现金流与投资缺口","status":"triggered","severity":"high","severity_tag":"重大","score":85.0,"trigger":"ocf_to_net_income_parent < 1.0","trigger_display":"经营活动现金流净额 / 归母净利润 < 1.0；低于 0.8 升级为重大","threshold":1.0,"evidence_required":["ocf","net_income_parent"],"confidence":0.9,"explanation":"经营现金流净额 2.85 亿元，归母净利润 6.35 亿元，净现比仅 0.45（上期 0.84）。利润与现金的缺口为 -3.50 亿元。","suggestions":["用 cash_flow_bridge 拆解缺口：应收占用、存货占用、应付释放、折旧摊销、减值各贡献多少","单年净现比低可能是时点因素，连续两年低于 1 才是风险信号","向 C 明确：DCF 的起点是自由现金流而非会计利润，本条直接影响估值输入"],"evidence_chain":[{"step":"数据","item":"ocf","value":2.85,"unit":"亿元","value_cny":285000000.0,"prev_value":7.24,"prev_value_cny":724000000.0,"source":"2025年年度报告","page":85},{"step":"数据","item":"net_income_parent","value":6.35,"unit":"亿元","value_cny":635000000.0,"prev_value":8.62,"prev_value_cny":862000000.0,"source":"2025年年度报告","page":83},{"step":"计算","item":"触发表达式","formula":"ocf_to_net_income_parent < 1.0","values":{"ocf_to_net_income_parent":0.448819}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83,84,85]},{"step":"判断","item":"经营活动现金流净额 / 归母净利润 < 1.0；低于 0.8 升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["用 cash_flow_bridge 拆解缺口：应收占用、存货占用、应付释放、折旧摊销、减值各贡献多少","单年净现比低可能是时点因素，连续两年低于 1 才是风险信号","向 C 明确：DCF 的起点是自由现金流而非会计利润，本条直接影响估值输入"]}],"trigger_values":{"ocf_to_net_income_parent":0.448819}},{"risk_id":"C02","risk_name":"经营活动现金流为负","risk_name_en":"Negative Operating Cash Flow","category":"cashflow_quality","category_label":"现金流质量风险：利润的现金含量、收现比、自由现金流与投资缺口","status":"passed","severity":null,"severity_tag":null,"score":null,"trigger":"ocf < 0","trigger_display":"经营活动产生的现金流量净额 < 0","threshold":0,"evidence_required":["ocf"],"confidence":0.95,"explanation":"规则已执行，条件不成立，本项无异常。","evidence_chain":[],"trigger_values":{"ocf":285000000.0}},{"risk_id":"C03","risk_name":"自由现金流连续为负","risk_name_en":"Persistent Negative FCF","category":"cashflow_quality","category_label":"现金流质量风险：利润的现金含量、收现比、自由现金流与投资缺口","status":"triggered","severity":"high","severity_tag":"重大","score":85.0,"trigger":"free_cash_flow < 0 and free_cash_flow_prev < 0","trigger_display":"连续两期（经营现金流 - 资本开支）< 0；若自由现金流/收入 < -5% 升级为重大","threshold":0,"evidence_required":["ocf","capex"],"confidence":0.88,"explanation":"自由现金流连续两期为负：本期 -13.95 亿元（OCF 2.85 - 资本开支 16.80），上期 -3.96 亿元。","suggestions":["区分扩张性资本开支（有明确产能与订单支撑）与维持性资本开支","计算资本开支/折旧摊销比，判断是在扩张还是仅仅在维持","向 C 明确：持续负 FCF 意味着 DCF 的预测期需要更长，且必须给出转正的量化路径"],"evidence_chain":[{"step":"数据","item":"ocf","value":2.85,"unit":"亿元","value_cny":285000000.0,"prev_value":7.24,"prev_value_cny":724000000.0,"source":"2025年年度报告","page":85},{"step":"数据","item":"capex","value":16.8,"unit":"亿元","value_cny":1680000000.0,"prev_value":11.2,"prev_value_cny":1120000000.0,"source":"2025年年度报告","page":85},{"step":"计算","item":"触发表达式","formula":"free_cash_flow < 0 and free_cash_flow_prev < 0","values":{"free_cash_flow":-1395000000.0,"free_cash_flow_prev":-396000000.0}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[84,85]},{"step":"判断","item":"连续两期（经营现金流 - 资本开支）< 0；若自由现金流/收入 < -5% 升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["区分扩张性资本开支（有明确产能与订单支撑）与维持性资本开支","计算资本开支/折旧摊销比，判断是在扩张还是仅仅在维持","向 C 明确：持续负 FCF 意味着 DCF 的预测期需要更长，且必须给出转正的量化路径"]}],"trigger_values":{"free_cash_flow":-1395000000.0,"free_cash_flow_prev":-396000000.0}},{"risk_id":"C04","risk_name":"资本开支大幅超出经营现金流","risk_name_en":"Capex Exceeds Operating Cash Flow","category":"cashflow_quality","category_label":"现金流质量风险：利润的现金含量、收现比、自由现金流与投资缺口","status":"triggered","severity":"high","severity_tag":"重大","score":85.0,"trigger":"capex_to_ocf > 1.0","trigger_display":"资本开支 / 经营活动现金流净额 > 1.0；超过 1.5 升级为重大","threshold":1.0,"evidence_required":["capex","ocf"],"confidence":0.89,"explanation":"资本开支 16.80 亿元，为经营现金流 2.85 亿元的 5.89 倍，投资缺口依赖外部融资填补（筹资活动净流入 6.55 亿元）。","suggestions":["检查在建工程项目明细与预计达产时间，评估投资回收期","若投资缺口靠有息负债填补，需与 S02、S05 联动，确认杠杆天花板","向 C 明确：这是'高投入低回报'还是'高投入换高成长'，直接决定 DCF 的 g 与终值"],"evidence_chain":[{"step":"数据","item":"capex","value":16.8,"unit":"亿元","value_cny":1680000000.0,"prev_value":11.2,"prev_value_cny":1120000000.0,"source":"2025年年度报告","page":85},{"step":"数据","item":"ocf","value":2.85,"unit":"亿元","value_cny":285000000.0,"prev_value":7.24,"prev_value_cny":724000000.0,"source":"2025年年度报告","page":85},{"step":"计算","item":"触发表达式","formula":"capex_to_ocf > 1.0","values":{"capex_to_ocf":5.894737}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[84,85]},{"step":"判断","item":"资本开支 / 经营活动现金流净额 > 1.0；超过 1.5 升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["检查在建工程项目明细与预计达产时间，评估投资回收期","若投资缺口靠有息负债填补，需与 S02、S05 联动，确认杠杆天花板","向 C 明确：这是'高投入低回报'还是'高投入换高成长'，直接决定 DCF 的 g 与终值"]}],"trigger_values":{"capex_to_ocf":5.894737}},{"risk_id":"C05","risk_name":"收现比下滑至偏低水平","risk_name_en":"Weak Sales Cash Recovery","category":"cashflow_quality","category_label":"现金流质量风险：利润的现金含量、收现比、自由现金流与投资缺口","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"sales_cash_ratio < 0.90","trigger_display":"销售商品提供劳务收到的现金 / 营业收入 < 90%；低于 80% 升级为重大","threshold":0.9,"evidence_required":["cash_received_from_sales","revenue"],"confidence":0.85,"explanation":"收现比由 96.6% 降至 88.0%，每 1 元收入实际收回现金 0.88 元。","suggestions":["含税口径会导致收现比天然大于 1（增值税影响），跨公司比较时必须统一口径","票据结算占比上升会拉低收现比，需与应收票据、应收款项融资科目联动看","若收现比长期低于 90%，说明收入确认偏激进"],"evidence_chain":[{"step":"数据","item":"cash_received_from_sales","value":113.2,"unit":"亿元","value_cny":11320000000.0,"prev_value":108.6,"prev_value_cny":10860000000.0,"source":"2025年年度报告","page":145},{"step":"数据","item":"revenue","value":128.6,"unit":"亿元","value_cny":12860000000.0,"prev_value":112.4,"prev_value_cny":11240000000.0,"source":"2025年年度报告","page":83},{"step":"计算","item":"触发表达式","formula":"sales_cash_ratio < 0.90","values":{"sales_cash_ratio":0.880249}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[82,83,143,145]},{"step":"判断","item":"销售商品提供劳务收到的现金 / 营业收入 < 90%；低于 80% 升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["含税口径会导致收现比天然大于 1（增值税影响），跨公司比较时必须统一口径","票据结算占比上升会拉低收现比，需与应收票据、应收款项融资科目联动看","若收现比长期低于 90%，说明收入确认偏激进"]}],"trigger_values":{"sales_cash_ratio":0.880249}},{"risk_id":"C06","risk_name":"经营现金流对利息的覆盖不足","risk_name_en":"Weak Cash Interest Coverage","category":"cashflow_quality","category_label":"现金流质量风险：利润的现金含量、收现比、自由现金流与投资缺口","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"ocf_to_interest_paid < 2.0","trigger_display":"经营活动现金流净额 / 已付利息 < 2 倍；低于 1 倍升级为重大","threshold":2.0,"evidence_required":["ocf","interest_paid"],"confidence":0.86,"explanation":"经营现金流 2.85 亿元，已付利息 1.96 亿元，现金流口径的利息覆盖仅 1.45 倍（上期 6.14 倍），低于利润口径的 5.16 倍。","suggestions":["现金流口径比利润口径（S04）更严格，两者差距大说明利润的现金含量低","若靠借新还旧维持付息，需提示再融资依赖","向 C 明确：覆盖不足时，DCF 需要加入财务困境成本的敏感性"],"evidence_chain":[{"step":"数据","item":"ocf","value":2.85,"unit":"亿元","value_cny":285000000.0,"prev_value":7.24,"prev_value_cny":724000000.0,"source":"2025年年度报告","page":85},{"step":"数据","item":"interest_paid","value":1.96,"unit":"亿元","value_cny":196000000.0,"prev_value":1.18,"prev_value_cny":118000000.0,"source":"2025年年度报告","page":145},{"step":"计算","item":"触发表达式","formula":"ocf_to_interest_paid < 2.0","values":{"ocf_to_interest_paid":1.454082}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[84,85,143,145]},{"step":"判断","item":"经营活动现金流净额 / 已付利息 < 2 倍；低于 1 倍升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["现金流口径比利润口径（S04）更严格，两者差距大说明利润的现金含量低","若靠借新还旧维持付息，需提示再融资依赖","向 C 明确：覆盖不足时，DCF 需要加入财务困境成本的敏感性"]}],"trigger_values":{"ocf_to_interest_paid":1.454082}},{"risk_id":"C07","risk_name":"投资缺口高度依赖外部融资","risk_name_en":"External Financing Dependency","category":"cashflow_quality","category_label":"现金流质量风险：利润的现金含量、收现比、自由现金流与投资缺口","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"cf_financing_dependency > 0.5","trigger_display":"（投资活动现金流出 - 经营现金流）/ 投资活动现金流出 > 50%","threshold":0.5,"evidence_required":["ocf","cf_investing","cf_financing"],"confidence":0.82,"explanation":"投资活动现金流出 18.60 亿元中，84.7% 无法由经营现金流覆盖，需依赖筹资活动（净流入 6.55 亿元）。","suggestions":["检查筹资结构：是银行借款、债券，还是股权融资（后者对老股东稀释）","若主要靠短期借款滚动长期项目，属典型的期限错配，风险等级应上调","向 C 明确：融资依赖度高时，估值应给出'融资不顺'的下行情景"],"evidence_chain":[{"step":"数据","item":"ocf","value":2.85,"unit":"亿元","value_cny":285000000.0,"prev_value":7.24,"prev_value_cny":724000000.0,"source":"2025年年度报告","page":85},{"step":"数据","item":"cf_investing","value":-18.6,"unit":"亿元","value_cny":-1860000000.0,"prev_value":-12.4,"prev_value_cny":-1240000000.0,"source":"2025年年度报告","page":85},{"step":"数据","item":"cf_financing","value":6.55,"unit":"亿元","value_cny":655000000.0,"prev_value":7.86,"prev_value_cny":786000000.0,"source":"2025年年度报告","page":85},{"step":"计算","item":"触发表达式","formula":"cf_financing_dependency > 0.5","values":{"cf_financing_dependency":0.846774}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[84,85]},{"step":"判断","item":"（投资活动现金流出 - 经营现金流）/ 投资活动现金流出 > 50%","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["检查筹资结构：是银行借款、债券，还是股权融资（后者对老股东稀释）","若主要靠短期借款滚动长期项目，属典型的期限错配，风险等级应上调","向 C 明确：融资依赖度高时，估值应给出'融资不顺'的下行情景"]}],"trigger_values":{"cf_financing_dependency":0.846774}},{"risk_id":"A01","risk_name":"商誉占净资产比例偏高","risk_name_en":"Goodwill Concentration","category":"asset_quality","category_label":"资产质量风险（扩展类）：商誉、存贷双高、审计意见、研发资本化","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"goodwill_to_equity > 0.20","trigger_display":"商誉 / 归母净资产 > 20%；超过 30% 升级为重大","threshold":0.2,"evidence_required":["goodwill","equity_parent"],"confidence":0.84,"explanation":"商誉 18.60 亿元，占归母净资产 27.0%，净资产中有相当部分来自并购溢价而非经营积累。","suggestions":["读取'商誉'附注，确认资产组划分、减值测试的关键假设（收入增速、毛利率、折现率）","检查被并购方是否完成业绩承诺，业绩不达标但未减值是重大红旗","向 C 明确：计算 PB 时应考虑扣除商誉后的'有形净资产'"],"evidence_chain":[{"step":"数据","item":"goodwill","value":18.6,"unit":"亿元","value_cny":1860000000.0,"prev_value":18.6,"prev_value_cny":1860000000.0,"source":"2025年年度报告","page":128},{"step":"数据","item":"equity_parent","value":68.9,"unit":"亿元","value_cny":6890000000.000001,"prev_value":65.3,"prev_value_cny":6530000000.0,"source":"2025年年度报告","page":81},{"step":"计算","item":"触发表达式","formula":"goodwill_to_equity > 0.20","values":{"goodwill_to_equity":0.269956}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[80,81,126,128]},{"step":"判断","item":"商誉 / 归母净资产 > 20%；超过 30% 升级为重大","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["读取'商誉'附注，确认资产组划分、减值测试的关键假设（收入增速、毛利率、折现率）","检查被并购方是否完成业绩承诺，业绩不达标但未减值是重大红旗","向 C 明确：计算 PB 时应考虑扣除商誉后的'有形净资产'"]}],"trigger_values":{"goodwill_to_equity":0.269956}},{"risk_id":"A02","risk_name":"存贷双高（账面资金充裕却大量举债）","risk_name_en":"Cash-rich Yet Heavily Indebted","category":"asset_quality","category_label":"资产质量风险（扩展类）：商誉、存贷双高、审计意见、研发资本化","status":"passed","severity":null,"severity_tag":null,"score":null,"trigger":"cash_to_assets > 0.15 and interest_bearing_debt_ratio > 0.25 and interest_to_cash > 0.02","trigger_display":"货币资金/总资产 > 15% 且 有息负债/总资产 > 25% 且 利息费用/货币资金 > 2%（三条件同时成立）","threshold":"composite","evidence_required":["cash_and_equivalents","total_assets","short_term_borrowings","long_term_borrowings","interest_expense"],"confidence":0.75,"explanation":"规则已执行，条件不成立，本项无异常。","evidence_chain":[],"trigger_values":{"cash_to_assets":0.10256410256410256,"interest_bearing_debt_ratio":0.31685,"interest_to_cash":0.09151785714285714}},{"risk_id":"A03","risk_name":"审计意见为非标准无保留意见","risk_name_en":"Qualified Audit Opinion","category":"asset_quality","category_label":"资产质量风险（扩展类）：商誉、存贷双高、审计意见、研发资本化","status":"passed","severity":null,"severity_tag":null,"score":null,"trigger":"audit_opinion_flag != 0","trigger_display":"审计意见 ≠ 标准无保留意见（含带强调事项段、保留意见、无法表示意见）","threshold":0,"evidence_required":["audit_opinion"],"confidence":0.95,"explanation":"规则已执行，条件不成立，本项无异常。","evidence_chain":[],"trigger_values":{"audit_opinion_flag":0}},{"risk_id":"A04","risk_name":"研发投入资本化率异常","risk_name_en":"R&D Capitalization Ratio","category":"asset_quality","category_label":"资产质量风险（扩展类）：商誉、存贷双高、审计意见、研发资本化","status":"not_evaluable","severity":null,"severity_tag":null,"score":null,"trigger":"rd_capitalization_ratio > 0.30","trigger_display":"研发资本化金额 /（研发费用 + 研发资本化金额）> 30%","threshold":0.3,"evidence_required":["rd_expense","rd_capitalized"],"confidence":0.7,"explanation":"无法判定：表达式引用的变量缺失（rd_capitalization_ratio），已转人工核验，不做'无风险'假设。","evidence_chain":[],"trigger_values":{}},{"risk_id":"V01","risk_name":"现金分红比例显著偏低","risk_name_en":"Low Payout Ratio","category":"governance","category_label":"治理与分红风险（扩展类）：分红可持续性与股东回报","status":"passed","severity":null,"severity_tag":null,"score":null,"trigger":"payout_ratio < 0.10","trigger_display":"已派发现金股利 / 归母净利润 < 10%","threshold":0.1,"evidence_required":["dividend_paid","net_income_parent"],"confidence":0.7,"explanation":"规则已执行，条件不成立，本项无异常。","evidence_chain":[],"trigger_values":{"payout_ratio":0.433071}},{"risk_id":"V02","risk_name":"分红金额占经营现金流比例过高","risk_name_en":"Dividend Exceeds Operating Cash Flow","category":"governance","category_label":"治理与分红风险（扩展类）：分红可持续性与股东回报","status":"triggered","severity":"medium","severity_tag":"关注","score":60.0,"trigger":"dividend_to_ocf > 0.60","trigger_display":"已派发现金股利 / 经营活动现金流净额 > 60%","threshold":0.6,"evidence_required":["dividend_paid","ocf"],"confidence":0.8,"explanation":"现金分红 2.75 亿元，占经营现金流 2.85 亿元的 96.5%，在经营现金流大幅下滑的背景下继续大额分红，分红可持续性存疑。","suggestions":["检查是否存在大股东高持股比例下的'掏空式分红'","若公司同时在大额举债（S02、S05），'借钱分红'是明确的治理风险信号","向 C 明确：红利型估值（如戈登模型）时，DPS 的可持续性需要单独论证"],"evidence_chain":[{"step":"数据","item":"dividend_paid","value":2.75,"unit":"亿元","value_cny":275000000.0,"prev_value":1.42,"prev_value_cny":142000000.0,"source":"2025年年度报告","page":141},{"step":"数据","item":"ocf","value":2.85,"unit":"亿元","value_cny":285000000.0,"prev_value":7.24,"prev_value_cny":724000000.0,"source":"2025年年度报告","page":85},{"step":"计算","item":"触发表达式","formula":"dividend_to_ocf > 0.60","values":{"dividend_to_ocf":0.9649122807017544}},{"step":"出处","item":"年报来源与页码","sources":["2024年年度报告","2025年年度报告"],"pages":[84,85,139,141]},{"step":"判断","item":"已派发现金股利 / 经营活动现金流净额 > 60%","result":"触发","severity":"medium"},{"step":"归因","item":"指标变动归因","unit_note":"金额类字段单位为亿元（由元换算），比率类字段为小数","dupont":{"net_margin_effect":-0.049756,"asset_turnover_effect":0.000272,"leverage_effect":0.004411,"roe_delta":-0.045073},"operating_profit_bridge_yi":{"delta_operating_profit":-2.43,"scale_effect":1.56,"gross_margin_effect":-3.25,"expense_ratio_effect":-1.13,"other_effect":0.39},"cash_flow_bridge_items_yi":[{"item":"净利润","amount_yi":6.68},{"item":"折旧与摊销","amount_yi":9.4},{"item":"资产减值损失","amount_yi":3.8},{"item":"财务费用（利息支出）","amount_yi":2.15},{"item":"存货的增加","amount_yi":-10.1},{"item":"经营性应收项目的增加","amount_yi":-18.2},{"item":"经营性应付项目的增加","amount_yi":6.4},{"item":"其他（递延税、其他经营性项目、汇兑等，倒轧）","amount_yi":2.72}],"cash_gap_yi":-3.83},{"step":"建议","item":"下一步动作","actions":["检查是否存在大股东高持股比例下的'掏空式分红'","若公司同时在大额举债（S02、S05），'借钱分红'是明确的治理风险信号","向 C 明确：红利型估值（如戈登模型）时，DPS 的可持续性需要单独论证"]}],"trigger_values":{"dividend_to_ocf":0.9649122807017544}}],"review_queue":[{"type":"risk_not_evaluable","item":"P06 毛利率低于行业中位数","reason":"缺失变量：industry_gross_margin_benchmark","missing_inputs":["industry_gross_margin_benchmark"],"severity_if_triggered":"medium","suggested_action":"行业基准缺失是数据问题而非公司问题，不应据此下结论","needs_human_judgement":true},{"type":"risk_not_evaluable","item":"A04 研发投入资本化率异常","reason":"缺失变量：rd_capitalization_ratio","missing_inputs":["rd_capitalization_ratio"],"severity_if_triggered":"medium","suggested_action":"本条需要 A 补充抽取 rd_capitalized（开发支出本期增加额）字段，缺失时不可评估","needs_human_judgement":true}]},"categories":{"growth":"成长性风险：收入 / 利润 / 扣非利润的增速与结构","profitability":"盈利能力风险：毛利率、回报率、费用率与资本回报","solvency":"偿债风险：杠杆水平、期限错配、利息覆盖与再融资压力","efficiency":"营运风险：应收、存货、应付周转与现金转换周期","cashflow_quality":"现金流质量风险：利润的现金含量、收现比、自由现金流与投资缺口","asset_quality":"资产质量风险（扩展类）：商誉、存贷双高、审计意见、研发资本化","governance":"治理与分红风险（扩展类）：分红可持续性与股东回报","banking":"银行业专属风险：资本充足、资产质量、息差与流动性"},"severity":{"high":{"tag":"重大","score_base":85,"meaning":"已构成实质性财务风险或报表可信度存疑，必须在投研简报中单列提示，并追查年报附注原文"},"medium":{"tag":"关注","score_base":60,"meaning":"存在明确恶化趋势或结构性隐患，需要在归因中解释成因，并列入持续跟踪项"},"low":{"tag":"提示","score_base":30,"meaning":"尚未构成风险，但偏离常态，列为观察项即可"}},"labels":{"schema_version":"finradar.field-labels/1.0","owner":"B","note":"字段中文名映射表。供指标引擎输出的 inputs 变量名、evidence 原始字段、看板与前端渲染共用。查表顺序：先精确匹配 fields；未命中时按 suffix_rules 拆解后缀后重试（例如 revenue_t_1 -> revenue『营业收入』+ 后缀『上期』= 营业收入（上期））。新增指标/字段时只需补 fields，不需要改渲染代码。","suffix_rules":{"_t_1":"（上期）","_t":"（本期）","_prev":"（上期）","_disclosed":"（披露值）","avg_":"平均"},"unit_defaults":{"ratio":"比率","days":"天","x":"倍","CNY":"元"},"fields":{"revenue":"营业收入","cost_of_revenue":"营业成本","net_income":"净利润","net_income_parent":"归母净利润","net_income_parent_adj":"归母净利润（扣除其他权益工具股息后）","net_income_deducted":"扣非归母净利润","operating_profit":"营业利润","pretax_profit":"利润总额","income_tax_expense":"所得税费用","gross_profit":"毛利","total_assets":"总资产","total_liabilities":"总负债","total_equity":"所有者权益合计","equity_parent":"归母股东权益","other_equity_instruments":"其他权益工具","other_equity_instrument_distribution":"其他权益工具持有者分配","cet1_net":"核心一级资本净额","total_current_assets":"流动资产合计","total_current_liabilities":"流动负债合计","cash_and_equivalents":"现金及现金等价物","restricted_cash":"受限资金","accounts_receivable":"应收账款","notes_receivable":"应收票据","contract_assets":"合同资产","ar_total":"应收类资产合计","inventory":"存货","accounts_payable":"应付账款","fixed_assets":"固定资产","goodwill":"商誉","investment":"投资类资产","operating_expense":"营业成本及费用合计","business_admin_expense":"业务及管理费","selling_expense":"销售费用","admin_expense":"管理费用","rd_expense":"研发费用","rd_expense_capitalized":"研发费用资本化金额","finance_expense":"财务费用","period_expense":"期间费用合计","depreciation_amortization":"折旧与摊销","impairment_loss":"资产减值损失","credit_impairment_loss":"信用减值损失","interest_income":"利息收入","interest_expense":"利息支出","net_interest_income":"利息净收入","fee_income_net":"手续费及佣金净收入","interest_paid":"已付利息","dividend_paid":"已付股息","ocf":"经营活动现金流净额","cf_investing":"投资活动现金流净额","cf_financing":"筹资活动现金流净额","cf_fx_effect":"汇率变动对现金及现金等价物的影响","fx_effect":"汇率变动对现金及现金等价物的影响","cf_cash_end":"年末现金及现金等价物余额","minority_interest":"少数股东权益","minority_pnl":"少数股东损益","capex":"资本开支","fcf":"自由现金流","cash_received_from_sales":"销售商品、提供劳务收到的现金","customer_loans_gross":"客户贷款及垫款总额","customer_deposits":"客户存款","loan_loss_provision":"贷款损失准备","loan_provision_ratio":"拨贷比","npl_ratio":"不良贷款率","provision_coverage":"拨备覆盖率","capital_adequacy_ratio":"资本充足率","cet1_ratio":"核心一级资本充足率","tier1_ratio":"一级资本充足率","nim":"净利息收益率（NIM）","net_interest_spread":"净利差","rwa":"风险加权资产","ebit":"EBIT（息税前利润）","ebitda":"EBITDA","nopat":"NOPAT（税后经营利润）","interest_bearing_debt":"有息负债合计","short_term_interest_bearing_debt":"短期有息债务","short_term_borrowings":"短期借款","long_term_borrowings":"长期借款","bonds_payable":"应付债券","current_portion_lt_debt":"一年内到期的非流动负债","net_debt":"净负债","working_capital":"营运资金","tax_rate":"有效税率","days":"期间天数","wacc":"WACC","_aliases_note":"以下为引擎 inputs / formula 中使用的简写变量名，按报表科目原义回填中文","rev":"营业收入","ni":"净利润","ni_parent":"归母净利润","ni_ded":"扣非净利润","cogs":"营业成本","gp":"毛利","ar":"应收账款","inv":"存货","ap":"应付账款","ta":"总资产","eq":"归母净资产","ibd":"有息负债","cur":"本期","prev":"上期","spread":"净利息差"}},"metricLabels":{"schema_version":"finradar.metric-labels/1.0","owner":"B","note":"指标中文名映射表（key 为输出 JSON 里的指标代码，value 为对外展示名）。命名以年报/报表内披露口径为准：银行专属指标采用银行年报「财务概要」原文称谓（如「平均总资产回报率」「净利息收益率」「成本收入比」）；通用指标采用财务报表附注与通行的财务分析称谓。键支持两种写法：'cat.key'（限定类别）或 'key'（全局）。","metrics":{"growth.revenue_growth":"营业收入增长率","growth.net_income_growth":"净利润增长率","growth.net_income_parent_growth":"归母净利润增长率","growth.net_income_deducted_growth":"扣非净利润增长率","growth.cost_of_revenue_growth":"营业成本增长率","growth.total_assets_growth":"总资产增长率","growth.equity_parent_growth":"归母净资产增长率","growth.ocf_growth":"经营活动现金流量净额增长率","growth.profit_revenue_scissors":"收入与利润增速剪刀差","profitability.gross_margin":"毛利率","profitability.net_margin":"净利率","profitability.net_margin_parent":"归母净利润率","profitability.net_margin_deducted":"扣非净利率","profitability.operating_margin":"营业利润率","profitability.ebit_margin":"EBIT 利润率","profitability.selling_expense_ratio":"销售费用率","profitability.admin_expense_ratio":"管理费用率","profitability.rd_expense_ratio":"研发费用率","profitability.finance_expense_ratio":"财务费用率","profitability.period_expense_ratio":"期间费用率","profitability.roe":"净资产收益率","profitability.roa":"总资产收益率","profitability.roic":"投入资本回报率","profitability.effective_tax_rate":"有效税率","profitability.deducted_to_parent":"扣非净利润占归母净利润比","profitability.roic_minus_wacc":"ROIC 与 WACC 之差","solvency.current_ratio":"流动比率","solvency.quick_ratio":"速动比率","solvency.cash_ratio":"现金比率","solvency.debt_to_assets":"资产负债率","solvency.equity_multiplier":"权益乘数","solvency.interest_bearing_debt":"有息负债","solvency.interest_bearing_debt_ratio":"有息负债率","solvency.interest_bearing_debt_growth":"有息负债增长率","solvency.net_debt":"净负债","solvency.cash_to_short_term_debt":"货币资金对短期有息债务覆盖倍数","solvency.interest_coverage":"利息保障倍数","solvency.net_debt_to_ebitda":"净负债 / EBITDA","solvency.restricted_cash_ratio":"受限资金占比","solvency.working_capital":"营运资金","efficiency.ar_turnover":"应收账款周转率","efficiency.inventory_turnover":"存货周转率","efficiency.ap_turnover":"应付账款周转率","efficiency.dso":"应收账款周转天数","efficiency.dio":"存货周转天数","efficiency.dpo":"应付账款周转天数","efficiency.cash_conversion_cycle":"现金转换周期","efficiency.total_asset_turnover":"总资产周转率","efficiency.fixed_asset_turnover":"固定资产周转率","efficiency.accounts_receivable_growth":"应收账款增长率","efficiency.inventory_growth":"存货增长率","efficiency.ar_and_inventory_to_assets":"应收及存货占总资产比","cashflow_quality.ocf":"经营活动产生的现金流量净额","cashflow_quality.ocf_to_net_income":"净利润现金含量","cashflow_quality.ocf_to_net_income_parent":"净现比","cashflow_quality.ocf_to_revenue":"经营现金流收入比","cashflow_quality.sales_cash_ratio":"收现比","cashflow_quality.capex":"资本开支","cashflow_quality.capex_to_ocf":"资本开支对经营现金流比","cashflow_quality.free_cash_flow":"自由现金流","cashflow_quality.fcf_to_revenue":"自由现金流收入比","cashflow_quality.ocf_to_interest_paid":"经营现金流利息覆盖倍数","cashflow_quality.payout_ratio":"现金分红比例","cashflow_quality.cf_financing_dependency":"外部融资依赖度","cashflow_quality.goodwill_to_equity":"商誉占净资产比","banking.nim":"净利息收益率","banking.net_interest_spread":"净利息差","banking.net_interest_income_ratio":"利息净收入占营业收入比","banking.net_interest_income_growth":"利息净收入增长率","banking.fee_income_ratio":"手续费及佣金净收入占比","banking.cost_to_income":"成本收入比","banking.operating_expense_ratio":"营业支出收入比","banking.credit_cost":"信用成本","banking.npl_ratio":"不良贷款率","banking.npl_balance":"不良贷款余额","banking.provision_coverage":"拨备覆盖率","banking.loan_provision_ratio":"贷款拨备率","banking.capital_adequacy_ratio":"资本充足率","banking.cet1_ratio":"核心一级资本充足率","banking.tier1_ratio":"一级资本充足率","banking.loan_to_deposit":"存贷比","banking.loan_growth":"客户贷款增长率","banking.deposit_growth":"客户存款增长率","banking.equity_to_assets":"总权益对总资产比率","banking.rwa_return":"风险加权资产收益率","banking.rwa_to_assets":"风险加权资产占总资产比","banking.roa_bank":"平均总资产回报率","banking.roe_common":"加权平均净资产收益率"}},"footNote":"本看板数据来自 B 两个引擎的<b>脚本实算结果<\/b>，非人工填写。演示所用公司为<b>合成数据<\/b>（华衍智能装备股份有限公司 DEMO.SH），非任何真实上市公司。该样本被<b>刻意构造成高风险<\/b>以最大化规则覆盖——真实公司通常仅触发 3–8 条风险，此处触发 27 条只说明规则跑通了，不代表典型水平。"}</script>
+<script>
+(function(){
+  var D = JSON.parse(document.getElementById('payload').textContent);
+  var diag = D.diag, risk = D.risk;
+  var R = diag.ratios, S = risk.summary, comp = diag.company, per = diag.period;
+
+  /* ---------- helpers ---------- */
+  function fmt(v, unit){
+    if(v===null||v===undefined) return '—';
+    if(unit==='ratio') return (v*100).toFixed(2)+'%';
+    if(unit==='pp')    return (v*100).toFixed(2)+'pp';
+    if(unit==='days')  return v.toFixed(1)+' 天';
+    if(unit==='x')     return v.toFixed(2)+' 倍';
+    if(unit==='CNY')   return (v/1e8).toFixed(2)+' 亿';
+    return String(v);
+  }
+  function delta(e){
+    if(e.delta===null||e.delta===undefined) return '';
+    var u=e.unit, d=e.delta, t;
+    if(u==='ratio') t=(d*100).toFixed(2)+'pp';
+    else if(u==='days') t=d.toFixed(1)+'天';
+    else if(u==='x') t=d.toFixed(2);
+    else if(u==='CNY') t=(d/1e8).toFixed(2)+'亿';
+    else t=d.toFixed(2);
+    var cls = (d>0?'up':(d<0?'dn':'flat'));
+    return '<span class="d '+cls+'">'+(d>0?'▲':(d<0?'▼':'—'))+t+'</span>';
+  }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
+
+  /* ---------- 中文名解析：会计科目表 + 指标名表，再按后缀规则拆解 ---------- */
+  var FIELDS = (D.labels && D.labels.fields) || {};
+  var SUF    = (D.labels && D.labels.suffix_rules) || {};
+  var MLAB   = (D.metricLabels && D.metricLabels.metrics) || {};
+  // 扁平化指标表：'efficiency.dso' -> 'dso'，供变量标签查找
+  var FMLAB  = {};
+  Object.keys(MLAB).forEach(function(mk){
+    var short = mk.split('.').pop();
+    if(!(short in FMLAB)) FMLAB[short] = MLAB[mk];
+  });
+
+  // 引擎 inputs 里的简写 -> 标准科目字段名（用于回查 evidence 出处）
+  var EV_ALIAS = {
+    rev:'revenue', ni:'net_income', ni_parent:'net_income_parent',
+    ni_ded:'net_income_deducted', cogs:'cost_of_revenue', ar:'accounts_receivable',
+    inv:'inventory', ap:'accounts_payable', ta:'total_assets', eq:'equity_parent',
+    ibd:'interest_bearing_debt', spread:'net_interest_spread'
+  };
+  function lookupName(k){
+    if(!k) return null;
+    if(Object.prototype.hasOwnProperty.call(FIELDS, k)) return FIELDS[k];
+    if(Object.prototype.hasOwnProperty.call(FMLAB, k)) return FMLAB[k];
+    return null;
+  }
+  function labelOf(k){
+    var hit = lookupName(k);
+    if(hit) return hit;
+    var base = k, suffix = '', changed = true;
+    while(changed){
+      changed = false;
+      for(var s in SUF){
+        if(base.length > s.length && base.slice(-s.length) === s && SUF[s].charAt(0) === '（'){
+          base = base.slice(0, -s.length); suffix = SUF[s] + suffix; changed = true; break;
+        }
+      }
+    }
+    if(base.slice(0,4) === 'avg_' && SUF['avg_']){
+      base = base.slice(4); suffix = SUF['avg_'] + '余额' + suffix;
+    }
+    return (lookupName(base) || base) + suffix;
+  }
+
+  /* ---------- 指标中文名：优先按 '类别.指标' 精确匹配 ---------- */
+  function metricLabel(cat, k){
+    return MLAB[cat + '.' + k] || MLAB[k] || FIELDS[k] || labelOf(k);
+  }
+
+  /* ---------- 公式里的英文变量名翻译成中文科目名 ---------- */
+  // 这些是年报里直接印的通用缩写，保留原文更易与报表对照
+  var KEEP_EN = {EBIT:1, EBITDA:1, NOPAT:1, WACC:1, ROE:1, ROA:1, ROIC:1, RWA:1, NIM:1};
+  function zhFormula(f){
+    if(!f) return '—';
+    return String(f).replace(/[A-Za-z][A-Za-z0-9_]*(?:-1)?/g, function(t){
+      var up = t.toUpperCase();
+      if(KEEP_EN[up]) return t;
+      // 公式里 t-1 与 inputs 里 _t_1 同义，先归一（Revenue_t-1 -> revenue_t_1）
+      var low = t.replace(/-1$/, '_1').toLowerCase();
+      var suffix = '', changed = true;
+      while(changed){
+        changed = false;
+        for(var s in SUF){
+          if(low.length > s.length && low.slice(-s.length) === s && SUF[s].charAt(0) === '（'){
+            low = low.slice(0, -s.length); suffix = SUF[s] + suffix; changed = true; break;
+          }
+        }
+      }
+      if(low.slice(0,4) === 'avg_'){ low = low.slice(4); suffix = '平均余额' + suffix; }
+      var hit = lookupName(low);
+      return hit ? hit + suffix : t;
+    });
+  }
+
+  /* ---------- 输入值单位推断（inputs 是归一到「元」的数值） ---------- */
+  var UFACT = {'元':1,'千元':1e3,'万元':1e4,'百万元':1e6,'百万':1e6,'亿元':1e8,'亿':1e8};
+  function inferUnit(k, v){
+    if(k === 'days') return '天';
+    var base = k.replace(/-1$/, '_1')
+                .replace(/(_t_1|_t|_prev|_disclosed)$/, '').replace(/^avg_/, '');
+    var ev = diag.evidence && diag.evidence[EV_ALIAS[base] || base];
+    var node = ev && (ev[per.current] || ev[per.previous]);
+    if(node && node.display_unit && UFACT[node.display_unit]){
+      return { unit: node.display_unit, factor: UFACT[node.display_unit] };
+    }
+    if(v !== null && v !== undefined && Math.abs(v) >= 1e6)
+      return { unit: '亿元', factor: 1e8 };
+    if(v !== null && v !== undefined && Math.abs(v) <= 1.5)
+      return { unit: 'ratio', factor: null };
+    return { unit: 'x', factor: null };
+  }
+  function fmtInput(k, v){
+    if(v===null||v===undefined) return '—';
+    var u = inferUnit(k, v);
+    if(u.unit === '天') return v.toFixed(0)+' 天';
+    if(u.factor) return (v/u.factor).toLocaleString('zh-CN',{maximumFractionDigits:2})+' '+u.unit;
+    if(u.unit === 'ratio') return (v*100).toFixed(2)+'%';
+    return v.toFixed(2)+' 倍';
+  }
+  function sourceOf(k){
+    var base = k.replace(/-1$/, '_1')
+                .replace(/(_t_1|_t|_prev|_disclosed)$/, '').replace(/^avg_/, '');
+    var ev = diag.evidence && diag.evidence[EV_ALIAS[base] || base];
+    if(!ev) return null;
+    var node = ev[per.current] || {};
+    var pnode = ev[per.previous] || {};
+    return { source: node.source || pnode.source, page: node.page !== undefined ? node.page : pnode.page };
+  }
+
+  /* ---------- header ---------- */
+  document.getElementById('co-name').textContent = comp.name || '—';
+  document.getElementById('co-sub').textContent =
+    (comp.ticker||'') + ' · ' + (comp.industry||'') + ' · 报告期 ' + (per.current||'') ;
+  var rv = diag.evidence && diag.evidence.revenue && diag.evidence.revenue[per.current];
+  var np = diag.evidence && diag.evidence.net_income_parent && diag.evidence.net_income_parent[per.current];
+  document.getElementById('co-meta').innerHTML =
+    '<div>当期营业收入<b>'+ (rv? rv.display_value+' '+rv.display_unit : '—') +'</b></div>' +
+    '<div>当期归母净利润<b>'+ (np? np.display_value+' '+np.display_unit : '—') +'</b></div>' +
+    '<div>ROE<b>'+fmt(R.profitability.roe.value,'ratio')+'</b></div>' +
+    '<div>资产负债率<b>'+fmt(R.solvency.debt_to_assets.value,'ratio')+'</b></div>' +
+    '<div>对比期间<b>'+(per.all||[]).join(' / ')+'</b></div>';
+
+  var lv = S.overall_risk_level, sc = S.overall_risk_score;
+  var col = (lv==='高')?'var(--red)':(lv==='较高')?'var(--org)':(lv==='中等')?'#7a5af8':'var(--grn)';
+  document.getElementById('g-num').textContent = sc.toFixed(1);
+  document.getElementById('g-num').style.color = col;
+  document.getElementById('g-lv').textContent = '综合风险：' + lv;
+  document.getElementById('g-lv').style.color = col;
+  document.getElementById('g-hint').textContent = S.suggested_action || '';
+
+  /* ---------- 1. metrics ---------- */
+  // 重点指标（卡片顶部固定展示）；其余指标在下方按类别全量列出
+  var PICK = {
+    growth:[['revenue_growth','营业收入增速'],['net_income_parent_growth','归母净利增速'],
+            ['net_income_deducted_growth','扣非净利增速'],['ocf_growth','经营现金流增速'],
+            ['profit_revenue_scissors','收入利润剪刀差']],
+    profitability:[['gross_margin','毛利率'],['net_margin_parent','归母净利率'],
+                   ['roe','ROE'],['roic','ROIC'],['period_expense_ratio','期间费用率'] ],
+    solvency:[['debt_to_assets','资产负债率'],['cash_to_short_term_debt','现金/短期有息债'],
+              ['interest_coverage','利息保障倍数'],['net_debt_to_ebitda','净负债/EBITDA'],
+              ['interest_bearing_debt_ratio','有息负债率']],
+    efficiency:[['dso','应收周转天数 DSO'],['dio','存货周转天数 DIO'],
+                ['dpo','应付周转天数 DPO'],['cash_conversion_cycle','现金转换周期 CCC'],
+                ['total_asset_turnover','总资产周转率']],
+    cashflow_quality:[['ocf_to_net_income_parent','净现比'],['sales_cash_ratio','收现比'],
+                      ['capex_to_ocf','资本开支/OCF'],['free_cash_flow','自由现金流'],
+                      ['ocf_to_interest_paid','OCF/已付利息']]
+  };
+  // 类别中文名；未在表里出现的类别（如 banking）直接显示 key，并额外补一行说明
+  var LBL={growth:'成长性',profitability:'盈利能力',solvency:'偿债能力',
+           efficiency:'营运能力',cashflow_quality:'现金流质量',
+           banking:'银行业专属',insurance:'保险业专属',brokerage:'券商业专属',
+           real_estate:'地产业专属'};
+
+  var mg='', cnt=0, na=0, ok=0;
+  for(var c in R){ for(var k in R[c]){ cnt++;
+    if(R[c][k] && R[c][k].status==='not_applicable') na++; else if(R[c][k] && R[c][k].value!==null) ok++; } }
+  document.getElementById('m-count').textContent = cnt;
+
+  // 覆盖度提示条（兼容两种形态：指标输出里 industry_profile 是字符串 id，
+  // 风险输出里是带 label / benchmarks_calibrated 的详细字典）
+  var rawProf = diag.industry_profile;
+  var profObj = (rawProf && typeof rawProf === 'object')
+      ? rawProf
+      : ((risk && typeof risk.industry_profile === 'object') ? risk.industry_profile : null);
+  var profLabel = (profObj && profObj.label) || null;
+  var profCal  = (profObj && typeof profObj.benchmarks_calibrated === 'boolean')
+      ? profObj.benchmarks_calibrated : null;
+
+  if(profLabel){
+    document.getElementById('m-prof').textContent =
+      '· 行业剖面：' + profLabel + (profCal === false ? '（阈值未统计校准）' : '');
+  }
+  if(na>0){
+    var note = '共 ' + cnt + ' 个指标：已算出 <b>' + ok + '</b> 个，'
+      + '<b>' + na + '</b> 个因当前行业口径不成立被<b>主动跳过</b>'
+      + '（口径不适用，非数据缺失、非算不出来）。';
+    if(profLabel){
+      note += '当前行业剖面：<b>' + esc(profLabel) + '</b>'
+        + (profCal === false ? '，阈值<b>尚未用可比公司分位数统计校准</b>。' : '。');
+    }
+    document.getElementById('m-note').innerHTML = note;
+    document.getElementById('m-note').style.display = 'block';
+  }
+
+  // 按 ratios 里实际存在的类别生成卡片（不再写死五类，行业专属类别也会出现）
+  Object.keys(R).forEach(function(cat){
+    var keys = Object.keys(R[cat]||{});
+    if(!keys.length) return;
+    var h='<div class="mc"><div class="cat '+(/^[a-z_]+$/.test(cat)?cat:'') +'">'
+        + (LBL[cat]||cat) + ' <span style="color:var(--tx3);font-weight:600">'
+        + keys.length + ' 个</span></div>';
+    keys.forEach(function(k){
+      var e = R[cat][k];
+      if(!e) return;
+      var isNA = (e.status === 'not_applicable');
+      h += '<button type="button" class="mrow'+(isNA?' na':'')+'" aria-expanded="false"'
+         + ' data-c="'+esc(cat)+'" data-k="'+esc(k)+'">'
+         + '<span class="k">'+esc(metricLabel(cat, k))+'</span>'
+         + (isNA ? '<span class="na-tag">不适用</span>'
+                 : '<span class="v">'+fmt(e.value,e.unit)+delta(e)+'</span>')
+         + '</button>';
+    });
+    h+='</div>'; mg+=h;
+  });
+  var gridEl = document.getElementById('m-grid');
+  gridEl.innerHTML = mg;
+
+  /* ---------- 点击指标行 → 展开公式与数据 ---------- */
+  function detailHTML(cat, k){
+    var e = (R[cat]||{})[k]; if(!e) return '';
+    var inp = e.inputs || {}, inpP = e.inputs_prev || {};
+    var h = '<div class="mdet">';
+    h += '<div class="mdet-h"><b>' + esc(metricLabel(cat, k)) + '</b>'
+       + '<span class="mdet-c">' + esc(k) + '　·　' + esc(LBL[cat] || cat) + '</span></div>';
+
+    h += '<div class="mf"><span class="ml">计算公式</span>'
+       + '<code>' + esc(zhFormula(e.formula)) + '</code></div>';
+
+    var ks = Object.keys(inp);
+    if(ks.length){
+      h += '<div class="mf"><span class="ml">代入数据</span>'
+         + '<table class="mt"><thead><tr><th>变量</th><th>本期</th><th>上期</th><th>出处</th></tr></thead><tbody>';
+      ks.forEach(function(vk){
+        var sv = sourceOf(vk) || {};
+        var src = (sv.source || '') + (sv.page !== undefined && sv.page !== null ? (' P' + sv.page) : '');
+        h += '<tr><td>'+esc(labelOf(vk))+'</td>'
+           + '<td class="mv">'+esc(fmtInput(vk, inp[vk]))+'</td>'
+           + '<td class="mv">'+esc((vk in inpP) ? fmtInput(vk, inpP[vk]) : '—')+'</td>'
+           + '<td class="ms">'+(src.trim() ? esc(src) : '—')+'</td></tr>';
+      });
+      h += '</tbody></table></div>';
+    }
+
+    h += '<div class="mf"><span class="ml">计算结果</span>'
+       + '<table class="mt"><tbody>'
+       + '<tr><td>本期（'+esc(per.current)+'）</td><td class="mv">'+esc(fmt(e.value,e.unit))+'</td></tr>'
+       + '<tr><td>上期（'+esc(per.previous)+'）</td><td class="mv">'+esc(fmt(e.prev,e.unit))+'</td></tr>'
+       + '<tr><td>同比变动</td><td class="mv">'
+       + (e.delta === null || e.delta === undefined ? '—'
+            : esc((e.delta>0?'▲':(e.delta<0?'▼':'—')) + fmt(Math.abs(e.delta), e.unit==='ratio'?'pp':e.unit)))
+       + '</td></tr></tbody></table></div>';
+
+    var dirTxt = e.higher_is_better === true ? '越高越好'
+               : (e.higher_is_better === false ? '越低越好' : '无方向性');
+    var notes = [];
+    notes.push('变动方向：' + dirTxt);
+    if(e.unit === 'ratio') notes.push('比率口径：1.00 = 100%');
+    if(e.note) notes.push(e.note);
+    h += '<div class="mnote">' + esc(notes.join('　·　')) + '</div>';
+    h += '</div>';
+    return h;
+  }
+
+  gridEl.addEventListener('click', function(ev){
+    var el = ev.target, row = null;
+    while(el && el !== gridEl){
+      if(el.classList && el.classList.contains('mrow')){ row = el; break; }
+      el = el.parentNode;
+    }
+    if(!row) return;
+    var isOpen = row.getAttribute('aria-expanded') === 'true';
+    // 同一张卡片内保持单开，避免页面被撑得过长
+    Array.prototype.slice.call(row.parentNode.querySelectorAll('.mrow[aria-expanded="true"]'))
+      .forEach(function(x){
+        x.setAttribute('aria-expanded','false');
+        var p = x.nextSibling;
+        if(p && p.className === 'mdet') p.parentNode.removeChild(p);
+      });
+    if(isOpen) return;
+    row.setAttribute('aria-expanded','true');
+    row.insertAdjacentHTML('afterend', detailHTML(row.getAttribute('data-c'), row.getAttribute('data-k')));
+  });
+
+  /* ---------- 2. risk summary ---------- */
+  var bs=S.by_severity;
+  document.getElementById('r-total').textContent = S.total_rules;
+  document.getElementById('r-sum').innerHTML =
+    '<div class="sc h"><div class="l">重大</div><div class="n">'+bs.high+'</div></div>'+
+    '<div class="sc m"><div class="l">关注</div><div class="n">'+bs.medium+'</div></div>'+
+    '<div class="sc x"><div class="l">提示</div><div class="n">'+bs.low+'</div></div>'+
+    '<div class="sc p"><div class="l">通过 / 不可评估</div><div class="n">'+S.passed+' / '+S.not_evaluable+'</div></div>';
+  var t=S.total_rules, seg=function(n,col){return '<span style="width:'+(n/t*100)+'%;background:'+col+'"></span>';};
+  document.getElementById('r-bar').innerHTML =
+    seg(bs.high,'var(--red)')+seg(bs.medium,'var(--org)')+seg(bs.low,'#a6f4c5')+
+    seg(S.passed,'#c9d4e5')+seg(S.not_evaluable,'#e4e7ec');
+  var tb='';
+  Object.keys(S.by_category).forEach(function(c){
+    var v=S.by_category[c];
+    tb+='<tr><td>'+(D.categories[c]?D.categories[c].split('：')[0]:c)+'</td><td><b>'+v.triggered+'</b></td><td>'+v.high+'</td><td>'+v.medium+'</td><td>'+v.low+'</td></tr>';
+  });
+  document.getElementById('r-cat').querySelector('tbody').innerHTML=tb;
+
+  /* ---------- risk list ---------- */
+  var SEV={high:'重大',medium:'关注',low:'提示'};
+  function chainHtml(ch){
+    var h='';
+    var sIdx = 0;
+    ch.forEach(function(s){
+      sIdx++;
+      h+='<div class="step"><div class="sh"><span class="sn">'+sIdx+'</span>'+esc(s.step)+'</div>';
+      if(s.step==='数据'){
+        h+='<div class="chips">'+ '<div class="chip">'+esc(s.item)+' <b>'+s.value+' '+s.unit+'</b>'
+          + (s.prev_value!==null&&s.prev_value!==undefined?' <span style="color:var(--tx3)">上期 '+s.prev_value+'</span>':'')
+          + '<span class="pg">'+esc(s.source||'')+' P'+s.page+'</span></div></div>';
+      } else if(s.step==='计算'){
+        h+='<div class="fml"><span class="cm">// 触发表达式</span><br>'+esc(s.formula)+'<br><br>'
+          +'<span class="cm">// 变量实际值</span><br>';
+        for(var k in s.values){ h+=esc(k)+' = <b>'+s.values[k]+'</b><br>'; }
+        h+='</div>';
+      } else if(s.step==='出处'){
+        h+='<div class="chips">';
+        (s.sources||[]).forEach(function(x){ h+='<div class="chip">'+esc(x)+'</div>'; });
+        (s.pages||[]).forEach(function(p){ h+='<div class="chip">第 '+p+' 页</div>'; });
+        h+='</div>';
+      } else if(s.step==='判断'){
+        h+='<div class="chips"><div class="chip">'+esc(s.item)+'</div><div class="chip">结果：<b>'+esc(s.result)+'</b></div></div>';
+      } else if(s.step==='归因'){
+        var d=s.dupont, b=s.operating_profit_bridge_yi;
+        h+='<div style="font-size:12px;line-height:1.9">';
+        if(d){ h+='<b>杜邦分解（ROE 变动 '+(d.roe_delta*100).toFixed(2)+'pp）</b><br>'
+          +'净利率效应 <b>'+(d.net_margin_effect*100).toFixed(2)+'pp</b>　'
+          +'周转率效应 <b>'+(d.asset_turnover_effect*100).toFixed(2)+'pp</b>　'
+          +'杠杆效应 <b>'+(d.leverage_effect*100).toFixed(2)+'pp</b><br>'; }
+        if(b){ h+='<br><b>营业利润桥（Δ营业利润 '+b.delta_operating_profit+' 亿元）</b><br>'
+          +'规模效应 <b>'+b.scale_effect+'</b>　毛利率效应 <b>'+b.gross_margin_effect+'</b><br>'
+          +'费用率效应 <b>'+b.expense_ratio_effect+'</b>　其他 <b>'+b.other_effect+'</b><br>'; }
+        if(s.cash_gap_yi!==null&&s.cash_gap_yi!==undefined){ h+='<br>利润与现金缺口 <b>'+s.cash_gap_yi+' 亿元</b>'; }
+        h+='</div>';
+      } else if(s.step==='建议'){
+        h+='<ul class="acts">'; (s.actions||[]).forEach(function(a){ h+='<li>'+esc(a)+'</li>'; }); h+='</ul>';
+      }
+      h+='</div>';
+    });
+    return h;
+  }
+  var order={high:0,medium:1,low:2};
+  var list=risk.risks.slice().sort(function(a,b){
+    if(a.status!==b.status){ return (a.status==='triggered'?-1:1); }
+    if(a.status==='triggered'){ return (order[a.severity]-order[b.severity]) || (b.score-a.score); }
+    return a.risk_id<b.risk_id?-1:1;
+  });
+  var lh='';
+  list.forEach(function(r){
+    var sev = r.status==='triggered' ? r.severity : r.status;
+    var badge = r.status==='triggered'
+      ? '<span class="badge b-'+r.severity+'">'+SEV[r.severity]+' '+r.score+'</span>'
+      : (r.status==='passed' ? '<span class="badge b-pass">通过</span>' : '<span class="badge b-ne">不可评估</span>');
+    lh+='<div class="ri '+(r.status==='passed'?'pass':'')+'" data-sev="'+sev+'">'
+      + '<div class="ri-head"><span class="arrow">▶</span>'+badge
+      + '<div class="ri-title"><div class="t">'+esc(r.risk_name)+'</div>'
+      + '<div class="c">'+esc(r.category_label||'')+'</div></div>'
+      + '<span class="ri-id">'+esc(r.risk_id)+'</span></div>'
+      + '<div class="ri-body">';
+    lh+='<div class="expl">'+esc(r.explanation)+'</div>';
+    if(r.trigger_display){
+      lh+='<div class="step"><div class="sh"><span class="sn">!</span>触发条件</div>'
+        +'<div class="chips"><div class="chip">'+esc(r.trigger_display)+'</div>'
+        +'<div class="chip">表达式：<b style="font-family:ui-monospace,Menlo,monospace">'+esc(r.trigger)+'</b></div></div></div>';
+    }
+    if(r.evidence_chain && r.evidence_chain.length) lh+=chainHtml(r.evidence_chain);
+    else lh+='<div class="tagline">本条无证据链（未触发或输入缺失）。</div>';
+    lh+='</div></div>';
+  });
+  document.getElementById('r-list').innerHTML=lh;
+
+  document.getElementById('r-list').addEventListener('click',function(e){
+    var h=e.target.closest('.ri-head'); if(!h) return;
+    h.parentNode.classList.toggle('open');
+  });
+  document.getElementById('filters').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    [].forEach.call(this.querySelectorAll('button'),function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    var f=b.getAttribute('data-f');
+    [].forEach.call(document.querySelectorAll('#r-list .ri'),function(it){
+      it.style.display = (f==='all'||it.getAttribute('data-sev')===f)?'':'none';
+    });
+  });
+
+  /* ---------- 3. attribution ---------- */
+  var A=diag.attribution;
+  var dp=A.dupont.contribution, mx=0;
+  [dp.net_margin_effect,dp.asset_turnover_effect,dp.leverage_effect].forEach(function(v){ mx=Math.max(mx,Math.abs(v)); });
+  function wbar(lbl,v){
+    var w=Math.abs(v)/mx*100, pos=v>=0;
+    return '<div class="wrow"><span class="wl">'+lbl+'</span>'
+      +'<span class="wb"><span class="wf" style="left:'+(pos?50:50-w/2)+'%;width:'+w/2+'%;background:'+(pos?'var(--red)':'var(--grn)')+'"></span></span>'
+      +'<span class="wv" style="color:'+(pos?'var(--red)':'var(--grn)')+'">'+(v*100).toFixed(2)+'pp</span></div>';
+  }
+  document.getElementById('a-dupont').innerHTML =
+    wbar('净利率效应',dp.net_margin_effect)
+    + wbar('周转率效应',dp.asset_turnover_effect)
+    + wbar('杠杆效应',dp.leverage_effect)
+    + '<div class="cb sum-row"><span class="ck">ROE 变动合计</span><span class="cv">'
+    + (dp.roe_delta*100).toFixed(2)+'pp （'+ (A.dupont.previous.roe*100).toFixed(2)+'% → '+(A.dupont.current.roe*100).toFixed(2)+'%）</span></div>';
+
+  var B=A.operating_profit_bridge, bmx=0;
+  ['scale_effect','gross_margin_effect','expense_ratio_effect','other_effect'].forEach(function(k){ bmx=Math.max(bmx,Math.abs(B[k])); });
+  var bl={scale_effect:'规模效应',gross_margin_effect:'毛利率效应',expense_ratio_effect:'费用率效应',other_effect:'其他（残差）'};
+  var bh='';
+  ['scale_effect','gross_margin_effect','expense_ratio_effect','other_effect'].forEach(function(k){
+    var v=B[k]/1e8, w=Math.abs(v)/(bmx/1e8)*100;
+    bh+='<div class="wrow"><span class="wl">'+bl[k]+'</span>'
+      +'<span class="wb"><span class="wf" style="left:'+(v>=0?50:50-w/2)+'%;width:'+w/2+'%;background:'+(v>=0?'var(--red)':'var(--grn)')+'"></span></span>'
+      +'<span class="wv" style="color:'+(v>=0?'var(--red)':'var(--grn)')+'">'+v.toFixed(2)+' 亿</span></div>';
+  });
+  bh+='<div class="cb sum-row"><span class="ck">营业利润变动合计</span><span class="cv">'
+     +(B.delta_operating_profit/1e8).toFixed(2)+' 亿元</span></div>';
+  document.getElementById('a-bridge').innerHTML=bh;
+
+  var C=A.cash_flow_bridge, ch='';
+  (C.items||[]).forEach(function(it){
+    var v=(it.amount||0)/1e8;
+    ch+='<div class="cb"><span class="ck">'+esc(it.item)+'</span><span class="cv" style="color:'+(v>=0?'var(--red)':'var(--grn)')+'">'
+      +(v>=0?'+':'')+v.toFixed(2)+' 亿</span></div>';
+  });
+  ch+='<div class="cb sum-row"><span class="ck">净利润 → 经营现金流缺口</span><span class="cv">'
+    +(C.gap/1e8).toFixed(2)+' 亿元</span></div>';
+  document.getElementById('a-cash').innerHTML=ch;
+
+  /* ---------- 5. 三表勾稽自检 ---------- */
+  var CK = diag.checks || {items:[], summary:{}, overall:'not_evaluable'};
+  var CK_TAG = {balanced:{t:'平衡', c:'b-pass'},
+                imbalanced:{t:'不平', c:'b-high'},
+                not_evaluable:{t:'无法勾稽', c:'b-ne'}};
+  var ks = CK.summary || {};
+  var overallTag = CK_TAG[CK.overall] || CK_TAG.not_evaluable;
+  document.getElementById('k-sum').innerHTML =
+      '<div class="sc '+(CK.overall==='imbalanced'?'h':'p')+'">'
+        + '<div class="l">勾稽结论</div><div class="n" style="font-size:20px">'+esc(overallTag.t)+'</div></div>'
+    + '<div class="sc"><div class="l">检查项</div><div class="n">'+(ks.total||0)+'</div></div>'
+    + '<div class="sc p"><div class="l">平衡</div><div class="n">'+(ks.balanced||0)+'</div></div>'
+    + '<div class="sc h"><div class="l">不平</div><div class="n">'+(ks.imbalanced||0)+'</div></div>'
+    + '<div class="sc x"><div class="l">无法勾稽</div><div class="n">'+(ks.not_evaluable||0)+'</div></div>';
+
+  // 统一以「亿元」呈现，带千分位；勾稽差异通常是 0，用 0.00 而非「—」更明确
+  function yi(v){
+    if(v===null||v===undefined) return '—';
+    return (v/1e8).toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  var kh='<table><thead><tr><th style="width:24%">勾稽关系</th><th style="width:9%">期间</th>'
+       + '<th style="width:8%">结论</th><th style="width:11%">左值（亿元）</th><th style="width:11%">右值（亿元）</th>'
+       + '<th style="width:10%">差异</th><th>说明 / 代入数据</th></tr></thead><tbody>';
+  (CK.items||[]).forEach(function(it, ix){
+    var tg = CK_TAG[it.status] || {t:it.status, c:'b-ne'};
+    var dp = (it.diff_pct===null||it.diff_pct===undefined)
+        ? '—' : (it.diff_pct*100).toFixed(3)+'%';
+    // 代入数据表：本期各科目取值 + 出处
+    var rows='';
+    Object.keys(it.inputs||{}).forEach(function(vk){
+      var nd = it.inputs[vk] || {};
+      // 直取科目用年报原文口径（display_value + display_unit）；
+      // 倒轧科目没有原文口径，value 已归一到「元」，转「亿元」需 /1e8。
+      var dv = (nd.display_value!==null && nd.display_value!==undefined)
+              ? nd.display_value
+              : (nd.value===null||nd.value===undefined ? null : nd.value/1e8);
+      var du = nd.display_unit || nd.unit || '';
+      var val = (dv===null||dv===undefined) ? '—'
+              : (typeof dv === 'number' ? dv.toLocaleString('zh-CN') : String(dv));
+      var src = nd.derived ? ('倒轧：'+(nd.derived_from||''))
+                           : ((nd.source||'—') + (nd.page!==null&&nd.page!==undefined ? (' P'+nd.page) : ''));
+      rows += '<div class="cb"><span class="ck">'+esc(vk)+'</span>'
+            + '<span class="cv">'+esc(val)+(du?(' '+esc(du)):'')
+            + ' <span class="pg">'+esc(src)+'</span></span></div>';
+    });
+    kh += '<tr><td><b>'+esc(it.name)+'</b><br><span style="font-size:11px;color:var(--tx2)">'
+        + esc(it.formula) + '</span></td>'
+        + '<td>'+esc(it.period)+'</td>'
+        + '<td><span class="badge '+tg.c+'">'+esc(tg.t)+'</span></td>'
+        + '<td>'+yi(it.left)+'</td><td>'+yi(it.right)+'</td>'
+        + '<td>'+yi(it.diff)+'<br><span style="font-size:11px;color:var(--tx3)">'+dp+'</span></td>'
+        + '<td>'
+        + (it.note ? '<div style="font-size:11.5px;color:var(--org);margin-bottom:6px">'+esc(it.note)+'</div>' : '')
+        + '<button type="button" class="kdet-btn" data-i="'+ix+'" aria-expanded="false">▸ 查看代入数据</button>'
+        + '<div class="kdet" id="kdet-'+ix+'" style="display:none">'+rows
+        + '<div style="font-size:10.5px;color:var(--tx3);margin-top:6px">表达式：'
+        + '<span style="font-family:ui-monospace,Menlo,monospace">'+esc(it.formula_symbolic)+'</span></div>'
+        + '</div></td></tr>';
+  });
+  kh += '</tbody></table>';
+  kh += '<div class="desc" style="margin-top:10px">容差口径：'
+      + esc(CK.tolerance_basis||'') + '　｜　处置口径：' + esc(CK.policy||'') + '</div>';
+  var klist = document.getElementById('k-list');
+  klist.innerHTML = kh;
+  klist.addEventListener('click', function(e){
+    var b = e.target.closest('.kdet-btn'); if(!b) return;
+    var box = document.getElementById('kdet-' + b.getAttribute('data-i'));
+    var open = b.getAttribute('aria-expanded') === 'true';
+    b.setAttribute('aria-expanded', open ? 'false' : 'true');
+    b.textContent = open ? '▸ 查看代入数据' : '▾ 收起代入数据';
+    box.style.display = open ? 'none' : 'block';
+  });
+
+  /* ---------- 4. queue ---------- */
+  var qh='';
+  (risk.review_queue||[]).forEach(function(q){
+    qh+='<div class="q"><div class="qt">'+esc(q.item)+'</div>'
+      +'<div class="qr"><b>'+esc(q.reason)+'</b>'+(q.missing_inputs&&q.missing_inputs.length?'（缺失：'+esc(q.missing_inputs.join('、'))+'）':'')+'</div>'
+      +'<div class="qs">建议动作：'+esc(q.suggested_action||'—')
+      +(q.inherited_from?'　｜　来源：'+esc(q.inherited_from):'')
+      +(q.needs_human_judgement?'　｜　<b style="color:var(--org)">需人工判断</b>':'')+'</div></div>';
+  });
+  document.getElementById('q-list').innerHTML = qh ||
+    '<div class="empty">待核验队列为空 —— 所有指标与规则均可计算。</div>';
+
+  /* ---------- nav ---------- */
+  document.querySelector('.nav').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    [].forEach.call(this.querySelectorAll('button'),function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    [].forEach.call(document.querySelectorAll('section'),function(s){s.classList.remove('on');});
+    document.getElementById(b.getAttribute('data-s')).classList.add('on');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  /* ---------- foot ---------- */
+  document.getElementById('foot').innerHTML =
+    'FinRadar（财报雷达）· B 模块演示看板　｜　' + esc(risk.generator||'') + '　｜　生成时间 ' + esc(risk.generated_at||'')
+    + '<br>' + (D.footNote || '')
+    + '<br>本看板仅供 B 模块演示与 E 前端参考之用，最终页面由 E 负责实现。';
+})();
+</script>
+</body>
+</html>
