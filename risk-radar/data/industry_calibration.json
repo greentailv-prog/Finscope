@@ -1,0 +1,78 @@
+{
+  "schema_version": "finradar.industry-calibration/1.0",
+  "owner": "B",
+  "updated_at": "2026-10-10",
+  "purpose": "风险阈值的行业校准表。risk_rules.json 里的默认值是【制造业通用档】，正式使用时按本表覆盖。校准口径建议由 C 从可比公司池统计分位数后提供。",
+  "how_to_use": [
+    "方式一（推荐）：由 C 统计可比公司分位数，写入输入 meta 的 industry_*_benchmark 字段，B 的规则自动读取（如 meta.industry_gross_margin_benchmark）。",
+    "方式二：按本表手工复制一份 risk_rules.json，改阈值后另存为 risk_rules_<行业>.json，调用时用 --rules 指定。",
+    "两种方式都不做时，规则仍会用制造业通用档跑，但必须在结论里标注'未经行业校准'。"
+  ],
+  "calibration_status": "v1.0 为【经验档】，仅提供方向性建议，未经统计校验。正式作业前请用可比公司池重算分位数。",
+  "industries": {
+    "制造业_通用": {
+      "note": "risk_rules.json 的默认值，无需覆盖",
+      "debt_to_assets": { "medium": 0.60, "high": 0.70 },
+      "dso_days":       { "medium": 120,  "high": 180 },
+      "gross_margin_typical": 0.25
+    },
+    "银行": {
+      "note": "高杠杆是经营模式，不是风险。资产负债率规则应整体停用（或阈值提到 0.93）。",
+      "disable_rules": ["S01", "S06", "S07"],
+      "focus_rules": ["A03", "A02"],
+      "debt_to_assets": { "medium": null, "high": null },
+      "note_detail": "银行应改用：不良率、拨备覆盖率、资本充足率、流动性覆盖率——这些指标需要 A 补充抽取，本期不作要求。"
+    },
+    "房地产": {
+      "note": "预售款（合同负债）计入负债，会虚增资产负债率；应改用'剔除预收后的资产负债率'（净负债率）。",
+      "debt_to_assets": { "medium": 0.80, "high": 0.88 },
+      "cash_to_short_term_debt": { "medium": 1.2, "high": 0.8 },
+      "focus_rules": ["S03", "S05", "C01", "C02"],
+      "note_detail": "房地产的核心风险是期限错配与销售回款，应重点看 S03（现金覆盖短期债务）与 C05（收现比）。"
+    },
+    "建筑装饰": {
+      "note": "账期长是行业常态，DSO 阈值需大幅放宽；同时应收减值与合同资产是重灾区。",
+      "dso_days": { "medium": 220, "high": 320 },
+      "debt_to_assets": { "medium": 0.75, "high": 0.85 },
+      "focus_rules": ["E01", "E02", "E05", "C01"]
+    },
+    "国防军工": {
+      "note": "客户为军方，回款集中在年末，DSO 天然偏高但坏账风险低。应收相关的'变化速度'比'绝对水平'更有意义。",
+      "dso_days": { "medium": 200, "high": 300 },
+      "focus_rules": ["E02", "E05", "C05"]
+    },
+    "白酒食品饮料": {
+      "note": "毛利率极高且预收款（合同负债）充沛，资产负债率的分子含大量无息经营负债。",
+      "gross_margin_typical": 0.60,
+      "debt_to_assets": { "medium": 0.40, "high": 0.55 },
+      "focus_rules": ["P01", "C05", "E04"]
+    },
+    "医药生物": {
+      "note": "创新药企可能长期无收入、经营现金流为负，C02/C03 属常态；研发资本化（A04）是重点。",
+      "disable_rules": ["C02", "C03"],
+      "focus_rules": ["A04", "P05", "C04"],
+      "note_detail": "对未盈利生物科技公司，应改用：研发投入占比、管线进度、现金消耗率（burn rate）与现金可支撑月数。"
+    },
+    "零售快消": {
+      "note": "流动比率可低于 1.2（占用上游账期是模式优势），但存货周转是命门。",
+      "current_ratio": { "medium": 1.0, "high": 0.8 },
+      "focus_rules": ["E04", "E05", "C05"]
+    },
+    "重资产_钢铁电力交运": {
+      "note": "折旧摊销占比高，EBITDA 口径天然偏乐观，净负债/EBITDA 应收紧；资本开支大属常态。",
+      "net_debt_to_ebitda": { "medium": 2.5, "high": 3.5 },
+      "capex_to_ocf": { "medium": 1.5, "high": 2.5 },
+      "focus_rules": ["S04", "S07", "P04"]
+    },
+    "半导体_TMT": {
+      "note": "周期性强、资本开支大、研发资本化常见；行业景气度的影响大于个体经营。",
+      "focus_rules": ["A04", "C03", "E04", "P01"],
+      "note_detail": "必须做行业横向对比（P06），单看时序变化容易被行业周期误导。"
+    }
+  },
+  "universal_rules": {
+    "note": "以下规则不受行业影响，任何行业都应保留原阈值",
+    "keep_unchanged": ["A02", "A03", "C01", "G03", "G04", "V02"],
+    "reason": "这六条指向的是报表可信度、利润含金量与治理风险，属于跨行业的共性问题。"
+  }
+}

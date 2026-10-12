@@ -1,0 +1,31 @@
+{
+  "schema_version": "finradar.industry-profile-index/1.0",
+  "owner": "B",
+  "updated_at": "2026-10-10",
+  "note": "行业剖面索引。detect_risks.py --industry <id> 按 profile_id 直接取；不给 --industry 时按 company.industry 关键词自动匹配；都匹配不到则用 default_profile。",
+  "default_profile": "manufacturing",
+  "profiles": [
+    {
+      "profile_id": "banking",
+      "file": "banking.json",
+      "label": "银行（货币金融服务）",
+      "keywords_any": ["银行", "货币金融", "商业银行", "储蓄", "信用社"],
+      "keywords_none": ["银行IT", "金融信息服务", "金融设备"]
+    },
+    {
+      "profile_id": "manufacturing",
+      "file": "manufacturing.json",
+      "label": "制造业（通用档，默认）",
+      "keywords_any": [],
+      "keywords_none": []
+    }
+  ],
+  "how_to_add": [
+    "1. 复制 manufacturing.json 改名，例如 realestate.json",
+    "2. 填 metric_applicability.not_applicable 与 rule_overrides（把不适用规则 action 设为 disable 并写 reason）",
+    "3. 需要的话写 extra_rules（行业专属规则）",
+    "4. 在 _index.json 的 profiles 里登记 profile_id / file / 关键词",
+    "5. 用 scripts/calibrate_industry.py 从可比公司池算分位数，回填 benchmarks",
+    "6. 跑 python3 risk-radar/scripts/detect_risks.py --ratios ... --rules ... --industry realestate -o ... 验证"
+  ]
+}

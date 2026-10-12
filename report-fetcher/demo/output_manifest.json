@@ -1,0 +1,79 @@
+{
+  "schema_version": "finradar.report-fetcher/1.0",
+  "generated_at": "2026-10-10 19:13:58",
+  "source": {
+    "name": "巨潮资讯网",
+    "note": "中国证监会指定上市公司信息披露平台；本模块仅访问无需登录的公开查询与静态文件接口。",
+    "endpoints": [
+      "http://www.cninfo.com.cn/new/information/topSearch/query",
+      "http://www.cninfo.com.cn/new/hisAnnouncement/query",
+      "http://static.cninfo.com.cn"
+    ]
+  },
+  "query": {
+    "keyword": "601398",
+    "years_requested": 3
+  },
+  "company": {
+    "sec_code": "601398",
+    "sec_name": "工商银行",
+    "org_id": "jjxt0000019",
+    "exchange_column": "sse"
+  },
+  "summary": {
+    "announcements_found": 3,
+    "reports_selected": 3,
+    "downloaded_ok": 3,
+    "periods_covered": [
+      2025,
+      2024,
+      2023
+    ],
+    "periods_enough_for_average_balance": true,
+    "note": null
+  },
+  "files": [
+    {
+      "file": "601398_2025_annual_report.pdf",
+      "path": "reports/601398_2025_annual_report.pdf",
+      "pdf_url": "http://static.cninfo.com.cn/finalpage/2026-03-28/1225047240.PDF",
+      "title": "工商银行2025年度报告",
+      "publish_date": "2026-03-28",
+      "fiscal_year": 2025,
+      "status": "ok",
+      "sha256": "e2edab73032f143aad881f612382bc613c8b96b424bb197b125d64a0ef23c78b",
+      "size_bytes": 9289165,
+      "pages": 408
+    },
+    {
+      "file": "601398_2024_annual_report.pdf",
+      "path": "reports/601398_2024_annual_report.pdf",
+      "pdf_url": "http://static.cninfo.com.cn/finalpage/2025-03-29/1222948914.PDF",
+      "title": "工商银行2024年度报告",
+      "publish_date": "2025-03-29",
+      "fiscal_year": 2024,
+      "status": "ok",
+      "sha256": "27b9c08e81061722ab4166ad23d4f90366a3f075af1422543fa6dcb8c7d1a03c",
+      "size_bytes": 9880426,
+      "pages": 410
+    },
+    {
+      "file": "601398_2023_annual_report.pdf",
+      "path": "reports/601398_2023_annual_report.pdf",
+      "pdf_url": "http://static.cninfo.com.cn/finalpage/2024-03-28/1219429144.PDF",
+      "title": "工商银行2023年度报告",
+      "publish_date": "2024-03-28",
+      "fiscal_year": 2023,
+      "status": "ok",
+      "sha256": "e310e8a55ff8f057782c6c70b003fa220ca5a2e484334bffbf308bdc39b3434d",
+      "size_bytes": 9493877,
+      "pages": 394
+    }
+  ],
+  "errors": [],
+  "downstream": {
+    "handoff_to": "A（文档解析层）",
+    "expected_input": "files[].path 指向的本地 PDF",
+    "expected_output": "符合 financial-diagnosis INPUT_SCHEMA 的 input_financials.json"
+  }
+}

@@ -1,0 +1,23 @@
+# ------- 年报 PDF 等二进制（可由 report-fetcher 重新下载，不进版本库） -------
+_raw/
+report-fetcher/data/reports/
+
+# ------- Python 缓存 -------
+__pycache__/
+*.pyc
+*.pyo
+
+# ------- 内部工作数据（非交付物，含项目记忆） -------
+.workbuddy/
+
+# ------- 本地虚拟环境 -------
+.venv/
+venv/
+env/
+
+# ------- 编辑器/系统 -------
+.DS_Store
+Thumbs.db
+
+# ------- 临时校验脚本 -------
+/tmp/_ld_check*.js
