@@ -249,6 +249,14 @@ def value(company, fin: Financials, peers: list[Peer], asm: Assumptions,
         "company": company.to_dict(),
         "as_of": fin.years[-1] if fin.years else None,
         "currency": company.currency,
+        # 市场数据单列一块：Excel 底稿要用股本和股价把股权价值换算成每股价值，
+        # 早先没导出这两个值，导致底稿里「每股价值」整列空白。
+        "market_data": {
+            "price": fin.price,
+            "shares_outstanding": fin.shares_outstanding,
+            "market_cap": fin.market_cap,
+            "price_date": company.price_date,
+        },
         "dcf": dcf,
         "relative": relative,
         "sotp": sotp,

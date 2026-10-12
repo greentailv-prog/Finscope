@@ -284,7 +284,9 @@ def build_dcf(fin: Financials, asm: Assumptions, market: str = "A",
             "delta_nwc": delta_nwc,
             "sbc": sbc,
             "fcff": fcff,
-            "discount_factor": 1 / (1 + wacc) ** (i + 1),
+            # 期中折现（mid-year convention）：现金流在年内均匀发生，按 i+0.5 期折。
+            # Excel 底稿用的是同一口径，两边必须一致，否则重算值对不上报告值。
+            "discount_factor": 1 / (1 + wacc) ** (i + 0.5),
         })
 
     for row in rows:
@@ -517,6 +519,10 @@ def build_relative(fin: Financials, peers: list[Peer], asm: Assumptions,
         "ok": True,
         "method": "relative",
         "peers_used": len(peers),
+        # 可比公司明细：Excel 的「相对估值」表靠它渲染倍数表。
+        # 之前这张表读的是 result.meta.peers_detail，而全项目没人生产过那个字段，
+        # 于是 5 家可比公司明明算出来了，表里却写着「未提供可比公司」。
+        "peers_detail": [p.to_dict() for p in peers],
         "results": results,
         "implied_equity_value": median(equities),
         "implied_per_share": median(per_shares) if per_shares else None,

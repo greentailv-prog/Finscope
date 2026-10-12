@@ -30,6 +30,7 @@
 | `company` | object | 回显标的公司信息 |
 | `as_of` | int | 估值所用最新会计年度 |
 | `currency` | string | `CNY` / `USD` |
+| `market_data` | object | 市价口径：`price / shares_outstanding / market_cap / price_date`。Excel 底稿靠它把股权价值换算成每股价值，**缺了这两个值底稿的「每股价值」会整列空白** |
 | `dcf` | object | DCF 结果 |
 | `relative` | object | 相对估值结果 |
 | `sotp` | object | 分部估值结果（`ok:false, skipped:true` 表示未启用） |
@@ -83,6 +84,7 @@
 |---|---|
 | `ok` | 是否算成功 |
 | `peers_used` | 实际使用的可比公司家数 |
+| `peers_detail[]` | **可比公司明细**（`name / ticker / pe / pb / ps / ev_ebitda / revenue_growth / ebitda_margin / note`）。Excel「相对估值」表的倍数表直接按它渲染，缺了这张表会渲染成「未提供可比公司」 |
 | `results[]` | 每个选用倍数的明细 |
 | `implied_per_share` | **结论：各倍数隐含每股价值的中位数** |
 | `implied_equity_value` | 对应的股权价值 |
@@ -125,6 +127,11 @@
 | `corporate_cost` | 扣减的总部费用 |
 | `equity_value` / `per_share` | 结论 |
 | `conglomerate_discount` | 集团折价 =（SOTP 价 − 市价）÷ SOTP 价 |
+
+> **未启用时 Excel 仍然出这张表**：免费源拿不到分部拆分，底稿会给一页蓝字可手填的空表
+> （分部名 / 指标值 / 可比倍数），填完自动算出分部每股价值并联动到三法融合。
+> 但**权重不会自动变**——三法融合表里 SOTP 那一行的权重是导出时的引擎权重（0），
+> 手工补完分部数据后要把权重调起来，表内已注明。
 
 ## blended（三法融合）
 

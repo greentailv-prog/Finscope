@@ -125,15 +125,15 @@ valuation/
 $ py cli.py value 600519 --peers demo/peers_baijiu.json
 
 贵州茅台（600519）
-  DCF        每股 2,646.99  （WACC 4.64%，g 2.50%）
+  DCF        每股 2,655.91  （WACC 4.64%，g 2.50%）
   相对估值   每股 421.80  （5 家可比）
-  融合        每股 1,534.39  现价 1263.0  →  低估 +21.5%
+  融合        每股 1,538.85  现价 1282.21  →  低估 +20.0%
 
-  提示 6 条：
-    ⚠ 算出的 WACC（4.64%）低于市场隐含折现率（8.31%）367bp。折现率偏低会让
+  提示 5 条：
+    ⚠ 算出的 WACC（4.64%）低于市场隐含折现率（8.28%）364bp。折现率偏低会让
       DCF 结果系统性高于市价——通常是无风险利率处在历史低位、Beta 偏低，或 ERP 偏小。
     ⚠ 终值两种算法偏离 136%，根因多半是 WACC − g 只有 2.14%……
-    ⚠ DCF 与相对估值相差 528%。两者背离到这个程度，加权平均值参考价值有限……
+    ⚠ DCF 与相对估值相差 530%。两者背离到这个程度，加权平均值参考价值有限……
 ```
 
 **这些提示不是报错，是模型的交叉验证结果。** 上面这家的例子说明：
@@ -144,10 +144,26 @@ $ py cli.py value 600519 --peers demo/peers_baijiu.json
 
 ```bash
 py cli.py health                     # 数据层自检
-py tools/smoke_engine.py             # 引擎冒烟（离线，用样例数据）
+py tools/smoke_engine.py             # 引擎冒烟（离线，用样例数据）→ 顺带出底稿
 py tools/probe_ifind.py 600519       # iFinD 连通性与指标实测
 py tools/check_env.py                # 各解释器的依赖分布
 ```
+
+**Excel 底稿的三道验证**（改完 `engine/excel.py` 必跑，需要本机装了 Excel）：
+
+```bash
+py tools/smoke_engine.py                     # 1. 用样例数据出底稿
+powershell -File tools/check_excel.ps1 -src demo/valuation_model.xlsx
+                                             # 2. Excel 打开重算：必须是 EXCEL_CHECK_OK、零错误格
+py tools/verify_workbook.py                  # 3. 八表齐全？公式够多？关键值 = 引擎结论？
+powershell -File tools/check_linkage.ps1 -src demo/valuation_model.xlsx
+                                             # 4. 改假设能不能带动下游（证明是真底稿）
+```
+
+`check_excel.ps1` 抓的是 `#VALUE!` / `#NAME?` / `#DIV/0!` 这类错误格；
+`verify_workbook.py` 按 B 列标签定位、不依赖行号，把底稿重算值和 JSON 结论逐项对齐；
+`check_linkage.ps1` 把 EBIT 利润率调低 10 个百分点，确认 DCF 每股跟着降。
+**这四步全绿，底稿才算能交。**
 
 ## 与作业要求的对应
 
