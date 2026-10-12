@@ -1,0 +1,386 @@
+{
+  "schema_version": "finradar.industry-profile/1.0",
+  "profile_id": "banking",
+  "label": "银行（货币金融服务 / 商业银行）",
+  "statement_model": "banking",
+  "owner": "B",
+  "updated_at": "2026-10-10",
+  "description": "银行业行业剖面。银行没有应收账款、存货、毛利率、流动比率这些概念，通用制造业规则直接套用会大面积误报（最典型：资产负债率 92% 是银行常态，若按通用规则 debt_to_assets > 0.60 会被判为重大偿债风险）。本剖面做三件事：屏蔽不适用规则、改写可适用规则的阈值、补充银行专属规则。",
+  "match": {
+    "keywords_any": ["银行", "货币金融", "商业银行", "储蓄", "信用社"],
+    "keywords_none": ["银行IT", "金融信息服务", "金融设备"],
+    "note": "A 抽取到的 company.industry 命中 keywords_any 且未命中 keywords_none 时自动选用；也可用 --industry banking 显式指定。"
+  },
+  "core_logic": "银行的偿债能力看资本充足率而不是资产负债率；资产质量看不良率/拨备覆盖率而不是应收与存货；盈利看 NIM/成本收入比/RWA 收益率而不是毛利率；现金流看存款与贷款吞吐，'经营现金流''自由现金流''净现比'均不适用。",
+
+  "metric_applicability": {
+    "not_applicable": [
+      "gross_margin", "cost_of_revenue_growth", "inventory_turnover", "dio",
+      "dso", "dpo", "ap_turnover", "ar_turnover", "cash_conversion_cycle",
+      "accounts_receivable_growth", "inventory_growth", "ar_and_inventory_to_assets",
+      "current_ratio", "quick_ratio", "cash_ratio", "working_capital",
+      "rd_expense_ratio", "interest_bearing_debt_ratio", "net_debt", "net_debt_to_ebitda",
+      "interest_coverage", "cash_to_short_term_debt", "restricted_cash_ratio",
+      "sales_cash_ratio", "free_cash_flow", "fcf_to_revenue", "capex_to_ocf",
+      "ocf_to_net_income_parent", "ocf_to_interest_paid", "cf_financing_dependency",
+      "roic", "roic_minus_wacc", "finance_expense_ratio"
+    ],
+    "reason": {
+      "gross_margin": "银行无'营业成本'概念，利息支出是资金成本，不构成毛利口径",
+      "dso/dio/dpo/ccc/_turnover": "银行无应收账款、存货、应付账款科目",
+      "current_ratio/quick_ratio/cash_ratio/working_capital": "银行资产负债表不划分流动/非流动，流动比率无定义",
+      "interest_bearing_debt/net_debt/net_debt_to_ebitda/interest_coverage": "存款本身就是银行的负债与资金来源，'有息负债'与'净负债'口径不成立；偿债能力改由资本充足率刻画",
+      "sales_cash_ratio": "银行无'销售商品收到的现金'概念",
+      "free_cash_flow/capex_to_ocf/cf_financing_dependency": "银行投资现金流主要是债券买卖与放贷，FCF 口径不成立",
+      "ocf_to_net_income_parent/ocf_to_interest_paid": "银行经营现金流含客户存款吞吐，与净利润无可比性",
+      "roic/roic_minus_wacc": "投入资本口径对银行不成立，改用 ROE / RWA 收益率 vs 资本成本",
+      "finance_expense_ratio": "利息支出属于银行主营成本，不属'财务费用'",
+      "rd_expense_ratio": "银行无研发投入资本化问题"
+    }
+  },
+
+  "rule_overrides": {
+    "G01": {"action": "keep", "reason": "营业收入增长对银行同样适用"},
+    "G02": {"action": "keep", "reason": "归母净利润增长对银行同样适用"},
+    "G03": {"action": "keep", "reason": "增收不增利对银行同样适用"},
+    "G04": {"action": "keep", "reason": "扣非占比对银行同样适用"},
+    "G05": {
+      "action": "disable",
+      "reason": "银行经营现金流由存款吞吐驱动，与收入增速无可比性；改用 B08 存款增速匹配度规则"
+    },
+    "P01": {"action": "disable", "reason": "银行无毛利率口径"},
+    "P02": {
+      "action": "modify",
+      "trigger": "roe_delta < -0.005",
+      "threshold": -0.005,
+      "trigger_display": "ROE 同比下降 > 0.5 个百分点",
+      "reason": "银行 ROE 已进入个位数区间，通用的 3 个百分点阈值会漏判；改用 0.5pp"
+    },
+    "P03": {
+      "action": "modify",
+      "trigger": "roe < wacc",
+      "threshold": "wacc（由 C 提供的银行权益成本）",
+      "reason": "保留，但银行的 WACC 应取权益成本（Ke），由 C 提供；缺失时本规则转 not_evaluable"
+    },
+    "P04": {"action": "disable", "reason": "ROIC 对银行不成立，改用 B12 RWA 收益率规则"},
+    "P05": {
+      "action": "modify",
+      "trigger": "cost_to_income_delta > 0.015",
+      "threshold": 0.015,
+      "trigger_display": "成本收入比同比上升 > 1.5 个百分点",
+      "reason": "银行用'成本收入比'（业务及管理费/营业收入）替代'期间费用率'"
+    },
+    "P06": {"action": "disable", "reason": "银行无毛利率；改用 B06 NIM 低于同业中位数"},
+    "P07": {"action": "disable", "reason": "利息支出是银行主营成本，非财务费用；改用 B06 观测 NIM"},
+    "S01": {
+      "action": "disable",
+      "reason": "银行资产负债率常态在 90% 以上，通用 60% 阈值必然误报；偿债能力改由 B04/B05 资本充足率规则刻画"
+    },
+    "S02": {"action": "disable", "reason": "同上，杠杆抬升改由资本充足率变动刻画"},
+    "S03": {"action": "disable", "reason": "银行流动性用 LCR/NSFR 刻画，货币资金/短债口径不成立"},
+    "S04": {"action": "disable", "reason": "利息保障倍数对银行不成立（利息支出即主营成本）"},
+    "S05": {"action": "disable", "reason": "'有息负债'口径不成立；负债端风险改由 B08 存款增速匹配度刻画"},
+    "S06": {"action": "disable", "reason": "银行不划分流动/非流动，无流动比率"},
+    "S07": {"action": "disable", "reason": "净负债/EBITDA 对银行不成立"},
+    "S08": {"action": "disable", "reason": "受限资金占比对银行不构成偿债风险信号"},
+    "E01": {"action": "disable", "reason": "银行无应收账款"},
+    "E02": {"action": "disable", "reason": "银行无应收账款"},
+    "E03": {"action": "disable", "reason": "银行无应收账款"},
+    "E04": {"action": "disable", "reason": "银行无存货"},
+    "E05": {"action": "disable", "reason": "银行无现金转换周期"},
+    "E06": {"action": "disable", "reason": "总资产周转率对银行不适用（资产即生息资产，周转概念不成立）"},
+    "E07": {"action": "disable", "reason": "银行无应收与存货"},
+    "C01": {"action": "disable", "reason": "银行经营现金流含存款吞吐，净现比无意义"},
+    "C02": {"action": "disable", "reason": "银行经营现金流受存款吞吐主导，正负不代表经营恶化"},
+    "C03": {"action": "disable", "reason": "自由现金流对银行不成立"},
+    "C04": {"action": "disable", "reason": "银行资本开支极小且非投资决策核心变量"},
+    "C05": {"action": "disable", "reason": "银行无收现比"},
+    "C06": {"action": "disable", "reason": "银行经营现金流口径不可比"},
+    "C07": {"action": "disable", "reason": "银行投资现金流即债券投资，不构成外部融资依赖"},
+    "A01": {"action": "keep", "reason": "商誉/净资产对银行同样适用"},
+    "A02": {"action": "disable", "reason": "'存贷双高'针对实体企业，银行本身就是存贷机构"},
+    "A03": {"action": "keep", "reason": "审计意见对银行同样适用"},
+    "A04": {"action": "disable", "reason": "银行无研发资本化问题"},
+    "V01": {"action": "keep", "reason": "分红率对银行同样适用（银行分红稳定性是核心关注点）"},
+    "V02": {"action": "disable", "reason": "银行经营现金流口径不可比；分红风险改由 B13 观察分红率与资本充足率的联动"}
+  },
+
+  "categories": {
+    "banking": "银行业专项风险：资产质量（不良/拨备）、资本充足、息差与负债成本、流动性匹配"
+  },
+
+  "regulatory_basis": {
+    "note": "以下监管底线用于把'低于红线'和'低于同业'区分开。数值为公开监管规则，若监管口径调整需同步更新；G-SIB 分组附加资本按工行实际情况取值，其他银行需按自身分组重算。",
+    "provision_coverage_floor": 0.0150,
+    "provision_coverage_floor_note": "拨备覆盖率监管要求 150%（差异化调控可下调至 120%–150%）",
+    "loan_provision_ratio_floor": 0.025,
+    "loan_provision_ratio_floor_note": "贷款拨备率监管要求 2.5%",
+    "cet1_floor": 0.0825,
+    "cet1_floor_note": "核心一级资本充足率底线 = 5%（最低要求）+ 2.5%（储备资本）+ G-SIB 附加资本；工行 2025 年 G-SIB 分组升至第三组，附加 0.75%，合计 8.25%",
+    "capital_adequacy_floor": 0.1125,
+    "capital_adequacy_floor_note": "资本充足率底线 = 8% + 2.5% + 0.75%（G-SIB 第三组附加），TLAC 要求另计"
+  },
+
+  "benchmarks": {
+    "as_of": "2026-10-10",
+    "source": "东方财富公开行情接口（银行板块 BK0475）ROE 分位数 + 待 C 补充的监管口径行业均值",
+    "calibrated": false,
+    "peers_note": "由 scripts/calibrate_industry.py --fetch-peers 用公开数据重算后回填，字段值会覆盖这里",
+    "values": {
+      "roe": {"p10": 0.0328, "p25": 0.0433, "median": 0.0466, "p75": 0.0606, "p90": 0.0669, "n": 20, "unit": "ratio", "source": "东方财富 银行板块 20 家 ROE(2025)", "as_of": "2026-10-10"},
+      "npl_ratio": {"median": null, "note": "待 C 从金融监管总局'商业银行主要监管指标'季度数据回填"},
+      "provision_coverage": {"median": null, "note": "待 C 回填"},
+      "nim": {"median": null, "note": "待 C 回填"},
+      "cost_to_income": {"median": null, "note": "待 C 回填"}
+    }
+  },
+
+  "extra_rules": [
+    {
+      "risk_id": "B01",
+      "risk_name": "不良贷款率抬升",
+      "risk_name_en": "NPL ratio rising",
+      "category": "banking",
+      "severity": "medium",
+      "confidence": "high",
+      "trigger": "npl_ratio_delta > 0.0005",
+      "escalate_when": "npl_ratio_delta > 0.0015",
+      "escalate_to": "high",
+      "threshold": 0.0005,
+      "trigger_display": "不良率同比上升 > 5BP（重大档 > 15BP）",
+      "explanation_template": "不良贷款率 {npl_ratio_pp:.2f}%，同比变动 {npl_ratio_delta_bp:+.0f}BP（上年 {npl_ratio_prev_pp:.2f}%）；不良贷款余额约 {npl_balance_yi:,.0f} 亿元。",
+      "evidence_required": ["customer_loans_gross", "npl_ratio"],
+      "suggestions": [
+        "拉取年报'资产质量分析'章节，确认不良率上升来自哪个行业/地区",
+        "核对关注类贷款与逾期贷款迁徙率，判断是不良认定收紧还是真实劣变",
+        "对比同业同期不良率变动，区分行业性因素与个体因素"
+      ]
+    },
+    {
+      "risk_id": "B02",
+      "risk_name": "拨备覆盖率低于监管红线",
+      "risk_name_en": "Provision coverage below regulatory floor",
+      "category": "banking",
+      "severity": "high",
+      "confidence": "high",
+      "trigger": "provision_coverage < 0.0150",
+      "threshold": 0.0150,
+      "trigger_display": "拨备覆盖率 < 150%（监管底线）",
+      "explanation_template": "拨备覆盖率 {provision_coverage_pp:.2f}%，低于监管底线 150%；贷款减值准备 {loan_loss_provision_yi:,.0f} 亿元，不良贷款余额约 {npl_balance_yi:,.0f} 亿元。",
+      "evidence_required": ["loan_loss_provision", "npl_ratio", "customer_loans_gross"],
+      "suggestions": [
+        "确认是否适用差异化拨备调控（120%–150% 区间），若适用需披露监管核准文件",
+        "测算补提拨备对净利润的影响幅度",
+        "检查是否存在通过核销转出压降不良、同时消耗拨备的操作"
+      ]
+    },
+    {
+      "risk_id": "B03",
+      "risk_name": "拨备覆盖率明显下降，风险抵补能力弱化",
+      "risk_name_en": "Provision coverage declining",
+      "category": "banking",
+      "severity": "medium",
+      "confidence": "high",
+      "trigger": "provision_coverage_delta < -0.20",
+      "escalate_when": "provision_coverage_delta < -0.40",
+      "escalate_to": "high",
+      "threshold": -0.20,
+      "trigger_display": "拨备覆盖率同比下降 > 20 个百分点（重大档 40 个百分点）",
+      "explanation_template": "拨备覆盖率由 {provision_coverage_prev_pp:.2f}% 降至 {provision_coverage_pp:.2f}%，变动 {provision_coverage_delta_pp:+.1f} 个百分点；贷款拨备率 {loan_provision_ratio_pp:.2f}%。",
+      "evidence_required": ["provision_coverage"],
+      "suggestions": [
+        "拆解拨备覆盖率下降来自分母（不良余额上升）还是分子（少提拨备）",
+        "若来自少提拨备，需评估利润中隐含的拨备释放成分",
+        "核对贷款拨备率是否同步下降"
+      ]
+    },
+    {
+      "risk_id": "B04",
+      "risk_name": "资本充足率下滑",
+      "risk_name_en": "Capital adequacy ratio declining",
+      "category": "banking",
+      "severity": "medium",
+      "confidence": "high",
+      "trigger": "capital_adequacy_ratio_delta < -0.005",
+      "escalate_when": "capital_adequacy_ratio_delta < -0.010",
+      "escalate_to": "high",
+      "threshold": -0.005,
+      "trigger_display": "资本充足率同比下降 > 0.5 个百分点（重大档 1 个百分点）",
+      "explanation_template": "资本充足率 {capital_adequacy_ratio_pp:.2f}%，同比变动 {capital_adequacy_ratio_delta_pp:+.2f} 个百分点；核心一级资本充足率 {cet1_ratio_pp:.2f}%，一级资本充足率 {tier1_ratio_pp:.2f}%。",
+      "evidence_required": ["capital_adequacy_ratio", "cet1_ratio"],
+      "suggestions": [
+        "核对是风险加权资产扩张过快，还是资本净额增速跟不上",
+        "查看年报'资本管理'章节的资本规划与内部资本充足评估程序（ICAAP）",
+        "确认分红与资本补充（永续债/可转债/定增）之间的平衡安排"
+      ]
+    },
+    {
+      "risk_id": "B05",
+      "risk_name": "核心一级资本充足率逼近监管底线",
+      "risk_name_en": "CET1 approaching regulatory floor",
+      "category": "banking",
+      "severity": "medium",
+      "confidence": "high",
+      "trigger": "cet1_ratio < 0.095",
+      "escalate_when": "cet1_ratio < 0.0825",
+      "escalate_to": "high",
+      "threshold": 0.095,
+      "trigger_display": "核心一级资本充足率 < 9.5%（重大档 < 8.25% 监管底线）",
+      "explanation_template": "核心一级资本充足率 {cet1_ratio_pp:.2f}%，距监管底线 8.25%（含储备资本与 G-SIB 第三组 0.75% 附加）缓冲 {cet1_buffer_pp:.2f} 个百分点；风险加权资产 {raw_rwa_yi:,.0f} 亿元。",
+      "evidence_required": ["cet1_ratio", "rwa"],
+      "suggestions": [
+        "确认本行 G-SIB 分组与对应的附加资本要求，重算真实底线",
+        "测算 RWA 增速若维持，资本缓冲可支撑几个年度",
+        "检查 TLAC 达标情况（若为全球系统重要性银行）"
+      ]
+    },
+    {
+      "risk_id": "B06",
+      "risk_name": "净息差收窄",
+      "risk_name_en": "NIM compression",
+      "category": "banking",
+      "severity": "medium",
+      "confidence": "high",
+      "trigger": "nim_delta < -0.0010",
+      "escalate_when": "nim_delta < -0.0025",
+      "escalate_to": "high",
+      "threshold": -0.0010,
+      "trigger_display": "净利息收益率同比下降 > 10BP（重大档 25BP）",
+      "explanation_template": "净利息收益率（NIM）{nim_pp:.2f}%，同比变动 {nim_delta_bp:+.0f}BP；净利息差 {net_interest_spread_pp:.2f}%，利息净收入 {raw_net_interest_income_yi:,.0f} 亿元。",
+      "evidence_required": ["nim", "net_interest_income"],
+      "suggestions": [
+        "拆解息差收窄来自资产端收益率下行还是负债端成本上行",
+        "查看年报'利息净收入'章节的生息资产收益率与计息负债付息率分解",
+        "评估存款定期化对负债成本的持续压力"
+      ]
+    },
+    {
+      "risk_id": "B07",
+      "risk_name": "成本收入比上升",
+      "risk_name_en": "Cost-to-income ratio rising",
+      "category": "banking",
+      "severity": "low",
+      "confidence": "high",
+      "trigger": "cost_to_income_delta > 0.015",
+      "threshold": 0.015,
+      "trigger_display": "成本收入比同比上升 > 1.5 个百分点",
+      "explanation_template": "成本收入比 {cost_to_income_pp:.2f}%，同比变动 {cost_to_income_delta_pp:+.2f} 个百分点；业务及管理费 {raw_business_admin_expense_yi:,.0f} 亿元，营业收入 {raw_revenue_yi:,.0f} 亿元。",
+      "evidence_required": ["business_admin_expense", "revenue"],
+      "suggestions": [
+        "区分是收入端增长乏力还是费用端刚性上升",
+        "核对员工成本与数字化转型投入的资本化/费用化口径"
+      ]
+    },
+    {
+      "risk_id": "B08",
+      "risk_name": "贷款增速显著快于存款增速，资金来源匹配度下降",
+      "risk_name_en": "Loan growth outpacing deposit growth",
+      "category": "banking",
+      "severity": "medium",
+      "confidence": "high",
+      "trigger": "(loan_growth - deposit_growth) > 0.05",
+      "threshold": 0.05,
+      "trigger_display": "贷款增速 − 存款增速 > 5 个百分点",
+      "explanation_template": "客户贷款及垫款总额增速 {loan_growth_pp:.2f}%，客户存款增速 {deposit_growth_pp:.2f}%，缺口 {loan_deposit_growth_gap_pp:+.2f} 个百分点；存贷比 {loan_to_deposit_pp:.2f}%（上年 {loan_to_deposit_prev_pp:.2f}%）。",
+      "evidence_required": ["customer_loans_gross", "customer_deposits"],
+      "suggestions": [
+        "检查是否依赖同业负债或发行债券弥补资金缺口",
+        "核对流动性覆盖率（LCR）与净稳定资金比例（NSFR）",
+        "评估存款成本上升压力"
+      ]
+    },
+    {
+      "risk_id": "B09",
+      "risk_name": "存贷比快速抬升",
+      "risk_name_en": "Loan-to-deposit ratio rising fast",
+      "category": "banking",
+      "severity": "low",
+      "confidence": "medium",
+      "trigger": "loan_to_deposit_delta > 0.05",
+      "threshold": 0.05,
+      "trigger_display": "存贷比同比上升 > 5 个百分点",
+      "explanation_template": "存贷比由 {loan_to_deposit_prev_pp:.2f}% 升至 {loan_to_deposit_pp:.2f}%，上升 {loan_to_deposit_delta_pp:.2f} 个百分点。存贷比自 2015 年起为监测指标而非监管指标，需结合 LCR/NSFR 一并判断。",
+      "evidence_required": ["customer_loans_gross", "customer_deposits"],
+      "suggestions": [
+        "结合 LCR / NSFR 判断流动性实际松紧",
+        "核对同业负债占比变化"
+      ]
+    },
+    {
+      "risk_id": "B10",
+      "risk_name": "信用减值计提强度上升",
+      "risk_name_en": "Credit impairment intensity rising",
+      "category": "banking",
+      "severity": "medium",
+      "confidence": "medium",
+      "trigger": "credit_cost_delta > 0.0010",
+      "threshold": 0.0010,
+      "trigger_display": "信用减值损失/平均贷款总额同比上升 > 10BP",
+      "explanation_template": "信用减值损失 {raw_credit_impairment_loss_yi:,.0f} 亿元，占平均贷款总额 {credit_cost_pp:.2f}%，同比变动 {credit_cost_delta_pp:+.2f} 个百分点。注：分子含全部金融资产的信用减值，非仅贷款，口径偏宽。",
+      "evidence_required": ["credit_impairment_loss", "customer_loans_gross"],
+      "suggestions": [
+        "从年报附注'信用减值损失'明细中剥离贷款部分，重算精确口径",
+        "区分阶段一/二/三计提结构变化"
+      ]
+    },
+    {
+      "risk_id": "B11",
+      "risk_name": "不良率下降但拨备覆盖率同步下降，需排查核销与认定的口径影响",
+      "risk_name_en": "NPL down while coverage down",
+      "category": "banking",
+      "severity": "medium",
+      "confidence": "medium",
+      "trigger": "npl_ratio_delta < 0 and provision_coverage_delta < -0.10",
+      "threshold": -0.10,
+      "trigger_display": "不良率下降 且 拨备覆盖率下降 > 10 个百分点",
+      "explanation_template": "不良贷款率由 {npl_ratio_prev_pp:.2f}% 降至 {npl_ratio_pp:.2f}%（{npl_ratio_delta_bp:+.0f}BP），但拨备覆盖率同时由 {provision_coverage_prev_pp:.2f}% 降至 {provision_coverage_pp:.2f}%。两者同向下降需排查：是否通过核销转出压降不良、是否放松了不良认定标准、或拨备少提释放利润。",
+      "evidence_required": ["npl_ratio", "provision_coverage"],
+      "suggestions": [
+        "核对年报'贷款减值准备变动表'中的核销与转出金额",
+        "计算'不良 + 关注'合计占比，判断是否只是口径迁移",
+        "对比'逾期 90 天以上贷款 / 不良贷款'比值，检验不良认定是否充分"
+      ]
+    },
+    {
+      "risk_id": "B12",
+      "risk_name": "风险加权资产收益率低于资本成本",
+      "risk_name_en": "RWA return below cost of capital",
+      "category": "banking",
+      "severity": "medium",
+      "confidence": "medium",
+      "trigger": "rwa_return < wacc",
+      "threshold": "wacc（由 C 提供）",
+      "trigger_display": "净利润 / 平均风险加权资产 < 资本成本",
+      "explanation_template": "风险加权资产收益率 {rwa_return_pp:.2f}%，低于资本成本 {wacc_pp:.2f}%，缺口 {rwa_return_minus_wacc_pp:+.2f} 个百分点；风险加权资产占总资产 {rwa_to_assets_pp:.2f}%。",
+      "evidence_required": ["rwa", "net_income", "wacc"],
+      "suggestions": [
+        "由 C 提供银行适用的权益成本（Ke）",
+        "结合 ROE 与 RWA 密度判断是资本使用效率问题还是资产结构问题"
+      ]
+    },
+    {
+      "risk_id": "B13",
+      "risk_name": "分红率与资本充足率同时承压",
+      "risk_name_en": "Payout pressure under capital constraint",
+      "category": "banking",
+      "severity": "low",
+      "confidence": "medium",
+      "trigger": "payout_ratio > 0.30 and capital_adequacy_ratio_delta < 0",
+      "threshold": 0.30,
+      "trigger_display": "现金分红率 > 30% 且资本充足率同比下降",
+      "explanation_template": "现金分红率 {payout_ratio_pp:.2f}%，同时资本充足率同比变动 {capital_adequacy_ratio_delta_pp:+.2f} 个百分点，分红对资本内生积累形成压力。",
+      "evidence_required": ["dividend_paid", "net_income_parent", "capital_adequacy_ratio"],
+      "suggestions": [
+        "核对分红方案是否已通过董事会与股东大会决议",
+        "测算在不分红情况下资本充足率可提升的幅度"
+      ]
+    }
+  ],
+
+  "derived_vars": {
+    "_note": "npl_balance 与 rwa_return 由 financial-diagnosis 的 banking 指标类直接产出，这里只放需要用比率再加工的量",
+    "loan_deposit_growth_gap": "loan_growth - deposit_growth",
+    "cet1_buffer": "cet1_ratio - 0.0825",
+    "rwa_return_minus_wacc": "rwa_return - wacc"
+  }
+}

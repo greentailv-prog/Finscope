@@ -1,0 +1,40 @@
+{
+  "schema_version": "finradar.industry-profile/1.0",
+  "profile_id": "manufacturing",
+  "label": "制造业（通用档，默认剖面）",
+  "statement_model": "general",
+  "owner": "B",
+  "updated_at": "2026-10-10",
+  "description": "默认剖面。未识别到特定行业时使用，40 条通用规则全量生效，不覆盖任何阈值。当前阈值属于'制造业通用经验档'，未经统计校准。",
+  "match": {
+    "keywords_any": [],
+    "keywords_none": [],
+    "note": "作为 fallback 剖面：任何未命中其他剖面的公司都用它。"
+  },
+  "core_logic": "以毛利率、应收与存货周转、有息负债与利息覆盖、经营现金流含金量为主线的实体企业口径。",
+
+  "metric_applicability": {
+    "not_applicable": [],
+    "reason": {}
+  },
+
+  "rule_overrides": {},
+
+  "categories": {},
+
+  "benchmarks": {
+    "as_of": "2026-10-10",
+    "source": "经验档，待 C 用可比公司池校准",
+    "calibrated": false,
+    "values": {
+      "gross_margin": {"median": null, "note": "由 meta.industry_gross_margin_benchmark 传入；C 从可比公司池统计后回填"},
+      "dso": {"median": null, "note": "待 C 回填（制造业经验值约 90–120 天）"},
+      "debt_to_assets": {"median": null, "note": "待 C 回填（制造业经验值约 40%–55%）"},
+      "ocf_to_net_income_parent": {"median": null, "note": "待 C 回填"}
+    }
+  },
+
+  "extra_rules": [],
+
+  "derived_vars": {}
+}

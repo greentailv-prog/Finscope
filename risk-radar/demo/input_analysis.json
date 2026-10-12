@@ -1,0 +1,3177 @@
+{
+  "schema_version": "finradar.diagnosis/1.0",
+  "generated_at": "2026-10-10T21:11:05+08:00",
+  "generator": "financial-diagnosis/scripts/compute_ratios.py",
+  "company": {
+    "name": "华衍智能装备股份有限公司",
+    "ticker": "DEMO.SH",
+    "industry": "专用设备制造业",
+    "report_period": "2025",
+    "report_source": "2025年年度报告"
+  },
+  "period": {
+    "current": "2025",
+    "previous": "2024",
+    "all": [
+      "2023",
+      "2024",
+      "2025"
+    ]
+  },
+  "meta": {
+    "default_unit": "亿元",
+    "currency": "CNY",
+    "periods": [
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "report_period": "2025",
+    "wacc": 0.085,
+    "days_in_year": 365,
+    "industry": "专用设备制造业",
+    "industry_gross_margin_benchmark": null,
+    "audit_opinion": "标准无保留意见"
+  },
+  "industry_profile": "general",
+  "assumptions": {
+    "wacc": 0.085,
+    "days_in_year": 365.0,
+    "average_balance": "所有周转率 / 回报率类指标的分母一律使用 (期初 + 期末) / 2",
+    "unit_normalized_to": "元"
+  },
+  "derived": {
+    "2023": {
+      "gross_profit": 2440000000.0,
+      "ebit": 1020000000.0,
+      "effective_tax_rate": 0.134078,
+      "ebitda": 1805000000.0,
+      "nopat": 883240223.463687,
+      "interest_bearing_debt": 4460000000.0,
+      "short_term_interest_bearing_debt": 1980000000.0,
+      "net_debt": 1570000000.0,
+      "invested_capital": 10270000000.0,
+      "working_capital": 3959999999.999999,
+      "ar_total": 4040000000.0,
+      "fcf": -218000000.0,
+      "period_expense": 1410000000.0
+    },
+    "2024": {
+      "gross_profit": 2880000000.000001,
+      "ebit": 1213000000.0,
+      "effective_tax_rate": 0.13806,
+      "ebitda": 2073000000.0,
+      "nopat": 1045533582.089552,
+      "interest_bearing_debt": 4970000000.0,
+      "short_term_interest_bearing_debt": 2320000000.0,
+      "net_debt": 1810000000.0,
+      "invested_capital": 11500000000.0,
+      "working_capital": 4440000000.0,
+      "ar_total": 4630000000.0,
+      "fcf": -396000000.0,
+      "period_expense": 1611000000.0
+    },
+    "2025": {
+      "gross_profit": 2970000000.0,
+      "ebit": 1057000000.0,
+      "effective_tax_rate": 0.160804,
+      "ebitda": 1997000000.0,
+      "nopat": 887030150.753769,
+      "interest_bearing_debt": 6920000000.0,
+      "short_term_interest_bearing_debt": 3500000000.0,
+      "net_debt": 4680000000.0,
+      "invested_capital": 13810000000.0,
+      "working_capital": 4439999999.999998,
+      "ar_total": 6450000000.0,
+      "fcf": -1395000000.0,
+      "period_expense": 1956000000.0
+    }
+  },
+  "ratios": {
+    "growth": {
+      "revenue_growth": {
+        "value": 0.144128,
+        "unit": "ratio",
+        "formula": "营业收入（本期）/ 营业收入（上期）- 1",
+        "inputs": {
+          "revenue_t": 12860000000.0,
+          "revenue_t_1": 11240000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "revenue_t": 11240000000.0,
+          "revenue_t_1": 9860000000.0
+        }
+      },
+      "net_income_growth": {
+        "value": -0.277056,
+        "unit": "ratio",
+        "formula": "净利润（本期）/ 净利润（上期）- 1",
+        "inputs": {
+          "net_income_t": 668000000.0,
+          "net_income_t_1": 924000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "net_income_t": 924000000.0,
+          "net_income_t_1": 775000000.0
+        }
+      },
+      "net_income_parent_growth": {
+        "value": -0.263341,
+        "unit": "ratio",
+        "formula": "归母净利润（本期）/ 归母净利润（上期）- 1",
+        "inputs": {
+          "ni_parent_t": 635000000.0,
+          "ni_parent_t_1": 862000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "ni_parent_t": null,
+          "ni_parent_t_1": null
+        }
+      },
+      "net_income_deducted_growth": {
+        "value": -0.381366,
+        "unit": "ratio",
+        "formula": "扣非净利润（本期）/ 扣非净利润（上期）- 1",
+        "inputs": {
+          "ni_ded_t": 498000000.0,
+          "ni_ded_t_1": 805000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "ni_ded_t": null,
+          "ni_ded_t_1": null
+        }
+      },
+      "cost_of_revenue_growth": {
+        "value": 0.183014,
+        "unit": "ratio",
+        "formula": "营业成本（本期）/ 营业成本（上期）- 1",
+        "inputs": {
+          "cogs_t": 9890000000.0,
+          "cogs_t_1": 8359999999.999999
+        },
+        "prev": null,
+        "delta": null,
+        "status": "ok",
+        "inputs_prev": {
+          "cogs_t": null,
+          "cogs_t_1": null
+        }
+      },
+      "total_assets_growth": {
+        "value": 0.172932,
+        "unit": "ratio",
+        "formula": "总资产（本期）/ 总资产（上期）- 1",
+        "inputs": {
+          "ta_t": 21840000000.0,
+          "ta_t_1": 18620000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "status": "ok",
+        "inputs_prev": {
+          "ta_t": null,
+          "ta_t_1": null
+        }
+      },
+      "equity_parent_growth": {
+        "value": 0.05513,
+        "unit": "ratio",
+        "formula": "归母净资产（本期）/ 归母净资产（上期）- 1",
+        "inputs": {
+          "eq_t": 6890000000.000001,
+          "eq_t_1": 6530000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "status": "ok",
+        "inputs_prev": {
+          "eq_t": null,
+          "eq_t_1": null
+        }
+      },
+      "ocf_growth": {
+        "value": -0.606354,
+        "unit": "ratio",
+        "formula": "经营活动现金流量净额（本期）/ 经营活动现金流量净额（上期）- 1",
+        "inputs": {
+          "ocf_t": 285000000.0,
+          "ocf_t_1": 724000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "ocf_t": 724000000.0,
+          "ocf_t_1": 642000000.0
+        }
+      },
+      "profit_revenue_scissors": {
+        "value": 0.407469,
+        "unit": "ratio",
+        "formula": "收入增速 - 归母净利润增速（>0 表示增收不增利）",
+        "inputs": {
+          "revenue_growth": 0.144128,
+          "net_income_parent_growth": -0.263341
+        },
+        "prev": null,
+        "delta": null,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "revenue_growth": null,
+          "net_income_parent_growth": null
+        }
+      }
+    },
+    "profitability": {
+      "gross_margin": {
+        "value": 0.230949,
+        "unit": "ratio",
+        "formula": "(营业收入 - 营业成本) / 营业收入",
+        "inputs": {
+          "revenue": 12860000000.0,
+          "cost_of_revenue": 9890000000.0
+        },
+        "prev": 0.256228,
+        "delta": -0.025279,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "revenue": 11240000000.0,
+          "cost_of_revenue": 8359999999.999999
+        }
+      },
+      "net_margin": {
+        "value": 0.051944,
+        "unit": "ratio",
+        "formula": "净利润 / 营业收入",
+        "inputs": {
+          "net_income": 668000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.082206,
+        "delta": -0.030262,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "net_income": 924000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "net_margin_parent": {
+        "value": 0.049378,
+        "unit": "ratio",
+        "formula": "归母净利润 / 营业收入",
+        "inputs": {
+          "net_income_parent": 635000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.07669,
+        "delta": -0.027312,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "net_income_parent": 862000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "net_margin_deducted": {
+        "value": 0.038725,
+        "unit": "ratio",
+        "formula": "扣非净利润 / 营业收入",
+        "inputs": {
+          "net_income_deducted": 498000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.071619,
+        "delta": -0.032894,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "net_income_deducted": 805000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "operating_margin": {
+        "value": 0.065474,
+        "unit": "ratio",
+        "formula": "营业利润 / 营业收入",
+        "inputs": {
+          "operating_profit": 842000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.09653,
+        "delta": -0.031056,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "operating_profit": 1085000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "ebit_margin": {
+        "value": 0.082193,
+        "unit": "ratio",
+        "formula": "EBIT / 营业收入，EBIT = 营业利润 + 财务费用",
+        "inputs": {
+          "ebit": 1057000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.107918,
+        "delta": -0.025725,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "ebit": 1213000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "selling_expense_ratio": {
+        "value": 0.047589,
+        "unit": "ratio",
+        "formula": "销售费用 / 营业收入",
+        "inputs": {
+          "selling_expense": 612000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.044929,
+        "delta": 0.002661,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "selling_expense": 505000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "admin_expense_ratio": {
+        "value": 0.042224,
+        "unit": "ratio",
+        "formula": "管理费用 / 营业收入",
+        "inputs": {
+          "admin_expense": 543000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.040925,
+        "delta": 0.001299,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "admin_expense": 460000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "rd_expense_ratio": {
+        "value": 0.045568,
+        "unit": "ratio",
+        "formula": "研发费用 / 营业收入",
+        "inputs": {
+          "rd_expense": 586000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.046085,
+        "delta": -0.000518,
+        "status": "ok",
+        "inputs_prev": {
+          "rd_expense": 518000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "finance_expense_ratio": {
+        "value": 0.016719,
+        "unit": "ratio",
+        "formula": "财务费用 / 营业收入",
+        "inputs": {
+          "finance_expense": 215000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.011388,
+        "delta": 0.005331,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "finance_expense": 128000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "period_expense_ratio": {
+        "value": 0.1521,
+        "unit": "ratio",
+        "formula": "(销售+管理+研发+财务费用) / 营业收入",
+        "inputs": {
+          "period_expense": 1956000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.143327,
+        "delta": 0.008772,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "period_expense": 1611000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "roe": {
+        "value": 0.094635,
+        "unit": "ratio",
+        "formula": "归母净利润 / ((期初归母净资产 + 期末归母净资产) / 2)",
+        "inputs": {
+          "net_income_parent": 635000000.0,
+          "avg_equity_parent": 6710000000.0
+        },
+        "prev": 0.139708,
+        "delta": -0.045073,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "net_income_parent": 862000000.0,
+          "avg_equity_parent": 6170000000.0
+        }
+      },
+      "roa": {
+        "value": 0.03302,
+        "unit": "ratio",
+        "formula": "净利润 / 平均总资产（净利润含少数股东损益，与总资产口径匹配）",
+        "inputs": {
+          "net_income": 668000000.0,
+          "avg_total_assets": 20230000000.0
+        },
+        "prev": 0.0521,
+        "delta": -0.01908,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "net_income": 924000000.0,
+          "avg_total_assets": 17735000000.0
+        }
+      },
+      "roic": {
+        "value": 0.070093,
+        "unit": "ratio",
+        "formula": "NOPAT / 平均投入资本；NOPAT = EBIT x (1 - 有效税率)；投入资本 = 有息负债 + 归母净资产",
+        "inputs": {
+          "nopat": 887030150.753769,
+          "avg_invested_capital": 12655000000.0
+        },
+        "prev": 0.096053,
+        "delta": -0.025959,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "nopat": 1045533582.089552,
+          "avg_invested_capital": null
+        }
+      },
+      "effective_tax_rate": {
+        "value": 0.160804,
+        "unit": "ratio",
+        "formula": "所得税费用 / 利润总额",
+        "inputs": {
+          "income_tax_expense": 128000000.0,
+          "pretax_profit": 796000000.0
+        },
+        "prev": 0.13806,
+        "delta": 0.022744,
+        "status": "ok",
+        "inputs_prev": {
+          "income_tax_expense": 148000000.0,
+          "pretax_profit": 1072000000.0
+        }
+      },
+      "deducted_to_parent": {
+        "value": 0.784252,
+        "unit": "ratio",
+        "formula": "扣非净利润 / 归母净利润（衡量盈利含金量）",
+        "inputs": {
+          "net_income_deducted": 498000000.0,
+          "net_income_parent": 635000000.0
+        },
+        "prev": 0.933875,
+        "delta": -0.149623,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "net_income_deducted": 805000000.0,
+          "net_income_parent": 862000000.0
+        }
+      },
+      "roic_minus_wacc": {
+        "value": -0.014907,
+        "unit": "ratio",
+        "formula": "ROIC - WACC（<0 表示当期未创造经济价值）",
+        "inputs": {
+          "roic": 0.070093,
+          "wacc": 0.085
+        },
+        "prev": 0.011053,
+        "delta": -0.025959,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "roic": null,
+          "wacc": 0.085
+        }
+      }
+    },
+    "solvency": {
+      "current_ratio": {
+        "value": 1.458678,
+        "unit": "ratio",
+        "formula": "流动资产 / 流动负债",
+        "inputs": {
+          "total_current_assets": 14119999999.999998,
+          "total_current_liabilities": 9680000000.0
+        },
+        "prev": 1.597577,
+        "delta": -0.1389,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "total_current_assets": 11870000000.0,
+          "total_current_liabilities": 7430000000.0
+        }
+      },
+      "quick_ratio": {
+        "value": 1.049587,
+        "unit": "ratio",
+        "formula": "(流动资产 - 存货) / 流动负债",
+        "inputs": {
+          "total_current_assets": 14119999999.999998,
+          "inventory": 3960000000.0,
+          "total_current_liabilities": 9680000000.0
+        },
+        "prev": 1.200538,
+        "delta": -0.150952,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "total_current_assets": 11870000000.0,
+          "inventory": 2950000000.0,
+          "total_current_liabilities": 7430000000.0
+        }
+      },
+      "cash_ratio": {
+        "value": 0.231405,
+        "unit": "ratio",
+        "formula": "货币资金 / 流动负债",
+        "inputs": {
+          "cash_and_equivalents": 2240000000.0,
+          "total_current_liabilities": 9680000000.0
+        },
+        "prev": 0.425303,
+        "delta": -0.193898,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "cash_and_equivalents": 3160000000.0,
+          "total_current_liabilities": 7430000000.0
+        }
+      },
+      "debt_to_assets": {
+        "value": 0.619048,
+        "unit": "ratio",
+        "formula": "总负债 / 总资产",
+        "inputs": {
+          "total_liabilities": 13519999999.999998,
+          "total_assets": 21840000000.0
+        },
+        "prev": 0.55102,
+        "delta": 0.068027,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "total_liabilities": 10260000000.0,
+          "total_assets": 18620000000.0
+        }
+      },
+      "equity_multiplier": {
+        "value": 3.169811,
+        "unit": "ratio",
+        "formula": "总资产 / 归母净资产（期末口径，杜邦分解用平均口径）",
+        "inputs": {
+          "total_assets": 21840000000.0,
+          "equity_parent": 6890000000.000001
+        },
+        "prev": 2.851455,
+        "delta": 0.318356,
+        "status": "ok",
+        "inputs_prev": {
+          "total_assets": 18620000000.0,
+          "equity_parent": 6530000000.0
+        }
+      },
+      "interest_bearing_debt": {
+        "value": 6920000000.0,
+        "unit": "CNY",
+        "formula": "短期借款 + 一年内到期非流动负债 + 长期借款 + 应付债券",
+        "inputs": {
+          "short_term_borrowings": 2860000000.0,
+          "current_portion_lt_debt": 640000000.0,
+          "long_term_borrowings": 3420000000.0,
+          "bonds_payable": 0.0
+        },
+        "prev": 4970000000.0,
+        "delta": 1950000000.0,
+        "status": "ok",
+        "inputs_prev": {
+          "short_term_borrowings": 1840000000.0,
+          "current_portion_lt_debt": 480000000.0,
+          "long_term_borrowings": 2650000000.0,
+          "bonds_payable": 0.0
+        }
+      },
+      "interest_bearing_debt_ratio": {
+        "value": 0.31685,
+        "unit": "ratio",
+        "formula": "有息负债 / 总资产",
+        "inputs": {
+          "interest_bearing_debt": 6920000000.0,
+          "total_assets": 21840000000.0
+        },
+        "prev": 0.266917,
+        "delta": 0.049933,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "interest_bearing_debt": 4970000000.0,
+          "total_assets": 18620000000.0
+        }
+      },
+      "interest_bearing_debt_growth": {
+        "value": 0.392354,
+        "unit": "ratio",
+        "formula": "有息负债（本期）/ 有息负债（上期）- 1",
+        "inputs": {
+          "ibd_t": 6920000000.0,
+          "ibd_t_1": 4970000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "ibd_t": null,
+          "ibd_t_1": null
+        }
+      },
+      "net_debt": {
+        "value": 4680000000.0,
+        "unit": "CNY",
+        "formula": "有息负债 - 货币资金",
+        "inputs": {
+          "interest_bearing_debt": 6920000000.0,
+          "cash_and_equivalents": 2240000000.0
+        },
+        "prev": 1810000000.0,
+        "delta": 2870000000.0,
+        "status": "ok",
+        "inputs_prev": {
+          "interest_bearing_debt": 4970000000.0,
+          "cash_and_equivalents": 3160000000.0
+        }
+      },
+      "cash_to_short_term_debt": {
+        "value": 0.64,
+        "unit": "ratio",
+        "formula": "货币资金 / (短期借款 + 一年内到期非流动负债)",
+        "inputs": {
+          "cash_and_equivalents": 2240000000.0,
+          "short_term_interest_bearing_debt": 3500000000.0
+        },
+        "prev": 1.362069,
+        "delta": -0.722069,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "cash_and_equivalents": 3160000000.0,
+          "short_term_interest_bearing_debt": 2320000000.0
+        }
+      },
+      "interest_coverage": {
+        "value": 5.156098,
+        "unit": "x",
+        "formula": "EBIT / 利息费用",
+        "inputs": {
+          "ebit": 1057000000.0,
+          "interest_expense": 205000000.0
+        },
+        "prev": 9.942623,
+        "delta": -4.786525,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "ebit": 1213000000.0,
+          "interest_expense": 122000000.0
+        }
+      },
+      "net_debt_to_ebitda": {
+        "value": 2.343515,
+        "unit": "x",
+        "formula": "净负债 / EBITDA",
+        "inputs": {
+          "net_debt": 4680000000.0,
+          "ebitda": 1997000000.0
+        },
+        "prev": 0.873131,
+        "delta": 1.470385,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "net_debt": 1810000000.0,
+          "ebitda": 2073000000.0
+        }
+      },
+      "restricted_cash_ratio": {
+        "value": 0.138393,
+        "unit": "ratio",
+        "formula": "受限货币资金 / 货币资金",
+        "inputs": {
+          "restricted_cash": 310000000.0,
+          "cash_and_equivalents": 2240000000.0
+        },
+        "prev": 0.075949,
+        "delta": 0.062443,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "restricted_cash": 240000000.0,
+          "cash_and_equivalents": 3160000000.0
+        }
+      },
+      "working_capital": {
+        "value": 4439999999.999998,
+        "unit": "CNY",
+        "formula": "流动资产 - 流动负债",
+        "inputs": {
+          "total_current_assets": 14119999999.999998,
+          "total_current_liabilities": 9680000000.0
+        },
+        "prev": 4440000000.0,
+        "delta": -2e-06,
+        "status": "ok",
+        "inputs_prev": {
+          "total_current_assets": 11870000000.0,
+          "total_current_liabilities": 7430000000.0
+        }
+      }
+    },
+    "efficiency": {
+      "ar_turnover": {
+        "value": 2.584925,
+        "unit": "x",
+        "formula": "营业收入 / 平均应收账款",
+        "inputs": {
+          "revenue": 12860000000.0,
+          "avg_accounts_receivable": 4975000000.0
+        },
+        "prev": 2.919481,
+        "delta": -0.334556,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "revenue": 11240000000.0,
+          "avg_accounts_receivable": 3850000000.0
+        }
+      },
+      "inventory_turnover": {
+        "value": 2.862518,
+        "unit": "x",
+        "formula": "营业成本 / 平均存货",
+        "inputs": {
+          "cost_of_revenue": 9890000000.0,
+          "avg_inventory": 3455000000.0
+        },
+        "prev": 2.991055,
+        "delta": -0.128537,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "cost_of_revenue": 8359999999.999999,
+          "avg_inventory": 2795000000.0
+        }
+      },
+      "ap_turnover": {
+        "value": 2.510152,
+        "unit": "x",
+        "formula": "营业成本 / 平均应付账款",
+        "inputs": {
+          "cost_of_revenue": 9890000000.0,
+          "avg_accounts_payable": 3940000000.0
+        },
+        "prev": 2.412698,
+        "delta": 0.097454,
+        "status": "ok",
+        "inputs_prev": {
+          "cost_of_revenue": 8359999999.999999,
+          "avg_accounts_payable": 3465000000.0
+        }
+      },
+      "dso": {
+        "value": 141.203344,
+        "unit": "days",
+        "formula": "365 / 应收账款周转率（应收账款口径，不含票据与合同资产）",
+        "inputs": {
+          "days": 365.0,
+          "ar_turnover": 2.584925
+        },
+        "prev": 125.022242,
+        "delta": 16.181102,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "days": 365.0,
+          "ar_turnover": null
+        }
+      },
+      "dio": {
+        "value": 127.510111,
+        "unit": "days",
+        "formula": "365 / 存货周转率",
+        "inputs": {
+          "days": 365.0,
+          "inventory_turnover": 2.862518
+        },
+        "prev": 122.030502,
+        "delta": 5.479609,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "days": 365.0,
+          "inventory_turnover": null
+        }
+      },
+      "dpo": {
+        "value": 145.409505,
+        "unit": "days",
+        "formula": "365 / 应付账款周转率",
+        "inputs": {
+          "days": 365.0,
+          "ap_turnover": 2.510152
+        },
+        "prev": 151.282895,
+        "delta": -5.87339,
+        "status": "ok",
+        "inputs_prev": {
+          "days": 365.0,
+          "ap_turnover": null
+        }
+      },
+      "cash_conversion_cycle": {
+        "value": 123.30395,
+        "unit": "days",
+        "formula": "DSO + DIO - DPO",
+        "inputs": {
+          "dso": 141.203344,
+          "dio": 127.510111,
+          "dpo": 145.409505
+        },
+        "prev": 95.76985,
+        "delta": 27.534101,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "dso": null,
+          "dio": null,
+          "dpo": null
+        }
+      },
+      "total_asset_turnover": {
+        "value": 0.63569,
+        "unit": "x",
+        "formula": "营业收入 / 平均总资产",
+        "inputs": {
+          "revenue": 12860000000.0,
+          "avg_total_assets": 20230000000.0
+        },
+        "prev": 0.633775,
+        "delta": 0.001915,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "revenue": 11240000000.0,
+          "avg_total_assets": 17735000000.0
+        }
+      },
+      "fixed_asset_turnover": {
+        "value": 2.91941,
+        "unit": "x",
+        "formula": "营业收入 / 平均固定资产",
+        "inputs": {
+          "revenue": 12860000000.0,
+          "avg_fixed_assets": 4405000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "revenue": 11240000000.0,
+          "avg_fixed_assets": 4100000000.0
+        }
+      },
+      "accounts_receivable_growth": {
+        "value": 0.415049,
+        "unit": "ratio",
+        "formula": "应收账款（本期）/ 应收账款（上期）- 1",
+        "inputs": {
+          "ar_t": 5830000000.0,
+          "ar_t_1": 4120000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "ar_t": null,
+          "ar_t_1": null
+        }
+      },
+      "inventory_growth": {
+        "value": 0.342373,
+        "unit": "ratio",
+        "formula": "存货（本期）/ 存货（上期）- 1",
+        "inputs": {
+          "inv_t": 3960000000.0,
+          "inv_t_1": 2950000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "inv_t": null,
+          "inv_t_1": null
+        }
+      },
+      "ar_and_inventory_to_assets": {
+        "value": 0.476648,
+        "unit": "ratio",
+        "formula": "(应收账款+应收票据+合同资产+存货) / 总资产",
+        "inputs": {
+          "ar_total": 6450000000.0,
+          "inventory": 3960000000.0,
+          "total_assets": 21840000000.0
+        },
+        "prev": 0.407089,
+        "delta": 0.069559,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "ar_total": 4630000000.0,
+          "inventory": 2950000000.0,
+          "total_assets": 18620000000.0
+        }
+      }
+    },
+    "cashflow_quality": {
+      "ocf": {
+        "value": 285000000.0,
+        "unit": "CNY",
+        "formula": "经营活动产生的现金流量净额（原值）",
+        "inputs": {
+          "ocf": 285000000.0
+        },
+        "prev": 724000000.0,
+        "delta": -439000000.0,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "ocf": 724000000.0
+        }
+      },
+      "ocf_to_net_income": {
+        "value": 0.426647,
+        "unit": "ratio",
+        "formula": "经营活动现金流净额 / 净利润",
+        "inputs": {
+          "ocf": 285000000.0,
+          "net_income": 668000000.0
+        },
+        "prev": 0.78355,
+        "delta": -0.356903,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "ocf": 724000000.0,
+          "net_income": 924000000.0
+        }
+      },
+      "ocf_to_net_income_parent": {
+        "value": 0.448819,
+        "unit": "ratio",
+        "formula": "经营活动现金流净额 / 归母净利润（净现比）",
+        "inputs": {
+          "ocf": 285000000.0,
+          "net_income_parent": 635000000.0
+        },
+        "prev": 0.839907,
+        "delta": -0.391088,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "ocf": 724000000.0,
+          "net_income_parent": 862000000.0
+        }
+      },
+      "ocf_to_revenue": {
+        "value": 0.022162,
+        "unit": "ratio",
+        "formula": "经营活动现金流净额 / 营业收入",
+        "inputs": {
+          "ocf": 285000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.064413,
+        "delta": -0.042251,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "ocf": 724000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "sales_cash_ratio": {
+        "value": 0.880249,
+        "unit": "ratio",
+        "formula": "销售商品、提供劳务收到的现金 / 营业收入（收现比）",
+        "inputs": {
+          "cash_received_from_sales": 11320000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": 0.966192,
+        "delta": -0.085943,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "cash_received_from_sales": 10860000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "capex": {
+        "value": 1680000000.0,
+        "unit": "CNY",
+        "formula": "购建固定资产、无形资产等支付的现金",
+        "inputs": {
+          "capex": 1680000000.0
+        },
+        "prev": 1120000000.0,
+        "delta": 560000000.0,
+        "status": "ok",
+        "inputs_prev": {
+          "capex": 1120000000.0
+        }
+      },
+      "capex_to_ocf": {
+        "value": 5.894737,
+        "unit": "ratio",
+        "formula": "资本开支 / 经营活动现金流净额（>1 表示投资靠外部融资输血）",
+        "inputs": {
+          "capex": 1680000000.0,
+          "ocf": 285000000.0
+        },
+        "prev": 1.546961,
+        "delta": 4.347776,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "capex": 1120000000.0,
+          "ocf": 724000000.0
+        }
+      },
+      "free_cash_flow": {
+        "value": -1395000000.0,
+        "unit": "CNY",
+        "formula": "经营活动现金流净额 - 资本开支",
+        "inputs": {
+          "ocf": 285000000.0,
+          "capex": 1680000000.0
+        },
+        "prev": -396000000.0,
+        "delta": -999000000.0,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "ocf": 724000000.0,
+          "capex": 1120000000.0
+        }
+      },
+      "fcf_to_revenue": {
+        "value": -0.108476,
+        "unit": "ratio",
+        "formula": "自由现金流 / 营业收入",
+        "inputs": {
+          "fcf": -1395000000.0,
+          "revenue": 12860000000.0
+        },
+        "prev": -0.035231,
+        "delta": -0.073245,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "fcf": -396000000.0,
+          "revenue": 11240000000.0
+        }
+      },
+      "ocf_to_interest_paid": {
+        "value": 1.454082,
+        "unit": "x",
+        "formula": "经营活动现金流净额 / 已付利息",
+        "inputs": {
+          "ocf": 285000000.0,
+          "interest_paid": 196000000.0
+        },
+        "prev": 6.135593,
+        "delta": -4.681512,
+        "higher_is_better": true,
+        "status": "ok",
+        "inputs_prev": {
+          "ocf": 724000000.0,
+          "interest_paid": 118000000.0
+        }
+      },
+      "payout_ratio": {
+        "value": 0.433071,
+        "unit": "ratio",
+        "formula": "已派发现金股利 / 归母净利润",
+        "inputs": {
+          "dividend_paid": 275000000.0,
+          "net_income_parent": 635000000.0
+        },
+        "prev": 0.164733,
+        "delta": 0.268338,
+        "status": "ok",
+        "inputs_prev": {
+          "dividend_paid": 142000000.0,
+          "net_income_parent": 862000000.0
+        }
+      },
+      "cf_financing_dependency": {
+        "value": 0.846774,
+        "unit": "ratio",
+        "formula": "(投资现金流出 - 经营现金流) / 投资现金流出，>0 说明投资缺口需外部融资弥补",
+        "inputs": {
+          "cf_investing": -1860000000.0,
+          "ocf": 285000000.0
+        },
+        "prev": null,
+        "delta": null,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "cf_investing": -1240000000.0,
+          "ocf": 724000000.0
+        }
+      },
+      "goodwill_to_equity": {
+        "value": 0.269956,
+        "unit": "ratio",
+        "formula": "商誉 / 归母净资产（商誉占归母净资产比，供风险诊断使用）",
+        "inputs": {
+          "goodwill": 1860000000.0,
+          "equity_parent": 6890000000.000001
+        },
+        "prev": 0.284839,
+        "delta": -0.014883,
+        "higher_is_better": false,
+        "status": "ok",
+        "inputs_prev": {
+          "goodwill": 1860000000.0,
+          "equity_parent": 6530000000.0
+        }
+      }
+    },
+    "banking": {}
+  },
+  "checks": {
+    "schema": "三表勾稽自检",
+    "tolerance_pct": 0.01,
+    "tolerance_basis": "差异 |左 − 右| 超过对应科目绝对值的 1% 视为不平",
+    "policy": "B 只查出不平，不自动修正；不平项写入 review_queue 交回 A 核对抽取结果",
+    "overall": "balanced",
+    "summary": {
+      "total": 11,
+      "balanced": 11,
+      "imbalanced": 0,
+      "not_evaluable": 0
+    },
+    "items": [
+      {
+        "id": "bs_balance",
+        "name": "资产负债表平衡",
+        "statement": "资产负债表",
+        "period": "2023",
+        "formula": "总资产 = 总负债 + 归母股东权益 + 少数股东权益",
+        "formula_symbolic": "total_assets - (total_liabilities + equity_parent + minority_interest)",
+        "status": "balanced",
+        "left": 16850000000.0,
+        "right": 16850000000.0,
+        "diff": 0.0,
+        "diff_pct": 0.0,
+        "tolerance_pct": 0.01,
+        "tolerance_abs": 168500000.0,
+        "tolerance_basis": 16850000000.0,
+        "inputs": {
+          "总资产": {
+            "value": 16850000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 168.5,
+            "display_unit": "亿元",
+            "source": "2023年年度报告",
+            "page": 81,
+            "derived": false
+          },
+          "总负债": {
+            "value": 9540000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 95.4,
+            "display_unit": "亿元",
+            "source": "2023年年度报告",
+            "page": 81,
+            "derived": false
+          },
+          "归母股东权益": {
+            "value": 5810000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 58.1,
+            "display_unit": "亿元",
+            "source": "2023年年度报告",
+            "page": 81,
+            "derived": false
+          },
+          "少数股东权益": {
+            "value": 1499999999.999999,
+            "derived": true,
+            "derived_from": "所有者权益合计 − 归母股东权益",
+            "display_value": 15.0,
+            "display_unit": "亿元",
+            "source": null,
+            "page": null
+          }
+        }
+      },
+      {
+        "id": "bs_balance",
+        "name": "资产负债表平衡",
+        "statement": "资产负债表",
+        "period": "2024",
+        "formula": "总资产 = 总负债 + 归母股东权益 + 少数股东权益",
+        "formula_symbolic": "total_assets - (total_liabilities + equity_parent + minority_interest)",
+        "status": "balanced",
+        "left": 18620000000.0,
+        "right": 18620000000.0,
+        "diff": 0.0,
+        "diff_pct": 0.0,
+        "tolerance_pct": 0.01,
+        "tolerance_abs": 186200000.0,
+        "tolerance_basis": 18620000000.0,
+        "inputs": {
+          "总资产": {
+            "value": 18620000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 186.2,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 80,
+            "derived": false
+          },
+          "总负债": {
+            "value": 10260000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 102.6,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 80,
+            "derived": false
+          },
+          "归母股东权益": {
+            "value": 6530000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 65.3,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 80,
+            "derived": false
+          },
+          "少数股东权益": {
+            "value": 1829999999.999999,
+            "derived": true,
+            "derived_from": "所有者权益合计 − 归母股东权益",
+            "display_value": 18.3,
+            "display_unit": "亿元",
+            "source": null,
+            "page": null
+          }
+        }
+      },
+      {
+        "id": "bs_balance",
+        "name": "资产负债表平衡",
+        "statement": "资产负债表",
+        "period": "2025",
+        "formula": "总资产 = 总负债 + 归母股东权益 + 少数股东权益",
+        "formula_symbolic": "total_assets - (total_liabilities + equity_parent + minority_interest)",
+        "status": "balanced",
+        "left": 21840000000.0,
+        "right": 21840000000.0,
+        "diff": 0.0,
+        "diff_pct": 0.0,
+        "tolerance_pct": 0.01,
+        "tolerance_abs": 218400000.0,
+        "tolerance_basis": 21840000000.0,
+        "inputs": {
+          "总资产": {
+            "value": 21840000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 218.4,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 81,
+            "derived": false
+          },
+          "总负债": {
+            "value": 13519999999.999998,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 135.2,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 81,
+            "derived": false
+          },
+          "归母股东权益": {
+            "value": 6890000000.000001,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 68.9,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 81,
+            "derived": false
+          },
+          "少数股东权益": {
+            "value": 1429999999.999999,
+            "derived": true,
+            "derived_from": "所有者权益合计 − 归母股东权益",
+            "display_value": 14.3,
+            "display_unit": "亿元",
+            "source": null,
+            "page": null
+          }
+        }
+      },
+      {
+        "id": "is_tax_bridge",
+        "name": "利润表勾稽·利润总额→净利润",
+        "statement": "利润表",
+        "period": "2023",
+        "formula": "利润总额 − 所得税费用 = 净利润",
+        "formula_symbolic": "pretax_profit - income_tax_expense - net_income",
+        "status": "balanced",
+        "left": 775000000.0,
+        "right": 775000000.0,
+        "diff": -0.0,
+        "diff_pct": -0.0,
+        "tolerance_pct": 0.01,
+        "tolerance_abs": 8950000.0,
+        "tolerance_basis": 895000000.0,
+        "inputs": {
+          "利润总额": {
+            "value": 895000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 8.95,
+            "display_unit": "亿元",
+            "source": "2023年年度报告",
+            "page": 83,
+            "derived": false
+          },
+          "所得税费用": {
+            "value": 120000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 1.2,
+            "display_unit": "亿元",
+            "source": "2023年年度报告",
+            "page": 115,
+            "derived": false
+          },
+          "净利润": {
+            "value": 775000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 7.75,
+            "display_unit": "亿元",
+            "source": "2023年年度报告",
+            "page": 83,
+            "derived": false
+          }
+        }
+      },
+      {
+        "id": "is_tax_bridge",
+        "name": "利润表勾稽·利润总额→净利润",
+        "statement": "利润表",
+        "period": "2024",
+        "formula": "利润总额 − 所得税费用 = 净利润",
+        "formula_symbolic": "pretax_profit - income_tax_expense - net_income",
+        "status": "balanced",
+        "left": 924000000.0,
+        "right": 924000000.0,
+        "diff": 0.0,
+        "diff_pct": 0.0,
+        "tolerance_pct": 0.01,
+        "tolerance_abs": 10720000.0,
+        "tolerance_basis": 1072000000.0,
+        "inputs": {
+          "利润总额": {
+            "value": 1072000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 10.72,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 82,
+            "derived": false
+          },
+          "所得税费用": {
+            "value": 148000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 1.48,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 116,
+            "derived": false
+          },
+          "净利润": {
+            "value": 924000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 9.24,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 82,
+            "derived": false
+          }
+        }
+      },
+      {
+        "id": "is_tax_bridge",
+        "name": "利润表勾稽·利润总额→净利润",
+        "statement": "利润表",
+        "period": "2025",
+        "formula": "利润总额 − 所得税费用 = 净利润",
+        "formula_symbolic": "pretax_profit - income_tax_expense - net_income",
+        "status": "balanced",
+        "left": 668000000.0,
+        "right": 668000000.0,
+        "diff": 0.0,
+        "diff_pct": 0.0,
+        "tolerance_pct": 0.01,
+        "tolerance_abs": 7960000.0,
+        "tolerance_basis": 796000000.0,
+        "inputs": {
+          "利润总额": {
+            "value": 796000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 7.96,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 83,
+            "derived": false
+          },
+          "所得税费用": {
+            "value": 128000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 1.28,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 118,
+            "derived": false
+          },
+          "净利润": {
+            "value": 668000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 6.68,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 83,
+            "derived": false
+          }
+        }
+      },
+      {
+        "id": "is_minority_split",
+        "name": "利润表勾稽·净利润→归母+少数股东",
+        "statement": "利润表",
+        "period": "2023",
+        "formula": "净利润 − 归母净利润 = 少数股东损益（与附注独立披露值核对）",
+        "formula_symbolic": "(net_income - net_income_parent) - minority_pnl",
+        "status": "balanced",
+        "left": 33000000.0,
+        "right": 33000000.0,
+        "diff": 0.0,
+        "diff_pct": 0.0,
+        "tolerance_pct": 0.01,
+        "tolerance_abs": 7750000.0,
+        "tolerance_basis": 775000000.0,
+        "inputs": {
+          "净利润": {
+            "value": 775000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 7.75,
+            "display_unit": "亿元",
+            "source": "2023年年度报告",
+            "page": 83,
+            "derived": false
+          },
+          "归母净利润": {
+            "value": 742000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 7.42,
+            "display_unit": "亿元",
+            "source": "2023年年度报告",
+            "page": 83,
+            "derived": false
+          },
+          "少数股东损益（独立披露）": {
+            "value": 33000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 0.33,
+            "display_unit": "亿元",
+            "source": "2023年年度报告",
+            "page": 83,
+            "derived": false
+          }
+        }
+      },
+      {
+        "id": "is_minority_split",
+        "name": "利润表勾稽·净利润→归母+少数股东",
+        "statement": "利润表",
+        "period": "2024",
+        "formula": "净利润 − 归母净利润 = 少数股东损益（与附注独立披露值核对）",
+        "formula_symbolic": "(net_income - net_income_parent) - minority_pnl",
+        "status": "balanced",
+        "left": 62000000.0,
+        "right": 62000000.0,
+        "diff": 0.0,
+        "diff_pct": 0.0,
+        "tolerance_pct": 0.01,
+        "tolerance_abs": 9240000.0,
+        "tolerance_basis": 924000000.0,
+        "inputs": {
+          "净利润": {
+            "value": 924000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 9.24,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 82,
+            "derived": false
+          },
+          "归母净利润": {
+            "value": 862000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 8.62,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 82,
+            "derived": false
+          },
+          "少数股东损益（独立披露）": {
+            "value": 62000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 0.62,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 82,
+            "derived": false
+          }
+        }
+      },
+      {
+        "id": "is_minority_split",
+        "name": "利润表勾稽·净利润→归母+少数股东",
+        "statement": "利润表",
+        "period": "2025",
+        "formula": "净利润 − 归母净利润 = 少数股东损益（与附注独立披露值核对）",
+        "formula_symbolic": "(net_income - net_income_parent) - minority_pnl",
+        "status": "balanced",
+        "left": 33000000.0,
+        "right": 33000000.0,
+        "diff": 0.0,
+        "diff_pct": 0.0,
+        "tolerance_pct": 0.01,
+        "tolerance_abs": 6680000.0,
+        "tolerance_basis": 668000000.0,
+        "inputs": {
+          "净利润": {
+            "value": 668000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 6.68,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 83,
+            "derived": false
+          },
+          "归母净利润": {
+            "value": 635000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 6.35,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 83,
+            "derived": false
+          },
+          "少数股东损益（独立披露）": {
+            "value": 33000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 0.33,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 83,
+            "derived": false
+          }
+        }
+      },
+      {
+        "id": "cf_reconcile",
+        "name": "现金净变动勾稽",
+        "statement": "现金流量表",
+        "period": "2023→2024",
+        "formula": "期末现金 − 期初现金 = 经营活动 + 投资活动 + 筹资活动 + 汇率影响",
+        "formula_symbolic": "(cash_end - cash_begin) - (ocf + cf_investing + cf_financing + fx_effect)",
+        "status": "balanced",
+        "left": 270000000.0,
+        "right": 270000000.0,
+        "diff": 0.0,
+        "diff_pct": 0.0,
+        "tolerance_pct": 0.01,
+        "tolerance_abs": 2700000.0,
+        "tolerance_basis": 270000000.0,
+        "inputs": {
+          "期初现金及现金等价物": {
+            "value": 2890000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 28.9,
+            "display_unit": "亿元",
+            "source": "2023年年度报告",
+            "page": 81,
+            "derived": false
+          },
+          "期末现金及现金等价物": {
+            "value": 3160000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 31.6,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 80,
+            "derived": false
+          },
+          "经营活动现金流净额": {
+            "value": 724000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 7.24,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 84,
+            "derived": false
+          },
+          "投资活动现金流净额": {
+            "value": -1240000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": -12.4,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 84,
+            "derived": false
+          },
+          "筹资活动现金流净额": {
+            "value": 786000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 7.86,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 84,
+            "derived": false
+          }
+        },
+        "note": "未抽取'汇率变动对现金及现金等价物的影响'，该项按 0 参与勾稽；若差异超容差需人工核对"
+      },
+      {
+        "id": "cf_reconcile",
+        "name": "现金净变动勾稽",
+        "statement": "现金流量表",
+        "period": "2024→2025",
+        "formula": "期末现金 − 期初现金 = 经营活动 + 投资活动 + 筹资活动 + 汇率影响",
+        "formula_symbolic": "(cash_end - cash_begin) - (ocf + cf_investing + cf_financing + fx_effect)",
+        "status": "balanced",
+        "left": -920000000.0,
+        "right": -920000000.0,
+        "diff": 0.0,
+        "diff_pct": 0.0,
+        "tolerance_pct": 0.01,
+        "tolerance_abs": 9200000.0,
+        "tolerance_basis": 920000000.0,
+        "inputs": {
+          "期初现金及现金等价物": {
+            "value": 3160000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 31.6,
+            "display_unit": "亿元",
+            "source": "2024年年度报告",
+            "page": 80,
+            "derived": false
+          },
+          "期末现金及现金等价物": {
+            "value": 2240000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 22.4,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 81,
+            "derived": false
+          },
+          "经营活动现金流净额": {
+            "value": 285000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 2.85,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 85,
+            "derived": false
+          },
+          "投资活动现金流净额": {
+            "value": -1860000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": -18.6,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 85,
+            "derived": false
+          },
+          "筹资活动现金流净额": {
+            "value": 655000000.0,
+            "unit": "元",
+            "unit_normalized": "元",
+            "display_value": 6.55,
+            "display_unit": "亿元",
+            "source": "2025年年度报告",
+            "page": 85,
+            "derived": false
+          }
+        },
+        "note": "未抽取'汇率变动对现金及现金等价物的影响'，该项按 0 参与勾稽；若差异超容差需人工核对"
+      }
+    ]
+  },
+  "attribution": {
+    "dupont": {
+      "current": {
+        "net_margin": 0.049378,
+        "asset_turnover": 0.63569,
+        "equity_multiplier": 3.014903,
+        "roe": 0.094635
+      },
+      "previous": {
+        "net_margin": 0.07669,
+        "asset_turnover": 0.633775,
+        "equity_multiplier": 2.874392,
+        "roe": 0.139708
+      },
+      "contribution": {
+        "net_margin_effect": -0.049756,
+        "asset_turnover_effect": 0.000272,
+        "leverage_effect": 0.004411,
+        "roe_delta": -0.045073
+      }
+    },
+    "operating_profit_bridge": {
+      "delta_operating_profit": -243000000.0,
+      "scale_effect": 156379003.558719,
+      "gross_margin_effect": -325088967.971531,
+      "expense_ratio_effect": -112809608.540925,
+      "other_effect": 38519572.953737,
+      "note": "规模效应=Δ收入×基期营业利润率；毛利率效应=当期收入×Δ毛利率；费用率效应=当期收入×(基期费用率-当期费用率)；其他=残差（减值、其他收益、投资收益、营业外等）"
+    },
+    "cash_flow_bridge": {
+      "net_income": 668000000.0,
+      "ocf": 285000000.0,
+      "items": [
+        {
+          "item": "净利润",
+          "amount": 668000000.0
+        },
+        {
+          "item": "折旧与摊销",
+          "amount": 940000000.0
+        },
+        {
+          "item": "资产减值损失",
+          "amount": 380000000.0
+        },
+        {
+          "item": "财务费用（利息支出）",
+          "amount": 215000000.0
+        },
+        {
+          "item": "存货的增加",
+          "amount": -1010000000.0
+        },
+        {
+          "item": "经营性应收项目的增加",
+          "amount": -1820000000.0
+        },
+        {
+          "item": "经营性应付项目的增加",
+          "amount": 640000000.0
+        },
+        {
+          "item": "其他（递延税、其他经营性项目、汇兑等，倒轧）",
+          "amount": 272000000.0
+        }
+      ],
+      "gap": -383000000.0,
+      "note": "用于定位'利润有现金没现金'：若缺口主要由应收/存货占用造成，属营运资金扩张；若由减值等倒轧项造成，需进一步核查"
+    },
+    "narrative_hint": "三段归因分别回答：ROE 变动由什么驱动（杜邦）、利润变动由什么驱动（毛利/费用/规模）、利润与现金的缺口从哪来（现金流桥）。Risk Radar 的证据链会直接引用这三段。"
+  },
+  "evidence": {
+    "accounts_payable": {
+      "2023": {
+        "value": 3310000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 33.1,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 107
+      },
+      "2024": {
+        "value": 3620000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 36.2,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 108
+      },
+      "2025": {
+        "value": 4260000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 42.6,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 110
+      }
+    },
+    "accounts_receivable": {
+      "2023": {
+        "value": 3580000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 35.8,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 96
+      },
+      "2024": {
+        "value": 4120000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 41.2,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 97
+      },
+      "2025": {
+        "value": 5830000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 58.3,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 99
+      }
+    },
+    "admin_expense": {
+      "2023": {
+        "value": 405000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 4.05,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 110
+      },
+      "2024": {
+        "value": 460000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 4.6,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 111
+      },
+      "2025": {
+        "value": 543000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 5.43,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 113
+      }
+    },
+    "bonds_payable": {
+      "2023": {
+        "value": 0.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 0.0,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 130
+      },
+      "2024": {
+        "value": 0.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 0.0,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 132
+      },
+      "2025": {
+        "value": 0.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 0.0,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 134
+      }
+    },
+    "capex": {
+      "2023": {
+        "value": 860000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 8.6,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 85
+      },
+      "2024": {
+        "value": 1120000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 11.2,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 84
+      },
+      "2025": {
+        "value": 1680000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 16.8,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 85
+      }
+    },
+    "cash_and_equivalents": {
+      "2023": {
+        "value": 2890000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 28.9,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 81
+      },
+      "2024": {
+        "value": 3160000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 31.6,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 80
+      },
+      "2025": {
+        "value": 2240000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 22.4,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 81
+      }
+    },
+    "cash_received_from_sales": {
+      "2023": {
+        "value": 9540000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 95.4,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 142
+      },
+      "2024": {
+        "value": 10860000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 108.6,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 143
+      },
+      "2025": {
+        "value": 11320000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 113.2,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 145
+      }
+    },
+    "cf_financing": {
+      "2023": {
+        "value": 310000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 3.1,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 85
+      },
+      "2024": {
+        "value": 786000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 7.86,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 84
+      },
+      "2025": {
+        "value": 655000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 6.55,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 85
+      }
+    },
+    "cf_investing": {
+      "2023": {
+        "value": -985000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": -9.85,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 85
+      },
+      "2024": {
+        "value": -1240000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": -12.4,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 84
+      },
+      "2025": {
+        "value": -1860000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": -18.6,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 85
+      }
+    },
+    "contract_assets": {
+      "2023": {
+        "value": 0.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 0.0,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 96
+      },
+      "2024": {
+        "value": 0.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 0.0,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 97
+      },
+      "2025": {
+        "value": 0.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 0.0,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 99
+      }
+    },
+    "cost_of_revenue": {
+      "2023": {
+        "value": 7420000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 74.2,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 83
+      },
+      "2024": {
+        "value": 8359999999.999999,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 83.6,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 82
+      },
+      "2025": {
+        "value": 9890000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 98.9,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 83
+      }
+    },
+    "current_portion_lt_debt": {
+      "2023": {
+        "value": 360000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 3.6,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 130
+      },
+      "2024": {
+        "value": 480000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 4.8,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 132
+      },
+      "2025": {
+        "value": 640000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 6.4,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 134
+      }
+    },
+    "depreciation_amortization": {
+      "2023": {
+        "value": 785000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 7.85,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 92
+      },
+      "2024": {
+        "value": 860000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 8.6,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 93
+      },
+      "2025": {
+        "value": 940000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 9.4,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 94
+      }
+    },
+    "dividend_paid": {
+      "2023": {
+        "value": 110000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.1,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 138
+      },
+      "2024": {
+        "value": 142000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.42,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 139
+      },
+      "2025": {
+        "value": 275000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 2.75,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 141
+      }
+    },
+    "equity_parent": {
+      "2023": {
+        "value": 5810000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 58.1,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 81
+      },
+      "2024": {
+        "value": 6530000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 65.3,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 80
+      },
+      "2025": {
+        "value": 6890000000.000001,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 68.9,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 81
+      }
+    },
+    "finance_expense": {
+      "2023": {
+        "value": 115000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.15,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 110
+      },
+      "2024": {
+        "value": 128000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.28,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 111
+      },
+      "2025": {
+        "value": 215000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 2.15,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 113
+      }
+    },
+    "fixed_assets": {
+      "2023": {
+        "value": 4020000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 40.2,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 103
+      },
+      "2024": {
+        "value": 4180000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 41.8,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 104
+      },
+      "2025": {
+        "value": 4630000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 46.3,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 106
+      }
+    },
+    "goodwill": {
+      "2023": {
+        "value": 420000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 4.2,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 124
+      },
+      "2024": {
+        "value": 1860000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 18.6,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 126
+      },
+      "2025": {
+        "value": 1860000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 18.6,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 128
+      }
+    },
+    "impairment_loss": {
+      "2023": {
+        "value": 160000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.6,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 108
+      },
+      "2024": {
+        "value": 195000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.95,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 109
+      },
+      "2025": {
+        "value": 380000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 3.8,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 111
+      }
+    },
+    "income_tax_expense": {
+      "2023": {
+        "value": 120000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.2,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 115
+      },
+      "2024": {
+        "value": 148000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.48,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 116
+      },
+      "2025": {
+        "value": 128000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.28,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 118
+      }
+    },
+    "interest_expense": {
+      "2023": {
+        "value": 110000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.1,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 132
+      },
+      "2024": {
+        "value": 122000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.22,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 134
+      },
+      "2025": {
+        "value": 205000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 2.05,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 136
+      }
+    },
+    "interest_paid": {
+      "2023": {
+        "value": 105000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.05,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 142
+      },
+      "2024": {
+        "value": 118000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.18,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 143
+      },
+      "2025": {
+        "value": 196000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 1.96,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 145
+      }
+    },
+    "inventory": {
+      "2023": {
+        "value": 2640000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 26.4,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 101
+      },
+      "2024": {
+        "value": 2950000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 29.5,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 102
+      },
+      "2025": {
+        "value": 3960000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 39.6,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 104
+      }
+    },
+    "long_term_borrowings": {
+      "2023": {
+        "value": 2480000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 24.8,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 130
+      },
+      "2024": {
+        "value": 2650000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 26.5,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 132
+      },
+      "2025": {
+        "value": 3420000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 34.2,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 134
+      }
+    },
+    "minority_pnl": {
+      "2023": {
+        "value": 33000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 0.33,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 83
+      },
+      "2024": {
+        "value": 62000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 0.62,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 82
+      },
+      "2025": {
+        "value": 33000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 0.33,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 83
+      }
+    },
+    "net_income": {
+      "2023": {
+        "value": 775000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 7.75,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 83
+      },
+      "2024": {
+        "value": 924000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 9.24,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 82
+      },
+      "2025": {
+        "value": 668000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 6.68,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 83
+      }
+    },
+    "net_income_deducted": {
+      "2023": {
+        "value": 695000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 6.95,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 86
+      },
+      "2024": {
+        "value": 805000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 8.05,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 85
+      },
+      "2025": {
+        "value": 498000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 4.98,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 87
+      }
+    },
+    "net_income_parent": {
+      "2023": {
+        "value": 742000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 7.42,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 83
+      },
+      "2024": {
+        "value": 862000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 8.62,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 82
+      },
+      "2025": {
+        "value": 635000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 6.35,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 83
+      }
+    },
+    "notes_receivable": {
+      "2023": {
+        "value": 460000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 4.6,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 96
+      },
+      "2024": {
+        "value": 510000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 5.1,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 97
+      },
+      "2025": {
+        "value": 620000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 6.2,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 99
+      }
+    },
+    "ocf": {
+      "2023": {
+        "value": 642000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 6.42,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 85
+      },
+      "2024": {
+        "value": 724000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 7.24,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 84
+      },
+      "2025": {
+        "value": 285000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 2.85,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 85
+      }
+    },
+    "operating_profit": {
+      "2023": {
+        "value": 905000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 9.05,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 83
+      },
+      "2024": {
+        "value": 1085000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 10.85,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 82
+      },
+      "2025": {
+        "value": 842000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 8.42,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 83
+      }
+    },
+    "pretax_profit": {
+      "2023": {
+        "value": 895000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 8.95,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 83
+      },
+      "2024": {
+        "value": 1072000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 10.72,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 82
+      },
+      "2025": {
+        "value": 796000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 7.96,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 83
+      }
+    },
+    "rd_expense": {
+      "2023": {
+        "value": 452000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 4.52,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 110
+      },
+      "2024": {
+        "value": 518000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 5.18,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 111
+      },
+      "2025": {
+        "value": 586000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 5.86,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 113
+      }
+    },
+    "restricted_cash": {
+      "2023": {
+        "value": 200000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 2.0,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 104
+      },
+      "2024": {
+        "value": 240000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 2.4,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 105
+      },
+      "2025": {
+        "value": 310000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 3.1,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 107
+      }
+    },
+    "revenue": {
+      "2023": {
+        "value": 9860000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 98.6,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 83
+      },
+      "2024": {
+        "value": 11240000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 112.4,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 82
+      },
+      "2025": {
+        "value": 12860000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 128.6,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 83
+      }
+    },
+    "selling_expense": {
+      "2023": {
+        "value": 438000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 4.38,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 110
+      },
+      "2024": {
+        "value": 505000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 5.05,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 111
+      },
+      "2025": {
+        "value": 612000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 6.12,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 113
+      }
+    },
+    "short_term_borrowings": {
+      "2023": {
+        "value": 1620000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 16.2,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 130
+      },
+      "2024": {
+        "value": 1840000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 18.4,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 132
+      },
+      "2025": {
+        "value": 2860000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 28.6,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 134
+      }
+    },
+    "total_assets": {
+      "2023": {
+        "value": 16850000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 168.5,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 81
+      },
+      "2024": {
+        "value": 18620000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 186.2,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 80
+      },
+      "2025": {
+        "value": 21840000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 218.4,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 81
+      }
+    },
+    "total_current_assets": {
+      "2023": {
+        "value": 10850000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 108.5,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 81
+      },
+      "2024": {
+        "value": 11870000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 118.7,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 80
+      },
+      "2025": {
+        "value": 14119999999.999998,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 141.2,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 81
+      }
+    },
+    "total_current_liabilities": {
+      "2023": {
+        "value": 6890000000.000001,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 68.9,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 81
+      },
+      "2024": {
+        "value": 7430000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 74.3,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 80
+      },
+      "2025": {
+        "value": 9680000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 96.8,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 81
+      }
+    },
+    "total_equity": {
+      "2023": {
+        "value": 7309999999.999999,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 73.1,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 81
+      },
+      "2024": {
+        "value": 8359999999.999999,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 83.6,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 80
+      },
+      "2025": {
+        "value": 8320000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 83.2,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 81
+      }
+    },
+    "total_liabilities": {
+      "2023": {
+        "value": 9540000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 95.4,
+        "display_unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 81
+      },
+      "2024": {
+        "value": 10260000000.0,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 102.6,
+        "display_unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 80
+      },
+      "2025": {
+        "value": 13519999999.999998,
+        "unit": "元",
+        "unit_normalized": "元",
+        "display_value": 135.2,
+        "display_unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 81
+      }
+    }
+  },
+  "review_queue": [],
+  "sources": [
+    {
+      "source": "2023年年度报告",
+      "pages": [
+        81,
+        83,
+        85,
+        86,
+        92,
+        96,
+        101,
+        103,
+        104,
+        107,
+        108,
+        110,
+        115,
+        124,
+        130,
+        132,
+        138,
+        142
+      ]
+    },
+    {
+      "source": "2024年年度报告",
+      "pages": [
+        80,
+        82,
+        84,
+        85,
+        93,
+        97,
+        102,
+        104,
+        105,
+        108,
+        109,
+        111,
+        116,
+        126,
+        132,
+        134,
+        139,
+        143
+      ]
+    },
+    {
+      "source": "2025年年度报告",
+      "pages": [
+        81,
+        83,
+        85,
+        87,
+        94,
+        99,
+        104,
+        106,
+        107,
+        110,
+        111,
+        113,
+        118,
+        128,
+        134,
+        136,
+        141,
+        145
+      ]
+    }
+  ],
+  "_note": "本文件是 risk-radar 的演示输入，等于 financial-diagnosis 的输出（即 D 在统一数据对象里传给 Risk Radar 的那一段）。由脚本生成，不要手改。"
+}
