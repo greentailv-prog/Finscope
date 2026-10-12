@@ -1,0 +1,25 @@
+{
+  "schema_version": "finradar.industry-hint/1.0",
+  "owner": "B",
+  "purpose": "抓取到年报后，用公司简称里的关键词粗判所属行业，供 risk-radar 自动匹配行业剖面（industry_profiles/_index.json）。这只是第一道粗筛，最终仍以行业剖面文件里的 match_keywords 为准；匹配不上就退回 general，并在待核验队列里提示人工确认。",
+  "note": "关键词命中后仍需人工确认。行业判断错了，整套阈值就全错——所以宁可退回通用档并提示，也不要自信地套错剖面。",
+  "hints": [
+    {
+      "profile_id": "banking",
+      "keywords": ["银行", "商行", "储蓄", "信用社", "农商", "城商"],
+      "confidence": "high",
+      "why": "银行简称几乎总带“银行”二字，命中率极高"
+    },
+    {
+      "profile_id": "manufacturing",
+      "keywords": ["股份", "重工", "机械", "装备", "制造", "材料", "化工", "汽车", "电子", "科技", "电气", "钢铁", "水泥", "医药", "食品", "纺织"],
+      "confidence": "low",
+      "why": "覆盖面广但噪声大，例如“科技”可能是软件公司而非制造业；仅作提示，不作为依据"
+    }
+  ],
+  "fallback": {
+    "profile_id": "general",
+    "action": "push_review_queue",
+    "review_reason": "未能从公司简称判断所属行业，已按通用档阈值计算。若目标公司为银行/保险/券商/地产等特殊行业，请显式指定 --industry 后重算，否则阈值可能大面积误报。"
+  }
+}
