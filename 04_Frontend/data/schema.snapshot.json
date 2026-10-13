@@ -1,0 +1,116 @@
+{
+  "_readme": [
+    "本文件是 D 的统一数据 Schema 快照，用于字段比对，不参与页面运行。",
+    "D 每定版一次 Schema，就把最新版覆盖到这里，并在 _version 记录时间。",
+    "E 的前端只依赖本文件描述的字段路径。若 D 改了字段名而前端没跟着改，",
+    "页面会出现空白 —— 拿本文件与 D 的最新版逐行 diff 即可定位。"
+  ],
+
+  "_version": {
+    "snapshot_date": "2026-10-10",
+    "source": "根据团队分工说明第四节 + E 的字段需求整理（等待 D 定版确认）",
+    "status": "placeholder",
+    "_changelog": [
+      "2026-10-10 新增 company.business / company.business_page（E 需求，可选）",
+      "2026-10-10 新增 business_mix / history 两个顶层块（E 需求，可选）——",
+      "两者都不改 financials 的单期口径，是纯加法，A 不交付时页面照常成立"
+    ]
+  },
+
+  "company": {
+    "_owner": "D 定义，A 补全",
+    "name": "string  公司全称",
+    "ticker": "string  股票代码",
+    "industry": "string  所属行业",
+    "report_period": "string  报告期",
+    "report_title": "string  报告名称（E 新增，用于展示来源）",
+    "business": "string  一句话业务定位，40–80 字（E 新增，可选；见 INTERFACE_CONTRACT 四·3）",
+    "business_page": "number  business 那句话出自年报第几页（E 新增，可选）"
+  },
+
+  "financials": {
+    "_owner": "A",
+    "_item_shape": "{ value: number, unit: string, period: string, source: string, page: number }",
+    "_note": "增长率不在此层，属于 ratios.growth（B 负责）",
+    "fields": [
+      "revenue", "cost_of_revenue", "net_income_attr", "net_income_deducted",
+      "total_assets", "total_liabilities", "equity_attr", "cash_and_equivalents",
+      "accounts_receivable", "inventory", "goodwill",
+      "cfo", "cfi", "cff", "rd_expense", "capex"
+    ]
+  },
+
+  "business_mix": {
+    "_owner": "A",
+    "_optional": true,
+    "_added": "2026-10-10，E 的新增需求（页面 2 主营构成），见 INTERFACE_CONTRACT 四·4",
+    "_shape": "{ period, source, section, page, unit, items }",
+    "_item_shape": "{ name: string, revenue: number, unit: string, share: number, page: number }",
+    "_note": [
+      "share = 占营业收入的比重，小数（0.62 = 62%），由 A 给，E 不自己算。",
+      "口径必须是完备拆分（分产品/分地区），加总 ≈ 营业收入；",
+      "「前五大客户」这类不完备拆分不要放进来 —— 页面那根条是「整条 = 100% 营收」。",
+      "items 顺序原样显示，E 不重排。"
+    ]
+  },
+
+  "history": {
+    "_owner": "A",
+    "_optional": true,
+    "_added": "2026-10-10，E 的新增需求（页面 2 多期趋势），见 INTERFACE_CONTRACT 四·5",
+    "_shape": "{ unit, source, series: [{ key, name, unit, values: [{ period, value, page }] }] }",
+    "_note": [
+      "values 必须按时间升序给，E 不排序（期间是字符串，'2023H1' 会排到 '2023' 后面）。",
+      "只给绝对值，不给同比增速（增速是 B 的 ratios.growth）。",
+      "少于 2 个点的系列 E 直接不画。"
+    ]
+  },
+
+  "ratios": {
+    "_owner": "B",
+    "_item_shape": "{ value: number, unit: string, formula: string, threshold: string, status: 'good'|'watch'|'bad' }",
+    "_note": "status 由 B 判断，E 只负责上色，不自己下结论",
+    "groups": {
+      "growth": ["revenue_yoy", "net_income_yoy", "ar_yoy"],
+      "profitability": ["gross_margin", "net_margin", "roe", "roa"],
+      "solvency": ["current_ratio", "quick_ratio", "debt_to_asset", "interest_cover"],
+      "efficiency": ["ar_turnover", "inventory_turnover", "asset_turnover"],
+      "cashflow_quality": ["ocf_to_net_income", "ocf_to_revenue", "free_cash_flow"]
+    }
+  },
+
+  "risks": {
+    "_owner": "B",
+    "_item_shape": {
+      "risk_id": "string",
+      "risk_name": "string",
+      "severity": "'high'|'attention'|'normal'",
+      "trigger": "string  触发规则原文",
+      "calculation": "{ formula, inputs, result, threshold, triggered }",
+      "evidence": "[{ metric, value, unit, period, source, page }]",
+      "explanation": "string  AI 解释（E 需求，待与 B 确认）",
+      "suggestion": "string  应对建议（E 需求，待与 B 确认）"
+    },
+    "_note": "团队文档原示例仅含 risk_id/name/trigger/severity/evidence_required，E 额外索要 calculation/explanation/suggestion，需在 INTERFACE_CONTRACT.md 中谈定"
+  },
+
+  "valuation": {
+    "_owner": "C",
+    "comps": {
+      "peers": "[{ name, ticker, pe, pb, ev_ebitda }]",
+      "target": "{ eps, net_income, shares_outstanding }",
+      "range": "{ low, mid, high, unit }",
+      "conclusion": "string"
+    },
+    "dcf": {
+      "assumptions": "{ wacc, terminal_growth, forecast_years, tax_rate }",
+      "range": "{ low, mid, high, unit }",
+      "conclusion": "string"
+    }
+  },
+
+  "sources": {
+    "_owner": "A",
+    "_item_shape": "{ source_id, metric, source, section, page }"
+  }
+}

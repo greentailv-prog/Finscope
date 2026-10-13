@@ -1,0 +1,2892 @@
+/* ============================================================================
+ * components.css —— 可复用零件
+ * ----------------------------------------------------------------------------
+ * 这些零件在六个页面里反复出现，写一次到处调用。改零件 = 全站同步更新。
+ * 颜色一律引用 base.css 的令牌，本文件不出现任何写死的色值。
+ * ==========================================================================*/
+
+/* ==========================================================================
+   1. 区块标题
+   ========================================================================== */
+.sec-head {
+  margin-bottom: var(--sp-5);
+}
+
+.sec-title {
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.01em;
+}
+
+/* 卡片标题下面的一行说明。定 12（原 13）而不是 14 ——
+   站上同角色早就写着两个答案：§1 自己的 `.sec-head-sm .sec-desc` 是 12，
+   §3 的 `.block-sub`（「卡片小标题下的一行补充」）也是 12。
+   同一个类在大卡片里 13、小卡片里 12，正是这一轮在修的那类不一致。
+   归「参考性注解」档（查的 → 12）；14 留给要读的正文。 */
+.sec-desc {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--c-text-2);
+  max-width: 62em;
+}
+
+/* 次级区块标题：页面内部的二级分段，比 sec-title 小一号 */
+.sec-head-sm {
+  margin-top: var(--sp-6);
+  margin-bottom: var(--sp-3);
+}
+
+.sec-head-sm .sec-title {
+  font-size: var(--fs-xl);
+}
+
+/* 字号不再另设 —— `.sec-desc` 已统一到 12，这行原本的 --fs-xs 成了空声明，删掉。
+   保留 color：小卡片位置靠下，说明行仍要比大卡片轻一档。 */
+.sec-head-sm .sec-desc {
+  color: var(--c-text-3);
+}
+
+.blk-title {
+  font-size: var(--fs-lg);
+  margin-bottom: var(--sp-3);
+}
+
+/* ★ 2026-10-13 第六轮：**块标题也要有上间距。**
+   反馈原话：「现金流桥和上方归因变化表格距离过近，敏感性表格和三情景表格
+   距离过近」。根因在这一行缺失 —— .blk-title 只有 margin-bottom，
+   而它上面那张 .mini-table 只有 margin-bottom（给下一块的，不是给自己的），
+   两边都不认账，间距就漏成 0，标题直接贴在上一张表的最后一行上。
+   这是本文件第 N 次踩同一类坑（.v-target 无上间距、.dim-grid 无上间距），
+   规律一句话：**两个相邻块之间，必须有一方显式认领这段间距。**
+   用 :not(:first-child) 而不是无条件给 —— 卡片里的第一个标题
+   （「主要财务数据」「本页待实现」这类）不能多出一段上边距，
+   否则卡片顶部内边距会凭空翻倍。 */
+.blk-title:not(:first-child) {
+  margin-top: var(--sp-5);
+}
+
+/* ==========================================================================
+   2. 卡片（毛玻璃，2026-10-12 改版）
+   --------------------------------------------------------------------------
+   改版把「外壳」和「内容」分开：卡片是一层**磨砂玻璃**，浮在 body::before
+   的灰蓝渐变之上；卡片里凡是「一排排的东西」（表格、清单、公式）都垫一块
+   底板（见各节）。一句话记法：**外壳玻璃，内容垫板。**
+
+   玻璃配方四个要点（每个容器都重复了这几行 —— 是有意的，这样随便读哪一条
+   规则都能看到完整写法，不用跳去别处找）：
+     · -webkit- 前缀必须有（Safari / 旧 Chrome 不认无前缀的）
+     · background 的 alpha 必须 < 1，否则 blur 看不见
+     · 描边用白色半透明（--c-glass-line）而不是灰线 —— 玻璃的「边」是光不是墨
+     · box-shadow 要带 --shadow-inset（顶部 1px 高光）。只靠投影的玻璃像塑料片
+   --------------------------------------------------------------------------
+   ⚠️ 不要往这个文件加 @media（含打印）。tools/layout-audit.js 用朴素正则拆
+   「选择器 + 声明块」，加了 @media 会让它的 ③④ 两项失准。打印规则写在
+   css/base.css 里。
+   -------------------------------------------------------------------------- */
+.card {
+  background: var(--c-glass);
+  border: 1px solid var(--c-glass-line);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+  /* ★ 2026-10-13 第五轮：板块之间的缝 16 → 24。
+     反馈原话：「3. 字体和字之间、板块之间的间距还是过于靠近的，重新调整」。
+     16px 是「两张白纸挨着」的间距；卡片改成毛玻璃浮在渐变上之后，
+     两张玻璃之间透出的那 16px 缝**要同时承担「这是两块」这个信息**，
+     16 就不够了 —— 上一轮把面板之间的缝定成 16 是因为那是**两块大面板**，
+     缝长（100vh）所以窄一点也看得见；卡片是碎的，得宽一档才读得出。
+     用 --sp-5 而不是新开一档，是为了不让间距阶梯再多一个值。 */
+  margin-bottom: var(--sp-5);
+  box-shadow: var(--shadow), var(--shadow-inset);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  /* 把卡内的 z-index 关在卡里（页面 5 的 .vr-band / .vr-rows 靠它，
+     否则将来哪个元素被提到卡片外会跟别的卡打架） */
+  isolation: isolate;
+}
+
+/* 载数据的卡：提高不透明度，把「背景透上来」压到最低。
+   玻璃伤密排数据的机制不是模糊表格线（线和数字画在玻璃**之上**，不受 blur 影响），
+   而是背景透光让行底色随渐变轻微变化、对比不稳。0.82 把透光压到 18%。
+   .card-dense 由页面 2 的「主要财务数据」卡显式挂上（16 行，见 p2-overview.js）——
+   .card 用不了 :has()，file:// 下不敢赌浏览器支持。 */
+.card.card-dense {
+  background: var(--c-glass-strong);
+}
+
+/* ==========================================================================
+   3. 待实现清单（骨架阶段专用，实现完可整块删掉）
+   --------------------------------------------------------------------------
+   这六张卡（p1–p6 各一张）是**开发期的进度标记**，页面上不该出现。
+   处理方式是**开关隐藏，不删代码**：打包前把 index.html 里的
+   `window.FINSCOPE_DEMO` 改成 true，`app.js` 的 boot() 会给 <body> 加上
+   `.app-demo`，六张卡一起消失。
+   （页面 5 那张标题写的是「本页待办 / 待确认」、且包在 specCard() 里，
+   最容易被漏掉 —— render.test.js 有一条断言专门钉这件事。）
+   DOM 保留是关键 —— 测试和开发期照常看得见结构，且页面里那些
+   「关键依赖：report 的字段结构必须先与 D 敲定」之类的说明不会丢。
+   ========================================================================== */
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* 「本页待实现」开发期清单的条目。定 12：它是注解不是内容，而且
+   整块在打包前要统一隐藏或删除（见 README 未完成项），这条规则会跟着走。
+   现在先给 12 是为了不被它卡住收尾 —— 留着它 `--fs-sm` 就删不掉。 */
+.todo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--c-text-2);
+}
+
+.todo-box {
+  color: var(--c-text-3);
+  line-height: 1.6;
+}
+
+/* 演示模式：整张开发卡一起隐藏（含标题和卡内那些开发说明），
+   不留一个孤零零的「本页待实现」小标题悬在那儿。
+   挂在 .card 上而不是 .todo-list 上，就是因为标题和说明是 .card 的兄弟节点。 */
+body.app-demo .dev-card { display: none; }
+
+/* ==========================================================================
+   4. 键值对网格
+   ========================================================================== */
+.kv-cell {
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius);
+  padding: var(--sp-3) var(--sp-4);
+}
+
+.kv-key {
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  font-family: var(--font-num);
+  word-break: break-all;
+}
+
+.kv-val {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+
+.kv-note {
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}
+
+/* ---- 「还差谁的东西」清单（页面 1 骨架自检卡）-------------------------
+   一行一个队友：谁 / 欠多少 / 缺了会怎样。
+   它是 tools/interface-check.js 在页面上的那一半 ——
+   同一个契约走出来的结果，只是一个输出到终端、一个输出到屏幕。
+
+   为什么用三列网格而不是行内文本：中间那列长度不一样（「必需 8 项」比
+   「待交付 3 项」短），行内排会让右列参差不齐，读起来像没对齐。
+   auto / 1fr / auto 让左列和右列各自贴边，中间那列吃掉剩余宽度。 */
+.owner-list {
+  margin-top: var(--sp-2);
+  display: grid;
+  gap: var(--sp-1);
+}
+
+.owner-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--c-surface-2);
+  border-radius: var(--radius);
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+}
+
+/* 队友代号用等宽数字字体 + 主色：它是这一行的索引，不是正文。
+   主色在这里是「可指认的结构」，不是强调 —— 全站橙的预算不花在这。 */
+.owner-who {
+  font-family: var(--font-num);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--c-primary);
+}
+
+.owner-what { color: var(--c-text); font-weight: 500; }
+
+/* 右列常为空字符串（比如「可选」项没有后果说明），
+   用 text-align: right 保证显形的那几行仍然贴着右边。 */
+.owner-note { color: var(--c-text-3); text-align: right; }
+
+/* ==========================================================================
+   5. 说明条 / 空状态
+   ========================================================================== */
+.note {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  line-height: 1.7;
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 2px solid var(--c-line);
+  background: var(--c-surface-2);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.note-info { border-left-color: var(--c-primary); color: var(--c-text-2); }
+.note-warn { border-left-color: var(--c-watch);   color: var(--c-text-2); }
+
+/* 空状态正文。定 14 而不是 12：它出现时**是整页唯一的内容**，
+   屏幕上只有这一段话 —— 用最小号灰字会让整页看上去像坏了，
+   正是 EDGE_CASES 第 7 / 25 条要防的观感。
+   页面 6 的 .paper-empty 是同一个角色的另一处实现，必须同号。 */
+.empty-state {
+  padding: var(--sp-6);
+  text-align: center;
+  color: var(--c-text-3);
+  font-size: var(--fs-md);
+  background: var(--c-glass);
+  /* 虚线框留着，它本身就表示「这里还是空的」。用灰而不是 --c-glass-line：
+     玻璃那道白边在浅底上看不见，虚线会消失。 */
+  border: 1px dashed var(--c-line);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--sp-4);
+  box-shadow: var(--shadow-inset);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  isolation: isolate;
+}
+
+/* ==========================================================================
+   6. 数据校验提示条
+   ========================================================================== */
+.warn-bar {
+  max-width: var(--content-max);
+  margin: 0 auto var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  /* ★ 2026-10-12 第二轮：底色从橙底纹 --c-watch-bg 改成玻璃白，
+     橙只剩左边框 + 标题文字。反馈原话：「橙只留在文字和左边框上」。
+     这条对它尤其要紧 —— 它是一条铺满内容宽的横幅，
+     橙底纹会让它变成**整个页面上最大的一块橙**，
+     而「强调」这个语义是靠稀缺撑着的，铺开就不再是强调。
+     现在橙的落点：左边框 3px（图形）+ .warn-title（ink 档 4.67:1）。 */
+  background: var(--c-glass-strong);
+  border: 1px solid var(--c-line);
+  border-left: 3px solid var(--c-watch);
+  border-radius: var(--radius);
+  font-size: var(--fs-xs);
+}
+
+.warn-title {
+  font-weight: 600;
+  /* 橙**文字**走 ink 档（4.67:1）。--c-watch 直接当字用只有 2.29:1。
+     2026-10-13 第六轮：这条横幅**没有**跟着改成橙底深字 ——
+     它铺满内容宽，一块大橙底就是整页最大的橙，会把「强调」的稀缺性打掉
+     （同下方 .warn-bar 注释里那条老账）。所以橙还是只留左边框 + 这行标题。 */
+  color: var(--c-watch-ink);
+  margin-bottom: var(--sp-1);
+}
+
+.warn-list {
+  color: var(--c-text-2);
+  line-height: 1.7;
+}
+
+.warn-list li::before {
+  content: "· ";
+  color: var(--c-text-3);
+}
+
+/* ==========================================================================
+   7. 按钮
+   ========================================================================== */
+.action-row {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-4);
+}
+
+.btn {
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-size: var(--fs-md);
+  font-weight: 500;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+
+/* ★ 主按钮走**橙**（2026-10-12 第二轮改定，推翻了同日上午「走黑」的那版）。
+   推翻的理由是原始反馈：「我选择橙色作为主色的意思，是希望部分按钮等可以是橙色」。
+   回头看不该把橙定义成**纯警报色** —— 那样它只在数据出错时才出现，
+   页面 2 这种浏览型页面永远一处橙都没有（实测：status 字段全在 ratios 里，
+   而 ratios 是页面 3 的数据，页面 2 根本不读），界面就素得没有落点。
+   参考图 2 里那个橙本来就是品牌 / 行动色，不是警报色。所以橙现在的语义扩宽成
+   **「强调」= 可行动 + 需关注**，但仍受预算约束：每屏最多 1–2 处，不许铺开。
+
+   ★ 2026-10-13 第六轮改定：实底从深橙 --c-watch-ink 换成**亮橙 --c-watch**，
+   字从白换成**深墨 --c-ink**（8.0:1，第七轮色号换成 #fa9205 后重新核过）。
+   理由是项目反馈「全篇要用同一个橙」——
+   按钮是全站面积最大的橙面，它是深褐的话，读者就把「深褐」和色条上的「亮橙」
+   读成两种颜色。现在按钮和色条**是同一个值**。
+   对比账：亮橙 #fa9205 配白字只有 **2.29:1**（14px 过不了），配深墨 8.0:1 ——
+   比原来的深橙配白字 5.6:1 还高，所以这次换色顺带把对比度也提上去了，不是妥协。
+   ⚠️ 结尾这半句「配白字过不了」在第九 / 第十轮被绕了一圈又回来了，见下。 */
+.btn-primary {
+  background: var(--c-watch);
+  /* ★ 2026-10-13 第十轮：字从中性暖深档换成**白**（--c-on-primary）。
+     反馈原话：「橙色按钮/标注的内部字体换成白色」。
+     过程：第六轮白 → 第九轮深墨 → 第九轮改同色相深档 #502e00 → 第十轮回到白。
+     第九轮那版的量因（橙 34.5° 配墨 214.3° 相差 180°，像警示标签）仍然成立，
+     白字只是绕开了「配什么深色」这个问题本身。
+     ⚠️ 代价是橙底只有 **2.29:1**，低于 AA —— 这是**知情的取舍**，
+        理由与「想修好它为什么只有压深橙面一条路」写在 base.css 的
+        --c-watch 第十轮 ① / ⚠️ 两段里。不要再当 bug 修一遍。 */
+  color: var(--c-on-primary);
+}
+
+/* hover 靠 filter 压暗，不换令牌 —— 零新令牌、零裸值（⑥ 色值零裸值仍为 0）。
+   压暗 10% 后白 → 亮橙的对比是 2.13:1，同样低于 AA（同 base.css 的取舍）。 */
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(0.9);
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background: var(--c-surface);
+  color: var(--c-text);
+  border-color: var(--c-line);
+}
+
+.btn-ghost:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+
+/* ==========================================================================
+   8. 上传区
+   ========================================================================== */
+.upload-zone {
+  padding: var(--sp-7) var(--sp-5);
+  text-align: center;
+  /* ★ 2026-10-13 新增：整格可点靠的是一枚**透明铺满的 <input type="file">**
+     （.upload-input，见 §19），它要相对这一格定位。 */
+  position: relative;
+  /* 虚线框是它的身份（「这是一块可放东西的空地」），所以用灰不用
+     --c-glass-line —— 玻璃那道白边在浅底上看不见，虚线会消失。 */
+  border: 2px dashed var(--c-line);
+  border-radius: var(--radius-lg);
+  background: var(--c-glass);
+  margin-bottom: var(--sp-4);
+  transition: border-color 0.15s, background 0.15s;
+  cursor: pointer;
+  box-shadow: var(--shadow-inset);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  isolation: isolate;
+}
+
+.upload-zone:hover {
+  border-color: var(--c-primary);
+  /* 用 background-image 叠一层薄纱，而**不是**改 background。
+     直接写 background: --c-primary-soft 会把 --c-glass 一起替换掉 ——
+     鼠标移上去磨砂突然消失，会「啪」地一下（玻璃底的 alpha 从 0.6 变成 0.1）。
+     这样玻璃留着，蓝色只是压在上面。 */
+  background-image: linear-gradient(var(--c-primary-soft), var(--c-primary-soft));
+}
+
+/* 上传箭头。它是**图形不是文字级** —— file:// 下不能引图标字体或图片，
+   箭头只能用文字字形画出来；40 是「画成这样好看」，与第几级标题无关。
+   故走单独的图形尺寸令牌（--icon-lg），不挂字号阶梯：
+   挂上去的话，将来动 --fs-3xl 会把这个图标一起带走。
+   全站唯一一处脱档字号，改完「font-size 零裸值」这条不变式才成立。 */
+.upload-icon {
+  font-size: var(--icon-lg);
+  color: var(--c-text-3);
+  line-height: 1;
+  margin-bottom: var(--sp-3);
+}
+
+.upload-main {
+  font-size: var(--fs-lg);
+  font-weight: 500;
+}
+
+.upload-hint {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}
+
+/* ==========================================================================
+   9. 公司抬头（页面2）
+   ========================================================================== */
+.company-head {
+  padding-bottom: var(--sp-4);
+}
+
+.company-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.company-name {
+  font-size: var(--fs-2xl);
+}
+
+.ticker {
+  font-family: var(--font-num);
+  font-size: var(--fs-lg);
+  color: var(--c-text-3);
+  letter-spacing: 0.04em;
+}
+
+.company-meta {
+  margin-top: var(--sp-3);
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.meta-chip {
+  font-size: var(--fs-xs);
+  color: var(--c-text-2);
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius-pill);
+  padding: 3px var(--sp-3);
+}
+
+/* ==========================================================================
+   10. 指标大数卡 + 主要财务数据表（页面2）
+   本页讲「数字必须可验证」：每个数旁边都要有一条能点开的页码。
+   本页零 tone（详见 base.css），颜色只走 status 系统。
+   ========================================================================== */
+.metric-card {
+  position: relative;
+  background: var(--c-glass);
+  border: 1px solid var(--c-glass-line);
+  border-top: 3px solid var(--c-line);
+  border-radius: var(--radius-lg);
+  /* 2026-10-13 第五轮：上下 16 → 24。三张大数卡是并排的，
+     上下留 16 会让顶上的 3px 健康度色条和卡内第一行字挤在一起。 */
+  padding: var(--sp-5);
+  box-shadow: var(--shadow), var(--shadow-inset);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  isolation: isolate;
+}
+
+/* 健康度体现在顶部色条 + 数值颜色上 */
+.metric-card.is-good  { border-top-color: var(--c-good); }
+.metric-card.is-watch { border-top-color: var(--c-watch); }
+.metric-card.is-bad   { border-top-color: var(--c-bad); }
+
+/* 2026-10-13 第五轮：12px → 14px。
+   原来它和下面的 .metric-source 都是 12px，一行「小字 / 34px 大数 / 小字」
+   读起来是大数被两条同款小字夹住 —— 反馈里的「大小很奇怪」有一半是这个。
+   现在标签提到 14（**它管着这个数是哪个科目，是内容不是注解**），
+   来源行留在 12（一条页码，是查的），一上一下才分得开。 */
+.metric-label {
+  font-size: var(--fs-md);
+  color: var(--c-text-2);
+}
+
+.metric-value {
+  /* 8 → 12：标签和它管着的那个数之间要给一道缝，否则 14px 的标签
+     会贴在 34px 数字的额头上。 */
+  margin-top: var(--sp-3);
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  /* ★ 负字距撤掉（原 -0.02em）。
+     这一串不只是数字 —— 是 `1,688.38 亿元`，**里面有两个汉字**。
+     负字距对大数字串是收敛，对汉字是**真的把字挤在一起**，
+     正是反馈里「字和字之间过于靠近」最清楚的一处。
+     汉字要的是正常字距，数字紧不紧凑由字族决定，不该在这里拉。 */
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+/* 缺数据时的大数：字号降下来、颜色变灰 ——
+   写「未提取」而不是「—」，「—」分不清是没有这个数还是这个数就是零。 */
+.metric-value.is-missing {
+  font-size: var(--fs-xl);
+  font-weight: 500;
+  color: var(--c-text-3);
+  letter-spacing: 0;
+}
+
+.metric-source {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}
+
+.metric-status {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+/* ---- 主要财务数据：三张报表，各有各的形状 ---- */
+/* 一版是把 16 行排成一张同样的表，那样的结果是「信息齐全但没有分辨度」：
+   同字号、同颜色、同列宽，眼睛找不到落点。现在改成三块，块内保留报表
+   自身的形状（缩进层级 / 「其中：」/ 净额沿零点线分流），并且每行配一条
+   比例条 —— 大小关系不读数字也能看出来。 */
+
+/* ★ 内容垫板：**不透明**的白面，不玻璃、不带 blur。
+   这里是「外壳玻璃，内容垫板」这句里「垫板」的样板 ——
+   整张卡是玻璃（.card.card-dense），但这三块报表块垫在白板上。
+   理由：玻璃伤密排数据的机制是背景透光让行底色随渐变漂移，
+   垫一块实的就彻底断了这条路。也**不嵌套玻璃**（玻璃里放玻璃会互相取样）。 */
+.fin-block {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius);
+  overflow: hidden;             /* 圆角裁掉表头灰底的四角 */
+  /* 2026-10-13 第五轮：16 → 24。
+     三张报表块（利润表 / 资产负债表 / 现金流量表）是**三块各自带边框的白板**，
+     16px 的缝配上 8px 的圆角，两块之间只剩一道细线可读 —— 反馈里
+     「板块之间的间距过于靠近」指的就是这里。24 让三块真的分成三块。 */
+  margin-top: var(--sp-5);
+}
+
+/* 块头：一眼看出这块是张什么表、体量多大 */
+.fin-block-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--c-surface-2);
+  border-bottom: 1px solid var(--c-line-soft);
+}
+
+/* 块名必须**大于它自己那张表的表体**（16 > 14）。
+   原先 13px = 表体 13px，标题不高于正文，是反的 ——
+   块名是「这三块表分别是什么」的唯一分节信号，扫不到它，三块就糊成一块。 */
+.fin-block-name {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+.fin-block-flag {
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 固定列宽，让三张表的「数值 / 条 / 页码」落在同一条竖线上 ——
+   块与块不整齐的话，分块反而更乱。
+
+   ★ 2026-10-13：列宽从「挂在 td 类名上」改成 **<colgroup>**。
+   起因是加「上期」列：table-layout: fixed 的列宽取**第一行**，
+   有了表头行之后第一行就是表头 —— 宽度挂在 td 类名上就得给表头 5 个
+   <th> 各配一个镜像类，同一份宽度写两遍，改一次要改两处。
+   放进 colgroup 就只有一处，表头行与表体行谁在前都不影响。
+   ⚠️ 也因此删掉了原来的 `.fin-table .col-source { width: 15% }`：
+   它和 `.col-source { width: 1% }`（通用条款）会跟 col 的宽度打架，
+   fixed 布局下 col 优先，留着就是一条读起来生效、实际不生效的规则。 */
+/* ★ 2026-10-13 新增：三张数据表的数字统一走 --font-num（当时 = Bahnschrift / DIN）。
+
+   起因是用户报的「大量字体不对」。查下来字体本身没装错、也没回落到衬线体 ——
+   **同一个数在两处用了两种字**：大数（.metric-value / .fin-value）是 DIN，
+   表格格子里的数走的是 --font-sans（Noto Sans SC）。
+   探针清点「纯数字但没走 --font-num」的元素：页 5 有 20 处、页 6 有 80 处，
+   页 1/2/3/4 为 0 —— 全部落在 td/th 上，来源就是这条缺失。
+
+   证据：同一串「1688.38」在 100px 下 Bahnschrift 宽 329、
+   Noto Sans SC 宽 361，差约 10%，两列数字并排一眼能看出不是一套。
+
+   为什么敢直接套在整张表上（包括中文的科目名、表头）：上面 base.css 里
+   --font-num 的链尾已经补了 "Noto Sans SC" —— 汉字走的是和 --font-sans
+   **同一个字体**，这条规则只改拉丁数字与字母，中文一个像素都不动。
+
+   这一条也把 .mini-table 本来就写着、却一直空转的 `font-variant-numeric`
+   补齐了：原来只声明了等宽数字，没声明数字字族，等宽是白写的。
+
+   ★ 2026-10-13 第五轮：`--font-num` 改成 `var(--font-sans)` 之后，
+   `font-family: var(--font-num)` 这一行**在当下是个空操作**（等于继承）。
+   **规则保留，不删**，两条理由：
+     1. `font-variant-numeric: tabular-nums` 仍然是实的 —— 它才是
+        「这几列数字要对齐」这句话的真正手段，而且与字族无关；
+     2. 上面写的那条**判据**（「纯数字就该走 --font-num」）还在
+        tools/probe-harness.html 里跑着。删了这条规则，判据会立刻指认
+        页 5 的 20 处、页 6 的 80 处为违规。要么两边一起删，要么留着。
+        留着的代价是零（继承同一个值），删掉要重做判断 —— 留。 */
+.fin-table td, .fin-table th,
+.mini-table td, .mini-table th,
+.ratio-table td, .ratio-table th {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+.fin-table {
+  width: 100%;
+  /* ★ 2026-10-13：min-width 是这张表的**可读下限**，配合 JS 里新加的
+     .table-scroll 壳使用。
+
+     实测（窗口宽 → 页面宽 = 窗口 − 409）：
+       窗口 1000 → 页面 565 → 表 513 → c-value 只有 92px，减去左右各 12px
+       内边距剩 68px；而「1,708.99 亿元」在 14px 下要 83px、头条行 16px 下要
+       95px。数字是 nowrap 的，装不下就直接溢到隔壁 —— vw 974 报 4 处重叠、
+       vw 924 报 20 处，压的正是上期列和比例条。
+     溢出的临界点是 c-value 装得下那串数字：0.18 × 表宽 − 24 ≥ 串宽
+     → 表宽 ≥ (串宽 + 24) / 0.18。
+
+     ★ 串宽**不是常数**，它跟着字族走 —— 而 --font-num 是一条回退链，
+     第一项当时是 Bahnschrift，在 Mac 上不存在。实测「1,708.99 亿元」@16px：
+       Bahnschrift 91.2 → 需 640     ← 当时本机命中的就是这条
+       Segoe UI    95.1 → 需 662
+       Noto Sans SC 97.8 → 需 677
+       Arial       98.7 → 需 682
+       Microsoft YaHei 100.7 → 需 693
+       Helvetica Neue  104 → 需 712  ← 当时 Mac 的兜底，链上最宽的一条
+     720 取的是**链上最宽那条也能装下**，不是「我这台机器装得下」。
+     按 680 写的话本机看着是对的，同学用 Mac 打开会原样复现这个重叠。
+
+     ★ 2026-10-13 第五轮：720 **不用重算，仍然成立，而且比原来更宽裕**。
+       数字改跟正文同族之后，--font-num 的链变成 --font-sans 的链
+       （"Noto Sans SC" → "Microsoft YaHei" → "PingFang SC" → …），
+       **Helvetica Neue 那条 104 已经从链上消失**，上面六行里最宽的一条退到
+       微软雅黑的 100.7（→ 需 693）。720 > 693，余 27px。
+       链上其余的 CJK 系统字体（PingFang / Hiragino / 思源）拉丁数字都比雅黑窄，
+       所以 693 就是新的上界。**改这条不用动 720，但要把这段数换成新的上界** ——
+       留着旧的 712 会让人以为链上还有个更宽的字体在等着。
+
+     三条出路，选了第三条：
+       · 让数字换行 —— 「1,708.99」和「亿元」拆两行。否。这一列的价值就是
+         竖着扫一眼看量级变化，有的行两行、有的行一行，列就不是一条线了。
+       · 缩字号 —— 治不了本：要到 13px 才能把临界点降到窗口 1050，
+         窗口 950 仍然撞，还赔掉全表的字号阶梯。
+       · 横向滚动 —— 选它。数字一个不裁、一个不换行，列对齐也保住
+         （table-layout: fixed 让三张表的数值/条/页码落在同一条竖线上，
+         一旦改 auto 让浏览器按内容排版，三张表的列就各走各的了）。
+         代价是窄窗口下多一条滚动条，而这张表本来就是**用来横向比对的**。
+     宽屏下 100% 大于 720，这条 min-width 完全不生效（窗口 ≥ 1210 起就不出现
+     滚动条，1280 及以上一定没有）。 */
+  min-width: 720px;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: var(--fs-md);
+}
+
+/* .table-scroll 默认带 margin-bottom: var(--sp-2)，是给页面 5 那种
+   「表 + 下面还有别的东西」的卡用的。这里表是 .fin-block 的最后一个孩子，
+   块本身已经有下边框和圆角，再留 8px 会在块底多出一条白边。 */
+.fin-block .table-scroll {
+  margin-bottom: 0;
+}
+
+.fin-table col.c-name   { width: 30%; }
+.fin-table col.c-value  { width: 18%; }
+.fin-table col.c-prior  { width: 14%; }
+.fin-table col.c-bar    { width: 24%; }
+.fin-table col.c-source { width: 14%; }
+
+/* 没有上期值的那一份（D 没给 prior_value）走四列：
+   列宽退回加列之前的 34/22/29/15。**不留一列全是破折号的空壳** ——
+   16 行破折号会被读成「E 没填」，而事实是上游没给。 */
+.fin-table.is-4col col.c-name   { width: 34%; }
+.fin-table.is-4col col.c-value  { width: 22%; }
+.fin-table.is-4col col.c-bar    { width: 29%; }
+.fin-table.is-4col col.c-source { width: 15%; }
+
+/* 表头行：科目 / 本期（2025）/ 上期（2024）/ 相对大小 / 出处。
+
+   ★ 2026-10-13 新增。加了「上期」列之后，**不写表头是不行的**：
+   两列数字长得一模一样，读者只能猜哪列是本期。而且这一行还顺手做了两件
+   别处做不到的事 ——（a）把期间写出来（2025 / 2024 是数据，不是装饰）；
+   （b）给比例条那一列命名。「相对大小」这四个字是脚注里那句
+   「不是任何比率」的**落点** —— 原来那句脚注面对的是一个没有名字的灰条。
+
+   **不加底色**：紧挨着的 .fin-block-head 已经是灰底 + 下边框了，
+   再加一条灰带就是两层灰叠在一起。只留一条细线和小字。 */
+.fin-head-row th {
+  /* 上下 4 → 8：表体行高提到 47 之后，表头还留在 4px 会比表体明显发飘
+     （表头 12px 字 + 上下各 4 = 28px，还不到表体行高的 60%）。 */
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--c-text-3);
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--c-line-soft);
+}
+
+/* 表头一律左对齐 —— 跟着它那一列走。数值列没有右对齐（.fin-value 就是左对齐的），
+   表头单独右对齐会让标题和它管的数字错开半格，比不写表头还乱。 */
+
+/* 分隔线一律画在**下面那一行的上边**，不用 border-bottom。
+   border-collapse 下上下两条边框会打架，只留一条边就永远不会有 2px 双线。 */
+/* 2026-10-13 第五轮：上下 8 → 12（左右不动）。
+   行高 40 → 47。原来的 40 = 14px 文字的行盒 23.1 + 上下各 8 —— 单看不挤，
+   但配上「每一行都有一条 1px 分隔线」就成了密排：线把 8px 的空气切两半，
+   每行实得 4px。反馈里「字体和字之间过于靠近」在表里就是这个。
+   行高提到 47 之后，17 行的表高 800，仍在一屏内读得完。
+   ★ 左右内边距**保持 12 不动** —— .board-table 的 min-width 680px 是按
+     「16% 列宽 = 108.8px，去掉左右各 12 = 85px 可用」算出来的，
+     改左右会把那个实测值作废。 */
+.fin-row td {
+  padding: var(--sp-3);
+  border-top: 1px solid var(--c-line-soft);
+  vertical-align: middle;
+}
+
+.fin-table tbody tr:first-child td { border-top: none; }
+
+/* 结论行之前的分隔线。**不是等号** —— 利润表中间隔着本表列不全的费用和税，
+   资产负债表两边不含少数股东权益，画等号就是错的。它只说「以下是结论」。 */
+.fin-row.is-gap td { border-top-color: var(--c-line); }
+
+.fin-label { color: var(--c-text-2); }
+
+/* 缩进：整格右移，行前缀（减：/其中：）跟着一起缩进 */
+.fin-name.indent-1 { padding-left: calc(var(--sp-3) + var(--sp-4)); }
+
+.fin-op {
+  color: var(--c-text-3);
+  margin-right: var(--sp-1);
+}
+
+/* 快慢两条车道：头条科目大一号、颜色最深；其余退到次级。
+   这是「一眼看到重点」的关键 —— 全都一样重，就是全都看不到。 */
+.fin-value {
+  font-weight: 500;
+  color: var(--c-text-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.fin-row.is-headline .fin-label { font-weight: 600; color: var(--c-text); }
+.fin-row.is-headline .fin-value {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--c-text);
+}
+
+/* ---- 上期列（★ 2026-10-13 新增）----
+
+   它是**参照车道**，不是第二条主角：字号退一档、颜色再淡一档，
+   而且**头条行也照样退** —— `.is-headline` 只抬本期那一格。
+   理由和 `.fin-value` 那条「快慢两条车道」是同一条：
+   两个数字一样重、一样大、一样深，就等于没有重点，
+   而这一页的重点从头到尾都是**本期**（上期只是用来判断本期是多了还是少了）。
+
+   tabular-nums：跟 `.fin-value` 一样。两列数字上下要对得齐，
+   否则竖着扫一眼看不出量级变化。 */
+.fin-prior {
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* 没有上期值的那一格给的是 `.dim` 破折号，不再另设颜色 —— .dim 本来就是
+   --c-text-3，和上面这行同值，再写一条就是同值重复。 */
+
+
+/* ---- 比例条 ---- */
+/* 条长按**本块内**最大科目归一。这是一次显示缩放（和给柱状图算刻度同类），
+   不是金融比率，页面脚注里已写明，免得被读成「占营收比」。 */
+.fin-track {
+  position: relative;
+  height: 8px;
+  background: var(--c-line-soft);
+  border-radius: var(--radius-sm);
+}
+
+.fin-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  min-width: 2px;               /* 极小的科目也留得下一个点 */
+  background: var(--c-bar);
+  border-radius: var(--radius-sm);
+}
+
+.fin-bar.is-neg { background: var(--c-bar-neg); }
+
+/* 现金流量表：三项都是净额，正负号表示流向，所以沿零点线分左右。
+   这一块**不铺轨道底色** —— 左右各半的灰底会让人以为有什么基准线。 */
+.fin-track.is-diverging { background: none; }
+
+.fin-track.is-diverging::before {
+  /* 零点线 */
+  content: "";
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: 50%;
+  width: 1px;
+  background: var(--c-line);
+}
+
+/* ---- 小节小标题（表格上方那一行说明）----
+   ★ 2026-10-13 修：原来只有一条 `margin-top: calc(var(--sp-2) * -1)`（-8px），
+   注释写的是「小标题自带下边距，这里把上方间距收掉一半」—— 那是照着
+   「紧跟 .blk-title 的下行说明」写的。可是全站 6 处调用**没有一处**是那个组合：
+
+       p4「经营现金流桥（亿元）」      前面是 .mini-table
+       p5「同行倍数推出的每股价值」    前面是 .kv
+       p5「可比公司」                  前面是 .note
+       p5「每股价值对 WACC × 永续…」   前面是 .table-scroll
+       p5「三情景」                    前面是 .note
+       p5「数据来源」                  前面是 .warn-list
+
+   于是这 -8px 只做了一件事：把这一行的上沿拽进上一块的格子里。
+   几何探针实测（1600px 宽）重叠高度**恒为 8px**、占该行高 40%，
+   命中 p4 三处关系、p5 四处 —— 与 -8px 完全对得上，
+   表现就是那行小字被上面那条表格线/注释框压掉一截（用户报的「面板重合」）。
+
+   现在反过来写：默认给正常间距，负边距收回到它本来服务的那个组合。 */
+.block-sub {
+  margin-top: var(--sp-4);
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}
+
+/* 紧跟小标题时才收紧。**这条当前全站零命中**，留着是给意图留个位置：
+   .blk-title 自带 12px 下边距，相邻边距折叠后 12 + (-8) = 4px 才是
+   「标题 + 下行说明」该有的紧密度。将来真按那个组合写，不必再推一遍。 */
+.blk-title + .block-sub {
+  margin-top: calc(var(--sp-2) * -1);
+}
+
+/* ---- 2026-10-13 撤：主营构成（.mix-*） / 多期趋势（.trend-*） ----
+   这两块的 CSS 随 p2-overview.js 里的同名渲染函数一起删掉了。
+   撤的原因：A/B/C/D 都不产出 business_mix 与 history 这两个字段
+   （见 D/output/Schema.json），E 侧留着的只是一套永远画不出东西的样式。
+   留白的代价是下一个人要花时间确认「这块到底还有没有在用」——
+   所以连注释一起删，只留这条墓碑说明去向。 */
+
+/* ==========================================================================
+   11. 维度块（页面3）
+   一个维度 = 一块。表头把原先独立「分组卡」的得分与健康分布吸收进来 ——
+   五维信息从「雷达 + 分组卡 + 明细表」三层压成两层，得分全页只写一次。
+   2026-10-10 再压一层：五块两栏并排（.dim-grid），一屏看全五维。
+   ========================================================================== */
+.dim-block {
+  /* 块间距交给 .dim-grid 的 gap —— 网格里再给 margin-bottom 会变成双倍间距 */
+  margin-bottom: 0;
+  /* 内边距收一档：.card 的 24px 是按满宽卡片定的，两块并排之后每块只有
+     半屏宽，24px 显得空；而且五块等高之后总高度直接影响「一屏看全五维」。 */
+  padding: var(--sp-4);
+  /* ★ 这一处要单独说：.dim-block 的节点**自带 .card 类**
+     （p3-diagnosis.js: `ui.el("div", "card dim-block")`），所以它一定会
+     跟着 .card 变成玻璃。改版定案：跟着变，但用**强玻璃**（0.82）——
+     每块里有一张 .ratio-table（3–4 行 + 内嵌比例条 + 状态色条），
+     0.82 把背景透光压到 18%，行底色才稳。
+     表里的线和数字画在玻璃**之上**，不受 blur 影响，所以不会糊。
+     若哪天肉眼觉得行底在「呼吸」，正确改法是给 .ratio-table 垫一块不透明底板，
+     **不是**把整个 .dim-block 退回实卡。 */
+  background: var(--c-glass-strong);
+}
+
+.dim-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.dim-name {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+
+/* ---- 2026-10-13 撤：维度得分（.dim-score / -num / -den） ----
+   D 的 ratios **不产出 _score**，且这不是「忘了给」：它给的是
+   status = ok / not_evaluable / not_meaningful，语义是「**算不算得出来**」，
+   不是「好不好」。得分这块整块删除，**不自己凑一个分数出来** ——
+   那既不是 B 的判断也不是 D 的判断，是 E 的判断，越权了。
+   表头原先放得分的位置改放「N 项待核验」（.status-chip），
+   位置和分量都在，只是说的从「多少分」变成「几项要补」。 */
+
+.dim-bar-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: var(--sp-3) 0 var(--sp-2);
+}
+
+.status-bar {
+  flex: 1 1 auto;
+  display: flex;
+  gap: 2px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background: var(--c-line-soft);
+}
+
+.status-seg {
+  display: block;
+  border-radius: var(--radius-pill);
+}
+
+.status-seg.is-good  { background: var(--c-good); }
+.status-seg.is-watch { background: var(--c-watch); }
+.status-seg.is-bad   { background: var(--c-bad); }
+.status-seg.is-empty { flex: 1; background: var(--c-line); }
+
+/* 一句话结论。颜色取本维度最差那一项的状态色（见 p3 的 dimConclusion），
+   不新增判断，只是把同组几个 status 标签里最严重的那个抬到句子上。 */
+.dim-meta {
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--c-text-3);
+  white-space: nowrap;
+}
+
+/* 待核验的主行左边加一道 2px 状态色。
+   算得出 / 不适用的行不涂 —— 对比才是指示，全都涂等于都没涂。
+   色条画在单元格内侧（inset box-shadow），不占宽度，三栏在两张卡之间仍然对齐。
+
+   ★ 2026-10-13：选择器从 .st-watch / .st-bad 改成 .st-not_evaluable。
+     页面 3 的行状态类直接取 D 的 status 字段（st-ok / st-not_evaluable /
+     st-not_meaningful），旧的 st-watch、st-bad 从来没被挂上去过 —— 也就是说
+     这道色条**一直是死的**，只是没人对过 DOM 里的类名。D 的比值项只给
+     ok / not_evaluable / not_meaningful 三种值，没有「差」这一档，所以
+     .st-bad 一并删掉（留着它只会让人以为还有第二种预警色）。 */
+.ratio-row.st-not_evaluable td:first-child { box-shadow: inset 2px 0 0 var(--c-watch); }
+
+/* ==========================================================================
+   12. （空）图表容器 —— 2026-10-13 整段撤除，只留墓碑
+   ========================================================================== */
+/* ---- 2026-10-13 撤：.chart-box / .chart-fallback ----
+   这一对是给 Chart.js 用的：.chart-box 是画布容器（固定高度，
+   否则 Chart.js 会把高度算成 0），.chart-fallback 是库没加载 / 数据缺系列时
+   盖在画布上的那句提示。随 vendor/chart.umd.min.js 与 js/charts.js 一起删。
+   ★ 撤掉的只是**这两条样式**，不是它们解决的问题。原来的 fallback 要处理的是
+     「这块要画的东西画不出来」——现在全站没有画不出来的东西：
+     数据缺了就整块不出现或以空状态落地（见 .fin-block 的 is-4col、
+     页面 5 的 .vr-empty），不需要一个专门盖在画布上的提示层。
+   若哪天要恢复 canvas，记得 .chart-box 的固定高度必须跟着回来。 */
+
+/* ==========================================================================
+   13. 风险雷达（页面4）—— 概览条 + 三层证据链
+   版式定案 2026-10-10：高风险默认展开；本页零 tone，只用 status 系统。
+   ========================================================================== */
+
+/* --- 概览条：三秒说清「几条、多严重、先看哪条」 --- */
+.risk-overview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+  padding: var(--sp-4) var(--sp-5);
+  margin-bottom: var(--sp-4);
+  background: var(--c-glass);
+  border: 1px solid var(--c-glass-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow), var(--shadow-inset);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  isolation: isolate;
+}
+
+.ro-stats {
+  display: flex;
+  gap: var(--sp-6);
+  /* ★ 2026-10-13 第五轮补的。
+     三个大数（融合每股价值 / 当前股价 / 相对现价空间）原来是不换行的一排，
+     窄窗口下**第三个会被推出卡片外面**。
+     ⚠️ 这条溢出**不是这一轮改出来的**，是一直就有的，只是原来量不到：
+        `.ro-num` 走 Bahnschrift（窄体）时三块加起来 ≈ 543px，右边沿落在
+        视口 895 < 924，探针按「越过视口才算探出」的口径**看不见它**；
+        数字换成正文同族（雅黑）之后宽了约 8%，右边沿到 940 > 924，
+        它才第一次被报出来。也就是说：宽出去的 45px 是新的，
+        「装不下就往外推」这件事是老账。
+     这样修而不是缩字号：本页这三块是**并排读**的，窗口窄了换行
+     比缩字更好 —— 缩字要动 --fs-3xl，会连带把页面 2 的大数一起改小。 */
+  flex-wrap: wrap;
+}
+
+.ro-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+
+.ro-num {
+  font-family: var(--font-num);
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* 大数底下那行标签。定 12 是为了与页面 2 的 .metric-label 对齐 ——
+   同一个角色（34px 大数的标签），页面 2 一直是 12，这里原先 13，
+   单独看两页都没问题，摆在一起才发现不一样。 */
+.ro-label {
+  font-size: var(--fs-xs);
+  color: var(--c-text-2);
+}
+
+.ro-note {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  min-width: 0;
+  text-align: right;
+}
+
+.ro-hint-text {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.ro-note.is-clear .ro-hint-text { color: var(--c-good); }
+
+/* --- 卡片 --- */
+.risk-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+/* 每个等级自带一组变量，卡片内部所有强调色都从 --sev 取，改一处全变 */
+.risk-card {
+  --sev: var(--c-text-3);
+  --sev-bg: var(--c-surface-2);
+  /* ---- 等级底色（2026-10-12 第四轮新增）----
+     默认（没有 severity）= 不着色：两个端点都取玻璃白描边色，叠上去等于没叠。
+     三个等级各自覆盖这两个端点，所以卡片外观只由 severity 一个变量决定。 */
+  --sev-grad-1: var(--c-glass-line);
+  --sev-grad-2: var(--c-glass-line);
+  /* 卡片底。写成变量是为了让 §18 降级时**只换这一层**、上面的渐变层原样保留
+     （--c-glass-strong 是半透明白，不支持 backdrop-filter 时要换成实白）。 */
+  --sev-base: var(--c-glass-strong);
+  /* 强玻璃：卡里有 .mini-table 证据表 */
+  /* ★ 135deg 而不是原来的 180deg：反馈图里卡片是**左上浓、右下淡**。
+     180deg 在矮卡上（约 120px 高）会变成「上浓下淡」，方向对不上参考图。 */
+  background:
+    linear-gradient(135deg, var(--sev-grad-1) 0, var(--sev-grad-2) 62%),
+    var(--sev-base);
+  /* ★ 2026-10-12 第四轮：描边和 inset 高光**全部去掉**。
+     反馈：「去掉左侧的红/橙/绿线，去掉上方的白线」。左线是 border-left；
+     上方白线有**两条**来源，都在这张卡上，以为删一条就够了是这里最容易踩的坑：
+       (a) border: 1px solid --c-glass-line —— 白描边，四边都有，顶上那条最显眼；
+       (b) box-shadow 里的 --shadow-inset —— inset 0 1px 0 白色内高光，正压在顶边。
+     两个一起删。
+     删掉之后等级信息一点没少：改由**整卡染色**表达。一条 4px 的边在快速
+     滚动时很容易被漏掉，整张卡染上颜色则不可能看不见 —— 这是升级不是妥协。
+     边界也不会丢：蓝灰面板上叠一层有色玻璃，再加 --shadow，轮廓仍然清楚。 */
+  border: none;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  isolation: isolate;
+}
+
+/* ★ 三个等级现在**结构完全一致**，只换色相和文本色 ——
+   2026-10-12 第四轮把它们统一了：以前是高(4px 边 + 卡底渐变)、
+   关注(1px 边)、正常(2px 边) 三种不同写法，等级差别其实靠「边的粗细」
+   在传达，而 1px / 2px / 4px 的粗细差在这个尺寸上根本看不出来。
+   现在差别只由**颜色**承担，这也是这三种 severity 唯一真正的区别。 */
+.risk-card.sev-high {
+  --sev: var(--c-bad);
+  --sev-bg: var(--c-bad-bg);
+  --sev-grad-1: var(--c-bad-bg-2);
+  --sev-grad-2: var(--c-bad-bg-3);
+}
+
+.risk-card.sev-attention {
+  /* --sev 是**文字**色（.sev-chip 的字、.layer-mark 的边、.ce-result 的大数），
+     所以走 ink 档（4.67:1）。
+     ★ 第四轮起卡片没有左侧色条了，所以原来那句「填充用亮橙、写字用深橙」
+     要改成：**填充走 --sev-grad-*（亮橙色相的低透明度渐变），写字走 --sev。** */
+  --sev: var(--c-watch-ink);
+  --sev-bg: var(--c-watch-bg);
+  --sev-grad-1: var(--c-watch-bg-2);
+  --sev-grad-2: var(--c-watch-bg-3);
+}
+
+.risk-card.sev-normal {
+  --sev: var(--c-good);
+  --sev-bg: var(--c-good-bg);
+  --sev-grad-1: var(--c-good-bg-2);
+  --sev-grad-2: var(--c-good-bg-3);
+}
+
+/* ---- 摊平的风险卡：不叠玻璃（2026-10-13，随页面 6 重写新增）----
+   起因：页面 6 把风险卡放进 .paper 里，而 **.paper 自己就是一张强玻璃**
+   （--c-glass-strong，0.82 白）。玻璃里再叠一层 0.82 白，实际接近实白 ——
+   四张卡连成一片，卡与卡之间没有边界，而第四轮刚把卡片的描边删掉，
+   于是连最后一条分界线也没了。
+
+   解法沿用本文件已有的那条思路（见文末降级块）：**只换底下那一层**，
+   上面的等级渐变原样保留 —— 所以这里只动 --sev-base，不重写 background。
+   等级色一点点没丢，而卡片从「浮层」变成「纸上的分区」：
+   浮影去掉、补一条发丝线，边界交还给线。
+
+   ★ 2026-10-13 二次改：原来写的是 `.paper .risk-card`（后代选择器）。
+   换成显式的 `.is-flat` 修饰类，理由有两条：
+     ① **意图要写在调用点**。原来「这张卡要摊平」这件事在 JS 里完全看不出来 ——
+        page 6 的 riskCard() 只写了 `risk-card is-open`，摊平是 CSS 在后面
+        偷偷补的。谁哪天把这个卡片挪出 .paper，样式会静默地变回去，
+        没有任何一处代码能提示他。
+     ② **后代选择器把「在哪」和「长什么样」捆死了**。这张卡要不要摊平，
+        取决于它**压在什么底上**，而不是取决于它爹的类名是不是叫 paper。
+        以后页面 4 想在某个实底容器里再放一张摊平卡，`.paper` 就用不上了。
+   名字取 `is-flat` 而不是 `is-on-paper`：它描述的是**渲染结果**
+   （无浮影、无玻璃、一条发丝线），跟本文件其它 is-* 修饰类一个路子；
+   至于「为什么这儿要摊平」，那是调用点该写清楚的注释。 */
+.risk-card.is-flat {
+  --sev-base: var(--c-surface);
+  border: 1px solid var(--c-line-soft);
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+          backdrop-filter: none;
+}
+
+.risk-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  cursor: pointer;
+  user-select: none;
+}
+
+.sev-chip {
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 2px var(--sp-3);
+  border-radius: var(--radius-pill);
+  margin-top: 2px;
+  color: var(--sev);
+  background: var(--sev-bg);
+}
+
+/* ★ 2026-10-13 第六轮：**只有「关注」这一档的胶囊改成实底**（亮橙底）。
+   （字走过三稿：深墨 → 第九轮 --c-watch-on → 第十轮**白**，见 base.css 的第十轮。）
+   理由与 .status-chip.is-watch 那条同源 —— 反馈是「全篇要用同一个橙」，
+   而这里原本是**淡橙底上的深褐字 + 橙底渐变卡**，是又一处分岔。
+   做法与新加的 .status-chip.is-watch 完全一致，两处胶囊现在长得一样。
+   高风险（红）与一般（绿）两档**不动**：它们不是橙，没有「两种橙」的问题，
+   而且三色卡片的等级渐变（--sev-grad-*）已经是等级的主表达，
+   再把三档胶囊全做实底，四张卡会变成一片实色标签，等级反而糊掉。 */
+.risk-card.sev-attention .sev-chip {
+  /* 第十轮：橙面上的字一律**白**（--c-on-primary），不再是深墨、也不再是暖深档。
+     理由见 base.css 的第十轮。三处橙面必须同时改，否则同一张脸两种字。 */
+  color: var(--c-on-primary);
+  background: var(--c-watch);
+}
+
+/* 展开 / 收起按钮 */
+.risk-toggle {
+  flex: 0 0 auto;
+  margin-left: auto;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--fs-md);
+  color: var(--c-primary);
+  background: none;
+  border: 0;
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--radius-sm);
+}
+
+.risk-toggle:hover { background: var(--c-primary-soft); }
+
+.risk-toggle::after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: var(--sp-2);
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform 0.18s;
+}
+
+.risk-card.is-open .risk-toggle::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+.risk-head-text { flex: 1; min-width: 0; }
+
+.risk-name {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+
+/* 高风险的名字更大——这是全页最该被一眼看到的字 */
+.sev-high .risk-name { font-size: var(--fs-xl); }
+
+.risk-trigger {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  font-family: var(--font-num);
+}
+
+/* 展开区：由 JS 切 .is-open。
+   不用 <details> —— 因为它没法按等级控制默认状态（高风险要默认展开）。 */
+.risk-body {
+  display: none;
+  border-top: 1px solid var(--c-line-soft);
+}
+
+.risk-card.is-open .risk-body {
+  display: block;
+  animation: risk-open 0.18s ease-out;
+}
+
+@keyframes risk-open {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.risk-layers {
+  position: relative;
+  padding: var(--sp-5) var(--sp-5) var(--sp-5) var(--sp-6);
+}
+
+/* 贯穿三层的竖线（节点圆点会压在上面） */
+.risk-layers::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--sp-6) + 15px);
+  top: calc(var(--sp-5) + 14px);
+  bottom: calc(var(--sp-5) + 14px);
+  width: 2px;
+  background: var(--c-line);
+  border-radius: 2px;
+}
+
+/* --- 层：左侧节点挂在竖线上，右侧是内容 --- */
+.layer {
+  position: relative;
+  padding-left: calc(var(--sp-6) + 12px);
+  margin-top: var(--sp-5);
+}
+
+.layer:first-child { margin-top: 0; }
+
+.layer-mark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-circle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-num);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  background: var(--c-surface);
+  border: 2px solid var(--c-line);
+  color: var(--c-text-3);
+  z-index: 1;
+}
+
+/* ①②是事实（中性蓝），③是结论（状态色）——让眼睛分清哪段可核对、哪段是判断 */
+.layer.is-fact .layer-mark {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+
+.layer.is-conclusion .layer-mark {
+  border-color: var(--sev);
+  color: var(--sev);
+}
+
+.layer-content {
+  min-width: 0;          /* 长指标名/长解释不许把卡片撑破 */
+}
+
+/* 层标题。它下面紧接 .mini-table(14) —— 本该像页面 2 的 .fin-block-name 那样
+   高于表体，但新阶梯 12/14/16/20/26/34 里 14 与 16 之间没有档：
+   12 会让块标题低于自己的正文（页面 2 刚修掉的毛病反过来），
+   16 会与 .risk-name 撞号（父标题就是 16/600，高风险时 20）。
+   故取 14，靠 600 字重 + 独占一行 + margin-bottom 与表体(400) 分辨。 */
+.layer-title {
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+/* 迷你表格。垫一块**不透明**白板（内容垫板）——
+   它所在的 .risk-card 是玻璃，表直接铺在玻璃上会让行底色随渐变漂移。 */
+.mini-table {
+  font-size: var(--fs-md);
+  background: var(--c-surface);
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.mini-table th {
+  text-align: left;
+  font-weight: 500;
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  background: var(--c-surface-2);
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--c-line-soft);
+}
+
+.mini-table td {
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--c-line-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.mini-table tr:last-child td { border-bottom: none; }
+
+/* ① 数据层的数值：比指标名更重，读表时先看到数 */
+.mini-table td.metric-value {
+  font-weight: 600;
+  font-size: var(--fs-md);
+}
+
+/* 列多的表（页面 5 的敏感性矩阵 6 列、三情景 7 列）在窄屏和打印时会溢出。
+   .mini-table 自己带 overflow:hidden，直接溢出会被**裁掉**而不是能滚 ——
+   所以外面套一层。滚动容器不能有 border-radius，否则裁圆角时会把首列切掉。 */
+.table-scroll {
+  overflow-x: auto;
+  margin-bottom: var(--sp-2);
+}
+
+/* 敏感性矩阵的基准格：D 的 base_wacc × base_growth 那一格。
+   ★ 2026-10-13 第八轮改定：**描边、加粗、底纹全部撤掉，
+   改成在它那一**行**和那一**列**的表头上各挂一个「基准」小标签。**
+
+   这是同一格上的**第三次**反馈，前两轮都在调「用什么颜色标」，这一轮改的是
+   **「标法本身」**：
+     第六轮 灰蓝底纹 → 「为什么有两块数据是灰的，也没有解释标灰的原因」
+     第七轮 墨黑描边 → 「数据表格被莫名框起来且加粗」
+   前两轮都当成**配色**问题处理（判定「灰蓝 = 次要」的语义用错了，
+   于是换成「墨黑 = 焦点」），但三次反馈落在同一个词上：
+   **「没有解释」「莫名」。**
+   ⇒ 真因从来不是颜色，是**那个标记身上没有任何字**。
+   底纹也好、框也好，都是纯视觉符号，必须靠旁边的说明去**解锁**：
+   读者先读说明，再回头到表里找那一格，找不到或懒得找，剩下的读数就是「莫名」。
+   换多少次颜色都治不了这一层。
+
+   这一轮**把字挂上去**，而且挂在**有名字的地方** —— 表头本来就在说
+   「这一行是 WACC 4.63%」「这一列是永续增长 3.00%」，
+   在它们后面接一个「基准」，读者不必对照、也不必找，读到表头就结束了。
+   交叉那一格由此被两把尺子同时指到，**格子里不需要再有任何记号**。
+
+   ★ 为什么标在轴头上而不是标在格子里（试过，量过，否决）：
+     在基准格里放标签，标签就进了这一列的 intrinsic width —— 实测列宽从
+     162px 被撑到 225px，其余五列被挤成 139/139/153/154。**等宽是这张矩阵的
+     读法本身**（横着比「WACC 每动 0.5% 价怎么变」），列一参差就没得比。
+     改绝对定位可以不吃宽度，但 1600px 下只剩 34px 富余，
+     视口收到 1300 以下标签就压到数字上了（实测 1250 起 gap 为负）。
+     轴头这一侧不一样：第一列本来就由「WACC ＼ 永续增长」这个长表头撑着，
+     1200px 下还有 165px，塞得下；被标的那列表头也只要 112px
+     —— 代价是**零**额外列宽，直到 1200px 以下才各撑宽十几像素。
+
+   为什么标签用灰蓝而不是橙：橙的语义是「需关注 / 可行动」，而基准假设是
+   **读这张表的原点**，不是警报；三色分工里灰蓝正好是「参考 / 结构」。
+   （第六、七轮为了同一个理由在灰蓝与墨黑之间反复，方向没错 ——
+   错的是把「标什么颜色」当成了问题。） */
+.cell-tag {
+  display: inline-block;
+  margin-left: var(--sp-2);
+  padding: 1px var(--sp-2);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  white-space: nowrap;
+  background: var(--c-primary-soft);
+  color: var(--c-primary-dark);
+}
+
+/* 出处链接 —— 默认低调。
+   全站原则（2026-10-10 定）：数据来源要标出来，但**不能和数据本身抢注意力**。
+   所以它是「灰色的、比正文小一号的、带虚线的可点击文字」，紧挨着它支撑的那个数字，
+   而不是一个蓝色高亮的独立区块。点开后浮层给出文件 / 章节 / 页码。
+   需要更显眼时加 .is-strong。 */
+.page-link {
+  color: var(--c-text-3);
+  cursor: pointer;
+  font-size: var(--fs-xs);
+  font-family: var(--font-num);
+  border-bottom: 1px dotted var(--c-text-3);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.page-link:hover {
+  color: var(--c-primary);
+  border-bottom-color: var(--c-primary);
+}
+
+.page-link.is-strong {
+  color: var(--c-primary);
+  font-size: inherit;
+  border-bottom-style: dashed;
+  border-bottom-color: var(--c-primary);
+}
+
+/* 出处列：贴着表格右边，窄，不抢戏。
+   页面 2 的财报表与页面 4 的证据表共用这一条 ——
+   「出处」在全站的排法应当是同一个长相。 */
+.col-source {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* --- ② 计算卡：公式 → 代入算式 → 阈值与触发 --- */
+.calc-box {
+  padding: var(--sp-4);
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius);
+}
+
+.calc-formula {
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px dashed var(--c-line);
+}
+
+/* 算式行。结果加大加粗——这是整页的落点 */
+.calc-eq {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+.ce-term {
+  font-size: var(--fs-lg);
+}
+
+.ce-op {
+  font-size: var(--fs-lg);
+  color: var(--c-text-3);
+}
+
+.ce-result {
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  color: var(--sev);
+}
+
+/* 回落版式（拼不出可靠算式时）：小一号，免得看起来像正式算式 */
+.calc-eq.is-fallback .ce-term,
+.calc-eq.is-fallback .ce-op { font-size: var(--fs-md); }
+
+.calc-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px dashed var(--c-line);
+  font-size: var(--fs-xs);
+}
+
+.calc-threshold { color: var(--c-text-3); }
+
+.calc-flag {
+  margin-left: auto;
+  font-weight: 600;
+  padding: 1px var(--sp-3);
+  border-radius: var(--radius-pill);
+}
+
+.calc-flag.is-triggered { color: var(--c-bad);   background: var(--c-bad-bg); }
+.calc-flag.is-quiet     { color: var(--c-text-3); background: var(--c-line-soft); }
+
+/* ③层内部有主次，别让两者长得一样：
+     「解释」是背景说明 —— 中性底、小字、灰，读不读都不影响决策；
+     「建议」是行动项     —— 主色底、大字、深色，是这一层、也是整张卡真正要人记住的东西。
+   ★ 这一块**不要**改用橙。每张风险卡都有一条建议，变橙 = 橙色成片，
+     全站「橙色 = 需关注」这一条就废了（那正是改版要修的「没有分辨度」）。
+   用 --c-primary（灰蓝）：它管的是「结构 / 参考」，不是「喊你看」。 */
+
+/* AI 解释：退到背景里 */
+.risk-explain {
+  font-size: var(--fs-md);
+  line-height: 1.8;
+  color: var(--c-text-2);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--c-surface-2);
+  border-left: 2px solid var(--c-line);
+  border-radius: var(--radius);
+}
+
+/* 应对建议：这一层的主角 */
+.risk-suggest {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--c-primary-soft);
+  border-left: 3px solid var(--c-primary);
+  border-radius: var(--radius);
+}
+
+.sug-tag {
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--c-on-primary);
+  background: var(--c-primary);
+  border-radius: var(--radius-sm);
+  padding: 2px var(--sp-2);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  margin-top: 1px;
+}
+
+/* 字号比解释大一档、颜色提到正文最深、加重 —— 一眼看出这是要执行的动作 */
+.sug-text {
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--c-text);
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ==========================================================================
+   14. 估值（页面5）
+   ========================================================================== */
+/* --- 估值标尺 ---------------------------------------------------------- */
+/* 这页的头条。一根价格轴，两条区间横条叠在上面，重叠段加底色。
+   为什么不用 Chart.js：浮动条 + 贯穿网格 + 跨行阴影在 canvas 里要靠自定义
+   插件，在这里是三个绝对定位的 div；而且打印 / 导出 PDF 时 DOM 清晰、
+   canvas 发虚。代价是没有 tooltip —— 所以数值全部写在行头上，不靠悬停。
+
+   颜色上刻意**不区分两条方法**：它们长得一样，靠位置区分。
+   视觉重点是重叠段，不是「哪条是哪条」。给 DCF 配一个方法色会暗示
+   它有独立语义，而它没有。 */
+.vr {
+  margin-top: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5) var(--sp-5);
+  background: var(--c-glass);
+  border: 1px solid var(--c-glass-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-inset);
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  /* .vr-band(z-index 0) / .vr-rows(z-index 1) 是卡内自己的一对层叠，
+     isolate 把它们关在这张卡里，不跟外面别的卡打架。 */
+  isolation: isolate;
+}
+
+.vr-unit {
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  margin-bottom: var(--sp-3);
+}
+
+/* 刻度条：标签绝对定位在各自刻度上面 */
+.vr-ticks {
+  position: relative;
+  height: 16px;
+  margin: 0 var(--sp-2) 0 var(--sp-2);
+}
+
+.vr-tick {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);   /* 以刻度线为中心对齐 */
+  font-family: var(--font-num);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  white-space: nowrap;
+}
+
+/* 首尾两个标签往里收，否则会溢出容器被裁掉 */
+.vr-tick.is-first { transform: translateX(0); }
+.vr-tick.is-last  { transform: translateX(-100%); }
+
+.vr-plot {
+  position: relative;
+  margin: 0 var(--sp-2);
+}
+
+/* 贯穿全高的网格线：压在行头文字下面也看得清，所以用最浅的线 */
+.vr-grid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.vr-gridline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--c-line-soft);
+}
+
+/* 重叠段：画在最底层（z-index 0），两条半透明区间条压上去，
+   重叠处的颜色自然更深 —— 「两个方法都认这个价」就这么画出来了。
+   左右两条虚线边是它的身份标记，图例里沿用这个样式。 */
+.vr-band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+  /* 原 rgba(47,111,184,0.16) 裸值。收进令牌 —— 与 .vr-bar 的 0.10 是深浅两档，
+     不是同一个值，见 base.css 的「零重值」不变式。 */
+  background: var(--c-primary-soft-2);
+  border-left: 1px dashed var(--c-primary);
+  border-right: 1px dashed var(--c-primary);
+}
+
+.vr-rows {
+  position: relative;
+  z-index: 1;
+}
+
+.vr-row { margin-top: var(--sp-4); }
+.vr-row:first-child { margin-top: var(--sp-2); }
+
+.vr-row-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-2);
+}
+
+/* 标尺左端的行名。与右端的 .vr-range(14/700) 同号，靠字重分辨 ——
+   同页面 3 的 .ratio-name 与 .ratio-value 的关系。 */
+.vr-name {
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.vr-vals {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  font-family: var(--font-num);
+}
+
+.vr-range {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--c-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.vr-mid {
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}
+
+/* 轨道：整幅宽度，与刻度条对齐。
+   **背景必须透明** —— 一旦填色，压在它下面的 .vr-band 重叠阴影就被整块挡住，
+   整页的落点会无声消失。轨道只靠一道细边框界定范围，这也让网格线穿得过去。 */
+.vr-track {
+  position: relative;
+  height: 24px;
+  background: transparent;
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius-sm);
+}
+
+/* 区间条：半透明，好让下面的重叠阴影透上来。min-width 兜住
+   「low ≈ high」的退化情形，免得细成一根会消失的线。 */
+.vr-bar {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  min-width: 3px;
+  background: var(--c-primary-soft);
+  border: 1px solid var(--c-primary);
+  border-radius: var(--radius-sm);
+}
+
+/* 现价竖线（2026-10-13 新增）。
+   ★ 它画在**轨道里**，一行的轨道一根，不贯穿整幅高度 ——
+     贯穿全高会从行头的方法名和区间值上切过去，读的时候正是干扰。
+     位置用的是与刻度线同一套 pos()，所以线和刻度是对齐的。
+   颜色取墨色 --c-ink 而不是任何 status 色：它是**参照物**，不是结论。
+   本页零 tone（见页头注释），这条线也不破坏它。 */
+.vr-priceline {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 1px;
+  background: var(--c-ink);
+  opacity: 0.5;
+}
+
+/* 中枢点：这条区间的中心在哪 */
+.vr-dot {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;      /* 以自身中心对准坐标 */
+  border-radius: var(--radius-circle);
+  background: var(--c-primary);
+  box-shadow: 0 0 0 2px var(--c-surface);
+}
+
+/* 图例：把「阴影是什么」写成一句话，不让读者猜 */
+.vr-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px dashed var(--c-line);
+}
+
+/* 与 .vr-band 用同一套视觉，读者才能把图例和图上那块对上 */
+.vr-legend-key {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 14px;
+  border-radius: 2px;
+}
+
+.vr-legend-key.is-band {
+  background: var(--c-primary-soft-2);
+  border-left: 1px dashed var(--c-primary);
+  border-right: 1px dashed var(--c-primary);
+}
+
+/* 图例归「参考性注解」→ 12，与 .vr-tick / .vr-unit / .vr-mid 同档。
+   界：分析性正文（读的）14，参考性注解（查的）12。
+   图例是查的 —— 整根标尺于是只剩两档：注解全 12，数据(.vr-range) 14。 */
+.vr-legend-text {
+  font-size: var(--fs-xs);
+  color: var(--c-text-2);
+}
+
+/* ---- 2026-10-13 撤：估值结论块（.v-conclusions / .v-conc / -name / -text） ----
+   D 的 valuation **不给一段成文的结论**（memo 里那句「结论」是页面 6 的事，
+   由 D 的绑定表逐字给出，页面 6 照排，不需要 p5 再写一遍）。
+   p5 的落点已经由「标尺 + 融合三数」承担，再加一个蓝底建议块只是把同一句话
+   说两遍，还顺手把页面 5 变成全站唯一有「结论块」的页 —— 版式不统一。
+   撤掉。 */
+
+/* ★ 2026-10-13 第六轮：「口径」行和它上面的三个大数原来**贴在一起**。
+   反馈：「估值结论数值和下面口径一行距离过近太拥挤」（页 5），
+   「结论摘要下数据和口径行过近，且数据太大，与其它内容完全不协调」（页 6）。
+   根因：.ro-stats 没有 margin-bottom，.v-target 没有 margin-top ——
+   又是「两边都不认账」。修法选**接线**而不是改 .v-target 自己：
+   .v-target 在别处也出现（页 5 的「估值对象」等），
+   无条件给它加上边距会连带改那些地方；而这一条只命中
+   「大数紧跟口径行」这一种排法，页 5 / 页 6 两处正好都是这个排法。
+   24px 是这一屏里最大的一段呼吸：上面是 34px 的大数（页 6 是 26px），
+   紧跟着一段 12px 的口径小字，中间不留白的话小字会被读成大数的注脚。 */
+.ro-stats + .v-target {
+  margin-top: var(--sp-5);
+}
+
+/* ★ 2026-10-13 第八轮：页 5「绝对估值 DCF」卡里，**假设网格和它下面两块面板贴死**。
+   反馈原话：「绝对估值板块下几个面板没有隔开，有粘连」。
+   量出来的接缝是 **0px**（.kv-grid 底 = 1302，下一块顶 = 1302）。
+
+   根因又是那一句老话 —— **「两边都不认账」**：
+     · .kv-grid 只写了 gap，那是**格与格之间**的缝，它自己不带 margin-bottom；
+     · .v-target 有 margin-bottom 没有 margin-top。
+   两个人都只管自己那一侧，接缝就漏成 0。
+
+   为什么这一处 0 比别的 0 更难看：`.kv-cell` 和 `.v-target` **长得一模一样**
+   （同一个 --c-surface-2 底、同一根 --c-line-soft 边、同一个圆角），
+   中间没有缝的时候，六格假设和下面那块面板会并成**一大块灰蓝色**，
+   「输入假设」到「推断终值」的分段整个消失 —— 这正是「粘连」的读数。
+
+   修法沿用 .ro-stats + .v-target 定下的**「接线」**（见下一条注释）：
+   只补接缝，不动零件本身。.v-target 在别处也用（页 5 的估值对象行、
+   页 6 的数字校验行），无条件给它加 margin-top 会连带改那些地方。
+   第二条 `+ .v-target` 管的是「永续期假设」和「终值两种算法」这两块并排面板，
+   它们原来是 12px —— 和 .kv-grid 的**格间距**同值，读起来「还是同一段」。
+
+   值取 16 而不是 12：**段与段之间的缝必须大于段内的缝**，
+   否则分段的层级传达不出去（12 是格间距，16 是段间距，--sp-4）。
+   下面那条 .note 仍是 12：注解贴着自己那块面板，这层「更近」是有意的。 */
+.kv-grid + .v-target,
+.v-target + .v-target {
+  margin-top: var(--sp-4);
+}
+
+/* --- 估值对象：这个区间是给谁估的 --- */
+.v-target {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  margin-bottom: var(--sp-3);
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius);
+}
+
+.v-target-label {
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}
+
+.v-target-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+
+.v-target-k {
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}
+
+.v-target-v {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  font-family: var(--font-num);
+}
+
+/* 倍数单元格右对齐，一列数字才好纵向比大小 */
+.mini-table td.num { text-align: right; }
+
+/* ==========================================================================
+   15. 报告纸张（页面6）
+   ========================================================================== */
+.paper {
+  /* 报告纸用强玻璃：它是最密的正文块（连续的段落，一读就是一屏） */
+  background: var(--c-glass-strong);
+  border: 1px solid var(--c-glass-line);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-7);
+  margin-bottom: var(--sp-4);
+  box-shadow: var(--shadow), var(--shadow-inset);
+
+  /* ★ 2026-10-13：46em → **56em**（基准 14px，≈644px → ≈784px）。
+     46em 是按**纯正文的阅读行长**定的，但这张纸里不止有正文 ——
+     风险卡（四张整宽堆叠，每张带一条三层证据链和一个六列 .mini-table）、
+     数据来源表、估值警告列表都在这条宽度里。644px 下那张六列表挤成一团，
+     而纸本身在 1440 的屏幕上只占内容区的六成不到，看着像一栏不是一页。
+
+     为什么不是更宽：**中文的行长就是字数**，1em ≈ 一个字。
+     56em ≈ 一行 56 个汉字，是这份文档里最长的一段正文（免责声明）还能读的上限
+     —— 再宽下去眼睛回车容易串行。要更宽就得单独给正文设一个窄度量，
+     那是另一件事，等有人真的觉得读不动了再说。 */
+  max-width: 56em;
+  margin-left: auto;
+  margin-right: auto;
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  isolation: isolate;
+}
+
+.paper-title {
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.01em;
+}
+
+/* ★ 2026-10-13 第六轮：**报告纸上的大数降一号（34 → 26）。**
+   反馈：「结论摘要下数据和口径行过近，且**数据太大，与其它内容完全不协调**」。
+   为什么不改 --fs-3xl 也不改 .ro-num 本身：
+   那会让页 5 的估值结论（内容区宽、周围是大留白的卡片）和页 4 的
+   风险概览条一起变小 —— 那两处 34px 是对的，它们的邻居也是大数。
+   不协调感是**这一张纸**的问题：纸的正文是 14px、纸宽 56em，
+   34px 在这里不是「落点」是「异物」。
+   26px 仍然是这一页最大的字（比 .paper-title 的 26 同级、比 .paper-h2 的 16
+   高一档），层级没塌，只是从「喊」降成「重读」。
+   写在 .paper 作用域里而不是加一个 modifier 类：.paper 只有页面 6 用，
+   加类要动 p6 的 JS，而 CSS 作用域已经精确到同一件事。 */
+.paper .ro-num {
+  font-size: var(--fs-2xl);
+}
+
+.paper-meta {
+  display: flex;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  margin-top: var(--sp-3);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--c-line-soft);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}
+
+/* 评级与目标价：改版定案**都用墨色 --c-ink**。
+   历史：目标价原用 --c-accent（= 需关注黄），等于把「目标价」涂成和站上
+   「需关注」一模一样的颜色，与「别用强调色，会和需关注串味」的警告直接冲突；
+   2026-10-12 先改成 --c-primary-dark，同日改版再统一到 --c-ink。
+   两个大数不需要靠颜色区分 —— 它们并排、各有标签，位置本身就是区分。 */
+.paper-meta .rating { color: var(--c-ink); font-weight: 600; }
+.paper-meta .target { color: var(--c-ink); font-weight: 600; }
+
+.paper-summary {
+  margin-top: var(--sp-5);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--c-primary-soft);
+  border-radius: var(--radius);
+  font-size: var(--fs-md);
+  line-height: 1.9;
+  color: var(--c-text-2);
+}
+
+.paper-h2 {
+  margin-top: var(--sp-6);
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-lg);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--c-line-soft);
+}
+
+.paper-body {
+  font-size: var(--fs-md);
+  line-height: 1.95;
+  color: var(--c-text-2);
+}
+
+.paper-body p { margin-bottom: var(--sp-3); }
+
+/* 报告未生成时的空状态。字号定在容器上，正文 .paper-empty-text 只有
+   line-height、字号靠继承 —— 所以这一行实际决定的是空状态正文的字号。
+   与 §5 的 .empty-state 同号（14），同一个角色的两处实现不许不一样。 */
+.paper-empty {
+  text-align: center;
+  color: var(--c-text-3);
+  font-size: var(--fs-md);
+}
+
+.paper-empty-title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--c-text-2);
+  margin-bottom: var(--sp-2);
+}
+
+.paper-empty-text {
+  line-height: 1.8;
+}
+
+.schema-hint-title {
+  margin-top: var(--sp-5);
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--c-text-2);
+  text-align: left;
+}
+
+.schema-hint {
+  text-align: left;
+  font-family: var(--font-num);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  line-height: 2;
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--radius);
+  padding: var(--sp-3) var(--sp-4);
+}
+
+/* ==========================================================================
+   16. 溯源弹窗
+   点击任意 .page-link 弹出，展示数据的完整出处。
+   fixed 定位（坐标由 app.js 计算），页面滚动时自动关闭。
+   ========================================================================== */
+.popover {
+  position: fixed;
+  z-index: 1000;
+  min-width: 260px;
+  max-width: 340px;
+  /* 全站唯一的 position: fixed 浮层，玻璃在这里最贴切 */
+  background: var(--c-glass);
+  border: 1px solid var(--c-glass-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg), var(--shadow-inset);
+  overflow: hidden;
+  -webkit-backdrop-filter: var(--glass-blur);
+          backdrop-filter: var(--glass-blur);
+  isolation: isolate;
+  animation: pop-in 0.12s ease-out;
+}
+
+/* 【改版：原来这里有 transform: translateY(-4px)，已删掉】
+   理由同 layout.css 的 fade-in —— 带 transform 的元素在动画期间会成为
+   新的 backdrop root，磨砂浮层弹出的一瞬间会取错景。只动 opacity 就没这问题。 */
+@keyframes pop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.popover-title {
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--c-primary);
+  background: var(--c-primary-soft);
+}
+
+.popover-body {
+  padding: var(--sp-3) var(--sp-4);
+}
+
+/* 溯源弹窗的每一行。注意这行的字号实际只作用在**值**上 ——
+   `.popover-key` 自己覆写成了 12，所以 13 落在 `.popover-val` 上。
+   弹窗里要读的是值（「128.6 亿元」「P.42」），给 14。
+   于是与页面 5 的估值对象条同构：键 `.v-target-k` 12 / 值 `.v-target-v` 14。
+   站上两处「键值对」到这一轮长相一致。 */
+.popover-row {
+  display: flex;
+  gap: var(--sp-3);
+  padding: 3px 0;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+}
+
+.popover-key {
+  flex: 0 0 68px;
+  color: var(--c-text-3);
+  font-size: var(--fs-xs);
+  padding-top: 2px;
+}
+
+.popover-val {
+  flex: 1;
+  min-width: 0;
+  color: var(--c-text);
+  word-break: break-word;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 「打开原文」——只在数据里真有 url / report_url 时才出现。
+   溯源浮层本身是低调的，但这一条是行动入口，给主色。 */
+/* 「打开原文 ↗」。动作控件，与 §7 `.btn`(14)、§13 `.risk-toggle`(14) 同档 ——
+   站上所有能点的按钮一律 14，不再有 13 那一档。 */
+.popover-open {
+  display: block;
+  margin: 0 var(--sp-4) var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  text-align: center;
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--c-primary);
+  background: var(--c-primary-soft);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.popover-open:hover {
+  background: var(--c-primary-soft-2);
+  text-decoration: none;
+}
+
+.popover-foot {
+  padding: var(--sp-2) var(--sp-4);
+  border-top: 1px solid var(--c-line-soft);
+  background: var(--c-surface-2);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  text-align: right;
+}
+
+/* ==========================================================================
+   17. 指标明细表（页面3）
+   表头（维度名 + 得分 + 色条）由 §11 的 .dim-* 承担，这里只管表格本身。
+   2026-10-10：删掉「阈值」列 —— 它在主行和展开行的「判断标准」里各写了一遍。
+   主行只回答「多少、好不好」，三列，两栏并排才放得下。
+   ========================================================================== */
+/* 这张表是**五个维度块内部**的指标表，不是页脚另有一张 ——
+   见 §11 里的 .ratio-row.st-not_evaluable（待核验行左侧那道状态色）与 p3-diagnosis.js。
+   所以这一行字号改的是五个块的内部，不是一处页脚。
+   13 → 14 之后与页面 2 的 .fin-table 同号（两张同型的「科目 + 数值 + 来源」表）。
+   自动布局，非 table-layout: fixed；360px 块宽下最长的指标名
+   「经营现金流 / 归母净利润」14px 约 155px，内容合计约 283px ≤ 312px 预算，仍有余量。 */
+.ratio-table {
+  width: 100%;
+  font-size: var(--fs-md);
+}
+
+/* 主行：可点击展开 */
+.ratio-row {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.ratio-row:hover {
+  background: var(--c-surface-2);
+}
+
+.ratio-row.is-open {
+  background: var(--c-surface-2);
+}
+
+/* 两栏并排后单块宽度只有一半，内边距跟着收一档 ——
+   否则「指标 / 数值 / 健康度」三栏在 360px 里会挤到换行。 */
+.ratio-table td {
+  padding: var(--sp-2) var(--sp-2);
+  border-bottom: 1px solid var(--c-line-soft);
+  vertical-align: middle;
+}
+
+.ratio-name {
+  color: var(--c-text);
+}
+
+.ratio-label {
+  display: block;
+}
+
+/* 指标名下的低调出处：只有 B 给了 page 才出现（全站原则，见 .page-link 注释） */
+.ratio-src {
+  display: block;
+  margin-top: 2px;
+}
+
+.ratio-value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ★ 2026-10-13 第六轮：**折叠组真的收起来了。**
+   上一版只有 JS 侧把被折叠的 .ratio-row 收进数组、切换 is-open，
+   CSS 侧却一条规则都没有 —— 那些行于是永远显示，「其余 N 项指标（点这里展开）」
+   被读成分节线（点它只变底色）。这一页「可读性不高」的真因就在这里：
+   五个块各自平铺 10–18 行，一眼看去全是同一号灰字，没有主次。
+   现在默认 display:none、展开时按表格行显示，与 .ratio-detail 同一套写法
+   （is-open 这个状态词也沿用，不再造第二个）。
+   ⚠️ 必须写 display: table-row 而不是 block：这是 <table> 里的 <tr>。 */
+.ratio-row.is-folded {
+  display: none;
+}
+
+.ratio-row.is-folded.is-open {
+  display: table-row;
+}
+
+/* 展开行：默认隐藏 */
+.ratio-detail {
+  display: none;
+}
+
+.ratio-detail.is-open {
+  display: table-row;
+}
+
+.ratio-detail td {
+  background: var(--c-surface-2);
+  border-bottom: 1px solid var(--c-line);
+  padding: var(--sp-3) var(--sp-3) var(--sp-3) var(--sp-5);
+}
+
+.detail-line {
+  font-size: var(--fs-xs);
+  color: var(--c-text-2);
+  line-height: 2;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 健康度胶囊标签 */
+.status-chip {
+  display: inline-block;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 1px var(--sp-3);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.status-chip.is-good  { color: var(--c-good);  background: var(--c-good-bg); }
+/* ★ 2026-10-13 第六轮：**只有 watch 这一档做成实底**（亮橙底），
+   good / bad 两档保持原来的淡底彩字。
+   （第六轮写的是「+ 深墨字 8.0:1」，第九轮换成 --c-watch-on 5.3:1，
+   第十轮换成**白** 2.29:1 —— 底子仍是第六轮定的，只有字变了。）
+   为什么不对称地改：feedback 是「全篇要用同一个橙」，
+   而橙在这里原来是**淡橙底上的深褐字**（又一处分岔）。
+   做成实底之后，「待核验」胶囊和色条/按钮变成同一个值，橙就不再有第二张脸。
+   顺带还赚了一条：本项目的约定是「对比才是指示」，三档里只有 watch 需要人动手，
+   它就应该是三档里唯一喊出来的那一个 —— 不是给好看，是给「这里还有活」。 */
+.status-chip.is-watch { color: var(--c-on-primary); background: var(--c-watch); }
+.status-chip.is-bad   { color: var(--c-bad);   background: var(--c-bad-bg); }
+
+/* ==========================================================================
+   18. 玻璃降级（不支持 backdrop-filter 时）
+   --------------------------------------------------------------------------
+   这是一门课的作业，演示现场可能是没更新的浏览器或某些国产内核。
+   没有 backdrop-filter 时，那层 rgba(255,255,255,0.60) 就只是一层半透明白 ——
+   卡片会显得脏、发灰，比不加玻璃还难看。所以**必须给兜底**。
+
+   兜底后长什么样：纯白实底 + 一条灰色细边，浮在灰蓝渐变背景上。
+   仍然是「悬浮卡片」的观感，只是没有磨砂。信息层级、橙的落点、
+   渐变背景、墨色大数全部不变 —— **不会退化成坏页面**。
+
+   注意描边要换成 --c-line：--c-glass-line 是白色半透明的，
+   在实白面上等于没有边框。
+   ========================================================================== */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .card,
+  .metric-card,
+  .risk-overview,
+  .vr,
+  .paper,
+  .empty-state,
+  .upload-zone,
+  .popover,
+  .nav {
+    background: var(--c-surface);
+    border-color: var(--c-line);
+  }
+
+  /* 强玻璃那几档在降级时也落到同一个白面上 */
+  .card.card-dense,
+  .dim-block {
+    background: var(--c-surface);
+  }
+
+  /* ★ .risk-card **不能**进上面那两组名单（2026-10-12 第四轮改）。
+     它现在的 background 是「等级渐变 + --sev-base」两层，直接赋
+     background: var(--c-surface) 会把渐变层一起冲掉，
+     降级时三个等级全变成一模一样的白卡 —— 等级色就这么没了。
+     正确做法是只换**底下那一层**：background 那条声明写在 .risk-card 自己
+     身上，它读的就是 --sev-base，所以改一个变量、三个等级一起正确。
+     （原来的写法是单独给 .risk-card.sev-high 拍平，只保住了高风险一级，
+     关注 / 正常两级本来就没有兜底 —— 这轮顺手一并解决了。） */
+  .risk-card {
+    --sev-base: var(--c-surface);
+  }
+}
+
+/* ==========================================================================
+   19. 页面 1：上传窗口 / A 的数据看板 / 年报问答（2026-10-13 新增）
+   --------------------------------------------------------------------------
+   这三块的数据全部来自 A 的产物（a/README.md 有逐文件 sha256 存证）：
+   看板读 A 的 window.FINSCOPE_METRICS，问答走 A 的 search.js。
+   E 只负责把它们显示出来，所以这一节的原则只有一条：
+   **别让 E 的版面把 A 的数据读变形。**
+
+   具体是三件事：
+     ① 指标表是**读数字**的表，所以它跟页面 2 的财报表共用一套行/单元格样式
+        （.fin-row / .fin-label / .fin-value / .fin-prior —— 数字字族、
+        不换行、对齐规则都一致），只补自己那一档列宽 .board-table。
+        同一个数在两张表上长得一样，读者才不会怀疑其中一处算错了。
+     ② 证据块与原文块是最长的东西，必须**能收起来**，否则一屏全是年报正文，
+        看不到一共有几条证据。
+     ③ 「载入状态」是这一页独有的东西（17 MB 语料按需读），
+        它要有自己的长相 —— 点一次的代价是读 1–2 MB 文件，
+        这件事必须在余光里看得见，不能混进一排长得一样的按钮里。
+   ========================================================================== */
+
+/* ---- 上传：透明的 file input ----
+   它才是这一格真正可点的东西 —— 点击、拖放、键盘（Tab + 回车）三条路都靠它。
+   **不能**用 display:none 或 visibility:hidden：那样就不可点、不可聚焦了，
+   又回到「画了一个不能点的方块」。只能让它透明地盖在上面。 */
+.upload-input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  /* 不写这行的话 Safari 会给它一个默认的文件按钮外观，
+     虽然 opacity:0 也看不见，但它会把格子里的文字挤走。 */
+  -webkit-appearance: none;
+          appearance: none;
+}
+
+/* 文件拖到格子上时的高亮。
+   ★ 不能只改 border-color —— 那正是 :hover 已经做过的事，两者看不出区别。
+   这里换成**实线**：虚线的空隙没了，一眼就知道「现在松手会成」。 */
+.upload-zone.is-over {
+  border-style: solid;
+  border-color: var(--c-primary);
+  background-image: linear-gradient(var(--c-primary-soft-2), var(--c-primary-soft-2));
+}
+
+/* 没选文件时这一格不占位置 —— 空 div 也会撑出 16px 的下边距。 */
+.upload-result:empty { display: none; }
+
+/* ---- 上传：文件卡 ----
+   显示的四项（文件名 / 体积 / 最后修改 / MIME type）全部是 File 对象上
+   真的有的属性，没有一个是我们编出来的。 */
+.file-card {
+  margin-bottom: var(--sp-4);
+  padding: var(--sp-4);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface-2);
+}
+
+.file-top {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-width: 0;
+}
+
+.file-badge {
+  flex: 0 0 auto;
+  padding: 2px var(--sp-2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-num);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--c-good);
+  background: var(--c-good-bg);
+}
+
+.file-name {
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  color: var(--c-text);
+  /* 年报的文件名动辄三十多个字（「XX股份有限公司2025年年度报告.pdf」）——
+     不强制断行的话它会把这行撑破、把卡片顶出页面。 */
+  word-break: break-all;
+}
+
+.file-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.file-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--c-line-soft);
+}
+
+/* 这一行是文件卡的重点：文件**没有离开这台机器**。
+   类型通过的绿灯已经由 .file-badge 给了，这里不再加第二个绿落点。 */
+.file-verdict {
+  font-size: var(--fs-xs);
+  color: var(--c-text-2);
+}
+
+/* ---- 文字按钮 ----
+   看起来像链接、用起来是按钮（收起抽屉、展开全文、全部载入）。
+   ★ 为什么是 <button> 而不是 <a href="#">：它做的事不产生任何地址，
+     做成链接会把 URL 顶上一个 #，还会被浏览器的「已访问」状态记住。 */
+.btn-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: var(--fs-xs);
+  color: var(--c-primary);
+  cursor: pointer;
+  border-bottom: 1px dotted var(--c-primary);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.btn-link:hover { color: var(--c-primary-dark); border-bottom-color: var(--c-primary-dark); }
+
+.btn-link:disabled {
+  color: var(--c-text-3);
+  border-bottom-color: var(--c-line);
+  cursor: default;
+}
+
+/* ---- 公司 chips ---- */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  /* 2026-10-13 第五轮：8 → 12。九枚 chip 是一片**会换行的小卡片**，
+     行间距 8 会让第二行的顶边贴在上一行的底边上，读起来是一整块。
+     margin-top 16 → 24：和「检索范围」那行说明拉开。 */
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+/* 一家公司一枚。
+   ★ 它是**按钮**不是标签：点一下会读入那家的年报正文（1–2 MB），
+     键盘也该点得到。 */
+.chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* 2026-10-13 第五轮：行距 1 → 4，内边距上下 8 → 12。
+     每枚 chip 里是三行字号不同的小字（公司名 14 / 代码·块数 12 / 状态 12），
+     行距 1px 时三行贴成一块，加上下 8px 的内边距，整枚只有 58px 高 ——
+     反馈里「字和字之间过于靠近」在这块最明显。现在 ~74px。 */
+  gap: var(--sp-1);
+  padding: var(--sp-3);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.chip:hover { border-color: var(--c-primary); }
+
+/* 「我现在在看这家」= **导航状态**，不是警报 ——
+   所以用灰蓝的左侧粗条 + 深字，不用橙。橙是全站的「需关注」预算，
+   九个 chip 里有一枚是橙的，那橙就不再是信号了（与 .nav-link.is-active 同一类）。 */
+.chip.is-on {
+  border-color: var(--c-primary);
+  background: var(--c-primary-soft);
+  box-shadow: inset 3px 0 0 var(--c-primary);
+}
+
+.chip-name {
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--c-text);
+}
+
+.chip.is-on .chip-name { font-weight: 700; }
+
+.chip-meta {
+  font-family: var(--font-num);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 载入状态。四档四种颜色，因为点一次的代价是读一个 1–2 MB 的文件：
+   未载入（灰）→ 载入中（蓝，正在干活）→ 可检索（绿，成了）→ 失败（红）。
+   ★ 载入中**不用橙**：九个 chip 同时载入就是九处橙，
+     而「正在读文件」是过程不是警报。 */
+.chip-load { font-size: var(--fs-xs); color: var(--c-text-3); }
+.chip.is-loaded  .chip-load { color: var(--c-good); }
+.chip.is-loading .chip-load { color: var(--c-primary); }
+.chip.is-failed  .chip-load { color: var(--c-bad); }
+.chip.is-failed  { border-color: var(--c-bad); }
+
+/* ---- 检索范围行 ---- */
+.scope-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.scope-err { color: var(--c-bad); }
+
+/* ---- 看板抬头 ---- */
+.board-head { margin: var(--sp-6) 0 var(--sp-4); }
+
+.board-name-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-3);
+}
+
+.board-name {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--c-text);
+}
+
+/* 抬头下面那排小标签走 §9 的 .meta-chip（页面 2 的公司抬头用的就是它）——
+   「这家公司是谁」在两页上应当是同一个长相。 */
+
+.board-empty { font-size: var(--fs-md); color: var(--c-text-3); }
+
+/* 看板抬头里「去页面 2」的联动（2026-10-13 方案 A）。
+   --------------------------------------------------------------------------
+   ★ 只在 D 交付的那一家（茅台 600519）上出现 —— 由 JS 判，不在这里用 CSS 藏。
+     D 只交付 1 家，其余 8 家在页面 2 上没有数据，给链接就是**指错**。
+
+   ★ 为什么要单开一个类、不复用 `.page-link`：
+     `.page-link` 的语义是「**这个数**从年报第几页来」——是**溯源**；
+     这里是「**跳去另一页**」——是**导航**。复用会让读者把跳转读成溯源，
+     鼠标移上去之前分不出来。样式像不等于语义像，这一处必须分开。
+
+   ★ 走灰蓝而不是橙：全站规矩是「可点 / 结构性」归灰蓝、
+     「需关注」才给橙。这个链接是导航，不占橙色预算。 */
+.board-jump {
+  display: inline-block;
+  margin-top: var(--sp-3);
+  font-size: var(--fs-md);
+  color: var(--c-primary);
+  border-bottom: 1px dashed var(--c-primary);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.board-jump:hover {
+  color: var(--c-primary-dark);
+  border-bottom-color: var(--c-primary-dark);
+}
+
+/* 「这一家为什么没有上面那个入口」。
+   与 .board-jump **占同一个位置**（抬头正下方），所以有入口和没入口两种
+   看板高度一致、读者视线落点一致 —— 区别只有一行是可点的、一行是说明。
+   ★ 用灰而不是橙：这不是「有活要干」，是「这里本来就没有这条路」。
+     橙是预算，留给真的需要动作的地方。
+   ★ 也不用红/黄这类「出错色」：D 只交付 1 家是**交付范围**，不是故障，
+     涂成告警色会让每一次看另外 8 家都像页面坏了。 */
+.board-jump-off {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-xs);
+  line-height: 1.7;
+  color: var(--c-text-3);
+  max-width: 62em;
+}
+
+/* ---- 看板表 ----
+   行与单元格全部复用页面 2 的 .fin-row / .fin-label / .fin-value / .fin-prior，
+   这里只重写列宽、min-width，和**数值列的对齐**。 */
+.board-table col.c-name   { width: 34%; }
+.board-table col.c-y1,
+.board-table col.c-y2,
+.board-table col.c-y3     { width: 16%; }
+.board-table col.c-source { width: 18%; }
+
+/* min-width = 680px，**实测定的，不是估的**
+   -------------------------------------------------------------------------
+   这一条原来写的是推算（「列更窄、串只短两个字，所以下限反而更大」）——
+   推出来的数和真值差着 200px，所以改成实测。量法是
+   `node tools/layout-probe.js --page p1 --chip N --minw --widths 950x800`：
+   把 min-width 从 440 一路加到 700，每档用 Range 量数值列的**墨迹宽**。
+
+   ★ 必须用窄视口（≤950）量。视口一宽，表就被 .table-scroll 撑开到 680 以上，
+     把 min-width 从 440 调到 660 表宽一动不动 —— 扫出来是一条平线，
+     「下限 440」是假的。探针会报 binding=false 提醒这一点。
+
+   量到的事实（9 家公司全扫，各家最挤的一格永远是 **2025 那一列**）：
+     · 全语料最长的数 = 比亚迪「66,130.52」，**需 64px**
+     · 其余八家都在 56px 上下（「1,704.47」「4,564.52」这一档，7 字含逗号点）
+     · 680px 表 → 年份列 16% = 108.8px，去掉内边距剩 **85px 可用**
+     · 所以最挤的一格余 21px（＝比它需要的宽 33%）
+
+   ★ 2026-10-13 第五轮重测过一遍，因为「数字有多宽」这个前提变了：
+     原来数字走 Bahnschrift（窄体，0.532em/位），最长的数只要 59px；
+     现在数字和正文同族（本机 = 微软雅黑，0.586em/位），同一个数要 64px，
+     **多了 8.5%**。同一条命令重扫，最挤那一列刚好不溢出的一档是 560px。
+     **680 不动**，余量从 26px 变成 21px —— 仍然够再进一位数。
+     重扫的输出（`--page p1 --chip 3 --minw --widths 950x800`）：
+       440 → ★溢出 13.8px      560 → 余 1.4px（= 下限）
+       480 → ★溢出 11.4px      620 → 余 11.0px
+       520 → ★溢出  5.0px      680 → 余 20.6px ← 现值
+       600 → 余 7.8px          700 → 余 23.8px
+
+   为什么是 680 而不是算出来的下限（≈560px）：
+     560 是「这 9 家、这条字族链」的下限。这张表是给**任意年报**看的，
+     多一位数（一万亿级的营业成本）就要往上抬。680 留的 21px
+     正好够再进一位数，不必因为换一家公司就来改 CSS。
+
+   ★ 回退链这一点也变了，顺手记下：`--font-num` 原来单独挂着一串拉丁字体
+     （Bahnschrift / Helvetica Neue …），其中最宽的一档比雅黑还宽 14%，
+     所以旧注释要按 ×1.140 换算才有意义。现在数字跟正文同一族，
+     链上只剩**各家的 CJK 系统字体**，而它们的数字都不比雅黑宽
+     （Arial 0.556 / Segoe UI 0.539 < 雅黑 0.586）——
+     也就是说**雅黑就是这条链上最坏的情况**，64px 不会再被字体放大。
+
+   宽屏下 100% 远大于 680，这条不生效 —— 它只在窄窗口兜住不换行/不叠字。 */
+.board-table { min-width: 680px; }
+
+/* 数值列**右对齐**。
+   ★ 这一条和页面 2 的 .fin-table 故意不一样，理由不是审美：
+     那张表的两列数字是**本期 vs 上期**一对，左对齐是为了让它们
+     与左边那串科目名连成一个整齐的块；
+     这张表要的是**三年纵向扫一眼看量级**，而位数是不齐的
+     （1,688.38 与 82,320.07），左对齐会让小数点上下错开一格，扫不出来。
+     表头跟着它管的列一起右对齐（.fin-head-row th 默认是左对齐的）。 */
+.board-table .fin-value,
+.board-table .fin-prior { text-align: right; }
+
+.board-table .fin-head-row th:nth-child(2),
+.board-table .fin-head-row th:nth-child(3),
+.board-table .fin-head-row th:nth-child(4) { text-align: right; }
+
+.board-dim { color: var(--c-text-3); }
+
+/* ---- 状态徽标 ----
+   只在**不是 found** 时出现。found 是绝大多数（全语料 153 格里 151 格），
+   给每一行都挂一个「已找到」等于给整张表加噪。 */
+.badge {
+  display: inline-block;
+  margin-left: var(--sp-2);
+  padding: 0 var(--sp-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge.na { color: var(--c-text-2); background: var(--c-surface-2); }
+.badge.nf { color: var(--c-bad);    background: var(--c-bad-bg); }
+.badge.tb { color: var(--c-primary); background: var(--c-primary-soft); margin-left: 0; }
+
+/* 存疑（2026-10-13）：A 给了这个值，但这个值自己跟自己打架。
+   ★ 为什么**不用橙**：本文档的橙预算是一屏 1–2 处，而三家公司的存疑行
+     可能同时有五六行 —— 全刷成橙，橙就不再是重点，正好退回这次改版要修的
+     「一堆没有分辨度的数据」。所以报警收在表头上方那一条 warn 说明里（仅一处橙），
+     行内这一枚只是「让你在 17 行里定位到它」，用最安静的中性色 + 虚线下划。
+   ★ 为什么**也不用红**：红是 .badge.nf「未找到」的色。两个都红，
+     就分不出「压根没抽到」和「抽到了但不对」—— 而这两种的处置完全不同：
+     前者要 A 补抽取，后者要 A 改抽取规则。
+   虚线下划是这里唯一「只有它才有」的视觉特征：不靠颜色也能认出来。 */
+.badge.suspect {
+  color: var(--c-text-2);
+  background: var(--c-surface-2);
+  border-bottom: 1px dashed var(--c-text-3);
+  cursor: help;
+  font-weight: 500;
+}
+
+/* 存疑汇总：位置上紧跟表格、在 block-sub 之前 —— 读者先看见「有几行不对」，
+   再看见「这些数是三年原样数字」的解释。顺序反了就变成先解释后报警。 */
+.board-warn:empty { display: none; }
+.board-warn { margin-top: var(--sp-3); }
+
+/* ---- 「该页原文」抽屉 ----
+   ★ 为什么是**就地展开**而不是像 A 的原页面那样开右下角浮层：
+     浮层会挡住它自己引用的那张表 —— 读到 P.6 的原文时，正好看不到 P.6 那一行。
+     就地展开把「表」和「原文」放进同一屏，眼睛不用来回对位。 */
+.board-drawer { display: none; }
+
+.board-drawer.is-open {
+  display: block;
+  margin-top: var(--sp-4);
+  padding: var(--sp-4);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface-2);
+}
+
+.drawer-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-3);
+}
+
+.drawer-title {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+/* ---- 证据块 ----
+   看板的「该页原文」与问答的「证据块」共用这一套长相 ——
+   两边说的是同一件事（「这段话出自年报，页码在这」），
+   长得一样，读的人才能一眼认出是同一类东西。 */
+.ev { padding: var(--sp-3) 0; }
+.ev + .ev { border-top: 1px solid var(--c-line-soft); }
+.ev:last-child { padding-bottom: 0; }
+
+.ev-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2);
+  font-size: var(--fs-md);
+}
+
+.ev-name { font-weight: 600; color: var(--c-text); }
+
+.ev-page {
+  font-family: var(--font-num);
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+.ev-dim { font-size: var(--fs-xs); color: var(--c-text-3); }
+
+/* 原文照排。white-space: pre-wrap 是必须的 ——
+   分片里的表格块本身带换行，塌成一行之后「资产负债表」会变成一长串数字。 */
+.ev-raw {
+  margin-top: var(--sp-2);
+  font-family: var(--font-num);
+  font-size: var(--fs-xs);
+  color: var(--c-text-2);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ev-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-top: var(--sp-1);
+  font-family: var(--font-num);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.ev-text {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-md);
+  color: var(--c-text);
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ev-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}
+
+.ev-list { margin-top: var(--sp-5); }
+
+/* ---- 问答 ---- */
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: var(--sp-4) 0;
+}
+
+/* 预设问题全铺开、不折叠。这 14 条是 A 交付物的**可核验清单**，
+   折起来等于把它藏了。每条都是完整问句、长度不齐，
+   所以给胶囊形（--radius-pill）而不是方角 —— 高低不齐时圆角比直角整齐。 */
+.preset {
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-pill);
+  background: var(--c-surface);
+  font-family: inherit;
+  font-size: var(--fs-xs);
+  color: var(--c-text-2);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.preset:hover { border-color: var(--c-primary); color: var(--c-primary); }
+
+.qa-form {
+  display: flex;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+}
+
+.qa-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  color: var(--c-text);
+  background: var(--c-surface);
+}
+
+/* 焦点环**不能只把 outline 去掉换成边线变色** —— 边线变色在浅色底上
+   只有 1px 的差别，键盘用户看不出来。这里补一圈灰蓝晕。 */
+.qa-input:focus {
+  outline: none;
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px var(--c-primary-soft);
+}
+
+.qa-input::placeholder { color: var(--c-text-3); }
+
+.qa-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}
+
+.qa-status:empty { display: none; }
+
+/* 检索路径。两档必须一眼分得开：双路要过向量模型，
+   BM25 单路只是关键词匹配 —— 答出来的东西不是一回事，
+   页面必须让人当场知道自己看的是哪一种。 */
+.qa-mode {
+  flex: 0 0 auto;
+  padding: 1px var(--sp-3);
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+}
+
+.qa-mode.is-vec  { color: var(--c-primary); background: var(--c-primary-soft); }
+.qa-mode.is-bm25 { color: var(--c-text-2);  background: var(--c-surface-2); }
+
+.qa-hint { flex: 1 1 240px; }
+
+.ans-note {
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--c-line-soft);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}
+
+/* 答案用 --fs-lg（16px）：它是这一屏**要读的东西**，
+   按全站那条「分析性正文 16 / 参考性注解 12」的分档走（见 base.css 字号阶梯）。 */
+.ans-line {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-lg);
+  line-height: 1.8;
+  color: var(--c-text);
+}
+
+.cite {
+  margin-left: 2px;
+  font-family: var(--font-num);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--c-primary);
+}
+
+.ans-empty {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-md);
+  color: var(--c-text-3);
+}
+
+.qa-meta {
+  margin-top: var(--sp-4);
+  font-family: var(--font-num);
+  font-size: var(--fs-xs);
+  color: var(--c-text-3);
+}

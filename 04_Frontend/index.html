@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinScope · 上市公司财报分析与估值 Agent</title>
+
+  <!--
+    样式：三个文件按「基础 → 布局 → 组件」顺序引入，顺序不能颠倒。
+    这里用 <link> 直接引入而不是走 styles.css 的 @import，
+    是为了保证双击打开（file:// 协议）时样式一定加载得上。
+    styles.css 保留为打包成单个 Final.html 时用的聚合入口。
+  -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+
+<body>
+
+  <!-- 左侧导航：由 app.js 动态生成 -->
+  <nav id="nav" class="nav"></nav>
+
+  <!-- 右侧内容区：六个页面由 app.js 动态挂载 -->
+  <main id="main" class="main"></main>
+
+  <!-- ==================================================================
+       脚本加载顺序（不能调换）
+       ================================================================== -->
+
+  <!-- 1. 数据源（两份，互相独立，缺一份另一份照常工作）
+         · mock  ：测试夹具，只给 tests/ 用，页面不再读它
+         · real  ：D 的交付物，由 tools/build-data.js 从 D 的 .json 原样搬运
+         ★ 换公司只改下面两行的 key，然后重跑 node tools/build-data.js <key> ★
+               统一数据对象 → 页面 1/2/3/4/5
+               投研简报绑定表 → 页面 6
+         注意：必须是 .js 而不是 .json。file:// 协议下浏览器会因 CORS
+         拦掉 fetch 本地 .json，写成 JS 变量赋值则不受限制。
+         顺序：real_memo.js 必须在 app.js 之前 —— boot() 里 F.data.load()
+         就是在这时候把 window.FINSCOPE_MEMO 取走的。 -->
+  <script src="data/real_data.js"></script>
+  <script src="data/real_memo.js"></script>
+
+  <!-- 2. 基础设施：口径 → 契约 → 数据入口（有依赖顺序，勿调换）
+       contract.js 必须排在 dataLoader.js 前面：dataLoader 的校验拿它当依据。
+       两者都缺席时 dataLoader 会退回浅检查，不会报错。
+
+       ★ 2026-10-13 撤：这里原来还有一行
+           <script src="vendor/chart.umd.min.js"></script>
+         和一行 <script src="js/charts.js"></script>。
+         六个页面一张 canvas 图都不依赖（雷达图与趋势图早撤了，
+         页面 5 的标尺、页面 2 的比例条都是 DOM + CSS 画的），
+         所以 Chart.js 与那个封装文件一起删掉，见 README 的「已撤清单」。 -->
+  <script src="js/format.js"></script>
+  <script src="js/contract.js"></script>
+  <script src="js/dataLoader.js"></script>
+
+  <!-- 3. A 的产物（**原样搬运，一个字节没改**，来源与 sha256 见 a/README.md）
+
+         这里只引「分词器 + 检索内核 + 看板 + 预设题」这一份，约 110 KB：
+           · tokenize.js 必须在 search.js 前面 —— 后者的 BM25 词表建在前者上
+           · tokens_golden.js 给页面 1 的分词一致性自检当样本
+         17 MB 的 a/data/shard_*.js **不在这里**。它们是按需注入的：
+         用户点了哪家公司、或是点了哪道题，才读那一家的正文
+         （见 js/pages/p1-upload.js 的 loadShard()）。
+         全量塞进来会让首屏卡住好几秒，而看板只用得到 95 KB 的 metrics.js。 -->
+  <script src="a/tokenize.js"></script>
+  <script src="a/search.js"></script>
+  <script src="a/data/tokens_golden.js"></script>
+  <script src="a/data/manifest.js"></script>
+  <script src="a/data/metrics.js"></script>
+  <script src="a/data/queries.js"></script>
+
+  <!-- 4. 六个页面模块：各自注册到 FinScope.pages，顺序不影响结果 -->
+  <script src="js/pages/p1-upload.js"></script>
+  <script src="js/pages/p2-overview.js"></script>
+  <script src="js/pages/p3-diagnosis.js"></script>
+  <script src="js/pages/p4-risk.js"></script>
+  <script src="js/pages/p5-valuation.js"></script>
+  <script src="js/pages/p6-memo.js"></script>
+
+  <!-- 5. 演示模式开关。★ 打包 Final.html 前改成 true ★
+         打开后给 <body> 加 .app-demo，六页「本页待实现」开发卡一起隐藏。
+         只隐藏不删 DOM，所以开发期和自测照常看得见那块内容。 -->
+  <script>window.FINSCOPE_DEMO = false;</script>
+
+  <!-- 6. 入口，必须最后加载（要等上面全部注册完） -->
+  <script src="app.js"></script>
+
+</body>
+</html>

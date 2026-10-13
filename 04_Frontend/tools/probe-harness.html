@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<!-- ==========================================================================
+     probe-harness.html —— layout-probe.js 的探针页，**不是**给人打开的页面
+     --------------------------------------------------------------------------
+     它加载整套样式与脚本，跑完把结果写进 #PROBE 的
+     `PROBE_JSON_START{...}PROBE_JSON_END`，由 tools/layout-probe.js 解析。
+
+     为什么不把它内联进 layout-probe.js：这个文件里有大量正则
+     （`/\s+/`、`/^[\s\d.,\-+%()/·]*$/`），塞进 JS 模板字符串会让 `\s`
+     被当成未知转义**静默吃掉反斜杠**变成 `/s+/` —— 判据失灵而且不报错。
+
+     ★ 必须由工具**拷到项目根**再跑（`_probe.tmp.html`），因为下面这些
+       `css/…` `js/…` `a/…` 是相对路径，放 tools/ 下会全部 404 拿到裸页面。
+     ★ 不要手动改这里的 URL 参数，用 layout-probe.js 的 --chip / --qa。
+     ========================================================================= -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>probe</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <nav id="nav" class="nav"></nav>
+  <main id="main" class="main"></main>
+  <pre id="PROBE" style="display:none"></pre>
+
+  <script src="data/real_data.js"></script>
+  <script src="data/real_memo.js"></script>
+  <script src="js/format.js"></script>
+  <script src="js/contract.js"></script>
+  <script src="js/dataLoader.js"></script>
+  <script src="a/tokenize.js"></script>
+  <script src="a/search.js"></script>
+  <script src="a/data/tokens_golden.js"></script>
+  <script src="a/data/manifest.js"></script>
+  <script src="a/data/metrics.js"></script>
+  <script src="a/data/queries.js"></script>
+  <script src="js/pages/p1-upload.js"></script>
+  <script src="js/pages/p2-overview.js"></script>
+  <script src="js/pages/p3-diagnosis.js"></script>
+  <script src="js/pages/p4-risk.js"></script>
+  <script src="js/pages/p5-valuation.js"></script>
+  <script src="js/pages/p6-memo.js"></script>
+  <script>window.FINSCOPE_DEMO = false;</script>
+  <script src="app.js"></script>
+  <script>
+  (function () {
+    /* ★ 探针自己抛错时，把错误写进 #PROBE。
+       没有这一段的话，run() 中途抛异常 → #PROBE 一直是空的 →
+       外面只看到「探针没出 JSON」，完全不知道是哪里坏的。
+       自诊断比沉默好。 */
+    window.addEventListener("error", function (e) {
+      var el = document.getElementById("PROBE");
+      if (el && el.textContent.indexOf("PROBE_JSON_START") < 0) {
+        el.textContent = "PROBE_JSON_START{\"err\":\"探针抛错：" +
+          String(e.message).replace(/["\\]/g, "'") +
+          "（第 " + e.lineno + " 行）\"}PROBE_JSON_END";
+      }
+    });
+
+    // 页面由 hash 决定；探针一次只看一页，靠 URL 上的 ?target=pX 换
+    var target = (location.search.match(/target=(\w+)/) || [])[1] || "p2";
+    location.hash = "#" + target;
+
+    function run() {
+      var out = {};
+      var page = document.querySelector(".page.is-active") || document.querySelector(".page");
+
+      /* ---------- ① 重叠检测 ---------- */
+      var all = Array.prototype.slice.call(document.querySelectorAll("body *"));
+      var boxes = [];
+      all.forEach(function (e) {
+        var cs = getComputedStyle(e);
+        if (cs.display === "none" || cs.visibility === "hidden" || cs.opacity === "0") return;
+        var r = e.getBoundingClientRect();
+        if (r.width < 2 || r.height < 2) return;
+        if (e.tagName === "HTML" || e.tagName === "BODY") return;
+        // 表格的内部盒子（colgroup/col/thead/tbody/tr）永远和单元格「重叠」，不是缺陷
+        if (/^(COLGROUP|COL|THEAD|TBODY|TFOOT|TR)$/.test(e.tagName)) return;
+        // ★ 换行的行内元素：getBoundingClientRect 返回的是**各行的并集**，
+        //   于是它天然「包含」紧挨着它前面的那个行内兄弟（p5 的
+        //   <strong>两条区间不重叠：</strong> + 后随长 <span> 就报过一次 96×17/100%）。
+        //   单行盒高约 1.5em，两行就 >2em —— 用它当判据把这类并集盒排除。
+        if (cs.display === "inline" && r.height > parseFloat(cs.fontSize) * 2) return;
+        boxes.push({ e: e, r: r, cls: e.className || e.tagName });
+      });
+      function label(e) {
+        var c = (typeof e.className === "string" && e.className) ? "." + e.className.trim().split(/\s+/).join(".")
+                : e.tagName.toLowerCase();
+        var t = (e.textContent || "").trim().replace(/\s+/g, " ").slice(0, 24);
+        return c + (t ? " [" + t + "]" : "");
+      }
+      function anc(a, b) { return a.contains(b) || b.contains(a); }
+      var overlaps = [];
+      for (var i = 0; i < boxes.length; i++) {
+        for (var j = i + 1; j < boxes.length; j++) {
+          var A = boxes[i], B = boxes[j];
+          if (anc(A.e, B.e)) continue;
+          var ox = Math.min(A.r.right, B.r.right) - Math.max(A.r.left, B.r.left);
+          var oy = Math.min(A.r.bottom, B.r.bottom) - Math.max(A.r.top, B.r.top);
+          if (ox <= 1 || oy <= 1) continue;
+          var area = ox * oy;
+          var minArea = Math.min(A.r.width * A.r.height, B.r.width * B.r.height);
+          var ratio = area / minArea;
+          if (ratio < 0.12) continue;                 // 轻微压边不算
+          overlaps.push({
+            a: label(A.e), b: label(B.e),
+            overlapPx: Math.round(ox) + "x" + Math.round(oy),
+            shareOfSmaller: Math.round(ratio * 100) + "%",
+            aPos: getComputedStyle(A.e).position,
+            bPos: getComputedStyle(B.e).position
+          });
+        }
+      }
+      // 报最狠的几条
+      overlaps.sort(function (a, b) { return parseInt(b.shareOfSmaller) - parseInt(a.shareOfSmaller); });
+      out.overlapsCount = overlaps.length;
+      out.overlaps = overlaps.slice(0, 25);
+
+      /* ---------- ② 字体实测 ---------- */
+      var fams = {}, sizes = {}, weights = {};
+      var numRe = /^[\s\d.,\-+%()/·]*$/;
+      var oddFam = [];
+      /* 种合法字族的首位，**从 --font-sans 现读**（见下方判据处的长注释）。 */
+      var SANS_FIRST = getComputedStyle(document.documentElement)
+        .getPropertyValue("--font-sans").split(",")[0].replace(/["']/g, "").trim();
+      all.forEach(function (e) {
+        if (!e.textContent || !e.textContent.trim()) return;
+        if (e.children.length && !Array.prototype.some.call(e.childNodes, function (n) {
+          return n.nodeType === 3 && n.textContent.trim();
+        })) return;                                  // 只看「自己直接含文字」的元素
+        var cs = getComputedStyle(e);
+        var f = cs.fontFamily;
+        fams[f] = (fams[f] || 0) + 1;
+        var k = cs.fontSize + " / " + cs.fontWeight;
+        sizes[k] = (sizes[k] || 0) + 1;
+        var isNum = numRe.test(e.textContent.trim());
+        var first = f.split(",")[0].replace(/["']/g, "").trim();
+        /* ★ 2026-10-13 第五轮改了这条判据。
+           原来全站只有两个字族：正文 "Noto Sans SC"、数字 "Bahnschrift"，
+           所以「第一个不是这两个之一」= 有人绕开令牌写死了字体。
+           现在 --font-num === var(--font-sans)，**数字和正文同族**，
+           于是只剩一个合法值，两个判据也合成一条：
+             合法的第一个字族 = SANS_FIRST
+           注意 SANS_FIRST 是**从 --font-sans 读出来的**，不是写死的字符串 ——
+           写死的话，哪天令牌换了首位，这个探针会对着一个已经不存在的
+           字体名报满屏「异常字体」，而且看起来特别像真事。 */
+        if (first !== SANS_FIRST) {
+          oddFam.push({ cls: label(e), family: f, size: cs.fontSize, weight: cs.fontWeight });
+        }
+        weights[cs.fontWeight] = (weights[cs.fontWeight] || 0) + 1;
+        if (isNum && first !== SANS_FIRST) {
+          oddFam.push({ cls: label(e), why: "纯数字但没走 --font-num（应与正文同族）", family: f });
+        }
+      });
+      out.fontFamilies = fams;
+      out.fontSizeWeightCombos = sizes;
+      out.fontWeights = weights;
+      out.oddFonts = oddFam.slice(0, 40);
+      out.oddFontsCount = oddFam.length;
+
+      /* ---------- ③ 可用字体探测 ---------- */
+      var probe = document.createElement("span");
+      probe.style.cssText = "position:absolute;left:-9999px;top:0;font-size:72px;white-space:nowrap;";
+      probe.textContent = "汉WWWWiiii12345";
+      document.body.appendChild(probe);
+      var test = {};
+      ["Noto Sans SC", "Bahnschrift", "DIN Alternate", "Microsoft YaHei", "Segoe UI", "Arial"].forEach(function (f) {
+        probe.style.fontFamily = "monospace";
+        var w0 = probe.offsetWidth;
+        probe.style.fontFamily = '"' + f + '", monospace';
+        test[f] = probe.offsetWidth !== w0 ? "有" : "无（回落到 monospace）";
+      });
+      probe.parentNode.removeChild(probe);
+      out.fontAvailable = test;
+      try {
+        out.fontsCheckApi = {
+          noto: document.fonts.check('16px "Noto Sans SC"'),
+          bahn: document.fonts.check('16px "Bahnschrift"'),
+          yahei: document.fonts.check('16px "Microsoft YaHei"')
+        };
+      } catch (e) { out.fontsCheckApi = "n/a"; }
+      /* 实际用哪一族渲染「1688」——量宽度反推：Bahnschrift 与 Noto 的数字宽度不同 */
+      var m = document.createElement("span");
+      m.style.cssText = "position:absolute;left:-9999px;top:0;font-size:100px;white-space:nowrap;";
+      m.textContent = "1688.38";
+      m.style.fontFamily = '"Bahnschrift"';  document.body.appendChild(m);
+      var wBahn = m.offsetWidth;
+      m.style.fontFamily = '"Noto Sans SC"'; var wNoto = m.offsetWidth;
+      m.style.fontFamily = '"Microsoft YaHei"'; var wYahei = m.offsetWidth;
+      m.style.fontFamily = "monospace"; var wMono = m.offsetWidth;
+      m.parentNode.removeChild(m);
+      out.numWidths100px = { Bahnschrift: wBahn, NotoSansSC: wNoto, YaHei: wYahei, monospace: wMono };
+
+      /* ---------- ⑤ 横向溢出 ---------- */
+      /* ★ 落在**横向滚动容器**里的元素不算溢出 —— 它们超出的部分靠滚动看得到，
+         正是我们要的（p2 的 .fin-table 在窄窗口下就是靠 .table-scroll 兜的）。
+         只报「没有滚动容器兜着、真的探到视口外」的那些。 */
+      function inScroller(e) {
+        for (var p = e.parentElement; p && p !== document.body; p = p.parentElement) {
+          var ox = getComputedStyle(p).overflowX;
+          if (ox === "auto" || ox === "scroll") return true;
+        }
+        return false;
+      }
+      var overflow = [];
+      all.forEach(function (e) {
+        var r = e.getBoundingClientRect();
+        if (r.width < 2) return;
+        if (r.right > innerWidth + 1 && !inScroller(e)) {
+          overflow.push({ cls: label(e), right: Math.round(r.right), vw: innerWidth });
+        }
+      });
+      out.hOverflow = overflow.slice(0, 15);
+      out.hOverflowCount = overflow.length;
+      out.docScrollWidth = document.documentElement.scrollWidth;
+
+      /* ---------- ④ 关键元素几何 ---------- */
+      function g(sel) {
+        var e = document.querySelector(sel);
+        if (!e) return null;
+        var r = e.getBoundingClientRect();
+        return { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) };
+      }
+      out.geometry = {
+        nav: g(".nav"), main: g(".main"), page: g(".page.is-active"),
+        paper: g(".paper"), firstCard: g(".page.is-active .card")
+      };
+      out.viewport = { w: innerWidth, h: innerHeight };
+
+      out.suspectNote = (function () {
+        var n = document.querySelector(".board-warn");
+        return n ? (n.textContent || "").trim().replace(/\s+/g, " ").slice(0, 220) : null;
+      })();
+      out.suspectRows = Array.prototype.slice.call(document.querySelectorAll(".board-table tbody tr"))
+        .filter(function (tr) { return tr.querySelector(".badge.suspect"); })
+        .map(function (tr) {
+          var b = tr.querySelector(".badge.suspect");
+          return { name: (tr.querySelector(".fin-name").textContent || "").trim(),
+                   years: (b.title || "").replace(/。★[\s\S]*$/, "") };
+        });
+      out.boardDump = Array.prototype.slice.call(document.querySelectorAll(".board-table tbody tr"))
+        .map(function (tr) {
+          return Array.prototype.slice.call(tr.children)
+            .map(function (td) { return (td.textContent || "").trim().replace(/\s+/g, " "); })
+            .join(" | ");
+        });
+      out.boardHead = Array.prototype.slice.call(document.querySelectorAll(".board-table thead th"))
+        .map(function (th) { return (th.textContent || "").trim(); }).join(" | ");
+
+      /* 问答块的实际渲染状态（?qa=1 之后才有答案） */
+      out.qa = (function () {
+        function n(sel) { return document.querySelectorAll(sel).length; }
+        var ans = document.querySelector(".qa-answer");
+        var evs = Array.prototype.slice.call(document.querySelectorAll(".ev"));
+        return {
+          asked: !!window.__qaFired,
+          answerBlocks: n(".qa-answer"),
+          answerChars: ans ? (ans.textContent || "").trim().length : 0,
+          cites: n(".cite"),
+          evidence: evs.length,
+          evRawOverflow: evs.filter(function (e) {
+            var r = e.querySelector(".ev-raw") || e;
+            return r.scrollWidth > r.clientWidth + 1;
+          }).length,
+          mode: (function () {
+            var m = document.querySelector(".qa-mode");
+            return m ? m.className + " :: " + (m.textContent || "").trim().slice(0, 40) : null;
+          })(),
+          status: (function () {
+            var s = document.querySelector(".qa-status");
+            return s ? (s.textContent || "").trim().slice(0, 60) : null;
+          })()
+        };
+      })();
+
+      /* 临时：同一串数字在各回落字体下的宽度（决定 .fin-table 的 min-width） */
+      out.fallbackW = (function () {
+        var s = document.createElement("span");
+        s.style.cssText = "position:absolute;left:-9999px;top:0;white-space:nowrap;font-size:16px;";
+        s.textContent = "1,708.99 亿元";
+        document.body.appendChild(s);
+        var r = {};
+        ["Bahnschrift", "DIN Alternate", "Segoe UI", "Helvetica Neue", "Arial",
+         "Noto Sans SC", "Microsoft YaHei"].forEach(function (f) {
+          s.style.fontFamily = '"' + f + '", monospace';
+          r[f] = Math.round(s.getBoundingClientRect().width * 10) / 10;
+        });
+        document.body.removeChild(s);
+        return r;
+      })();
+
+      /* 临时：三张 fin-table 的宽度与各自 c-value 单元格的可用宽 */
+      out.finTables = Array.prototype.slice.call(document.querySelectorAll(".fin-table")).map(function (t) {
+        var tr = t.querySelector("tbody tr");
+        var td = tr && tr.querySelector("td.fin-value");
+        var sp = td && td.querySelector("span");
+        return {
+          cls: t.className,
+          tableW: Math.round(t.getBoundingClientRect().width),
+          cellW: td ? Math.round(td.getBoundingClientRect().width) : null,
+          textW: sp ? Math.round(sp.getBoundingClientRect().width) : null
+        };
+      });
+
+      /* 临时：页面 1 看板表的「需要多宽」vs「实际给多宽」。
+         表装在 .table-scroll（overflow-x:auto）里，所以它溢出**不会**被 ⑤ 报出来 ——
+         但被挤到换行的列头/数字一样是缺陷，只是症状是「挤」不是「探出」。
+         .board-table 的 min-width 就是照这个数定的。 */
+      out.boardGeom = (function () {
+        var t = document.querySelector(".board-table");
+        if (!t) return null;
+        var sc = t.closest(".table-scroll") || t.parentElement;
+        var head = t.querySelector("thead tr");
+        var ths = head ? Array.prototype.slice.call(head.children) : [];
+        var rows = Array.prototype.slice.call(t.querySelectorAll("tbody tr"));
+        return {
+          tableClientW: Math.round(t.getBoundingClientRect().width),
+          tableScrollW: t.scrollWidth,
+          minWidth: getComputedStyle(t).minWidth,
+          scrollerClientW: sc ? Math.round(sc.clientWidth) : null,
+          scrollerScrollW: sc ? sc.scrollWidth : null,
+          scrolls: sc ? sc.scrollWidth > sc.clientWidth + 1 : null,
+          th: ths.map(function (x) { return x.textContent.trim() + "=" + Math.round(x.getBoundingClientRect().width); }),
+          rowCount: rows.length,
+          /* 每个数值格里的 <span> 有没有换行：量它的高度对不对单行 */
+          /* ★ 这一格才是关键：`.fin-value` 是 nowrap，装不下就**不会换行**，
+             而是溢出去压到右边一列上 —— 那正是用户报的「两个面板重合」。
+             量法走过两次弯路，两个都是「假判据」，记在这里免得再走：
+             ①「格高 > 1.6 倍行高」→ 每个宽度都报 wrapped（格高 40 本含 padding）；
+             ② `td.scrollWidth > td.clientWidth` → 永远相等。因为
+                table-layout:fixed 下 td 的盒子是**定宽**的，nowrap 的内容
+                溢出去是溢出到 td 盒子**外面**，不会把 td 自己的 scrollWidth 撑大。
+             真判据只有一个：用 Range 量**文字的墨迹宽**，跟格子的内容宽比。 */
+          ink: (function () {
+            var rng = document.createRange();
+            function inkW(node) {
+              if (!node || !node.firstChild) return 0;
+              rng.selectNodeContents(node);
+              return rng.getBoundingClientRect().width;
+            }
+            function contentW(td) {
+              var cs = getComputedStyle(td);
+              return td.getBoundingClientRect().width
+                   - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+                   - parseFloat(cs.borderLeftWidth) - parseFloat(cs.borderRightWidth);
+            }
+            var rows = Array.prototype.slice.call(t.querySelectorAll("tbody tr"));
+            var bad = [], worst = null;
+            rows.forEach(function (tr) {
+              Array.prototype.slice.call(tr.children).forEach(function (td, i) {
+                var have = contentW(td), need = 0;
+                /* 一格可能有多个子元素（状态徽标 + 文字），逐个量再相加 */
+                Array.prototype.slice.call(td.children).length
+                  ? Array.prototype.slice.call(td.children).forEach(function (c) {
+                      need += Math.max(inkW(c), c.getBoundingClientRect().width);
+                    })
+                  : need = inkW(td);
+                var rec = { col: i, txt: (td.textContent || "").trim().slice(0, 18),
+                            need: Math.round(need), have: Math.round(have),
+                            over: Math.round(need - have) };
+                if (rec.over > 1) bad.push(rec);
+                if (!worst || rec.over > worst.over) worst = rec;
+              });
+            });
+            return { overflow: bad.length, sample: bad.slice(0, 6), worst: worst };
+          })(),
+          /* 列头也不许挤：.fin-head-row th 是 12px 灰字 */
+          headOverflow: (function () {
+            var rng = document.createRange();
+            var n = 0, w = null;
+            Array.prototype.slice.call(t.querySelectorAll("thead th")).forEach(function (th) {
+              var cs = getComputedStyle(th);
+              var have = th.getBoundingClientRect().width - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+              var need = 0;
+              if (th.firstChild) { rng.selectNodeContents(th); need = rng.getBoundingClientRect().width; }
+              var rec = { txt: th.textContent.trim(), need: Math.round(need), have: Math.round(have) };
+              if (need > have + 1) n++;
+              if (!w || need - have > w.need - w.have) w = rec;
+            });
+            return { overflow: n, worst: w };
+          })(),
+          /* 事实核验用：17 行里最长的那串数是多少（推到别的字体上够不够） */
+          widest: (function () {
+            var best = "";
+            Array.prototype.slice.call(t.querySelectorAll("tbody td")).forEach(function (td) {
+              var s = (td.textContent || "").trim();
+              if (s.replace(/[^\x00-\xff]/g, "").length === s.length && s.length > best.length) best = s;
+            });
+            return best;
+          })()
+        };
+      })();
+
+      /* 找 .board-table 的 min-width **下限**：把 min-width 从 440 一路加到 700，
+         每个值都量一次「墨迹溢出」，看哪一档开始全为 0。
+         ★ 为什么要扫而不是推：`(串宽 + 内边距) / 列宽占比` 这个算式算出来是 469，
+           但真实下限不在这里 —— 它由**哪一列最挤**决定，而最挤的那列会变
+           （窄到一定程度变成科目名列先挤）。算式给的是「理论上够」，扫出来的是
+           「这一版真够」。两个数差着 200px，所以以扫的为准。 */
+      out.boardMinwScan = (function () {
+        var t = document.querySelector(".board-table");
+        if (!t) return null;
+        var st = document.createElement("style");
+        document.head.appendChild(st);
+        var rng = document.createRange();
+
+        function worstOver() {
+          var worst = { over: -1e9, col: -1, txt: "", need: 0, have: 0 };
+          Array.prototype.slice.call(t.querySelectorAll("tbody tr")).forEach(function (tr) {
+            Array.prototype.slice.call(tr.children).forEach(function (td, i) {
+              var cs = getComputedStyle(td);
+              var have = td.getBoundingClientRect().width
+                       - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+                       - parseFloat(cs.borderLeftWidth) - parseFloat(cs.borderRightWidth);
+              var need = 0;
+              if (td.children.length) {
+                Array.prototype.slice.call(td.children).forEach(function (c) {
+                  need += Math.max(c.getBoundingClientRect().width, 0);
+                });
+              } else if (td.firstChild) {
+                rng.selectNodeContents(td);
+                need = rng.getBoundingClientRect().width;
+              }
+              var over = need - have;
+              if (over > worst.over) {
+                worst = { over: over, col: i, txt: (td.textContent || "").trim().slice(0, 18),
+                          need: Math.round(need), have: Math.round(have) };
+              }
+            });
+          });
+          return worst;
+        }
+
+        var scan = [];
+        [440, 480, 520, 560, 600, 620, 640, 660, 680, 700].forEach(function (mw) {
+          st.textContent = ".board-table{min-width:" + mw + "px !important}";
+          void t.offsetWidth;                       /* 强制重排，否则量的是上一档 */
+          var w = worstOver();
+          scan.push({ minw: mw, over: Math.round(w.over * 10) / 10, col: w.col,
+                      txt: w.txt, need: w.need, have: w.have,
+                      tableW: Math.round(t.getBoundingClientRect().width) });
+        });
+        document.head.removeChild(st);              /* 还原，后面的测量不受影响 */
+        void t.offsetWidth;
+
+        /* ★ 这一扫**只有在表宽真被 min-width 顶住时才作数**。
+           视口宽的时候，表由滚动容器撑开到比 min-width 大得多，
+           把 min-width 从 440 调到 660 表宽一动不动 —— 于是每一档余量都一样，
+           扫出来的「下限 440」是假的（在那个视口它压根没生效）。
+           判据：最小那一档的**实际表宽**有没有跟着缩到 440 附近。 */
+        var binding = Math.abs(scan[0].tableW - scan[0].minw) < 40;
+
+        /* 下限 = 第一档 **不挤** 的 min-width。门槛 0.5px：`need`/`have` 都取整过，
+           0.5px 以内是子像素舍入噪声，不是真的挤。 */
+        var ok = scan.filter(function (x) { return x.over <= 0.5; })[0];
+        return {
+          scan: scan,
+          floor: ok ? ok.minw : null,
+          binding: binding,
+          tableWAtMin: scan[0].tableW
+        };
+      })();
+
+      document.getElementById("PROBE").textContent = "PROBE_JSON_START" + JSON.stringify(out) + "PROBE_JSON_END";
+
+      /* 需要肉眼确认时：?focus=<选择器> 把目标滚到视口上部 */
+      var f = (location.search.match(/focus=([^&]+)/) || [])[1];
+      if (f) {
+        var t;
+        if (/^\d+$/.test(f)) {
+          var bs = document.querySelectorAll(".block-sub")[+f];
+          t = bs ? (bs.previousElementSibling || bs) : null;
+        } else {
+          t = document.querySelector(decodeURIComponent(f));
+        }
+        if (t) {
+          var r = t.getBoundingClientRect();
+          window.scrollTo(0, Math.max(0, r.top + window.scrollY - 80));
+        }
+      }
+    }
+
+    /* ?chip=<n> —— 点第 n 枚公司 chip，让**看板表真的填上数据**再量。
+       不点的话，量到的是一张「还没选公司」的空表。 */
+    function armChip() {
+      var want = (location.search.match(/chip=(\d+)/) || [])[1];
+      if (want == null) return;
+      var chips = document.querySelectorAll(".chip");
+      var c = chips[+want];
+      if (c) { try { c.click(); } catch (e) {} }
+    }
+
+    /* ?qa=1 —— 先点一下第一道预设题，让**答案块与证据块**真的渲染出来再量。
+       ★ 不这么做的话页面 1 有一大块 CSS（.qa-answer / .ev-* / .cite / .qa-mode）
+         从头到尾没被任何一次测量碰到过：答案是「问完才画」的。
+         量不到的样式 = 没测过的样式。 */
+    function armQa() {
+      if (!/qa=1/.test(location.search)) return;
+      var p = document.querySelector(".preset");
+      if (!p) return;
+      try { p.click(); } catch (e) { return; }
+      /* 分片是 <script> 注入的 1–2 MB 本地文件，给它在虚拟时钟里跑一会儿。
+         8000 ms 之后不管有没有回来都量 —— 量到了更好，没量到也不静默通过：
+         下面会把「答案块是否存在」一起报出来。 */
+      setTimeout(function () { window.__qaFired = true; }, 8000);
+    }
+
+    /* ★ 这里的延时必须和 tools/layout-probe.js 的 --virtual-time-budget 对上。
+       踩过两次的坑：为了让 armQa() 等分片注入，run() 被推迟到 9000ms；
+       而 runner 的虚拟时钟 6000ms 就到点，于是**没有 --qa 的每一次测量**
+       都在 run() 触发之前被掐掉 —— 外面看到的是「探针没出 JSON」，
+       看起来像脚本坏了，其实是根本没轮到它跑。
+       现在：要问答等 9000ms，不要问答就 400ms；runner 那边对应 20000 / 8000。 */
+    function go() {
+      armChip();
+      var waiting = /qa=1/.test(location.search);
+      armQa();
+      setTimeout(run, waiting ? 9000 : 400);
+    }
+    if (document.readyState === "complete") setTimeout(go, 300);
+    else window.addEventListener("load", function () { setTimeout(go, 300); });
+  })();
+  </script>
+</body>
+</html>
