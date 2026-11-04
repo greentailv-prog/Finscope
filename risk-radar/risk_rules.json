@@ -3,49 +3,55 @@
   "owner": "B（财务指标计算 + 财务风险诊断）",
   "updated_at": "2026-10-10",
   "description": "FinRadar 财务风险规则库。每条规则 = 触发表达式 + 严重度 + 证据要求 + 解释模板 + 应对建议。引擎 risk-radar/scripts/detect_risks.py 直接读取本文件执行，不改代码即可增删规则。",
-
   "severity_scale": {
-    "high":   { "tag": "重大", "score_base": 85, "meaning": "已构成实质性财务风险或报表可信度存疑，必须在投研简报中单列提示，并追查年报附注原文" },
-    "medium": { "tag": "关注", "score_base": 60, "meaning": "存在明确恶化趋势或结构性隐患，需要在归因中解释成因，并列入持续跟踪项" },
-    "low":    { "tag": "提示", "score_base": 30, "meaning": "尚未构成风险，但偏离常态，列为观察项即可" },
+    "high": {
+      "tag": "重大",
+      "score_base": 85,
+      "meaning": "已构成实质性财务风险或报表可信度存疑，必须在投研简报中单列提示，并追查年报附注原文"
+    },
+    "medium": {
+      "tag": "关注",
+      "score_base": 60,
+      "meaning": "存在明确恶化趋势或结构性隐患，需要在归因中解释成因，并列入持续跟踪项"
+    },
+    "low": {
+      "tag": "提示",
+      "score_base": 30,
+      "meaning": "尚未构成风险，但偏离常态，列为观察项即可"
+    },
     "_note": "分工文档示例中使用的 severity: 'attention' 已统一映射为本文件的 medium（关注档），D 组装时只需读 severity 字段"
   },
-
   "status_values": {
-    "triggered":     "触发，规则条件成立",
-    "passed":        "未触发，规则条件不成立（同样进入输出，便于审计'查过且无异常'）",
+    "triggered": "触发，规则条件成立",
+    "passed": "未触发，规则条件不成立（同样进入输出，便于审计'查过且无异常'）",
     "not_evaluable": "输入缺失或口径不可用，无法判断，进入待核验队列，不静默判定为安全"
   },
-
   "categories": {
-    "growth":           "成长性风险：收入 / 利润 / 扣非利润的增速与结构",
-    "profitability":    "盈利能力风险：毛利率、回报率、费用率与资本回报",
-    "solvency":         "偿债风险：杠杆水平、期限错配、利息覆盖与再融资压力",
-    "efficiency":       "营运风险：应收、存货、应付周转与现金转换周期",
+    "growth": "成长性风险：收入 / 利润 / 扣非利润的增速与结构",
+    "profitability": "盈利能力风险：毛利率、回报率、费用率与资本回报",
+    "solvency": "偿债风险：杠杆水平、期限错配、利息覆盖与再融资压力",
+    "efficiency": "营运风险：应收、存货、应付周转与现金转换周期",
     "cashflow_quality": "现金流质量风险：利润的现金含量、收现比、自由现金流与投资缺口",
-    "asset_quality":    "资产质量风险（扩展类）：商誉、存贷双高、审计意见、研发资本化",
-    "governance":       "治理与分红风险（扩展类）：分红可持续性与股东回报",
-    "banking":          "银行业专属风险：资本充足、资产质量、息差与流动性"
+    "asset_quality": "资产质量风险（扩展类）：商誉、存贷双高、审计意见、研发资本化",
+    "governance": "治理与分红风险（扩展类）：分红可持续性与股东回报",
+    "banking": "银行业专属风险：资本充足、资产质量、息差与流动性"
   },
-
   "derived_vars": {
     "_note": "由引擎基于 ratios + 原始值安全求值得到的中间变量，供 trigger / 解释模板引用",
-    "ar_revenue_gap":         "accounts_receivable_growth - revenue_growth",
-    "inv_cogs_gap":           "inventory_growth - cost_of_revenue_growth",
-    "cash_to_assets":         "raw_cash_and_equivalents / raw_total_assets",
-    "interest_to_cash":       "raw_interest_expense / raw_cash_and_equivalents",
-    "dividend_to_ocf":        "raw_dividend_paid / raw_ocf",
-    "rd_capitalization_ratio":"raw_rd_capitalized / (raw_rd_expense + raw_rd_capitalized)",
-    "dso_months":             "dso / 30.44",
-    "cash_gap_yi":            "(raw_ocf - raw_net_income_parent) / 100000000",
-    "cf_investing_abs_yi":    "abs(raw_cf_investing) / 100000000",
+    "ar_revenue_gap": "accounts_receivable_growth - revenue_growth",
+    "inv_cogs_gap": "inventory_growth - cost_of_revenue_growth",
+    "cash_to_assets": "raw_cash_and_equivalents / raw_total_assets",
+    "interest_to_cash": "raw_interest_expense / raw_cash_and_equivalents",
+    "dividend_to_ocf": "raw_dividend_paid / raw_ocf",
+    "rd_capitalization_ratio": "raw_rd_capitalized / (raw_rd_expense + raw_rd_capitalized)",
+    "dso_months": "dso / 30.44",
+    "cash_gap_yi": "(raw_ocf - raw_net_income_parent) / 100000000",
+    "cf_investing_abs_yi": "abs(raw_cf_investing) / 100000000",
     "gross_margin_vs_industry_pp": "(gross_margin - industry_gross_margin_benchmark) * 100",
-    "nonrecurring_share":         "1 - deducted_to_parent"
+    "nonrecurring_share": "1 - deducted_to_parent"
   },
-
   "raw_var_prefix": "raw_",
   "raw_var_note": "所有 raw_xxx 变量取自 diagnosis 输出的 evidence（原始抽取值，已归一到元），用于需要绝对值口径的规则（如存贷双高、分红占现金流）",
-
   "rules": [
     {
       "risk_id": "G01",
@@ -58,7 +64,9 @@
       "trigger": "revenue_growth < 0",
       "threshold": 0,
       "trigger_display": "营业收入同比增速 < 0；跌破 -10% 升级为重大",
-      "evidence_required": ["revenue"],
+      "evidence_required": [
+        "revenue"
+      ],
       "explanation_template": "营业收入同比增长 {revenue_growth:.1%}（{revenue_growth_pp:.1f} 个百分点），较上期出现收缩。需区分是行业需求下行、价格竞争，还是公司主动收缩低毛利订单。",
       "suggestions": [
         "读取年报'经营情况讨论与分析'章节，确认收入下滑是量跌、价跌还是并表范围变化",
@@ -79,7 +87,9 @@
       "trigger": "net_income_parent_growth < 0",
       "threshold": 0,
       "trigger_display": "归母净利润同比增速 < 0；跌破 -20% 升级为重大",
-      "evidence_required": ["net_income_parent"],
+      "evidence_required": [
+        "net_income_parent"
+      ],
       "explanation_template": "归母净利润同比增长 {net_income_parent_growth:.1%}。结合杜邦分解，本期 ROE 变动 {roe_delta_pp:.1f} 个百分点，其中净利率贡献 {net_margin_effect_pp:.2f} 个百分点。",
       "suggestions": [
         "用 operating_profit_bridge 拆出：规模效应 / 毛利率效应 / 费用率效应 / 其他（减值、其他收益）",
@@ -96,9 +106,13 @@
       "category": "growth",
       "severity": "high",
       "trigger": "revenue_growth > 0.05 and profit_revenue_scissors > 0.20",
-      "threshold": 0.20,
+      "threshold": 0.2,
       "trigger_display": "收入增速 > 5% 且（收入增速 - 归母净利增速）> 20pp",
-      "evidence_required": ["revenue", "net_income_parent", "operating_profit"],
+      "evidence_required": [
+        "revenue",
+        "net_income_parent",
+        "operating_profit"
+      ],
       "explanation_template": "营业收入增长 {revenue_growth:.1%}，但归母净利润增长 {net_income_parent_growth:.1%}，剪刀差达 {profit_revenue_scissors_pp:.1f} 个百分点。收入扩张没有转化为利润，通常指向毛利率下行、费用前置投放或减值计提。",
       "suggestions": [
         "优先看毛利率：本期 {gross_margin:.2%}，较上期变动 {gross_margin_delta_pp:.2f} 个百分点",
@@ -118,9 +132,12 @@
       "escalate_to": "high",
       "escalate_when": "deducted_to_parent < 0.70",
       "trigger": "deducted_to_parent < 0.90",
-      "threshold": 0.90,
+      "threshold": 0.9,
       "trigger_display": "扣非净利润 / 归母净利润 < 90%；低于 70% 升级为重大",
-      "evidence_required": ["net_income_parent", "net_income_deducted"],
+      "evidence_required": [
+        "net_income_parent",
+        "net_income_deducted"
+      ],
       "explanation_template": "扣非净利润 {deducted_to_parent:.1%} 归母净利润，即约 {nonrecurring_share:.1%} 的利润来自非经常性损益（政府补助、资产处置、公允价值变动等）。这类收益不具备持续性。",
       "suggestions": [
         "读取年报'非经常性损益项目及金额'附注，逐项列明构成与金额",
@@ -137,9 +154,12 @@
       "category": "growth",
       "severity": "medium",
       "trigger": "ocf_growth < -0.30 and revenue_growth > 0",
-      "threshold": -0.30,
+      "threshold": -0.3,
       "trigger_display": "经营现金流同比增速 < -30% 且收入仍为正增长",
-      "evidence_required": ["ocf", "revenue"],
+      "evidence_required": [
+        "ocf",
+        "revenue"
+      ],
       "explanation_template": "收入增长 {revenue_growth:.1%}，但经营活动现金流净额同比变动 {ocf_growth:.1%}。收入在增长而现金在流出，是营运资金被大量占用的典型特征。",
       "suggestions": [
         "用 cash_flow_bridge 逐项拆解：应收占用、存货占用、应付释放各贡献多少",
@@ -149,7 +169,6 @@
       "confidence": 0.85,
       "reference": "收入与经营现金流长期背离，是财务造假研究中最常被引用的红旗之一"
     },
-
     {
       "risk_id": "P01",
       "risk_name": "毛利率下滑",
@@ -161,7 +180,10 @@
       "trigger": "gross_margin_delta < -0.02",
       "threshold": -0.02,
       "trigger_display": "毛利率较上期下降超过 2 个百分点；超过 3 个百分点升级为重大",
-      "evidence_required": ["revenue", "cost_of_revenue"],
+      "evidence_required": [
+        "revenue",
+        "cost_of_revenue"
+      ],
       "explanation_template": "毛利率由 {gross_margin_prev:.2%} 降至 {gross_margin:.2%}，下降 {gross_margin_delta_pp:.2f} 个百分点；同期营业成本增速 {cost_of_revenue_growth:.1%} 高于收入增速 {revenue_growth:.1%}。",
       "suggestions": [
         "拆分量价：产品均价变动 vs 单位成本变动，判断是售价压力还是成本压力",
@@ -182,7 +204,10 @@
       "trigger": "roe_delta < -0.03",
       "threshold": -0.03,
       "trigger_display": "ROE 较上期下降超过 3 个百分点；超过 5 个百分点升级为重大",
-      "evidence_required": ["net_income_parent", "equity_parent"],
+      "evidence_required": [
+        "net_income_parent",
+        "equity_parent"
+      ],
       "explanation_template": "ROE 由 {roe_prev:.2%} 降至 {roe:.2%}。杜邦归因：净利率贡献 {net_margin_effect_pp:.2f}pp、总资产周转贡献 {asset_turnover_effect_pp:.2f}pp、权益乘数贡献 {leverage_effect_pp:.2f}pp。",
       "suggestions": [
         "若下滑主要由净利率驱动，回到 P01 追毛利率与费用率",
@@ -201,7 +226,10 @@
       "trigger": "roe < wacc",
       "threshold": "wacc",
       "trigger_display": "ROE < WACC（WACC 由 C 的估值模块提供，缺失时本规则不可评估）",
-      "evidence_required": ["net_income_parent", "equity_parent"],
+      "evidence_required": [
+        "net_income_parent",
+        "equity_parent"
+      ],
       "explanation_template": "ROE 为 {roe:.2%}，低于资本成本 WACC = {wacc:.2%}，股东回报未能覆盖其承担的风险。",
       "suggestions": [
         "与 C 对齐 WACC 口径（无风险利率、Beta、市场风险溢价、债务成本）",
@@ -209,7 +237,16 @@
         "向 C 明确：ROE < WACC 时，PB 应低于 1 倍才具安全边际"
       ],
       "confidence": 0.8,
-      "reference": "ROE 与 WACC 的差额决定了公司是在创造价值还是毁损价值"
+      "reference": "ROE 与 WACC 的差额决定了公司是在创造价值还是毁损价值",
+      "threshold_basis": "convention",
+      "threshold_basis_doc": "WACC 是公司专属参数，无行业惯例单点值；用 compute_wacc.py 现场计算的敏感性区间两端重判",
+      "wacc_judge": {
+        "metric": "roe",
+        "side": "lt",
+        "kind": "wacc",
+        "peer_expr": "roe < wacc_point",
+        "note": "ROE 与资本成本比较用敏感性区间：越过区间两端结论明确；落在区间内说明回报处于资本成本的合理争议带，转人工而非取中值硬判"
+      }
     },
     {
       "risk_id": "P04",
@@ -222,7 +259,13 @@
       "trigger": "roic_minus_wacc < 0",
       "threshold": 0,
       "trigger_display": "ROIC - WACC < 0；低于 -3 个百分点升级为重大",
-      "evidence_required": ["operating_profit", "finance_expense", "income_tax_expense", "pretax_profit", "equity_parent"],
+      "evidence_required": [
+        "operating_profit",
+        "finance_expense",
+        "income_tax_expense",
+        "pretax_profit",
+        "equity_parent"
+      ],
       "explanation_template": "ROIC 为 {roic:.2%}，低于 WACC {wacc:.2%}，差额 {roic_minus_wacc_pp:.2f} 个百分点。当期投入资本未能创造经济利润，扩张规模反而在摊薄价值。",
       "suggestions": [
         "结合 E 类营运指标看：是周转拖累还是毛利拖累",
@@ -241,7 +284,13 @@
       "trigger": "period_expense_ratio_delta > 0.02",
       "threshold": 0.02,
       "trigger_display": "期间费用率（销售+管理+研发+财务）较上期上升超过 2 个百分点",
-      "evidence_required": ["selling_expense", "admin_expense", "rd_expense", "finance_expense", "revenue"],
+      "evidence_required": [
+        "selling_expense",
+        "admin_expense",
+        "rd_expense",
+        "finance_expense",
+        "revenue"
+      ],
       "explanation_template": "期间费用率由 {period_expense_ratio_prev:.2%} 升至 {period_expense_ratio:.2%}，上升 {period_expense_ratio_delta_pp:.2f} 个百分点。其中财务费用率变动 {finance_expense_ratio_delta_pp:.2f} 个百分点。",
       "suggestions": [
         "分项归因：销售费用率 / 管理费用率 / 研发费用率 / 财务费用率各自贡献多少",
@@ -260,7 +309,10 @@
       "trigger": "gross_margin < industry_gross_margin_benchmark",
       "threshold": "industry_gross_margin_benchmark",
       "trigger_display": "毛利率 < 行业中位数（需要外部行业基准数据，缺失时不可评估）",
-      "evidence_required": ["revenue", "cost_of_revenue"],
+      "evidence_required": [
+        "revenue",
+        "cost_of_revenue"
+      ],
       "explanation_template": "毛利率 {gross_margin:.2%}，低于行业基准 {industry_gross_margin_benchmark:.2%}，差额 {gross_margin_vs_industry_pp:.2f} 个百分点。",
       "suggestions": [
         "由 C 从可比公司池计算行业中位数并回写到 meta.industry_gross_margin_benchmark",
@@ -268,7 +320,14 @@
         "行业基准缺失是数据问题而非公司问题，不应据此下结论"
       ],
       "confidence": 0.6,
-      "reference": "横向对比能剔除行业景气度，但强依赖可比口径，缺失时必须标注不可评估"
+      "reference": "横向对比能剔除行业景气度，但强依赖可比口径，缺失时必须标注不可评估",
+      "threshold_basis": "peer_percentile",
+      "benchmark_judge": {
+        "metric": "gross_margin",
+        "quantile": "median",
+        "peer_expr": "gross_margin < gross_margin_industry_median",
+        "note": "毛利率低于行业中位数。基准优先级：--benchmarks 板块池（更细行业）> meta.industry_gross_margin_benchmark（C 可比池）> 规则自身 trigger（缺失时 not_evaluable）"
+      }
     },
     {
       "risk_id": "P07",
@@ -279,7 +338,10 @@
       "trigger": "finance_expense_ratio_delta > 0.005",
       "threshold": 0.005,
       "trigger_display": "财务费用率较上期上升超过 0.5 个百分点",
-      "evidence_required": ["finance_expense", "revenue"],
+      "evidence_required": [
+        "finance_expense",
+        "revenue"
+      ],
       "explanation_template": "财务费用率由 {finance_expense_ratio_prev:.2%} 升至 {finance_expense_ratio:.2%}，上升 {finance_expense_ratio_delta_pp:.2f} 个百分点，与有息负债扩张（增速 {interest_bearing_debt_growth:.1%}）相互印证。",
       "suggestions": [
         "拆分汇兑损益与利息支出，避免把汇兑损失误判为融资成本上升",
@@ -289,7 +351,6 @@
       "confidence": 0.83,
       "reference": "财务费用率上升是杠杆压力从资产负债表传导到利润表的路径"
     },
-
     {
       "risk_id": "S01",
       "risk_name": "资产负债率偏高",
@@ -299,9 +360,12 @@
       "escalate_to": "high",
       "escalate_when": "debt_to_assets > 0.70",
       "trigger": "debt_to_assets > 0.60",
-      "threshold": 0.60,
+      "threshold": 0.6,
       "trigger_display": "资产负债率 > 60%；超过 70% 升级为重大（金融、地产、公用事业需按行业重设阈值）",
-      "evidence_required": ["total_liabilities", "total_assets"],
+      "evidence_required": [
+        "total_liabilities",
+        "total_assets"
+      ],
       "explanation_template": "资产负债率 {debt_to_assets:.2%}，较上期 {debt_to_assets_prev:.2%} 上升 {debt_to_assets_delta_pp:.2f} 个百分点。",
       "suggestions": [
         "剔除预收款 / 合同负债后的'真实杠杆'往往更低，需读附注区分经营性负债与有息负债",
@@ -309,7 +373,14 @@
         "向 C 明确：杠杆上行需同步上调 WACC 与财务风险溢价"
       ],
       "confidence": 0.85,
-      "reference": "资产负债率的阈值高度依赖行业，本文件给出的 60/70 是制造业通用档"
+      "reference": "资产负债率的阈值高度依赖行业，本文件给出的 60/70 是制造业通用档",
+      "threshold_basis": "convention",
+      "benchmark_judge": {
+        "metric": "debt_to_assets",
+        "quantile": "p75",
+        "peer_expr": "debt_to_assets > debt_to_assets_industry_p75",
+        "note": "资产负债率属 convention 类阈值：惯例 60% 为主，同业 P75 作辅助校准——高杠杆行业（地产等）按行业实际水平判定，避免跨行业误报。基准缺失时回退固定 60%"
+      }
     },
     {
       "risk_id": "S02",
@@ -320,7 +391,10 @@
       "trigger": "debt_to_assets_delta > 0.05",
       "threshold": 0.05,
       "trigger_display": "资产负债率较上期上升超过 5 个百分点",
-      "evidence_required": ["total_liabilities", "total_assets"],
+      "evidence_required": [
+        "total_liabilities",
+        "total_assets"
+      ],
       "explanation_template": "资产负债率一年内上升 {debt_to_assets_delta_pp:.2f} 个百分点，有息负债增速 {interest_bearing_debt_growth:.1%}，净负债由 {net_debt_prev_yi:.2f} 亿元增至 {net_debt_yi:.2f} 亿元。",
       "suggestions": [
         "核查负债扩张的资金去向：是投入在建工程（扩张），还是弥补经营现金流缺口（被动加杠杆）",
@@ -341,7 +415,11 @@
       "trigger": "cash_to_short_term_debt < 1.5",
       "threshold": 1.5,
       "trigger_display": "货币资金 /（短期借款 + 一年内到期非流动负债）< 1.5 倍；低于 1.0 倍升级为重大",
-      "evidence_required": ["cash_and_equivalents", "short_term_borrowings", "current_portion_lt_debt"],
+      "evidence_required": [
+        "cash_and_equivalents",
+        "short_term_borrowings",
+        "current_portion_lt_debt"
+      ],
       "explanation_template": "货币资金 {cash_and_equivalents_yi:.2f} 亿元，短期有息债务合计 {short_term_interest_bearing_debt_yi:.2f} 亿元，覆盖倍数仅 {cash_to_short_term_debt:.2f} 倍，存在期限错配。",
       "suggestions": [
         "必须扣掉受限资金（受限比例 {restricted_cash_ratio:.1%}）后再算可动用资金",
@@ -363,7 +441,11 @@
       "trigger": "interest_coverage < 6",
       "threshold": 6,
       "trigger_display": "EBIT / 利息费用 < 6 倍；低于 3 倍升级为重大",
-      "evidence_required": ["operating_profit", "finance_expense", "interest_expense"],
+      "evidence_required": [
+        "operating_profit",
+        "finance_expense",
+        "interest_expense"
+      ],
       "explanation_template": "利息保障倍数由 {interest_coverage_prev:.2f} 倍降至 {interest_coverage:.2f} 倍（EBIT {ebit_yi:.2f} 亿元 / 利息费用 {interest_expense_yi:.2f} 亿元）。",
       "suggestions": [
         "用'经营现金流 / 已付利息'（{ocf_to_interest_paid:.2f} 倍）做交叉验证，现金流口径比利润口径更严格",
@@ -380,9 +462,13 @@
       "category": "solvency",
       "severity": "medium",
       "trigger": "interest_bearing_debt_growth > 0.30",
-      "threshold": 0.30,
+      "threshold": 0.3,
       "trigger_display": "有息负债同比增速 > 30%",
-      "evidence_required": ["short_term_borrowings", "long_term_borrowings", "current_portion_lt_debt"],
+      "evidence_required": [
+        "short_term_borrowings",
+        "long_term_borrowings",
+        "current_portion_lt_debt"
+      ],
       "explanation_template": "有息负债由 {interest_bearing_debt_prev_yi:.2f} 亿元增至 {interest_bearing_debt_yi:.2f} 亿元，增速 {interest_bearing_debt_growth:.1%}，有息负债占总资产 {interest_bearing_debt_ratio:.1%}。",
       "suggestions": [
         "区分用途：并购、产能建设，还是补充流动资金（后者是被动加杠杆的强信号）",
@@ -403,7 +489,10 @@
       "trigger": "current_ratio < 1.2",
       "threshold": 1.2,
       "trigger_display": "流动比率 < 1.2；低于 1.0 升级为重大",
-      "evidence_required": ["total_current_assets", "total_current_liabilities"],
+      "evidence_required": [
+        "total_current_assets",
+        "total_current_liabilities"
+      ],
       "explanation_template": "流动比率 {current_ratio:.2f}，速动比率 {quick_ratio:.2f}，短期清偿缓冲偏薄。",
       "suggestions": [
         "速动比率剔除了存货，比流动比率更可靠，两者应一起看",
@@ -423,7 +512,12 @@
       "trigger": "net_debt_to_ebitda > 3",
       "threshold": 3,
       "trigger_display": "净负债 / EBITDA > 3 倍；超过 4 倍升级为重大",
-      "evidence_required": ["cash_and_equivalents", "short_term_borrowings", "long_term_borrowings", "operating_profit"],
+      "evidence_required": [
+        "cash_and_equivalents",
+        "short_term_borrowings",
+        "long_term_borrowings",
+        "operating_profit"
+      ],
       "explanation_template": "净负债 / EBITDA 为 {net_debt_to_ebitda:.2f} 倍（上期 {net_debt_to_ebitda_prev:.2f} 倍），按当前盈利水平需约 {net_debt_to_ebitda:.1f} 年才能还清净负债。",
       "suggestions": [
         "这是银行授信与债券评级的标准指标，超过 4 倍通常进入高收益区间",
@@ -440,9 +534,12 @@
       "category": "solvency",
       "severity": "medium",
       "trigger": "restricted_cash_ratio > 0.30",
-      "threshold": 0.30,
+      "threshold": 0.3,
       "trigger_display": "受限货币资金 / 货币资金 > 30%",
-      "evidence_required": ["cash_and_equivalents", "restricted_cash"],
+      "evidence_required": [
+        "cash_and_equivalents",
+        "restricted_cash"
+      ],
       "explanation_template": "受限货币资金占货币资金的 {restricted_cash_ratio:.1%}，可自由动用资金被明显压缩。",
       "suggestions": [
         "读取'货币资金'附注，确认受限原因：保证金、质押、冻结还是监管账户",
@@ -452,7 +549,6 @@
       "confidence": 0.82,
       "reference": "账上有钱不等于能动用，受限比例是判断真实流动性的关键修正项"
     },
-
     {
       "risk_id": "E01",
       "risk_name": "应收账款增速显著高于收入增速",
@@ -464,7 +560,10 @@
       "trigger": "(accounts_receivable_growth - revenue_growth) > 0.05",
       "threshold": 0.05,
       "trigger_display": "应收账款增速 - 收入增速 > 5pp；超过 15pp 升级为重大（分工文档示例规则的原始阈值即 15pp）",
-      "evidence_required": ["revenue", "accounts_receivable"],
+      "evidence_required": [
+        "revenue",
+        "accounts_receivable"
+      ],
       "explanation_template": "应收账款同比增长 {accounts_receivable_growth:.1%}，收入增长 {revenue_growth:.1%}，差额 {ar_revenue_gap_pp:.1f} 个百分点。应收账款周转天数由 {dso_prev:.1f} 天升至 {dso:.1f} 天，延长 {dso_delta:.1f} 天。",
       "suggestions": [
         "读取'应收账款'附注，按账龄结构看 1 年以上占比是否上升",
@@ -486,7 +585,10 @@
       "trigger": "dso_delta > 15",
       "threshold": 15,
       "trigger_display": "DSO 较上期延长超过 15 天；超过 30 天升级为重大",
-      "evidence_required": ["revenue", "accounts_receivable"],
+      "evidence_required": [
+        "revenue",
+        "accounts_receivable"
+      ],
       "explanation_template": "应收账款周转天数（DSO）由 {dso_prev:.1f} 天升至 {dso:.1f} 天，延长 {dso_delta:.1f} 天，回款速度放缓。",
       "suggestions": [
         "与客户结构变化、结算方式变化（票据占比上升）交叉验证",
@@ -507,7 +609,10 @@
       "trigger": "dso > 120",
       "threshold": 120,
       "trigger_display": "DSO > 120 天；超过 180 天升级为重大（工程类、军工类行业需上调阈值）",
-      "evidence_required": ["revenue", "accounts_receivable"],
+      "evidence_required": [
+        "revenue",
+        "accounts_receivable"
+      ],
       "explanation_template": "应收账款周转天数达 {dso:.1f} 天，意味着平均销售后近 {dso_months:.1f} 个月才收回现金，营运资金被大量占用。",
       "suggestions": [
         "行业属性至关重要：工程设备、军工、政府客户的账期天然更长，必须做行业校准",
@@ -526,9 +631,12 @@
       "escalate_to": "high",
       "escalate_when": "(inventory_growth - cost_of_revenue_growth) > 0.20",
       "trigger": "(inventory_growth - cost_of_revenue_growth) > 0.10",
-      "threshold": 0.10,
+      "threshold": 0.1,
       "trigger_display": "存货增速 - 营业成本增速 > 10pp；超过 20pp 升级为重大",
-      "evidence_required": ["inventory", "cost_of_revenue"],
+      "evidence_required": [
+        "inventory",
+        "cost_of_revenue"
+      ],
       "explanation_template": "存货同比增长 {inventory_growth:.1%}，高于营业成本增速 {cost_of_revenue_growth:.1%} 约 {inv_cogs_gap_pp:.1f} 个百分点；存货周转天数 {dio:.1f} 天。",
       "suggestions": [
         "读取'存货'附注，看原材料 / 在产品 / 库存商品的构成变化",
@@ -550,7 +658,11 @@
       "trigger": "cash_conversion_cycle_delta > 20",
       "threshold": 20,
       "trigger_display": "现金转换周期（DSO + DIO - DPO）较上期延长超过 20 天",
-      "evidence_required": ["accounts_receivable", "inventory", "accounts_payable"],
+      "evidence_required": [
+        "accounts_receivable",
+        "inventory",
+        "accounts_payable"
+      ],
       "explanation_template": "现金转换周期由 {cash_conversion_cycle_prev:.1f} 天升至 {cash_conversion_cycle:.1f} 天，延长 {cash_conversion_cycle_delta:.1f} 天。分解：应收端 {dso_delta:.1f} 天、存货端 {dio_delta:.1f} 天、应付端 {dpo_delta:.1f} 天。",
       "suggestions": [
         "应付天数缩短（{dpo_delta:.1f} 天）说明对上游议价能力下降或付款条件收紧，是流动性压力的另一面",
@@ -567,9 +679,12 @@
       "category": "efficiency",
       "severity": "medium",
       "trigger": "total_asset_turnover_delta < -0.10",
-      "threshold": -0.10,
+      "threshold": -0.1,
       "trigger_display": "总资产周转率较上期下降超过 0.10 次",
-      "evidence_required": ["revenue", "total_assets"],
+      "evidence_required": [
+        "revenue",
+        "total_assets"
+      ],
       "explanation_template": "总资产周转率由 {total_asset_turnover_prev:.2f} 次降至 {total_asset_turnover:.2f} 次，资产扩张快于收入扩张。",
       "suggestions": [
         "检查在建工程转固节奏：转固后折旧立即计提但产能未爬坡，会阶段性拖累周转",
@@ -585,9 +700,13 @@
       "category": "efficiency",
       "severity": "medium",
       "trigger": "ar_and_inventory_to_assets > 0.40",
-      "threshold": 0.40,
+      "threshold": 0.4,
       "trigger_display": "（应收账款+应收票据+合同资产+存货）/ 总资产 > 40%",
-      "evidence_required": ["accounts_receivable", "inventory", "total_assets"],
+      "evidence_required": [
+        "accounts_receivable",
+        "inventory",
+        "total_assets"
+      ],
       "explanation_template": "应收账款与存货合计占总资产 {ar_and_inventory_to_assets:.1%}（上期 {ar_and_inventory_to_assets_prev:.1%}），资产结构中营运资金占比过高，'重'在账面上而非产能上。",
       "suggestions": [
         "这类资产的变现能力弱于固定资产抵押能力，会削弱实际融资能力",
@@ -597,7 +716,6 @@
       "confidence": 0.8,
       "reference": "资产结构决定了账面净资产的'含金量'，是 PB 估值的重要修正项"
     },
-
     {
       "risk_id": "C01",
       "risk_name": "净现比偏低，利润缺乏现金支撑",
@@ -609,7 +727,10 @@
       "trigger": "ocf_to_net_income_parent < 1.0",
       "threshold": 1.0,
       "trigger_display": "经营活动现金流净额 / 归母净利润 < 1.0；低于 0.8 升级为重大",
-      "evidence_required": ["ocf", "net_income_parent"],
+      "evidence_required": [
+        "ocf",
+        "net_income_parent"
+      ],
       "explanation_template": "经营现金流净额 {ocf_yi:.2f} 亿元，归母净利润 {net_income_parent_yi:.2f} 亿元，净现比仅 {ocf_to_net_income_parent:.2f}（上期 {ocf_to_net_income_parent_prev:.2f}）。利润与现金的缺口为 {cash_gap_yi:.2f} 亿元。",
       "suggestions": [
         "用 cash_flow_bridge 拆解缺口：应收占用、存货占用、应付释放、折旧摊销、减值各贡献多少",
@@ -628,7 +749,9 @@
       "trigger": "ocf < 0",
       "threshold": 0,
       "trigger_display": "经营活动产生的现金流量净额 < 0",
-      "evidence_required": ["ocf"],
+      "evidence_required": [
+        "ocf"
+      ],
       "explanation_template": "经营活动现金流净额为 {ocf_yi:.2f} 亿元，主业自身不产生现金，需依赖外部融资或资产处置维持运转。",
       "suggestions": [
         "立即检查货币资金余额与未使用授信，估算可维持月数",
@@ -649,7 +772,10 @@
       "trigger": "free_cash_flow < 0 and free_cash_flow_prev < 0",
       "threshold": 0,
       "trigger_display": "连续两期（经营现金流 - 资本开支）< 0；若自由现金流/收入 < -5% 升级为重大",
-      "evidence_required": ["ocf", "capex"],
+      "evidence_required": [
+        "ocf",
+        "capex"
+      ],
       "explanation_template": "自由现金流连续两期为负：本期 {free_cash_flow_yi:.2f} 亿元（OCF {ocf_yi:.2f} - 资本开支 {capex_yi:.2f}），上期 {free_cash_flow_prev_yi:.2f} 亿元。",
       "suggestions": [
         "区分扩张性资本开支（有明确产能与订单支撑）与维持性资本开支",
@@ -670,7 +796,10 @@
       "trigger": "capex_to_ocf > 1.0",
       "threshold": 1.0,
       "trigger_display": "资本开支 / 经营活动现金流净额 > 1.0；超过 1.5 升级为重大",
-      "evidence_required": ["capex", "ocf"],
+      "evidence_required": [
+        "capex",
+        "ocf"
+      ],
       "explanation_template": "资本开支 {capex_yi:.2f} 亿元，为经营现金流 {ocf_yi:.2f} 亿元的 {capex_to_ocf:.2f} 倍，投资缺口依赖外部融资填补（筹资活动净流入 {cf_financing_yi:.2f} 亿元）。",
       "suggestions": [
         "检查在建工程项目明细与预计达产时间，评估投资回收期",
@@ -689,9 +818,12 @@
       "escalate_to": "high",
       "escalate_when": "sales_cash_ratio < 0.80",
       "trigger": "sales_cash_ratio < 0.90",
-      "threshold": 0.90,
+      "threshold": 0.9,
       "trigger_display": "销售商品提供劳务收到的现金 / 营业收入 < 90%；低于 80% 升级为重大",
-      "evidence_required": ["cash_received_from_sales", "revenue"],
+      "evidence_required": [
+        "cash_received_from_sales",
+        "revenue"
+      ],
       "explanation_template": "收现比由 {sales_cash_ratio_prev:.1%} 降至 {sales_cash_ratio:.1%}，每 1 元收入实际收回现金 {sales_cash_ratio:.2f} 元。",
       "suggestions": [
         "含税口径会导致收现比天然大于 1（增值税影响），跨公司比较时必须统一口径",
@@ -712,7 +844,10 @@
       "trigger": "ocf_to_interest_paid < 2.0",
       "threshold": 2.0,
       "trigger_display": "经营活动现金流净额 / 已付利息 < 2 倍；低于 1 倍升级为重大",
-      "evidence_required": ["ocf", "interest_paid"],
+      "evidence_required": [
+        "ocf",
+        "interest_paid"
+      ],
       "explanation_template": "经营现金流 {ocf_yi:.2f} 亿元，已付利息 {interest_paid_yi:.2f} 亿元，现金流口径的利息覆盖仅 {ocf_to_interest_paid:.2f} 倍（上期 {ocf_to_interest_paid_prev:.2f} 倍），低于利润口径的 {interest_coverage:.2f} 倍。",
       "suggestions": [
         "现金流口径比利润口径（S04）更严格，两者差距大说明利润的现金含量低",
@@ -731,7 +866,11 @@
       "trigger": "cf_financing_dependency > 0.5",
       "threshold": 0.5,
       "trigger_display": "（投资活动现金流出 - 经营现金流）/ 投资活动现金流出 > 50%",
-      "evidence_required": ["ocf", "cf_investing", "cf_financing"],
+      "evidence_required": [
+        "ocf",
+        "cf_investing",
+        "cf_financing"
+      ],
       "explanation_template": "投资活动现金流出 {cf_investing_abs_yi:.2f} 亿元中，{cf_financing_dependency:.1%} 无法由经营现金流覆盖，需依赖筹资活动（净流入 {cf_financing_yi:.2f} 亿元）。",
       "suggestions": [
         "检查筹资结构：是银行借款、债券，还是股权融资（后者对老股东稀释）",
@@ -741,7 +880,6 @@
       "confidence": 0.82,
       "reference": "融资依赖度衡量的是'公司对资本市场的依赖程度'，在紧缩周期最脆弱"
     },
-
     {
       "risk_id": "A01",
       "risk_name": "商誉占净资产比例偏高",
@@ -751,9 +889,12 @@
       "escalate_to": "high",
       "escalate_when": "goodwill_to_equity > 0.30",
       "trigger": "goodwill_to_equity > 0.20",
-      "threshold": 0.20,
+      "threshold": 0.2,
       "trigger_display": "商誉 / 归母净资产 > 20%；超过 30% 升级为重大",
-      "evidence_required": ["goodwill", "equity_parent"],
+      "evidence_required": [
+        "goodwill",
+        "equity_parent"
+      ],
       "explanation_template": "商誉 {goodwill_yi:.2f} 亿元，占归母净资产 {goodwill_to_equity:.1%}，净资产中有相当部分来自并购溢价而非经营积累。",
       "suggestions": [
         "读取'商誉'附注，确认资产组划分、减值测试的关键假设（收入增速、毛利率、折现率）",
@@ -772,7 +913,13 @@
       "trigger": "cash_to_assets > 0.15 and interest_bearing_debt_ratio > 0.25 and interest_to_cash > 0.02",
       "threshold": "composite",
       "trigger_display": "货币资金/总资产 > 15% 且 有息负债/总资产 > 25% 且 利息费用/货币资金 > 2%（三条件同时成立）",
-      "evidence_required": ["cash_and_equivalents", "total_assets", "short_term_borrowings", "long_term_borrowings", "interest_expense"],
+      "evidence_required": [
+        "cash_and_equivalents",
+        "total_assets",
+        "short_term_borrowings",
+        "long_term_borrowings",
+        "interest_expense"
+      ],
       "explanation_template": "货币资金占总资产 {cash_to_assets:.1%}，同时有息负债占总资产 {interest_bearing_debt_ratio:.1%}，利息费用/货币资金达 {interest_to_cash:.2%}。账上有钱却仍在大量付息借款，需高度警惕资金被占用或虚增。",
       "suggestions": [
         "这是财务造假研究中的顶级红旗，必须逐项核实：货币资金是否受限、是否存在大股东资金占用",
@@ -792,7 +939,9 @@
       "trigger": "audit_opinion_flag != 0",
       "threshold": 0,
       "trigger_display": "审计意见 ≠ 标准无保留意见（含带强调事项段、保留意见、无法表示意见）",
-      "evidence_required": ["audit_opinion"],
+      "evidence_required": [
+        "audit_opinion"
+      ],
       "explanation_template": "审计意见为「{audit_opinion}」，非标准无保留意见。审计报告是财务报表可信度的底线，非标意见意味着会计师对部分事项无法获取充分适当的审计证据。",
       "suggestions": [
         "直接定位审计报告全文，摘录形成非标意见的基础段落",
@@ -809,9 +958,12 @@
       "category": "asset_quality",
       "severity": "medium",
       "trigger": "rd_capitalization_ratio > 0.30",
-      "threshold": 0.30,
+      "threshold": 0.3,
       "trigger_display": "研发资本化金额 /（研发费用 + 研发资本化金额）> 30%",
-      "evidence_required": ["rd_expense", "rd_capitalized"],
+      "evidence_required": [
+        "rd_expense",
+        "rd_capitalized"
+      ],
       "explanation_template": "研发投入资本化率为 {rd_capitalization_ratio:.1%}，高于 30%。资本化会同时虚增当期利润与资产。",
       "suggestions": [
         "读取'开发支出'附注，看资本化项目的进度与转无形资产情况",
@@ -821,7 +973,6 @@
       "confidence": 0.7,
       "reference": "研发资本化是最隐蔽的利润调节手段之一，缺失该字段时必须明确标注不可评估而非默认安全"
     },
-
     {
       "risk_id": "V01",
       "risk_name": "现金分红比例显著偏低",
@@ -829,9 +980,12 @@
       "category": "governance",
       "severity": "low",
       "trigger": "payout_ratio < 0.10",
-      "threshold": 0.10,
+      "threshold": 0.1,
       "trigger_display": "已派发现金股利 / 归母净利润 < 10%",
-      "evidence_required": ["dividend_paid", "net_income_parent"],
+      "evidence_required": [
+        "dividend_paid",
+        "net_income_parent"
+      ],
       "explanation_template": "现金分红率仅 {payout_ratio:.1%}，在盈利为正的情况下仍基本不分红。",
       "suggestions": [
         "若同时存在大额资本开支（C04），不分红可能是合理的资金安排",
@@ -848,9 +1002,12 @@
       "category": "governance",
       "severity": "medium",
       "trigger": "dividend_to_ocf > 0.60",
-      "threshold": 0.60,
+      "threshold": 0.6,
       "trigger_display": "已派发现金股利 / 经营活动现金流净额 > 60%",
-      "evidence_required": ["dividend_paid", "ocf"],
+      "evidence_required": [
+        "dividend_paid",
+        "ocf"
+      ],
       "explanation_template": "现金分红 {dividend_paid_yi:.2f} 亿元，占经营现金流 {ocf_yi:.2f} 亿元的 {dividend_to_ocf:.1%}，在经营现金流大幅下滑的背景下继续大额分红，分红可持续性存疑。",
       "suggestions": [
         "检查是否存在大股东高持股比例下的'掏空式分红'",
@@ -861,15 +1018,34 @@
       "reference": "分红超过经营现金流承载能力，实质上是在消耗资产负债表"
     }
   ],
-
   "overall_scoring": {
     "formula": "raw = Σ(重大×10 + 关注×4 + 提示×1.5)；overall_risk_score = round(100 × raw / (raw + 40), 1)",
     "levels": [
-      { "min": 75, "level": "高",   "action": "投研简报须以'风险提示'开篇，并逐条给出证据链" },
-      { "min": 55, "level": "较高", "action": "需在归因章节解释主要风险成因，并列入持续跟踪" },
-      { "min": 35, "level": "中等", "action": "常规提示，纳入风险清单" },
-      { "min": 20, "level": "较低", "action": "观察即可" },
-      { "min": 0,  "level": "低",   "action": "无需特别提示" }
+      {
+        "min": 75,
+        "level": "高",
+        "action": "投研简报须以'风险提示'开篇，并逐条给出证据链"
+      },
+      {
+        "min": 55,
+        "level": "较高",
+        "action": "需在归因章节解释主要风险成因，并列入持续跟踪"
+      },
+      {
+        "min": 35,
+        "level": "中等",
+        "action": "常规提示，纳入风险清单"
+      },
+      {
+        "min": 20,
+        "level": "较低",
+        "action": "观察即可"
+      },
+      {
+        "min": 0,
+        "level": "低",
+        "action": "无需特别提示"
+      }
     ],
     "note": "总分只用于排序与快速浏览，投资决策必须回到单条风险的证据链，不要只看一个数字"
   }

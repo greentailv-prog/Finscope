@@ -1,0 +1,761 @@
+{
+  "schema": "finradar.peer_view/1.0",
+  "generated_at": "2026-11-05T01:43:59+08:00",
+  "target": {
+    "code": "600519",
+    "name": "贵州茅台酒"
+  },
+  "board": {
+    "code": "BK1277",
+    "name": "白酒Ⅱ",
+    "as_of": "2025-12-31",
+    "source": null
+  },
+  "companies": [
+    {
+      "code": "000333",
+      "name": "美的"
+    },
+    {
+      "code": "000651",
+      "name": "珠海格力电器"
+    },
+    {
+      "code": "000858",
+      "name": "宜宾五粮液"
+    },
+    {
+      "code": "002415",
+      "name": "杭州海康威视数字技术"
+    },
+    {
+      "code": "002594",
+      "name": "比亚迪"
+    },
+    {
+      "code": "002709",
+      "name": "广州天赐高新材料"
+    },
+    {
+      "code": "300750",
+      "name": "宁德时代新能源科技"
+    },
+    {
+      "code": "600031",
+      "name": "三一重工"
+    },
+    {
+      "code": "600309",
+      "name": "万华化学"
+    },
+    {
+      "code": "600519",
+      "name": "贵州茅台酒"
+    },
+    {
+      "code": "600887",
+      "name": "内蒙古伊利实业"
+    }
+  ],
+  "indicators": [
+    {
+      "metric": "roe",
+      "label": "ROE（归母，加权）",
+      "unit": "ratio",
+      "direction": "higher_better",
+      "convert_note": null,
+      "companies": [
+        {
+          "code": "000333",
+          "name": "美的",
+          "value": 0.199765
+        },
+        {
+          "code": "000651",
+          "name": "珠海格力电器",
+          "value": null,
+          "missing_reason": "not_meaningful"
+        },
+        {
+          "code": "000858",
+          "name": "宜宾五粮液",
+          "value": 0.070724
+        },
+        {
+          "code": "002415",
+          "name": "杭州海康威视数字技术",
+          "value": 0.173097
+        },
+        {
+          "code": "002594",
+          "name": "比亚迪",
+          "value": 0.15118
+        },
+        {
+          "code": "002709",
+          "name": "广州天赐高新材料",
+          "value": 0.087993
+        },
+        {
+          "code": "300750",
+          "name": "宁德时代新能源科技",
+          "value": 0.247249
+        },
+        {
+          "code": "600031",
+          "name": "三一重工",
+          "value": 0.104933
+        },
+        {
+          "code": "600309",
+          "name": "万华化学",
+          "value": 0.123462
+        },
+        {
+          "code": "600519",
+          "name": "贵州茅台酒",
+          "value": 0.34462
+        },
+        {
+          "code": "600887",
+          "name": "内蒙古伊利实业",
+          "value": 0.214496
+        }
+      ],
+      "target_value": 0.34462,
+      "pool": {
+        "median": 0.07995,
+        "p25": 0.04285,
+        "p75": 0.148075,
+        "n": 20,
+        "status": "calibrated"
+      }
+    },
+    {
+      "metric": "gross_margin",
+      "label": "毛利率",
+      "unit": "ratio",
+      "direction": "higher_better",
+      "convert_note": null,
+      "companies": [
+        {
+          "code": "000333",
+          "name": "美的",
+          "value": 0.267202
+        },
+        {
+          "code": "000651",
+          "name": "珠海格力电器",
+          "value": 0.298073
+        },
+        {
+          "code": "000858",
+          "name": "宜宾五粮液",
+          "value": 0.775418
+        },
+        {
+          "code": "002415",
+          "name": "杭州海康威视数字技术",
+          "value": 0.458776
+        },
+        {
+          "code": "002594",
+          "name": "比亚迪",
+          "value": 0.177445
+        },
+        {
+          "code": "002709",
+          "name": "广州天赐高新材料",
+          "value": 0.222413
+        },
+        {
+          "code": "300750",
+          "name": "宁德时代新能源科技",
+          "value": 0.262728
+        },
+        {
+          "code": "600031",
+          "name": "三一重工",
+          "value": 0.279145
+        },
+        {
+          "code": "600309",
+          "name": "万华化学",
+          "value": 0.136123
+        },
+        {
+          "code": "600519",
+          "name": "贵州茅台酒",
+          "value": 0.911796
+        },
+        {
+          "code": "600887",
+          "name": "内蒙古伊利实业",
+          "value": 0.347424
+        }
+      ],
+      "target_value": 0.911796,
+      "pool": {
+        "median": 0.70354287,
+        "p25": 0.62885818,
+        "p75": 0.7797039,
+        "n": 20,
+        "status": "calibrated"
+      }
+    },
+    {
+      "metric": "net_margin",
+      "label": "净利率",
+      "unit": "ratio",
+      "direction": "higher_better",
+      "convert_note": "篮子为全口径净利率；板块池 XSJLL 同口径",
+      "companies": [
+        {
+          "code": "000333",
+          "name": "美的",
+          "value": 0.097099
+        },
+        {
+          "code": "000651",
+          "name": "珠海格力电器",
+          "value": 0.169336
+        },
+        {
+          "code": "000858",
+          "name": "宜宾五粮液",
+          "value": 0.22989
+        },
+        {
+          "code": "002415",
+          "name": "杭州海康威视数字技术",
+          "value": 0.166836
+        },
+        {
+          "code": "002594",
+          "name": "比亚迪",
+          "value": 0.041993
+        },
+        {
+          "code": "002709",
+          "name": "广州天赐高新材料",
+          "value": 0.080732
+        },
+        {
+          "code": "300750",
+          "name": "宁德时代新能源科技",
+          "value": 0.181227
+        },
+        {
+          "code": "600031",
+          "name": "三一重工",
+          "value": 0.094623
+        },
+        {
+          "code": "600309",
+          "name": "万华化学",
+          "value": 0.069082
+        },
+        {
+          "code": "600519",
+          "name": "贵州茅台酒",
+          "value": 0.505279
+        },
+        {
+          "code": "600887",
+          "name": "内蒙古伊利实业",
+          "value": 0.099317
+        }
+      ],
+      "target_value": 0.505279,
+      "pool": {
+        "median": 0.12773698,
+        "p25": 0.07562578,
+        "p75": 0.2363547,
+        "n": 20,
+        "status": "calibrated"
+      }
+    },
+    {
+      "metric": "debt_to_assets",
+      "label": "资产负债率",
+      "unit": "ratio",
+      "direction": "lower_better",
+      "convert_note": null,
+      "companies": [
+        {
+          "code": "000333",
+          "name": "美的",
+          "value": 0.61165
+        },
+        {
+          "code": "000651",
+          "name": "珠海格力电器",
+          "value": 0.617266
+        },
+        {
+          "code": "000858",
+          "name": "宜宾五粮液",
+          "value": 0.308868
+        },
+        {
+          "code": "002415",
+          "name": "杭州海康威视数字技术",
+          "value": 0.339246
+        },
+        {
+          "code": "002594",
+          "name": "比亚迪",
+          "value": 0.707445
+        },
+        {
+          "code": "002709",
+          "name": "广州天赐高新材料",
+          "value": 0.117197
+        },
+        {
+          "code": "300750",
+          "name": "宁德时代新能源科技",
+          "value": 0.619393
+        },
+        {
+          "code": "600031",
+          "name": "三一重工",
+          "value": 0.132005
+        },
+        {
+          "code": "600309",
+          "name": "万华化学",
+          "value": 0.628095
+        },
+        {
+          "code": "600519",
+          "name": "贵州茅台酒",
+          "value": 0.164154
+        },
+        {
+          "code": "600887",
+          "name": "内蒙古伊利实业",
+          "value": 0.61509
+        }
+      ],
+      "target_value": 0.164154,
+      "pool": {
+        "median": 0.33356575,
+        "p25": 0.22958892,
+        "p75": 0.36610421,
+        "n": 20,
+        "status": "calibrated"
+      }
+    },
+    {
+      "metric": "current_ratio",
+      "label": "流动比率",
+      "unit": "ratio",
+      "direction": "higher_better",
+      "convert_note": null,
+      "companies": [
+        {
+          "code": "000333",
+          "name": "美的",
+          "value": 1.213402
+        },
+        {
+          "code": "000651",
+          "name": "珠海格力电器",
+          "value": 1.083663
+        },
+        {
+          "code": "000858",
+          "name": "宜宾五粮液",
+          "value": 2.446134
+        },
+        {
+          "code": "002415",
+          "name": "杭州海康威视数字技术",
+          "value": 2.41861
+        },
+        {
+          "code": "002594",
+          "name": "比亚迪",
+          "value": 0.792969
+        },
+        {
+          "code": "002709",
+          "name": "广州天赐高新材料",
+          "value": 5.199388
+        },
+        {
+          "code": "300750",
+          "name": "宁德时代新能源科技",
+          "value": 1.597698
+        },
+        {
+          "code": "600031",
+          "name": "三一重工",
+          "value": 1.729808
+        },
+        {
+          "code": "600309",
+          "name": "万华化学",
+          "value": 0.616039
+        },
+        {
+          "code": "600519",
+          "name": "贵州茅台酒",
+          "value": 5.090027
+        },
+        {
+          "code": "600887",
+          "name": "内蒙古伊利实业",
+          "value": 0.728913
+        }
+      ],
+      "target_value": 5.090027,
+      "pool": {
+        "median": 2.34219156,
+        "p25": 1.70297482,
+        "p75": 3.6201965,
+        "n": 20,
+        "status": "calibrated"
+      }
+    },
+    {
+      "metric": "quick_ratio",
+      "label": "速动比率",
+      "unit": "ratio",
+      "direction": "higher_better",
+      "convert_note": null,
+      "companies": [
+        {
+          "code": "000333",
+          "name": "美的",
+          "value": 1.02519
+        },
+        {
+          "code": "000651",
+          "name": "珠海格力电器",
+          "value": 0.961956
+        },
+        {
+          "code": "000858",
+          "name": "宜宾五粮液",
+          "value": 2.148216
+        },
+        {
+          "code": "002415",
+          "name": "杭州海康威视数字技术",
+          "value": 1.953287
+        },
+        {
+          "code": "002594",
+          "name": "比亚迪",
+          "value": 0.497484
+        },
+        {
+          "code": "002709",
+          "name": "广州天赐高新材料",
+          "value": 4.554649
+        },
+        {
+          "code": "300750",
+          "name": "宁德时代新能源科技",
+          "value": 1.361161
+        },
+        {
+          "code": "600031",
+          "name": "三一重工",
+          "value": 1.416312
+        },
+        {
+          "code": "600309",
+          "name": "万华化学",
+          "value": 0.419733
+        },
+        {
+          "code": "600519",
+          "name": "贵州茅台酒",
+          "value": 3.851832
+        },
+        {
+          "code": "600887",
+          "name": "内蒙古伊利实业",
+          "value": 0.610047
+        }
+      ],
+      "target_value": 3.851832,
+      "pool": {
+        "median": 0.79110452,
+        "p25": 0.49664263,
+        "p75": 1.81317153,
+        "n": 20,
+        "status": "calibrated"
+      }
+    },
+    {
+      "metric": "dso",
+      "label": "应收账款周转天数",
+      "unit": "days",
+      "direction": "lower_better",
+      "convert_note": "365 / 应收周转次数",
+      "companies": [
+        {
+          "code": "000333",
+          "name": "美的",
+          "value": 30.35
+        },
+        {
+          "code": "000651",
+          "name": "珠海格力电器",
+          "value": null,
+          "missing_reason": "not_meaningful"
+        },
+        {
+          "code": "000858",
+          "name": "宜宾五粮液",
+          "value": 0.34
+        },
+        {
+          "code": "002415",
+          "name": "杭州海康威视数字技术",
+          "value": 133.6
+        },
+        {
+          "code": "002594",
+          "name": "比亚迪",
+          "value": 22.54
+        },
+        {
+          "code": "002709",
+          "name": "广州天赐高新材料",
+          "value": 128.79
+        },
+        {
+          "code": "300750",
+          "name": "宁德时代新能源科技",
+          "value": 60.53
+        },
+        {
+          "code": "600031",
+          "name": "三一重工",
+          "value": 103.88
+        },
+        {
+          "code": "600309",
+          "name": "万华化学",
+          "value": 25.32
+        },
+        {
+          "code": "600519",
+          "name": "贵州茅台酒",
+          "value": 0.02
+        },
+        {
+          "code": "600887",
+          "name": "内蒙古伊利实业",
+          "value": 9.23
+        }
+      ],
+      "target_value": 0.02,
+      "pool": {
+        "median": 1.55908665,
+        "p25": 0.34582572,
+        "p75": 7.65057481,
+        "n": 20,
+        "status": "calibrated"
+      }
+    },
+    {
+      "metric": "dio",
+      "label": "存货周转天数",
+      "unit": "days",
+      "direction": "lower_better",
+      "convert_note": "365 / 存货周转次数",
+      "companies": [
+        {
+          "code": "000333",
+          "name": "美的",
+          "value": 69.51
+        },
+        {
+          "code": "000651",
+          "name": "珠海格力电器",
+          "value": null,
+          "missing_reason": "not_meaningful"
+        },
+        {
+          "code": "000858",
+          "name": "宜宾五粮液",
+          "value": 767.92
+        },
+        {
+          "code": "002415",
+          "name": "杭州海康威视数字技术",
+          "value": 144.28
+        },
+        {
+          "code": "002594",
+          "name": "比亚迪",
+          "value": 70.22
+        },
+        {
+          "code": "002709",
+          "name": "广州天赐高新材料",
+          "value": 42.05
+        },
+        {
+          "code": "300750",
+          "name": "宁德时代新能源科技",
+          "value": 90.18
+        },
+        {
+          "code": "600031",
+          "name": "三一重工",
+          "value": 119.88
+        },
+        {
+          "code": "600309",
+          "name": "万华化学",
+          "value": 52.1
+        },
+        {
+          "code": "600519",
+          "name": "贵州茅台酒",
+          "value": 1418.73
+        },
+        {
+          "code": "600887",
+          "name": "内蒙古伊利实业",
+          "value": 52.03
+        }
+      ],
+      "target_value": 1418.73,
+      "pool": {
+        "median": 1140.69083813,
+        "p25": 903.74668568,
+        "p75": 1342.32869086,
+        "n": 20,
+        "status": "calibrated"
+      }
+    }
+  ],
+  "dupont": [
+    {
+      "code": "000333",
+      "name": "美的",
+      "net_margin": 0.095846,
+      "asset_turnover": 0.755891,
+      "equity_multiplier": 2.757324,
+      "roe": 0.199765,
+      "closure_delta": 1e-06
+    },
+    {
+      "code": "000651",
+      "name": "珠海格力电器",
+      "missing_reason": "not_meaningful"
+    },
+    {
+      "code": "000858",
+      "name": "宜宾五粮液",
+      "net_margin": 0.220937,
+      "asset_turnover": 0.214302,
+      "equity_multiplier": 1.493721,
+      "roe": 0.070724,
+      "closure_delta": -0.0
+    },
+    {
+      "code": "002415",
+      "name": "杭州海康威视数字技术",
+      "net_margin": 0.153451,
+      "asset_turnover": 0.685076,
+      "equity_multiplier": 1.646574,
+      "roe": 0.173097,
+      "closure_delta": 0.0
+    },
+    {
+      "code": "002594",
+      "name": "比亚迪",
+      "net_margin": 0.040573,
+      "asset_turnover": 0.964515,
+      "equity_multiplier": 3.863236,
+      "roe": 0.15118,
+      "closure_delta": 1e-06
+    },
+    {
+      "code": "002709",
+      "name": "广州天赐高新材料",
+      "net_margin": 0.081797,
+      "asset_turnover": 0.654475,
+      "equity_multiplier": 1.643667,
+      "roe": 0.087993,
+      "closure_delta": -1e-06
+    },
+    {
+      "code": "300750",
+      "name": "宁德时代新能源科技",
+      "net_margin": 0.170406,
+      "asset_turnover": 0.481073,
+      "equity_multiplier": 3.016047,
+      "roe": 0.247249,
+      "closure_delta": -0.0
+    },
+    {
+      "code": "600031",
+      "name": "三一重工",
+      "net_margin": 0.093736,
+      "asset_turnover": 0.551244,
+      "equity_multiplier": 2.030788,
+      "roe": 0.104933,
+      "closure_delta": 1e-06
+    },
+    {
+      "code": "600309",
+      "name": "万华化学",
+      "net_margin": 0.061639,
+      "asset_turnover": 0.659486,
+      "equity_multiplier": 3.037196,
+      "roe": 0.123462,
+      "closure_delta": 0.0
+    },
+    {
+      "code": "600519",
+      "name": "贵州茅台酒",
+      "net_margin": 0.487568,
+      "asset_turnover": 0.560199,
+      "equity_multiplier": 1.261721,
+      "roe": 0.34462,
+      "closure_delta": 0.0
+    },
+    {
+      "code": "600887",
+      "name": "内蒙古伊利实业",
+      "net_margin": 0.099759,
+      "asset_turnover": 0.758174,
+      "equity_multiplier": 2.835951,
+      "roe": 0.214496,
+      "closure_delta": 0.0
+    }
+  ],
+  "dupont_factors": [
+    {
+      "key": "net_margin",
+      "label": "净利率",
+      "unit": "ratio"
+    },
+    {
+      "key": "asset_turnover",
+      "label": "总资产周转率",
+      "unit": "ratio"
+    },
+    {
+      "key": "equity_multiplier",
+      "label": "权益乘数",
+      "unit": "multiplier"
+    }
+  ],
+  "notes": [
+    "ROE（归母，加权）：缺 珠海格力电器（not_meaningful）",
+    "应收账款周转天数：缺 珠海格力电器（not_meaningful）",
+    "存货周转天数：缺 珠海格力电器（not_meaningful）",
+    "杜邦三因子：珠海格力电器 缺（not_meaningful）"
+  ]
+}

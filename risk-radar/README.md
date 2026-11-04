@@ -45,12 +45,17 @@ risk-radar/
 ├── risk_rules.json       ← 40 条规则库本体     【分工文档点名要的】
 ├── README.md             ← 你正在看这个
 ├── data/
-│   └── industry_calibration.json   ← 行业阈值校准表
+│   ├── industry_calibration.json   ← 行业阈值校准表
+│   ├── industry_profiles/          ← 行业剖面（banking / manufacturing）
+│   └── peer_samples/               ← 校准样本池（同业指标值 + 来源 + 样本量）
 ├── scripts/
-│   └── detect_risks.py             ← 风险识别引擎
+│   ├── detect_risks.py             ← 风险识别引擎（单公司）
+│   ├── build_risk_matrix.py        ← 多公司风险矩阵
+│   └── calibrate.py                ← 阈值校准（默认预演）
 └── demo/
     ├── input_analysis.json   ← 演示输入（= diagnosis 的输出）
-    └── output_risks.json     ← 【分工文档点名要的：风险输出 JSON】
+    ├── output_risks.json     ← 【分工文档点名要的：风险输出 JSON】
+    └── matrix/               ← 多公司矩阵演示（合成数据 + 一键脚本 + HTML）
 ```
 
 ---
@@ -89,6 +94,31 @@ risk-radar/
 - 之所以用高风险样本，是为了让中期展示时能看到"规则确实在工作"，而不是一片空白。
 - 演示中有 11 条 `passed` 和 2 条 `not_evaluable`，这是**故意保留**的：
   前者证明"查过且无异常"，后者证明"缺数据时不硬判"。这三态一起才是可信的风险系统。
+
+---
+
+## 多公司风险矩阵
+
+单公司诊断与横向对比是两个动作，分开实现：`detect_risks.py` 负责前者（保留完整证据链），
+`build_risk_matrix.py` 负责后者（同口径排列）。
+
+```bash
+python scripts/build_risk_matrix.py \
+    --diag-dir demo/matrix/ratios \
+    --rules risk_rules.json \
+    --pretty -o demo/matrix/risk_matrix.json
+
+python ../scripts_build_matrix.py \
+    --matrix demo/matrix/risk_matrix.json \
+    --out    demo/matrix/risk_matrix.html
+```
+
+矩阵行是风险项、列是公司——公司通常个位数、规则几十条，反过来排会挤成竖排文字。
+
+**只允许同一行业剖面的公司进同一张矩阵。** 跨行业直接报错退出（退出码 1）且不落盘，
+避免"制造业口径套银行"那类错误在对比层被放大。
+
+一键演示：`bash demo/matrix/run_matrix_demo.sh`（3 家合成公司，仅验证引擎与呈现）。
 
 ---
 

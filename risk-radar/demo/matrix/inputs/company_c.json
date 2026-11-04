@@ -1,0 +1,868 @@
+{
+  "schema_version": "finradar.extraction/1.0",
+  "note": "演示样本（合成数据，非真实公司）",
+  "meta": {
+    "default_unit": "亿元",
+    "currency": "CNY",
+    "periods": [
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "report_period": "2025",
+    "wacc": 0.085,
+    "days_in_year": 365,
+    "industry": "专用设备制造业",
+    "industry_gross_margin_benchmark": null,
+    "audit_opinion": "标准无保留意见"
+  },
+  "company": {
+    "name": "星海精密制造股份有限公司",
+    "ticker": "DEMO-C.SH",
+    "industry": "专用设备制造业",
+    "report_period": "2025",
+    "report_source": "演示样本（合成数据，非真实公司）"
+  },
+  "financials": {
+    "revenue": {
+      "2023": {
+        "value": 70.992,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 80.928,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 92.592,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "cost_of_revenue": {
+      "2023": {
+        "value": 59.36,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 66.88,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 79.12,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "operating_profit": {
+      "2023": {
+        "value": 9.05,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 83
+      },
+      "2024": {
+        "value": 10.85,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 82
+      },
+      "2025": {
+        "value": 8.42,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 83
+      }
+    },
+    "pretax_profit": {
+      "2023": {
+        "value": 3.1325,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 3.752,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 2.786,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "income_tax_expense": {
+      "2023": {
+        "value": 0.42,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 0.518,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 0.448,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "net_income": {
+      "2023": {
+        "value": 2.7125,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 3.234,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 2.338,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "net_income_parent": {
+      "2023": {
+        "value": 2.3825,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 2.614,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 2.008,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "minority_pnl": {
+      "2023": {
+        "value": 0.33,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 83
+      },
+      "2024": {
+        "value": 0.62,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 82
+      },
+      "2025": {
+        "value": 0.33,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 83
+      }
+    },
+    "net_income_deducted": {
+      "2023": {
+        "value": 6.95,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 86
+      },
+      "2024": {
+        "value": 8.05,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 85
+      },
+      "2025": {
+        "value": 4.98,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 87
+      }
+    },
+    "selling_expense": {
+      "2023": {
+        "value": 3.723,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 4.2925,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 5.202,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "admin_expense": {
+      "2023": {
+        "value": 3.4425,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 3.91,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 4.6155,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "rd_expense": {
+      "2023": {
+        "value": 3.842,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 4.403,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 4.981,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "finance_expense": {
+      "2023": {
+        "value": 1.38,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 1.536,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 2.58,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "interest_expense": {
+      "2023": {
+        "value": 1.1,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 132
+      },
+      "2024": {
+        "value": 1.22,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 134
+      },
+      "2025": {
+        "value": 2.05,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 136
+      }
+    },
+    "depreciation_amortization": {
+      "2023": {
+        "value": 7.85,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 92
+      },
+      "2024": {
+        "value": 8.6,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 93
+      },
+      "2025": {
+        "value": 9.4,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 94
+      }
+    },
+    "impairment_loss": {
+      "2023": {
+        "value": 1.6,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 108
+      },
+      "2024": {
+        "value": 1.95,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 109
+      },
+      "2025": {
+        "value": 3.8,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 111
+      }
+    },
+    "cash_and_equivalents": {
+      "2023": {
+        "value": 28.9,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 81
+      },
+      "2024": {
+        "value": 22.498,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 11.443,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "restricted_cash": {
+      "2023": {
+        "value": 2.0,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 104
+      },
+      "2024": {
+        "value": 2.4,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 105
+      },
+      "2025": {
+        "value": 3.1,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 107
+      }
+    },
+    "accounts_receivable": {
+      "2023": {
+        "value": 48.33,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 55.62,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 78.705,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "notes_receivable": {
+      "2023": {
+        "value": 4.6,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 96
+      },
+      "2024": {
+        "value": 5.1,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 97
+      },
+      "2025": {
+        "value": 6.2,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 99
+      }
+    },
+    "contract_assets": {
+      "2023": {
+        "value": 0.0,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 96
+      },
+      "2024": {
+        "value": 0.0,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 97
+      },
+      "2025": {
+        "value": 0.0,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 99
+      }
+    },
+    "inventory": {
+      "2023": {
+        "value": 31.68,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 35.4,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 47.52,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "total_current_assets": {
+      "2023": {
+        "value": 108.5,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 118.7,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 141.2,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "fixed_assets": {
+      "2023": {
+        "value": 40.2,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 103
+      },
+      "2024": {
+        "value": 41.8,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 104
+      },
+      "2025": {
+        "value": 46.3,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 106
+      }
+    },
+    "goodwill": {
+      "2023": {
+        "value": 4.2,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 124
+      },
+      "2024": {
+        "value": 18.6,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 126
+      },
+      "2025": {
+        "value": 18.6,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 128
+      }
+    },
+    "total_assets": {
+      "2023": {
+        "value": 168.5,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 186.2,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 218.4,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "accounts_payable": {
+      "2023": {
+        "value": 33.1,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 107
+      },
+      "2024": {
+        "value": 36.2,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 108
+      },
+      "2025": {
+        "value": 42.6,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 110
+      }
+    },
+    "total_current_liabilities": {
+      "2023": {
+        "value": 68.9,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 74.3,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 96.8,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "short_term_borrowings": {
+      "2023": {
+        "value": 16.2,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 130
+      },
+      "2024": {
+        "value": 18.4,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 132
+      },
+      "2025": {
+        "value": 28.6,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 134
+      }
+    },
+    "current_portion_lt_debt": {
+      "2023": {
+        "value": 3.6,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 130
+      },
+      "2024": {
+        "value": 4.8,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 132
+      },
+      "2025": {
+        "value": 6.4,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 134
+      }
+    },
+    "long_term_borrowings": {
+      "2023": {
+        "value": 24.8,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 130
+      },
+      "2024": {
+        "value": 26.5,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 132
+      },
+      "2025": {
+        "value": 34.2,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 134
+      }
+    },
+    "bonds_payable": {
+      "2023": {
+        "value": 0.0,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 130
+      },
+      "2024": {
+        "value": 0.0,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 132
+      },
+      "2025": {
+        "value": 0.0,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 134
+      }
+    },
+    "total_liabilities": {
+      "2023": {
+        "value": 95.4,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 81
+      },
+      "2024": {
+        "value": 102.6,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 80
+      },
+      "2025": {
+        "value": 135.2,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 81
+      }
+    },
+    "equity_parent": {
+      "2023": {
+        "value": 58.1,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 81
+      },
+      "2024": {
+        "value": 65.3,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 80
+      },
+      "2025": {
+        "value": 68.9,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 81
+      }
+    },
+    "total_equity": {
+      "2023": {
+        "value": 73.1,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 83.6,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 83.2,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "ocf": {
+      "2023": {
+        "value": -5.136,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": -5.792,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": -2.28,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "cf_investing": {
+      "2023": {
+        "value": -9.85,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 85
+      },
+      "2024": {
+        "value": -12.4,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 84
+      },
+      "2025": {
+        "value": -18.6,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 85
+      }
+    },
+    "cf_financing": {
+      "2023": {
+        "value": 4.65,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2024": {
+        "value": 11.79,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      },
+      "2025": {
+        "value": 9.825,
+        "unit": "亿元",
+        "source": "演示样本（合成数据，非真实公司）",
+        "page": null
+      }
+    },
+    "capex": {
+      "2023": {
+        "value": 8.6,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 85
+      },
+      "2024": {
+        "value": 11.2,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 84
+      },
+      "2025": {
+        "value": 16.8,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 85
+      }
+    },
+    "cash_received_from_sales": {
+      "2023": {
+        "value": 95.4,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 142
+      },
+      "2024": {
+        "value": 108.6,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 143
+      },
+      "2025": {
+        "value": 113.2,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 145
+      }
+    },
+    "interest_paid": {
+      "2023": {
+        "value": 1.05,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 142
+      },
+      "2024": {
+        "value": 1.18,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 143
+      },
+      "2025": {
+        "value": 1.96,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 145
+      }
+    },
+    "dividend_paid": {
+      "2023": {
+        "value": 1.1,
+        "unit": "亿元",
+        "source": "2023年年度报告",
+        "page": 138
+      },
+      "2024": {
+        "value": 1.42,
+        "unit": "亿元",
+        "source": "2024年年度报告",
+        "page": 139
+      },
+      "2025": {
+        "value": 2.75,
+        "unit": "亿元",
+        "source": "2025年年度报告",
+        "page": 141
+      }
+    }
+  }
+}

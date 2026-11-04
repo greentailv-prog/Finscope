@@ -583,7 +583,7 @@ ul.acts li{font-size:12.5px;color:var(--tx2);margin-bottom:5px;line-height:1.65}
 
   var mg='', cnt=0, na=0, ok=0;
   for(var c in R){ for(var k in R[c]){ cnt++;
-    if(R[c][k] && R[c][k].status==='not_applicable') na++; else if(R[c][k] && R[c][k].value!==null) ok++; } }
+    if(R[c][k] && (R[c][k].status==='not_applicable'||R[c][k].status==='not_meaningful')) na++; else if(R[c][k] && R[c][k].value!==null) ok++; } }
   document.getElementById('m-count').textContent = cnt;
 
   // 覆盖度提示条（兼容两种形态：指标输出里 industry_profile 是字符串 id，
@@ -622,7 +622,8 @@ ul.acts li{font-size:12.5px;color:var(--tx2);margin-bottom:5px;line-height:1.65}
     keys.forEach(function(k){
       var e = R[cat][k];
       if(!e) return;
-      var isNA = (e.status === 'not_applicable');
+      // 规范 6.2 用 not_meaningful，旧产物用 not_applicable，两个都算「不适用」
+      var isNA = (e.status === 'not_applicable' || e.status === 'not_meaningful');
       h += '<button type="button" class="mrow'+(isNA?' na':'')+'" aria-expanded="false"'
          + ' data-c="'+esc(cat)+'" data-k="'+esc(k)+'">'
          + '<span class="k">'+esc(metricLabel(cat, k))+'</span>'
@@ -747,11 +748,13 @@ ul.acts li{font-size:12.5px;color:var(--tx2);margin-bottom:5px;line-height:1.65}
       } else if(s.step==='归因'){
         var d=s.dupont, b=s.operating_profit_bridge_yi;
         h+='<div style="font-size:12px;line-height:1.9">';
-        if(d){ h+='<b>杜邦分解（ROE 变动 '+(d.roe_delta*100).toFixed(2)+'pp）</b><br>'
+        if(d && typeof d.roe_delta === 'number'){ h+='<b>杜邦分解（ROE 变动 '+(d.roe_delta*100).toFixed(2)+'pp）</b><br>'
           +'净利率效应 <b>'+(d.net_margin_effect*100).toFixed(2)+'pp</b>　'
           +'周转率效应 <b>'+(d.asset_turnover_effect*100).toFixed(2)+'pp</b>　'
           +'杠杆效应 <b>'+(d.leverage_effect*100).toFixed(2)+'pp</b><br>'; }
-        if(b){ h+='<br><b>营业利润桥（Δ营业利润 '+b.delta_operating_profit+' 亿元）</b><br>'
+        // 银行没有营业成本口径，bridge 是空对象；空对象不是数字，不能进模板
+        if(b && typeof b.delta_operating_profit === 'number'){
+          h+='<br><b>营业利润桥（Δ营业利润 '+b.delta_operating_profit+' 亿元）</b><br>'
           +'规模效应 <b>'+b.scale_effect+'</b>　毛利率效应 <b>'+b.gross_margin_effect+'</b><br>'
           +'费用率效应 <b>'+b.expense_ratio_effect+'</b>　其他 <b>'+b.other_effect+'</b><br>'; }
         if(s.cash_gap_yi!==null&&s.cash_gap_yi!==undefined){ h+='<br>利润与现金缺口 <b>'+s.cash_gap_yi+' 亿元</b>'; }
@@ -824,18 +827,28 @@ ul.acts li{font-size:12.5px;color:var(--tx2);margin-bottom:5px;line-height:1.65}
     + '<div class="cb sum-row"><span class="ck">ROE 变动合计</span><span class="cv">'
     + (dp.roe_delta*100).toFixed(2)+'pp （'+ (A.dupont.previous.roe*100).toFixed(2)+'% → '+(A.dupont.current.roe*100).toFixed(2)+'%）</span></div>';
 
-  var B=A.operating_profit_bridge, bmx=0;
-  ['scale_effect','gross_margin_effect','expense_ratio_effect','other_effect'].forEach(function(k){ bmx=Math.max(bmx,Math.abs(B[k])); });
+  var B=A.operating_profit_bridge||{};
+  // 银行没有营业成本口径（不分营业成本/毛利），这条桥算不出来，attribution 里是空对象。
+  // 空对象不能当数字用：不判空会渲染出 undefined / NaN。
+  var bkeys=['scale_effect','gross_margin_effect','expense_ratio_effect','other_effect'];
+  var bEmpty = !bkeys.some(function(k){ return typeof B[k]==='number'; });
+  var bmx=0; bkeys.forEach(function(k){ if(typeof B[k]==='number') bmx=Math.max(bmx,Math.abs(B[k])); });
   var bl={scale_effect:'规模效应',gross_margin_effect:'毛利率效应',expense_ratio_effect:'费用率效应',other_effect:'其他（残差）'};
   var bh='';
-  ['scale_effect','gross_margin_effect','expense_ratio_effect','other_effect'].forEach(function(k){
-    var v=B[k]/1e8, w=Math.abs(v)/(bmx/1e8)*100;
-    bh+='<div class="wrow"><span class="wl">'+bl[k]+'</span>'
-      +'<span class="wb"><span class="wf" style="left:'+(v>=0?50:50-w/2)+'%;width:'+w/2+'%;background:'+(v>=0?'var(--red)':'var(--grn)')+'"></span></span>'
-      +'<span class="wv" style="color:'+(v>=0?'var(--red)':'var(--grn)')+'">'+v.toFixed(2)+' 亿</span></div>';
-  });
-  bh+='<div class="cb sum-row"><span class="ck">营业利润变动合计</span><span class="cv">'
-     +(B.delta_operating_profit/1e8).toFixed(2)+' 亿元</span></div>';
+  if(bEmpty){
+    bh='<p class="h" style="margin:0">本行业口径下无营业利润桥：'
+      +'银行不披露营业成本、无法拆分毛利，本条跳过。<br>'
+      +'利润变动改看上面的杜邦分解与下面的现金流桥，不在此处硬凑数字。</p>';
+  }else{
+    bkeys.forEach(function(k){
+      var v=B[k]/1e8, w=bmx?Math.abs(v)/(bmx/1e8)*100:0;
+      bh+='<div class="wrow"><span class="wl">'+bl[k]+'</span>'
+        +'<span class="wb"><span class="wf" style="left:'+(v>=0?50:50-w/2)+'%;width:'+w/2+'%;background:'+(v>=0?'var(--red)':'var(--grn)')+'"></span></span>'
+        +'<span class="wv" style="color:'+(v>=0?'var(--red)':'var(--grn)')+'">'+v.toFixed(2)+' 亿</span></div>';
+    });
+    bh+='<div class="cb sum-row"><span class="ck">营业利润变动合计</span><span class="cv">'
+       +(B.delta_operating_profit/1e8).toFixed(2)+' 亿元</span></div>';
+  }
   document.getElementById('a-bridge').innerHTML=bh;
 
   var C=A.cash_flow_bridge, ch='';

@@ -6,7 +6,9 @@
 对 financial-diagnosis 的输出做体检，把「未算出」拆成三类原因，
 并给出可执行的补齐建议。三者语义完全不同，绝不能混为一谈：
 
-  not_applicable  行业口径不成立 → 正确行为，不是缺陷，无需补数据
+  not_meaningful  行业口径不成立 → 正确行为，不是缺陷，无需补数据
+                  （引擎内部旧词是 not_applicable，输出时已按规范 6.2 改为
+                   not_meaningful；这里两个都认，免得旧产物读不了）
   not_evaluable   输入缺失或分母为 0 → 需要补数据，否则指标永远算不出来
   ok              正常算出
 
@@ -17,6 +19,10 @@
 """
 
 from __future__ import annotations
+
+# 指标 status 里表示「口径不成立」的取值。规范 6.2 用 not_meaningful，
+# 引擎早期输出用的是 not_applicable，两个都当作「不适用」处理。
+NA_STATUS = ("not_applicable", "not_meaningful")
 
 import argparse
 import glob
@@ -85,7 +91,7 @@ def check(path: str, verbose: bool = False) -> dict:
     else:
         prof = {"profile_id": raw_prof or "general", "label": None}
 
-    buckets = {"ok": [], "not_applicable": [], "not_evaluable": []}
+    buckets = {"ok": [], "not_meaningful": [], "not_evaluable": []}
     total = 0
     for cat, items in R.items():
         for k, e in (items or {}).items():
@@ -109,9 +115,11 @@ def check(path: str, verbose: bool = False) -> dict:
         n = len(items or {})
         if not n:
             continue
-        na = sum(1 for v in (items or {}).values() if (v or {}).get("status") == "not_applicable")
+        na = sum(1 for v in (items or {}).values()
+                 if (v or {}).get("status") in NA_STATUS)
         ne = sum(1 for v in (items or {}).values()
-                 if (v or {}).get("value") is None and (v or {}).get("status") != "not_applicable")
+                 if (v or {}).get("value") is None
+                 and (v or {}).get("status") not in NA_STATUS)
         mark = ""
         if na:
             mark += f"　不适用 {na}"
@@ -121,7 +129,7 @@ def check(path: str, verbose: bool = False) -> dict:
 
     print("-" * 74)
     nok = len(buckets["ok"])
-    nna = len(buckets["not_applicable"])
+    nna = len(buckets["not_meaningful"])
     nne = len(buckets["not_evaluable"])
     print(f"  总计 {total} 个　|　已算出 {nok}　|　行业不适用 {nna}　|　输入缺失 {nne}")
     if total:
@@ -152,17 +160,17 @@ def check(path: str, verbose: bool = False) -> dict:
             print("    当前是银行业剖面。银行不划分流动/非流动资产、没有应收/存货科目、")
             print("    利息支出是主营成本而非财务费用——因此毛利率、DSO、DIO、流动比率、")
             print("    利息保障倍数、自由现金流等 36 个制造业口径指标在银行语境下不成立。")
-            print("    引擎主动跳过并标记 not_applicable，而不是拿空数据算出一个错误数字，")
+            print("    引擎主动跳过并标记 not_meaningful，而不是拿空数据算出一个错误数字，")
             print("    更不是默认成「无风险」。这些维度改由 13 条银行业专属规则（B01–B13）刻画：")
             print("    NIM / 净利差 / 不良率 / 拨备覆盖率 / 资本充足率三级 / 存贷比 / 信用成本。")
         else:
             print("    当前行业剖面把部分指标判定为口径不成立，已主动跳过。")
         print()
         print("    被跳过的指标（示例）：")
-        for cat, k, e in buckets["not_applicable"][:12]:
+        for cat, k, e in buckets["not_meaningful"][:12]:
             print(f"      - {cat}.{k}")
-        if len(buckets["not_applicable"]) > 12:
-            print(f"      ... 其余 {len(buckets['not_applicable']) - 12} 个见输出 JSON 的 ratios 段")
+        if len(buckets["not_meaningful"]) > 12:
+            print(f"      ... 其余 {len(buckets['not_meaningful']) - 12} 个见输出 JSON 的 ratios 段")
 
     if nne:
         print()
@@ -177,7 +185,7 @@ def check(path: str, verbose: bool = False) -> dict:
 
     print()
     return {"path": path, "total": total, "ok": nok,
-            "not_applicable": nna, "not_evaluable": nne}
+            "not_meaningful": nna, "not_evaluable": nne}
 
 
 def main():
@@ -209,7 +217,7 @@ def main():
         print("-" * 74)
         for r in results:
             print(f"  {r['path']:52s} {r['ok']:3d}/{r['total']:3d}"
-                  f"　不适用 {r['not_applicable']:2d}　缺失 {r['not_evaluable']:2d}")
+                  f"　不适用 {r['not_meaningful']:2d}　缺失 {r['not_evaluable']:2d}")
 
 
 if __name__ == "__main__":

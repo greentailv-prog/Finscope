@@ -1,0 +1,264 @@
+{
+ "schema": "finradar.comparison/1.0",
+ "generated_at": "2026-11-04T23:39:10+08:00",
+ "generator": "risk-radar/scripts/build_comparison.py",
+ "status": "ok",
+ "comparability": {
+  "level": "weak",
+  "note": "行业剖面未识别（general），同业只在同一剖面内可比，不能当作严格同行业对比"
+ },
+ "industry_profile": "general",
+ "target": {
+  "ticker": "002415",
+  "name": "杭州海康威视数字技术股份有限公司",
+  "report_period": "2025"
+ },
+ "peer_set": [
+  {
+   "ticker": "000333",
+   "name": "美的集团股份有限公司",
+   "report_period": "2025"
+  },
+  {
+   "ticker": "000651",
+   "name": "珠海格力电器股份有限公司",
+   "report_period": "2025"
+  },
+  {
+   "ticker": "000858",
+   "name": "宜宾五粮液股份有限公司",
+   "report_period": "2025"
+  },
+  {
+   "ticker": "002594",
+   "name": "比亚迪股份有限公司",
+   "report_period": "2025"
+  },
+  {
+   "ticker": "002709",
+   "name": "广州天赐高新材料股份有限公司",
+   "report_period": "2025"
+  },
+  {
+   "ticker": "300750",
+   "name": "宁德时代新能源科技股份有限公司",
+   "report_period": "2025"
+  },
+  {
+   "ticker": "600031",
+   "name": "三一重工股份有限公司",
+   "report_period": "2025"
+  },
+  {
+   "ticker": "600309",
+   "name": "万华化学集团股份有限公司",
+   "report_period": "2025"
+  },
+  {
+   "ticker": "600519",
+   "name": "贵州茅台酒股份有限公司",
+   "report_period": "2025"
+  },
+  {
+   "ticker": "600887",
+   "name": "内蒙古伊利实业集团股份有限公司",
+   "report_period": "2025"
+  }
+ ],
+ "sample_n": 10,
+ "metrics": [
+  {
+   "metric": "revenue_growth",
+   "label": "营业收入增速",
+   "target": 0.000133,
+   "peer_median": 0.075409,
+   "peer_p25": -0.00871775,
+   "peer_p75": 0.13847725,
+   "percentile": 0.3,
+   "sample_n": 10,
+   "better": "higher",
+   "flag": "in_range"
+  },
+  {
+   "metric": "gross_margin",
+   "label": "毛利率",
+   "target": 0.458776,
+   "peer_median": 0.27317349999999996,
+   "peer_p25": 0.23249175,
+   "peer_p75": 0.33508625000000003,
+   "percentile": 0.8,
+   "sample_n": 10,
+   "better": "higher",
+   "flag": "above_p75"
+  },
+  {
+   "metric": "net_margin_parent",
+   "label": "归母净利率",
+   "target": 0.153451,
+   "peer_median": 0.0978025,
+   "peer_p25": 0.08478174999999999,
+   "peer_p75": 0.17034424999999997,
+   "percentile": 0.6,
+   "sample_n": 10,
+   "better": "higher",
+   "flag": "in_range"
+  },
+  {
+   "metric": "roe",
+   "label": "净资产收益率",
+   "target": 0.173097,
+   "peer_median": 0.15118,
+   "peer_p25": 0.104933,
+   "peer_p75": 0.214496,
+   "percentile": 0.5555555555555556,
+   "sample_n": 9,
+   "better": "higher",
+   "flag": "in_range"
+  },
+  {
+   "metric": "debt_to_assets",
+   "label": "资产负债率",
+   "target": 0.339246,
+   "peer_median": 0.61337,
+   "peer_p25": 0.20033249999999997,
+   "peer_p75": 0.6188612499999999,
+   "percentile": 0.4,
+   "sample_n": 10,
+   "better": "lower",
+   "flag": "in_range"
+  },
+  {
+   "metric": "dso",
+   "label": "应收账款周转天数",
+   "target": 133.603417,
+   "peer_median": 25.315743,
+   "peer_p25": 9.234051,
+   "peer_p75": 60.533904,
+   "percentile": 1.0,
+   "sample_n": 9,
+   "better": "lower",
+   "flag": "worse_than_p75"
+  },
+  {
+   "metric": "dio",
+   "label": "存货周转天数",
+   "target": 144.283007,
+   "peer_median": 70.2223,
+   "peer_p25": 52.10001,
+   "peer_p75": 119.88227,
+   "percentile": 0.7777777777777778,
+   "sample_n": 9,
+   "better": "lower",
+   "flag": "worse_than_p75"
+  },
+  {
+   "metric": "ocf_to_net_income",
+   "label": "净现比",
+   "target": 1.641828,
+   "peer_median": 1.670984,
+   "peer_p25": 1.21012825,
+   "peer_p75": 2.202989,
+   "percentile": 0.5,
+   "sample_n": 10,
+   "better": "higher",
+   "flag": "in_range"
+  }
+ ],
+ "risk_matrix": [
+  {
+   "dimension": "成长",
+   "target_level": "低",
+   "peer_level": "中",
+   "quality_percentile": 0.3,
+   "note": "收入增速相对同业的位置",
+   "metrics": [
+    "revenue_growth"
+   ]
+  },
+  {
+   "dimension": "盈利",
+   "target_level": "高",
+   "peer_level": "中",
+   "quality_percentile": 0.6519,
+   "note": "毛利率、净利率、ROE 的综合位置",
+   "metrics": [
+    "gross_margin",
+    "net_margin_parent",
+    "roe"
+   ]
+  },
+  {
+   "dimension": "偿债",
+   "target_level": "高",
+   "peer_level": "中",
+   "quality_percentile": 0.6,
+   "note": "资产负债率越低越稳健",
+   "metrics": [
+    "debt_to_assets"
+   ]
+  },
+  {
+   "dimension": "营运",
+   "target_level": "低",
+   "peer_level": "中",
+   "quality_percentile": 0.1111,
+   "note": "周转天数越短效率越高",
+   "metrics": [
+    "dso",
+    "dio"
+   ]
+  },
+  {
+   "dimension": "现金流",
+   "target_level": "中",
+   "peer_level": "中",
+   "quality_percentile": 0.5,
+   "note": "利润的现金转化能力",
+   "metrics": [
+    "ocf_to_net_income"
+   ]
+  }
+ ],
+ "thresholds": {
+  "ar_growth_gap": {
+   "label": "应收增速 − 收入增速",
+   "basis": "peer_p75",
+   "value": 0.08277300000000004,
+   "sample_n": 9,
+   "expr": "accounts_receivable_growth - revenue_growth"
+  },
+  "inventory_growth_gap": {
+   "label": "存货增速 − 成本增速",
+   "basis": "peer_p75",
+   "value": 0.136589,
+   "sample_n": 9,
+   "expr": "inventory_growth - cost_of_revenue_growth"
+  },
+  "gross_margin": {
+   "label": "毛利率",
+   "basis": "peer_p25",
+   "value": 0.23249175,
+   "sample_n": 10,
+   "expr": "gross_margin"
+  },
+  "dso_delta": {
+   "label": "应收周转天数变动",
+   "basis": "peer_p75",
+   "value": null,
+   "sample_n": 0,
+   "expr": "dso_delta"
+  },
+  "debt_to_assets": {
+   "label": "资产负债率",
+   "basis": "peer_p75",
+   "value": 0.6188612499999999,
+   "sample_n": 10,
+   "expr": "debt_to_assets"
+  }
+ },
+ "notes": {
+  "status_rule": "同业 3 家及以上才标 ok；1–2 家标 partial；没有同业标 not_available",
+  "no_fake_score": "五维只给相对位置（高/中/低）与质量分位，不给 0–100 评分",
+  "peers_not_selected_here": "同业名单由 C 决定，本脚本只算分位与位置，不自己选同业"
+ }
+}

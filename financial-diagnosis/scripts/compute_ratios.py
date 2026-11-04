@@ -63,6 +63,335 @@ def _load_field_labels() -> dict:
 _FIELD_LABELS = _load_field_labels()
 
 
+def _load_metric_labels() -> dict:
+    """指标中文名（data/metric_labels.json）。取不到返回空表，只影响展示。"""
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "metric_labels.json")
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return (json.load(f) or {}).get("metrics", {}) or {}
+    except Exception:
+        return {}
+
+
+_METRIC_LABELS = _load_metric_labels()
+
+# 规范 6.2.1：core 只放 8 个，其余 diagnostic。
+# role 只影响财务诊断页的分组排序；公司概览读 meta.display.overview_financials，不读 ratios。
+CORE_RATIOS = {
+    "growth.revenue_growth",
+    "growth.net_income_parent_growth",
+    "profitability.gross_margin",
+    "profitability.net_margin_parent",
+    "profitability.roe",
+    "banking.roe_common",
+    "solvency.debt_to_assets",
+    "cashflow_quality.ocf_to_revenue",
+    "cashflow_quality.ocf_to_net_income",
+}
+
+# inputs 里的简写 → canonical 科目
+_INPUT_ALIAS = {
+    "rev": "revenue", "ta": "total_assets", "eq": "equity_parent",
+    "cogs": "cost_of_revenue", "ni_parent": "net_income_parent",
+    "ni_ded": "net_income_deducted", "ar": "accounts_receivable",
+    "inv": "inventory", "ibd": "interest_bearing_debt",
+    # 银行口径里的简写。spread 是净利差的披露值，对应科目 net_interest_spread。
+    "spread": "net_interest_spread",
+    # 普通股口径：归母净利减去永续债等权益工具利息，科目仍是归母净利润；
+    # 普通股权益 = 归母权益扣除其他权益工具。
+    "net_income_parent_adj": "net_income_parent",
+    "common_equity": "equity_parent",
+}
+# 派生量 → 它由哪些 canonical 科目算出（source_fields 要能回溯到原始科目）
+_DERIVED_SRC = {
+    "ebit": ["operating_profit", "finance_expense"],
+    "ebitda": ["operating_profit", "finance_expense", "depreciation_amortization"],
+    "nopat": ["operating_profit", "income_tax_expense"],
+    # 键是剥掉 avg_ 前缀之后的写法：_infer_source_fields 先归一化再查表，
+    # 写成 avg_invested_capital 会永远匹配不上（曾因此让 ROIC 少两个科目）。
+    "invested_capital": ["total_assets", "total_current_liabilities", "equity_parent"],
+    "interest_bearing_debt": ["short_term_borrowings", "current_portion_lt_debt",
+                              "long_term_borrowings", "bonds_payable"],
+    "short_term_interest_bearing_debt": ["short_term_borrowings", "current_portion_lt_debt"],
+    "period_expense": ["selling_expense", "admin_expense", "rd_expense", "finance_expense"],
+    "fcf": ["ocf", "capex"],
+    "net_debt": ["short_term_borrowings", "long_term_borrowings", "cash_and_equivalents"],
+    "ar_total": ["accounts_receivable", "notes_receivable"],
+    "revenue_growth": ["revenue"],
+    "net_income_parent_growth": ["net_income_parent"],
+    "ar_turnover": ["revenue", "accounts_receivable"],
+    "inventory_turnover": ["cost_of_revenue", "inventory"],
+    "ap_turnover": ["cost_of_revenue", "accounts_payable"],
+    "dso": ["accounts_receivable", "revenue"],
+    "dio": ["inventory", "cost_of_revenue"],
+    "dpo": ["accounts_payable", "cost_of_revenue"],
+}
+# 不是科目、不该出现在 source_fields 里的 token
+_NON_FIELD_TOKENS = {"days", "wacc", "roic", "roic_minus_wacc", "avg_equity_parent"}
+
+# 引擎承认的全部原始科目（通用 + 银行专属）。
+# 只收真正能从输入里取到值的键；派生量走 _DERIVED_SRC。
+_ALL_INPUT_FIELDS = {
+    # 通用
+    "revenue", "cost_of_revenue", "operating_profit", "pretax_profit",
+    "income_tax_expense", "net_income", "net_income_parent", "net_income_deducted",
+    "selling_expense", "admin_expense", "rd_expense", "finance_expense",
+    "interest_expense", "depreciation_amortization", "impairment_loss",
+    "cash_and_equivalents", "restricted_cash", "accounts_receivable",
+    "notes_receivable", "contract_assets", "inventory", "total_current_assets",
+    "fixed_assets", "goodwill", "total_assets", "accounts_payable",
+    "total_current_liabilities", "short_term_borrowings", "current_portion_lt_debt",
+    "long_term_borrowings", "bonds_payable", "total_liabilities", "equity_parent",
+    "total_equity", "ocf", "cf_investing", "cf_financing", "capex",
+    "cash_received_from_sales", "interest_paid", "dividend_paid", "cf_cash_end",
+    "minority_interest", "minority_pnl", "ebit", "ebitda",
+    # 银行专属
+    "customer_loans_gross", "customer_deposits", "net_interest_income",
+    "net_interest_income_disclosed", "business_admin_expense", "operating_expense",
+    "credit_impairment_loss", "npl_ratio", "npl_ratio_disclosed",
+    "provision_coverage", "provision_coverage_disclosed", "loan_provision_ratio",
+    "loan_provision_ratio_disclosed", "capital_adequacy_ratio", "cet1_ratio",
+    "tier1_ratio", "rwa", "interest_earning_assets", "net_interest_spread",
+    "net_interest_spread_disclosed", "other_equity_instruments", "operating_income",
+    # 银行附注披露的原始比率（工行案例用）：净息差在输入里就叫 nim
+    "nim",
+}
+
+
+def _infer_source_fields(inputs: dict) -> list:
+    """从 inputs 的键反推该指标用了哪些 canonical 科目。
+
+    规则：去 avg_ 前缀、去 _t/_t_1 后缀 → 查别名 → 命中 B 字段就收下；
+    派生量按 _DERIVED_SRC 展开；认不出的 token 跳过，不臆造。
+    """
+    out = []
+
+    def add(x):
+        if x and x not in out:
+            out.append(x)
+
+    for raw in (inputs or {}):
+        k = str(raw)
+        for suffix in ("_t_1", "_t", "_disclosed"):
+            if k.endswith(suffix) and len(k) > len(suffix):
+                k = k[: -len(suffix)]
+                break
+        if k.startswith("avg_"):
+            k = k[4:]
+        k = _INPUT_ALIAS.get(k, k)
+        if k in _NON_FIELD_TOKENS:
+            continue
+        if k in _DERIVED_SRC:
+            for x in _DERIVED_SRC[k]:
+                add(x)
+            continue
+        if k in _ALL_INPUT_FIELDS:
+            add(k)
+    return out
+
+
+def _decorate_ratios(ratios: dict, evidence: dict, t: str, t1: str) -> dict:
+    """给每条指标补 name / role / source_fields / source_pages（规范 6.2）。
+
+    原样返回传入的字典，只增键、不改值。
+    """
+    # 第一趟：按 inputs 直接反推科目
+    for cat, items in (ratios or {}).items():
+        for key, rec in items.items():
+            mid = "%s.%s" % (cat, key)
+            rec["name"] = (_METRIC_LABELS.get(mid) or _METRIC_LABELS.get(key)
+                           or rec.get("name") or key)
+            rec["role"] = "core" if mid in CORE_RATIOS else "diagnostic"
+            rec["source_fields"] = _infer_source_fields(rec.get("inputs") or {})
+
+    # 第二趟：inputs 里引用的是另一个指标（如 roic_minus_wacc 用 roic）时，
+    # 直接反推会得到空表——因为 roic 不是科目。这里顺着引用再走一层，
+    # 把被引用指标已推出的科目继承过来。不猜，只继承已算出的东西。
+    by_key = {}
+    for items in (ratios or {}).values():
+        for key, rec in items.items():
+            if rec.get("source_fields"):
+                by_key.setdefault(key, rec["source_fields"])
+    for items in (ratios or {}).values():
+        for key, rec in items.items():
+            if rec.get("source_fields"):
+                continue
+            inherited = []
+            for raw in (rec.get("inputs") or {}):
+                tok = str(raw)
+                for suffix in ("_t_1", "_t", "_disclosed"):
+                    if tok.endswith(suffix) and len(tok) > len(suffix):
+                        tok = tok[: -len(suffix)]
+                        break
+                if tok.startswith("avg_"):
+                    tok = tok[4:]
+                tok = _INPUT_ALIAS.get(tok, tok)
+                for f in by_key.get(tok) or []:
+                    if f not in inherited:
+                        inherited.append(f)
+            rec["source_fields"] = inherited
+
+    # 页码统一在这一步补，避免两趟各写一遍
+    for items in (ratios or {}).values():
+        for key, rec in items.items():
+            pages = []
+            for f in rec.get("source_fields") or []:
+                per_pd = (evidence or {}).get(f) or {}
+                for pd in (t, t1):
+                    p = (per_pd.get(pd) or {}).get("page")
+                    if p is not None and p not in pages:
+                        pages.append(p)
+            rec["source_pages"] = sorted(pages)
+
+            # 规范 6.2 的指标 status 只有 ok / not_evaluable / not_meaningful。
+            # 引擎内部把「行业口径不成立、主动跳过」写成 not_applicable，这里
+            # 转成 not_meaningful 再交出去，原值留在 status_raw 里备查。
+            # 风险卡是另一套四态（含 not_applicable），不在这里改。
+            if rec.get("status") == "not_applicable":
+                rec["status_raw"] = "not_applicable"
+                rec["status"] = "not_meaningful"
+    return ratios
+
+
+# --------------------------------------------------------------------------- #
+# 交接给 D 的规范化：company / meta / 指标级出处
+# --------------------------------------------------------------------------- #
+# 交易所后缀。按代码首位判：6 沪、0/3 深、4/8 北。
+_EXCHANGE_BY_HEAD = {"6": "SH", "0": "SZ", "3": "SZ", "4": "BJ", "8": "BJ"}
+_EXCHANGE_NAME = {"SH": "上海证券交易所", "SZ": "深圳证券交易所",
+                  "BJ": "北京证券交易所"}
+
+
+def _split_ticker(raw) -> tuple[str, str]:
+    """'600519' / '600519.SH' / '600519.sh' -> ('600519', 'SH')。判不出返回空后缀。"""
+    s = str(raw or "").strip()
+    if not s:
+        return "", ""
+    if "." in s:
+        base, suf = s.split(".", 1)
+        return base.strip(), suf.strip().upper()
+    return s, _EXCHANGE_BY_HEAD.get(s[:1], "")
+
+
+def _normalize_company(company: dict, meta: dict, period: str) -> dict:
+    """按规范 §4.3 补齐 company 字段。已有值不覆盖，缺的才补。
+
+    `ticker` 保持 6 位纯代码：它是全链路的唯一标识（文件名、矩阵行键、同业对比
+    的匹配键都基于它）。规范里的 `600519.SH` 写在 `ticker_full`，需要展示带后缀
+    时取它，不要在 ticker 上做字符串拼接。
+    """
+    c = dict(company or {})
+
+    code, suffix = _split_ticker(c.get("ticker"))
+    if code:
+        c["ticker"] = code
+        c["ticker_code"] = code
+        if suffix:
+            c.setdefault("ticker_full", f"{code}.{suffix}")
+            c.setdefault("exchange", _EXCHANGE_NAME.get(suffix))
+            c.setdefault("exchange_code", suffix)
+
+    # 报告期统一成 4 位年份。输入里可能写 "2025年度" / "2025年报" / "2025-12-31"。
+    rp = str(c.get("report_period") or period or "")
+    digits = "".join(ch for ch in rp if ch.isdigit())
+    c["report_period"] = digits[:4] if len(digits) >= 4 else rp
+
+    # 规范：没有行业就写「未识别」，不猜、不留空。
+    c["industry"] = str(c.get("industry") or "").strip() or "未识别"
+    c.setdefault("report_type", "年度报告")
+    c.setdefault("scope", "合并报表")
+    c.setdefault("currency", meta.get("currency") or "CNY")
+    # 金额单位写「元」，不是输入的单位。本引擎把全部金额归一到元（见 assumptions
+    # .unit_normalized_to），输入可能是亿元或万元，输出一律是元。
+    c.setdefault("amount_unit", "元")
+    return c
+
+
+def _metric_evidence(ratios: dict, evidence: dict, periods: list) -> dict:
+    """指标名 → 期间 → 出处。给 D 的 `involved_values[].page` 用。
+
+    为什么要有这一层：`evidence` 是按**科目**建的树（revenue、inventory…），
+    而风险卡里的 `trigger_values` 用的是**指标**名（revenue_growth、
+    gross_margin…）。D 拿指标名去 `evidence` 里查，查不到，页码就是 null。
+    这里按每条指标的 source_fields 把科目页码汇总到指标名下。
+    """
+    out = {}
+    for items in (ratios or {}).values():
+        for key, rec in items.items():
+            fields = [f for f in (rec.get("source_fields") or []) if f]
+            if not fields:
+                continue
+            per = {}
+            for pd in periods:
+                pages, srcs = [], []
+                for f in fields:
+                    r = ((evidence or {}).get(f) or {}).get(pd) or {}
+                    p = r.get("page")
+                    if p is not None and p not in pages:
+                        pages.append(p)
+                    s = r.get("source")
+                    if s and s not in srcs:
+                        srcs.append(s)
+                if pages or srcs:
+                    per[pd] = {
+                        "page": min(pages) if pages else None,
+                        "pages": sorted(pages),
+                        "source": srcs[0] if srcs else None,
+                        "sources": srcs,
+                        "source_fields": list(fields),
+                    }
+            if per:
+                out[key] = per
+
+    # 变动量（roe_delta、gross_margin_delta…）不是独立指标，是同一指标两期之差。
+    # 风险规则的表达式里用的是 `<指标>_delta` 这种变量名，指标表里没有这一条，
+    # 所以按「有变动量的指标」自动生成别名，出处就取它自己那几页。
+    recs = {}
+    for items in (ratios or {}).values():
+        for key, rec in items.items():
+            recs[key] = rec
+    for key in list(out):
+        if recs.get(key, {}).get("delta") is None:
+            continue
+        dkey = f"{key}_delta"
+        if dkey in out:
+            continue
+        base = out[key]
+        pages, srcs, flds = [], [], []
+        for pd in periods:
+            v = base.get(pd) or {}
+            for p in v.get("pages") or []:
+                if p not in pages:
+                    pages.append(p)
+            for s in v.get("sources") or []:
+                if s not in srcs:
+                    srcs.append(s)
+            for f in v.get("source_fields") or []:
+                if f not in flds:
+                    flds.append(f)
+        if pages or srcs:
+            out[dkey] = {pd: {"page": min(pages) if pages else None,
+                              "pages": sorted(pages),
+                              "source": srcs[0] if srcs else None,
+                              "sources": srcs,
+                              "source_fields": flds,
+                              "inherited_from": key}
+                         for pd in periods}
+    return out
+
+
+def _alias_metric_evidence(evidence: dict, metric_ev: dict) -> None:
+    """把指标级出处以别名形式并进 `evidence`，供按指标名查页码的消费方使用。
+
+    原地修改。与已有科目同名的键不覆盖（科目优先）。每条别名带
+    `kind="metric_alias"`，和科目条目区分得开。
+    """
+    for m, per in (metric_ev or {}).items():
+        if m in evidence:
+            continue
+        evidence[m] = {pd: dict(v, kind="metric_alias") for pd, v in per.items()}
+
+
 # --------------------------------------------------------------------------- #
 # 数据访问层
 # --------------------------------------------------------------------------- #
@@ -138,7 +467,21 @@ class Fin:
             "display_value": raw_val,
             "display_unit": unit,
             "source": cell.get("source"),
+            # 印刷页码：报告里引用的「第 X 页」
             "page": cell.get("page"),
+            # PDF 物理页：E 的 PDF 预览靠它定位，和印刷页码不是一回事，
+            # 不能用一个代替另一个。在线取数没有这两者，保持 None。
+            "pdf_page": cell.get("pdf_page"),
+            "source_type": cell.get("source_type"),
+            # 原文片段：核对时能直接看到「营业收入 168,838,102,514.79 …」这一行
+            "raw_text": cell.get("raw_text"),
+            "basis": cell.get("basis"),
+            # A 抽取层的补救痕迹：值不是从报表行直接抄的（如权益合计按资产-负债
+            # 倒算），勾稽与规则都必须知道这一点，否则恒等式会被推算值骗过。
+            "derived": bool(cell.get("derived")),
+            "status_note": cell.get("status_note"),
+            "value_original": cell.get("value_original"),
+            "confidence": cell.get("confidence"),
         }
 
     def has(self, key: str) -> bool:
@@ -297,7 +640,8 @@ def _banking_metrics(fin: Fin, bk: RatioBook, t: str, t1: str, periods: list):
            div(at("fee_income_net", t1), rev_p), higher_is_better=True)
     bk.put("banking", "net_interest_income_growth", gc("net_interest_income"),
            "利息净收入同比增长率",
-           {"cur": at("net_interest_income", t), "prev": at("net_interest_income", t1)},
+           {"net_interest_income_t": at("net_interest_income", t),
+            "net_interest_income_t_1": at("net_interest_income", t1)},
            gp("net_interest_income"), higher_is_better=None)
 
     # ---- 成本 ---- #
@@ -370,11 +714,11 @@ def _banking_metrics(fin: Fin, bk: RatioBook, t: str, t1: str, periods: list):
            div(loans_p, deps_p), higher_is_better=False)
     bk.put("banking", "loan_growth", gc("customer_loans_gross"),
            "客户贷款及垫款总额同比增长率",
-           {"cur": loans, "prev": loans_p}, gp("customer_loans_gross"),
+           {"customer_loans_gross_t": loans, "customer_loans_gross_t_1": loans_p}, gp("customer_loans_gross"),
            higher_is_better=None)
     bk.put("banking", "deposit_growth", gc("customer_deposits"),
            "客户存款同比增长率",
-           {"cur": deps, "prev": deps_p}, gp("customer_deposits"),
+           {"customer_deposits_t": deps, "customer_deposits_t_1": deps_p}, gp("customer_deposits"),
            higher_is_better=None)
 
     # ---- 回报（银行口径） ---- #
@@ -932,7 +1276,7 @@ def compute(obj: dict) -> dict:
             })
 
     # ============ 三表勾稽自检（不平项进待核验队列） ============ #
-    checks = _articulation_checks(fin, periods)
+    checks = _articulation_checks(fin, periods, hints=meta)
     for it in checks["items"]:
         if it["status"] != "imbalanced":
             continue
@@ -950,7 +1294,35 @@ def compute(obj: dict) -> dict:
                                "确认是否串表、是否漏取附注拆分项，再重跑本引擎。",
         })
 
+    # ===================== 交接层：company / meta / 指标级出处 ===================== #
+    company_out = _normalize_company(obj.get("company", {}), meta, t)
+    meta_out = dict(meta)
+    meta_out["period_type"] = meta_out.get("period_type") or "annual"
+    # 规范 4.2：source_mode 只能是 online / upload。输入没写就按证据判：
+    # 出现印刷页码或 PDF 物理页，说明数据来自年报 PDF；两者都没有才是接口取数。
+    if meta_out.get("source_mode") not in ("online", "upload"):
+        has_pdf = any(
+            (v or {}).get("page") is not None or (v or {}).get("pdf_page") is not None
+            for per in evidence.values() if isinstance(per, dict)
+            for v in per.values() if isinstance(v, dict)
+        )
+        meta_out["source_mode"] = "upload" if has_pdf else "online"
+        meta_out["source_mode_inferred"] = True
+    # 规范硬约束：只用合并口径。输入没声明就按合并报表处理，并在 note 里留痕。
+    if meta_out.get("consolidated") is None:
+        meta_out["consolidated"] = True
+        meta_out["consolidated_assumed"] = True
+    if company_out.get("ticker_full") and company_out.get("report_period"):
+        meta_out.setdefault("key", f"{company_out['ticker_full']}_{company_out['report_period']}")
+    elif company_out.get("ticker") and company_out.get("report_period"):
+        meta_out.setdefault("key", f"{company_out['ticker']}_{company_out['report_period']}")
+
+    ratios_out = _decorate_ratios(bk.r, evidence, t, t1)
+    metric_ev = _metric_evidence(ratios_out, evidence, periods)
+
     # ===================== 出处汇总 ===================== #
+    # 注意顺序：先按科目汇总 sources，再把指标别名并进 evidence，
+    # 否则别名条目会被重复计进 sources 的页码里。
     src = {}
     for key, per_pd in evidence.items():
         for pd, r in per_pd.items():
@@ -959,13 +1331,15 @@ def compute(obj: dict) -> dict:
     sources = [{"source": s, "pages": sorted([p for p in pages if p is not None])}
                for s, pages in sorted(src.items())]
 
+    _alias_metric_evidence(evidence, metric_ev)
+
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": datetime.now(timezone(timedelta(hours=8))).isoformat(timespec="seconds"),
         "generator": "financial-diagnosis/scripts/compute_ratios.py",
-        "company": obj.get("company", {}),
+        "company": company_out,
         "period": {"current": t, "previous": t1, "all": periods},
-        "meta": meta,
+        "meta": meta_out,
         "industry_profile": industry_profile,
         "assumptions": {
             "wacc": wacc,
@@ -974,7 +1348,8 @@ def compute(obj: dict) -> dict:
             "unit_normalized_to": "元",
         },
         "derived": {pd: {k: _r6(v) for k, v in derived_all[pd].items()} for pd in periods},
-        "ratios": _round_ratios(bk.r),
+        "ratios": _round_ratios(ratios_out),
+        "metric_evidence": metric_ev,
         "checks": checks,
         "attribution": attribution,
         "evidence": evidence,
@@ -1173,7 +1548,8 @@ def _missing_note(fin: Fin, keys: list, period: str):
     return f"缺少科目：{'、'.join(miss)}，本项无法勾稽（不猜数、不跳过，进待核验队列）" if miss else None
 
 
-def _articulation_checks(fin: Fin, periods: list, tol: float = ARTICULATION_TOLERANCE) -> dict:
+def _articulation_checks(fin: Fin, periods: list, tol: float = ARTICULATION_TOLERANCE,
+                         hints: dict | None = None) -> dict:
     """三表勾稽自检。
 
     三条关系（RULES.md）：
@@ -1190,6 +1566,11 @@ def _articulation_checks(fin: Fin, periods: list, tol: float = ARTICULATION_TOLE
         tl = fin.get("total_liabilities", pd)
         ep = fin.get("equity_parent", pd)
         te = fin.get("total_equity", pd)
+        te_ref = fin.ref("total_equity", pd) or {}
+        # 权益合计是推算值吗？A 对可疑值会按「资产 − 负债」倒算并在 status_note 里
+        # 写明；旧输入没有 derived 字段，退回看原文里有没有「倒算」字样。
+        te_derived = (bool(te_ref.get("derived"))
+                      or "倒算" in (te_ref.get("raw_text") or ""))
         # 少数股东权益：A 抽到就直取，抽不到用「所有者权益合计 − 归母股东权益」倒轧
         mi = _resolve_val(fin, "minority_interest", pd, {}) if fin.has("minority_interest") \
             else (None if (te is None or ep is None) else te - ep)
@@ -1205,12 +1586,33 @@ def _articulation_checks(fin: Fin, periods: list, tol: float = ARTICULATION_TOLE
             note = "缺少科目：所有者权益合计，且未抽取少数股东权益，无法倒轧"
         if note is None and right is None:
             note = "权益类科目缺失，无法倒轧少数股东权益"
+        # 少数股东权益是倒轧、而权益合计又是「资产 − 负债」倒算出来的时，右边
+        # tl + ep + (te − ep) = tl + te ≡ 资产，恒等式必真——检查零鉴别力，
+        # 资产或负债抽错 91 亿也会报 balanced。与利润表「伪勾稽」同理，只能
+        # 判 not_evaluable，并指出真正的病因（权益合计为倒算值）。
+        status_override = None
+        if note is None and te_derived and not fin.has("minority_interest"):
+            status_override = "not_evaluable"
+            src_note = te_ref.get("status_note") or "抽取层已改用倒算值"
+            note = ("所有者权益合计不是年报披露行，而是推算值（%s）。用它验证"
+                    "「资产 = 负债 + 权益」是恒真式，勾稽无鉴别力；且倒算所用"
+                    "的负债若同样抽错，错误会被配平掩盖。需回原文核对合并报表"
+                    "「所有者权益合计」行。" % src_note)
+        # 所有者权益合计小于归母股东权益，在会计上不可能成立。此时差额不是"少数股东
+        # 权益为负"，而是两个科目本身矛盾——多半是抽取错位（取到母公司报表）或串列。
+        # 输入自相矛盾时，"不平多少亿"不对应任何真实错账，判 not_evaluable 并说病因。
+        elif note is None and mi is not None and mi < 0:
+            status_override = "not_evaluable"
+            note = ("所有者权益合计小于归母股东权益（差 %.2f 亿元），会计上不成立；"
+                    "多为抽取错位或母公司报表混入，请核对该两个科目的页码与列"
+                    % (mi / 1e8))
         items.append(_make_item(
             "bs_balance", "资产负债表平衡", "资产负债表",
             "总资产 = 总负债 + 归母股东权益 + 少数股东权益",
             "total_assets - (total_liabilities + equity_parent + minority_interest)",
             pd, ta, right,
             abs(ta) if ta is not None else None, inputs, note,
+            status=status_override,
         ))
 
     # ---------- 2) 利润表勾稽 · 第一段：利润总额 → 净利润 ---------- #
@@ -1280,7 +1682,16 @@ def _articulation_checks(fin: Fin, periods: list, tol: float = ARTICULATION_TOLE
         left = None if (c1 is None or c0 is None) else c1 - c0
         parts = {"ocf": ocf, "cf_investing": icf, "cf_financing": fcf, "fx_effect": fx}
         miss = [fin_label(k) for k, v in parts.items() if v is None and k != "fx_effect"]
-        if miss:
+        # 口径不成立 ≠ 数据缺失，也 ≠ 账不平。在线取数常只拿到「货币资金」，
+        # 与「现金及现金等价物」不同源，勾稽必然差一大截。这种情况判 not_evaluable，
+        # 并写明是口径问题——报「不平」会把取数口径缺陷说成公司账目问题。
+        cash_mismatch = (((hints or {}).get("alignment_flags") or {})
+                         .get("cash_bridge") == "not_comparable")
+        if cash_mismatch:
+            left = None
+            right, note = None, ("取数源只提供「货币资金」口径，与「现金及现金等价物」不同源，"
+                                 "现金净变动勾稽在口径上不成立；判无法勾稽，不判不平")
+        elif miss:
             right, note = None, f"缺少科目：{'、'.join(miss)}，本项无法勾稽"
         else:
             right = (ocf or 0) + (icf or 0) + (fcf or 0) + (fx or 0)

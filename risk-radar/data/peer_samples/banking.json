@@ -1,0 +1,254 @@
+{
+  "schema_version": "finradar.peer-samples/1.0",
+  "industry": "banking",
+  "as_of": "2025-12-31",
+  "sample_definition": "20 家上市银行（国有六大行 6 + 股份制 9 + 头部城商行 5，名单见 metrics 各项 values），取 2025 年报披露值；由 scripts/fetch_bank_samples.py 刷新",
+  "owner": "B",
+  "note": "本文件是风险阈值的校准样本池。样本必须与待评估公司同行业、同口径、同期。C 的估值可比池只含 PE/PB/PS/EV-EBITDA 等倍数，推不出不良率与拨备覆盖率，故不能作为风险阈值的样本来源。",
+  "metrics": {
+    "roe": {
+      "unit": "ratio",
+      "n": 20,
+      "percentiles": {
+        "p10": 0.0328,
+        "p25": 0.0433,
+        "median": 0.0466,
+        "p75": 0.0606,
+        "p90": 0.0669
+      },
+      "source": "东方财富 银行板块 20 家 ROE(2025)",
+      "as_of": "2026-10-10"
+    },
+    "nim": {
+      "unit": "ratio",
+      "values": [
+        {
+          "company": "工商银行",
+          "code": "601398",
+          "value": 0.0128
+        },
+        {
+          "company": "建设银行",
+          "code": "601939",
+          "value": 0.0134
+        },
+        {
+          "company": "农业银行",
+          "code": "601288",
+          "value": 0.0128
+        },
+        {
+          "company": "中国银行",
+          "code": "601988",
+          "value": 0.0126
+        },
+        {
+          "company": "交通银行",
+          "code": "601328",
+          "value": 0.012
+        },
+        {
+          "company": "邮储银行",
+          "code": "601658",
+          "value": 0.0166
+        },
+        {
+          "company": "招商银行",
+          "code": "600036",
+          "value": 0.0187
+        },
+        {
+          "company": "兴业银行",
+          "code": "601166",
+          "value": 0.0171
+        },
+        {
+          "company": "中信银行",
+          "code": "601998",
+          "value": 0.0163
+        },
+        {
+          "company": "浦发银行",
+          "code": "600000",
+          "value": 0.0142
+        },
+        {
+          "company": "民生银行",
+          "code": "600016",
+          "value": 0.014
+        },
+        {
+          "company": "光大银行",
+          "code": "601818",
+          "value": 0.014
+        },
+        {
+          "company": "平安银行",
+          "code": "000001",
+          "value": 0.0178
+        },
+        {
+          "company": "华夏银行",
+          "code": "600015",
+          "value": 0.0156
+        },
+        {
+          "company": "浙商银行",
+          "code": "601916",
+          "value": 0.016
+        },
+        {
+          "company": "北京银行",
+          "code": "601169",
+          "value": 0.0127
+        },
+        {
+          "company": "江苏银行",
+          "code": "600919",
+          "value": 0.0173
+        },
+        {
+          "company": "宁波银行",
+          "code": "002142",
+          "value": 0.0174
+        },
+        {
+          "company": "上海银行",
+          "code": "601229",
+          "value": 0.0116
+        },
+        {
+          "company": "南京银行",
+          "code": "601009",
+          "value": 0.0182
+        }
+      ],
+      "source": "东方财富 F10：主要指标 NET_INTEREST_MARGIN；利润表自算 业务及管理费/营业收入（2026-11-04 用工行年报复算口径一致）",
+      "as_of": "2025-12-31"
+    },
+    "cost_to_income": {
+      "unit": "ratio",
+      "values": [
+        {
+          "company": "工商银行",
+          "code": "601398",
+          "value": 0.280546
+        },
+        {
+          "company": "建设银行",
+          "code": "601939",
+          "value": 0.283396
+        },
+        {
+          "company": "农业银行",
+          "code": "601288",
+          "value": 0.351756
+        },
+        {
+          "company": "中国银行",
+          "code": "601988",
+          "value": 0.278395
+        },
+        {
+          "company": "交通银行",
+          "code": "601328",
+          "value": 0.292959
+        },
+        {
+          "company": "邮储银行",
+          "code": "601658",
+          "value": 0.620966
+        },
+        {
+          "company": "招商银行",
+          "code": "600036",
+          "value": 0.319827
+        },
+        {
+          "company": "兴业银行",
+          "code": "601166",
+          "value": 0.292802
+        },
+        {
+          "company": "中信银行",
+          "code": "601998",
+          "value": 0.31608
+        },
+        {
+          "company": "浦发银行",
+          "code": "600000",
+          "value": 0.285013
+        },
+        {
+          "company": "民生银行",
+          "code": "600016",
+          "value": 0.357022
+        },
+        {
+          "company": "光大银行",
+          "code": "601818",
+          "value": 0.291344
+        },
+        {
+          "company": "平安银行",
+          "code": "000001",
+          "value": null
+        },
+        {
+          "company": "华夏银行",
+          "code": "600015",
+          "value": 0.30608
+        },
+        {
+          "company": "浙商银行",
+          "code": "601916",
+          "value": 0.32092
+        },
+        {
+          "company": "北京银行",
+          "code": "601169",
+          "value": 0.309042
+        },
+        {
+          "company": "江苏银行",
+          "code": "600919",
+          "value": 0.26666
+        },
+        {
+          "company": "宁波银行",
+          "code": "002142",
+          "value": null
+        },
+        {
+          "company": "上海银行",
+          "code": "601229",
+          "value": 0.233108
+        },
+        {
+          "company": "南京银行",
+          "code": "601009",
+          "value": 0.26069
+        }
+      ],
+      "source": "东方财富 F10：主要指标 NET_INTEREST_MARGIN；利润表自算 业务及管理费/营业收入（2026-11-04 用工行年报复算口径一致）",
+      "as_of": "2025-12-31"
+    }
+  },
+  "pending_metrics": {
+    "npl_ratio": {
+      "type": "regulatory",
+      "why": "阈值是监管红线（B02：150%，可差异化下调至 120%–150%），分位数不参与判定；同业分位仅作参考，如需展示可另抓",
+      "where": "金融监管总局「商业银行主要监管指标」季度表，或各行年报"
+    },
+    "provision_coverage": {
+      "type": "regulatory",
+      "why": "同上，B02 判定用法规硬线，不用同业分位",
+      "where": "同上"
+    },
+    "capital_adequacy_ratio": {
+      "type": "regulatory",
+      "why": "B04/B05 用《商业银行资本管理办法》底线（8%/8.25% 等），分位数不参与判定",
+      "where": "同上"
+    }
+  }
+}

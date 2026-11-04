@@ -173,6 +173,64 @@ unified["review_queue"] = diag["review_queue"] + risks["review_queue"]
 
 **五类 key 与统一 Schema 完全一致，不需要字段映射。**
 
+### 交付前先跑契约自检
+
+```bash
+# 只查指标
+python3 scripts_check_contract.py --ratios out/600519.json
+
+# 指标 + 风险（阈值与证据链只在风险卡里）
+python3 scripts_check_contract.py --ratios out/600519.json --risks out/600519_risks.json
+
+# 连 D 的适配器一起跑：能导入就真的调一遍 adapt_b，看字段有没有被吃掉
+python3 scripts_check_contract.py --ratios ... --risks ... --with-d /path/to/D分支文件
+```
+
+退出码 0 才算能交。它查的是静态检查抓不到的东西：字段名拼错、单位词表不匹配、
+页码取不到、状态值多出一个——这些都不报错，只会让 D 的适配器静默丢字段，
+最后表现为「报告里没有出处」。
+
+当前真实产物全部 0 失败：11 家 A 股 + 工行 + 合成样本 + 在线取数 600519。
+
+### 交接字段（v1.4 起，对齐冻结规范 v1.0 第 4、6 节）
+
+| 位置 | 字段 | 说明 |
+|---|---|---|
+| `company` | `ticker_full` / `exchange` | `600519.SH`、上海证券交易所 |
+| `company` | `report_period` | 统一 4 位年份 `2025`，不是 `2025年度` |
+| `company` | `industry` | 没有就写「未识别」，不留 null |
+| `company` | `report_type` / `scope` / `amount_unit` | 年度报告 / 合并报表 / 元 |
+| `meta` | `key` / `period_type` / `source_mode` / `consolidated` | `600519.SH_2025` / annual / online\|upload / true |
+| `ratios.*.*` | `name` / `role` | 中文名；core 8 个 + diagnostic 其余 |
+| `ratios.*.*` | `source_fields` / `source_pages` | 用了哪些科目、在年报第几页 |
+| `ratios.*.*` | `status` | `ok` / `not_evaluable` / `not_meaningful`（口径不成立） |
+| `risks[]` | `threshold_value` / `threshold_source` / `peer_sample_n` | 固定阈值还是同业分位 |
+| 顶层 | `metric_evidence` | 指标 → 期间 → 页码，专给 `involved_values[].page` 用 |
+
+`metric_evidence` 是为解决一个具体断点加的：`evidence` 按**科目**建树，而风险卡的
+`trigger_values` 用的是**指标**名，D 拿指标名去 `evidence` 里查必然查不到，页码就是
+null。这里按每条指标的 `source_fields` 把科目页码汇总到指标名下，并对
+`roe_delta` 这类变动量做了继承（出处就是基期指标那几页）。同时把指标名以
+`kind="metric_alias"` 的形式并进 `evidence`，老的查法也能取到。
+
+### 三条刻意偏差（不是漏做，是权衡后选的）
+
+1. **`company.ticker` 保持 6 位纯代码**，规范要的 `600519.SH` 写在 `ticker_full`。
+   `ticker` 是文件名、矩阵行键、同业匹配键的唯一标识，改带后缀会连锁改一串产物。
+2. **`risks` 保留全量 40 条**，规范要的「只含触发」单独放在 `risks_triggered`。
+   D 现有 `from_b.py` 只认 `risks` 并按 status 自己分流，若这里只给触发卡，
+   未触发的那 36 条会在 D 侧静默消失。等 D 改读 `rules_evaluated` 后可以收紧。
+   注意：消费方按 status 分流，**不要把 `risks` 与 `rules_evaluated` 直接拼接**。
+3. **证据链多一个「建议」步骤**。D 只读数据/计算/判断/出处，多出来的不影响；
+   删掉反而丢掉可执行的整改动作。
+
+### D 侧还需补两处（规范 6.2 与 6.3 都点名了）
+
+自检会把这两项报成 WARN，不是 FAIL，因为 B 的字段已经在了，是 `from_b.py` 没透传：
+
+- `_ratio_record` 丢 `name` / `role` / `source_fields` / `source_pages` → E 拿不到中文名与出处。
+- `_adapt_risk_card` 丢 `threshold_value` / `threshold_source` / `peer_sample_n` → 页面上看不到阈值来源。
+
 ---
 
 ## 五、对其他四个人的对接请求
@@ -201,6 +259,17 @@ unified["review_queue"] = diag["review_queue"] + risks["review_queue"]
 1. 调用顺序：`financial-extraction` → **`financial-diagnosis`** → **`risk-radar`** → `valuation` → `report`。
 2. 我的两个模块都是**纯 Python 脚本**，无第三方依赖，用 `subprocess` 或 `exec` 调用都行，输入输出都是 JSON 文件。
 3. `review_queue` 记得**合并**两段的（`diag["review_queue"] + risks["review_queue"]`），我这边已经用 `inherited_from` 标记了来源。
+4. **`from_b.py` 要补两个透传**（规范 6.2 / 6.3 点名了，我用你的真实适配器跑过，确认现在会被丢掉）：
+   - `_ratio_record` 加上 `name`、`role`、`source_fields`、`source_pages` 四个键；
+   - `_adapt_risk_card` 加上 `threshold_value`、`threshold_source`、`peer_sample_n`。
+5. **`involved_values[].page` 已经能取到**：我加了 `metric_evidence`，并把指标名以别名并进
+   `evidence`（带 `kind="metric_alias"`），你现有的 `_evidence_page(evidence, metric, period)`
+   不改也能命中。实测 4 条触发卡的 4 个变量全部拿到页码。
+6. `risks` 给的是**全量**（40 条），你按 `status` 分流即可；规范要的「只含触发」在
+   `risks_triggered`。**不要把 `risks` 和 `rules_evaluated` 拼接**，会重复。
+7. 银行专属规则（B01–B13）的 `category` 我按你 `CATEGORY_MAP` 的 7 类映射过了
+   （资本/流动性归 `solvency`，不良与拨备归 `asset_quality`，息差与成本归 `profitability`），
+   原值留在 `category_internal="banking"` 备查。
 
 ### 给 E（@E）
 
@@ -501,10 +570,47 @@ open B_demo_dashboard.html
 
 | 限制 | 影响 | 下一步 |
 |---|---|---|
-| **行业阈值未做统计校准** | 银行业剖面的阈值取自公开监管规则与公开行业均值，**未用可比公司分位数算过**。已用 `benchmarks_calibrated: false` 显式标注，没有伪装成已校准 | 等 C 提供可比公司池的 P25/P50/P75，填进 `meta.industry_*_benchmark` 后重算，**无需改代码** |
-| **WACC 仍缺失** | P03 / B12 两条规则 `not_evaluable` | 等 C 的 WACC 模型。**没有随手填一个看起来合理的数** |
+| **行业阈值已校准 3 项（roe / nim / cost_to_income，覆盖度 60%）** | 银行业 20 家上市银行真实样本（v1.6，`fetch_bank_samples.py` 可年度刷新）。npl / 拨备覆盖率 / 资本充足率属 regulatory 阈值，判定走法规硬线，**不参与分位校准**；`benchmarks_calibrated: false` 与 `benchmarks_coverage: 0.6` 如实透出 | 样本池由 B 自己维护（`risk-radar/data/peer_samples/`），年报季后跑 `fetch_bank_samples.py --write && calibrate.py --write` 刷新。制造业同业池待建 |
+| **WACC 已解决（v1.6c）** | 不再等 C：`compute_wacc.py` 输入公司代码/名称现场计算敏感性区间（每家公司的 β 回归、市值、债务成本、税率全自算），P03/B12 用区间两端重判。详情见下文 v1.6c 节 | 与 C 对齐：估值模块建议读同一份 wacc 输出，避免两处口径打架 |
 | **只有两个行业剖面** | 目前只有 banking / manufacturing | 按同一份剖面 schema 继续加：地产、券商、保险、医药、零售 |
 | **只覆盖 A 股** | 港股、美股、新三板不在范围内 | 需接入其他公开披露渠道 |
+| **部分上游抽取缺印刷页码** | 天赐材料（002709）34 个科目只有 PDF 物理页、没有印刷页码；工行手工底稿整体没有 `pdf_page` | 属 A 侧抽取完整性。B 原样透传、不补造页码，契约自检会报 WARN 并注明归属 |
+| **在线模式没有页码** | 接口取数只有数据源与字段，没有年报页码 | 规范明确接受这个取舍：不编页码。报告出处写「东方财富·F10 财务报表（年报）」+ 字段名 |
+
+### v1.6c 已解决：WACC 来源口径（2026-11-05）
+
+WACC 是**公司专属参数**，不允许手填单点数假装精确。落地为「每家公司现场计算 + 敏感性两端判定」：
+
+**来源逐项可核对**（`risk-radar/scripts/compute_wacc.py`，输入 `--code 600519` 或 `--name 贵州茅台`）：
+
+| 参数 | 来源 |
+|---|---|
+| Rf 无风险利率 | 中债 10 年期国债收益率 1.65%（2026-10-30，中国债券信息网；`data/wacc_inputs.json` 统一配置，年报季后刷新，同批交付同一根 Rf） |
+| β | 该公司 156 周周收益率对沪深 300 的 OLS 回归，区间 = β±2×标准误 |
+| MRP | 惯例区间 6%–7%（无官方数，用区间进敏感性，不假装有精确值） |
+| Rd | 公司自算：利息费用 ÷ 平均有息负债；缺则中债商业银行 AAA 债兜底并注明"市场口径" |
+| t | 公司有效税率；缺则法定 25% |
+| E / D | 东财行情总市值 / 报表有息负债账面值 |
+
+**诚实防线（不猜数的三道闸）**：① β 回归 R²<0.05 拒绝采信（工行实证：R²=0.001，回退 20 家银行同业 β 中位数 0.391，13 家达标）；② 回归不可得且无 `--beta` 显式传入时**拒绝产出**；③ 市值/有息负债缺则全权益近似并注明"门槛偏严"。
+
+**判定（`detect_risks.py --wacc`）**：P03/B12 用区间两端重判——两端都低于区间 → triggered，两端都高于 → passed，**落在区间内 → not_evaluable + review_queue 转人工**（结论随假设翻转本身是有信息量的结论，呼应敏感性分析，绝不取中值硬判）。
+
+**银行口径单列**：存款是经营材料非融资，经典 WACC 失真。银行门槛用股权成本 Ke；B12 的 RWA 收益率与 WACC 不同尺度不可直接比，折算 RAROC = 净利润/资本净额（`rwa_return/capital_adequacy_ratio`，资本充足率的分子分母对消）后与 Ke 同尺度。
+
+**实证**：工行 ROE 8.97% > Ke 区间 3.99%–4.38% → passed（P03/B12 从 not_evaluable 全部激活，待核验 64→0 项）；demo 合成数据 β=1.0（manual 标注）WACC 7.65%–8.65%，ROE 9.46% passed；茅台全流程 ROE 34.5% vs 6.20%–9.88% passed。
+
+**工作台接入（与同业对比一致的入口）**：
+
+```
+python3 risk-radar/scripts/compute_wacc.py --code <公司代码> --ratios <ratios.json> \
+    [--industry banking] --out risk-radar/data/wacc_<code>.json --write
+python3 risk-radar/scripts/detect_risks.py --ratios ... --rules ... --wacc risk-radar/data/wacc_<code>.json -o ...
+```
+
+无 `--wacc` 时 P03/B12 维持 not_evaluable（不伪装）；风险卡 `threshold_source=wacc_sensitivity / cost_of_equity_sensitivity`，`industry_profile.wacc` 透出区间与 β 出处给 D。
+
+**与 C 的对齐请求**：C 的估值（戈登模型 r）建议读同一份 wacc 输出——否则 B 判"ROE 低于资本成本"而 C 估值用的 r 更低，两处结论会打架。
 
 ### v1.2 已补齐：三表勾稽自检
 
@@ -516,13 +622,136 @@ open B_demo_dashboard.html
 - **现金净变动**：期末现金 − 期初现金 = 经营 + 投资 + 筹资 + 汇率影响（相邻期之间）
 
 容差 1%，不平则进 `review_queue`。看板新增「三表勾稽」标签页，可点击展开每一项的代入数据与年报出处。
-回归测试 `scripts_test_checks.py`：注入已知失衡，断言能被抓出（19 项断言）。
+回归测试 `scripts_test_checks.py`：注入已知失衡，断言能被抓出（24 项断言）。
 
 **过程中被测试抓出的两个真问题**（都记在 `financial-diagnosis/RULES.md` 第七节）：
 
 1. 利润表②若用倒轧的少数股东损益，恒等式退化成 `A + (B − A) ≡ B`，**恒真、抓不到错**。
    → 改为只在附注独立披露时才判定，否则判"无法勾稽"。
 2. 演示样本的现金流本来就差 1500 万，之前没人发现。→ 已修正合成数据使其内部自洽。
+
+### v1.5 新增：识别抽取层的倒算值（2026-11-04）
+
+**问题**：A 对「所有者权益合计」这类科目有一个补救逻辑——抽到的值小于归母权益时（会计上不可能），
+改用「资产总计 − 负债合计」倒算，并在 `status_note` 里写明。五粮液、宁德时代、三一重工、万华化学
+4 家的 2025 年报都是这种情况。经原文核对，五粮液抽到的 774.59 亿实为**母公司报表**的权益合计
+（合并报表该行是 1221.81 亿），而倒算所用负债 586.80 亿同样抽错（真实 678.04 亿）。
+
+倒算本身有两个隐患，B 侧已修复：
+
+1. **推算值冒充披露值**：`from_a_extract.py` 此前不透传 `status_note` / `value_original` /
+   `confidence`，B 无从知道这是推算值。→ 现已透传，且对倒算条目加 `derived: true` 标记。
+2. **倒算 + 倒轧构成恒真式**：少数股东权益缺失时按 `te − ep` 倒轧，若 `te` 又是「资产 − 负债」
+   倒算的，则勾稽右边 `tl + ep + (te − ep) ≡ 资产`——**资产或负债抽错多少亿都报 balanced**。
+   五粮液 2025 年负债抽错 91.24 亿，勾稽却显示"差 0.00003 元"。→ 与利润表「伪勾稽」同理：
+   `bs_balance` 遇倒算权益或倒轧出负的少数股东权益，判 `not_evaluable` 并写明病因与核对路径，
+   不再产出无鉴别力的"平衡"。
+
+**给 A**：这 4 家的「所有者权益合计」需回年报合并资产负债表重取披露行（如五粮液 2025 为
+122,180,683,645.14，第 55 页）。另注意 A 的倒算会把 `raw_text` 覆盖成倒算式且两期共用，
+原值出处随之一并丢失——建议保留 `value_original` 的独立出处。
+
+**给 D**：勾稽 `not_evaluable` 的公司，`data_quality` 与结论可信度已在矩阵侧如实降级，
+不需要 D 做额外处理。
+
+### v1.6 新增：行业基准阈值真正接入规则判定（2026-11-04）
+
+**此前的断点**：`detect_risks.py` 已把 `profile.benchmarks` 注入成 `{指标}_industry_pXX`
+上下文变量，但没有任何规则引用它们——校准不改变判定结果，等于白校准。
+
+**本版打通的链路**：`fetch_bank_samples.py`（抓样本）→ `peer_samples/banking.json`
+（样本池）→ `calibrate.py`（算分位、写剖面）→ 规则 `benchmark_judge` 声明 →
+`detect_risks.py` 通用引擎判定。四个环节都落了盘：
+
+1. **样本池补齐**：新增 `risk-radar/scripts/fetch_bank_samples.py`，抓 20 家上市银行
+   （六大行 6 + 股份制 9 + 头部城商行 5）2025 年报的净息差（20/20）与成本收入比
+   （18/20，平安、宁波缺业务及管理费行，如实记 null）。口径已用工行年报复算核对
+   （NIM 1.28%、成本收入比 28.05%，与 B 指标引擎一致）。银行板块现在 **3 项 calibrated**
+   （roe / nim / cost_to_income，覆盖度 60%）。
+2. **npl / 拨备覆盖率 / 资本充足率不参与分位校准**：这三项是 regulatory 阈值，
+   判定走法规硬线（行业剖面 `regulatory_basis`），样本池里改标 `type: regulatory`。
+   **分位数不能替代监管红线**，样本不足的空位不再是"待补"，而是"不该用分位数"。
+3. **规则侧声明、引擎侧通用处理**：banking 剖面的 B06 / B07 声明 `benchmark_judge`
+   （metric + quantile + peer_expr），引擎见到声明且基准样本 n≥5（calibrated/indicative）
+   就用同业阈值重判；基准缺失或样本不足则回退规则默认阈值，**回退原因写进
+   `threshold_source = fixed_fallback` + `threshold_note`**，不伪装成同业判定。
+   13 条银行规则全部带上 `threshold_basis`（regulatory / self_delta / convention），
+   静态标注规则默认阈值的性质——与动态的 `threshold_source` 一静一动，不要混。
+4. **工行实证**：B06 判定改用"行业中位数 1.49%（样本 20 家）"——工行 NIM 1.28% 低于
+   中位数，triggered；B07 改用"行业 P75 31.89%（样本 18 家）"——工行 28.05% 未及 P75，
+   passed。证据链"计算"层写的是实际参与比较的两个数。
+
+**契约增量**（都是增量字段，D 不改代码也能跑，建议后续透传）：
+
+- 风险卡新增 `threshold_basis`（规则默认阈值性质）、`threshold_note`（回退原因 / 声明依据）、
+  `benchmark_status`（行业基准状态）；`threshold_source` 词表扩充
+  `industry_p10/p25/median/p75/p90` 与 `fixed_fallback`。
+- `industry_profile` 新增 `benchmarks_coverage` 与 `benchmarks_calibrated_metrics`
+  （全有全无的 `benchmarks_calibrated` 布尔看不出 3/5 的进度）。
+- 门禁脚本同步：`threshold_source` 白名单、行业基准变量豁免页码回溯（外部校准量没有
+  年报页码）、行业阈值样本 <5 家判 FAIL。
+- demo 契约此前漏放的两个既有缺口一并修正：`_prev/_delta` 变体按基本指标回溯页码；
+  规则派生量（如 dividend_to_ocf）页码由证据链"数据"层承担，降级为 WARN。
+
+**给 D**：`from_b.py` 适配器建议透传 `threshold_value / threshold_source / peer_sample_n`
+三件套 + 新增的 `threshold_basis / threshold_note`，页面上才能显示"阈值是同业分位还是
+法规硬线"。本地无 D 分支解包目录，`--with-d` 实测未复跑（字段均为增量，不影响现有适配）。
+
+### v1.6b 增补：同业对比扩展到任意行业（板块级基准池）
+
+银行业的专属建池脚本升级为**通用机制**，任何行业的公司输入后都能做同业对比：
+
+- **`risk-radar/scripts/fetch_industry_samples.py`**：输入东财板块代码 / 名称 /
+  公司代码（自动解析所属板块，如 600519 → 白酒Ⅱ），抓成分股按市值前 40 家的
+  8 项指标（ROE、毛利率、净利率、资产负债率、流动/速动比率、应收/存货周转天数），
+  算分位数落盘 `peer_samples/boards/<BK>.json`。指标单位已用茅台 2025 年报逐项复核。
+- **引擎侧 `--benchmarks` 参数**：板块池与剖面基准合并（同一指标板块池优先，
+  n<5 的指标不参与合并），注入同一命名空间变量。声明了 `benchmark_judge` 的规则
+  在任何行业自动改用板块分位数判定，缺失则回退固定阈值并标注 `fixed_fallback`。
+- **通用规则接线**：P06（毛利率 vs 行业中位数，peer_percentile 类）与
+  S01（资产负债率 vs 行业 P75，convention 类——惯例 60% 为主、分位数辅助，
+  避免对高杠杆行业跨行业误报）。
+- **茅台实证（真实 A 股数据）**：不带池时 P06 `not_evaluable`（外部基准缺失）；
+  带白酒池后 P06 用行业中位数 70.35% 判定 → passed（茅台 91.18%）。S01 用行业
+  P75 36.61% 判定 → passed（茅台 16.42%）。**同业池不仅提供对比，还把原本
+  不可评估的规则救活**。工行案例回归不受影响（B06 仍用银行业剖面中位数）。
+
+**工作台接入方式**：输入公司 → detect_risks.py **`--benchmarks auto`** →
+引擎按公司代码自动解析所属板块（东财 f127，结果缓存 `_company_board.json`，
+第二次起零网络）→ 本地有池即用，无池不建、提示建池命令（`fetch_industry_samples.py
+--code <公司> --write`，或加 `--ensure-pool` 现场建一次）。行业剖面同理：
+不传 `--industry` 时按 company.industry 关键词自动匹配（三级解析，输出
+`resolved_from` 写明）。板块池按年报季后刷新一次即可。
+
+### v1.6d 同业对比可视化（2026-11-05 凌晨）
+
+之前只有风险矩阵一个跨公司视图，`comparison/*.json` 和板块池分位数**没有任何页面渲染**。
+本轮补齐，两个新文件 + 一条管线命令：
+
+| 文件 | 作用 |
+|---|---|
+| `risk-radar/scripts/build_peer_view.py` | 数据层：篮子 11 家指标 + 板块池分位线 + 杜邦三因子 → `peer_view.json` |
+| `scripts_build_peer_view.py` | 渲染层：`peer_view.json` → 单文件 `peer_view.html`（静态 SVG，零依赖、零 JS） |
+
+三个视图：
+
+1. **逐指标点图**（8 项指标）：每家一个点、目标公司红色高亮、板块池 P25/中位数/P75
+   三条分位线；dso 跨 4 个数量级用对数刻度并在图上注明。
+2. **差距条形图**：目标 − 行业中位数，条长以四分位距（IQR）为单位，
+   红=不利偏离、绿=有利偏离，旁边标实际数值与相对偏离。
+3. **杜邦三因子并排**：净利率 × 总资产周转率 × 权益乘数 = ROE，跨公司逐列对比、
+   按 ROE 排序、目标行高亮；**闭合差随图透出**（1e-15 级浮点噪声属正常）。
+   注意：杜邦此前只是单家公司自身两期对比（`attribution.dupont`），跨公司并排是本轮新增。
+
+诚实标注三件事：① 篮子跨行业，池线只对同板块公司严格可比（顶部横幅写明）；
+② 分位线带 n 与 calibrated/indicative 状态，不是合格线；③ 缺值公司不画点
+（格力 ROE `not_meaningful` → 杜邦灰行说明原因），绝不按零值落图。
+周转天数口径：篮子是次数（次/年）、池是天数，数据层按 `365/次数` 换算并在图下注明公式。
+
+一键重生成：`bash cases/a-share-basket/run_basket.sh`（第 6 步自动产出 peer_view.*），
+或手动：`build_peer_view.py --ratios-dir ... --board-pool ... --target 600519 -o peer_view.json`
+→ `scripts_build_peer_view.py --view peer_view.json --out peer_view.html`。
+换目标公司改 `--target` 即可；目标公司所属板块应与板块池一致，否则横幅的可比性提示会如实变弱。
 
 ---
 

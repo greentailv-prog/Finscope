@@ -164,8 +164,115 @@ def t7_review_queue():
                "suggested_action 明确写'不自动修正'（B 的边界）")
 
 
+def t8_derived_equity():
+    """A 对可疑权益合计会按「资产 − 负债」倒算。此时 right = tl + ep + (te − ep)
+    ≡ 资产，恒真式——资产或负债抽错多少都报 balanced。必须判 not_evaluable。"""
+    print("\n[T8] 注入倒算权益合计（raw_text 标明倒算，无少数股东权益）")
+    obj = _load()
+    for pd in ("2023", "2024", "2025"):
+        cell = obj["financials"]["total_equity"][pd]
+        cell["raw_text"] = "按资产总计 - 负债合计倒算：X - Y = Z"
+        cell["derived"] = True
+    ck = _checks(obj)
+    st = _status_of(ck, "bs_balance")
+    expect(st == ["not_evaluable"] * 3,
+           f"bs_balance 三期全部 not_evaluable，不得判 balanced（实际 {st}）")
+    notes = [it.get("note", "") for it in ck["items"]
+             if it["id"] == "bs_balance"]
+    expect(all("恒真式" in n for n in notes),
+           "note 指出恒真式问题与病因（需回原文核对披露行）")
+    expect(set(_status_of(ck, "is_tax_bridge")) == {"balanced"},
+           "利润表勾稽不受影响")
+
+
+def t9_equity_below_parent():
+    """权益合计 < 归母权益在会计上不可能成立（合并口径下 te = ep + mi ≥ ep）。
+    此时差额不对应任何真实错账，判 not_evaluable 并写病因，而非 imbalanced。"""
+    print("\n[T9] 注入权益合计小于归母权益（te 减半）")
+    obj = _load()
+    for pd in ("2023", "2024", "2025"):
+        obj["financials"]["total_equity"][pd]["value"] *= 0.5
+    ck = _checks(obj)
+    st = _status_of(ck, "bs_balance")
+    expect(st == ["not_evaluable"] * 3,
+           f"bs_balance 三期全部 not_evaluable（实际 {st}）")
+    notes = [it.get("note", "") for it in ck["items"] if it["id"] == "bs_balance"]
+    expect(all("归母股东权益" in n and "母公司报表" in n for n in notes),
+           "note 写明病因（抽取错位或母公司报表混入）")
+
+
+# ---- WACC 敏感性判定（detect_risks._wacc_judge，P03 路径）----
+
+sys.path.insert(0, os.path.join(ROOT, "risk-radar", "scripts"))
+import detect_risks as DR  # noqa: E402
+
+
+def _wacc_diag(roe: float) -> dict:
+    return {
+        "company": {"ticker": "600000", "name": "测试公司"},
+        "period": {"current": "2025", "previous": "2024", "all": ["2023", "2024", "2025"]},
+        "ratios": {"profitability": {"roe": {"value": roe, "prev": roe, "unit": "ratio"}}},
+    }
+
+
+_WACC_DOC = {"wacc": {"low": 0.05, "point": 0.06, "high": 0.07},
+             "cost_of_equity": {"low": 0.05, "point": 0.06, "high": 0.07},
+             "components": {"beta": {"source": "manual(--beta)"}},
+             "company": {"code": "600000", "banking": False}}
+_WACC_RULES = {"rules": [{
+    "risk_id": "P03", "risk_name": "ROE 低于资本成本", "category": "profitability",
+    "trigger": "roe < wacc", "severity": "medium",
+    "wacc_judge": {"metric": "roe", "side": "lt", "kind": "wacc",
+                   "peer_expr": "roe < wacc_point"},
+}], "severity_scale": {"medium": {"tag": "关注", "score_base": 60}}}
+
+
+def _p03_card(roe: float) -> tuple[dict, dict]:
+    res = DR.detect(_wacc_diag(roe), _WACC_RULES, wacc=_WACC_DOC)
+    card = [r for r in res["risks"] if r["risk_id"] == "P03"][0]
+    return card, res
+
+
+def t10_wacc_triggered():
+    """ROE 越过 WACC 区间两端（低于 low）→ triggered，阈值来源 wacc_sensitivity。"""
+    print("\n[T10] ROE 3% < WACC 区间下界 5%")
+    card, _ = _p03_card(0.03)
+    expect(card["status"] == "triggered",
+           f"两端都低于区间 → triggered（实际 {card['status']}）")
+    expect(card["threshold_source"] == "wacc_sensitivity",
+           f"threshold_source=wacc_sensitivity（实际 {card.get('threshold_source')}）")
+    expect(card["trigger_values"].get("wacc_point") == 0.06,
+           "trigger_values 带出 wacc_point")
+
+
+def t11_wacc_passed():
+    """ROE 高于区间上界 → passed。"""
+    print("\n[T11] ROE 15% > WACC 区间上界 7%")
+    card, _ = _p03_card(0.15)
+    expect(card["status"] == "passed",
+           f"两端都高于区间 → passed（实际 {card['status']}）")
+
+
+def t12_wacc_sensitive():
+    """ROE 落在假设区间内 → 结论随假设翻转，判 not_evaluable 且转人工，
+    绝不取中值硬判——这是「不猜数」在估值参数上的落点。"""
+    print("\n[T12] ROE 5.8% 落在 WACC 区间 5%–7% 内")
+    card, res = _p03_card(0.058)
+    expect(card["status"] == "not_evaluable",
+           f"区间内 → not_evaluable（实际 {card['status']}）")
+    expect("结论不唯一" in (card.get("explanation") or ""),
+           "explanation 写明结论随假设翻转")
+    tv = card.get("trigger_values") or {}
+    expect(tv.get("wacc_low") == 0.05 and tv.get("wacc_high") == 0.07,
+           "trigger_values 带出区间两端，供页面展示两种可能结果")
+    expect(any(q.get("item", "").startswith("P03") for q in res["review_queue"]),
+           "review_queue 有 P03 转人工条目")
+
+
 TESTS = [t1_balanced, t2_bs_break, t3_is_break, t4_cf_break,
-         t5_missing, t6_tolerance, t7_review_queue]
+         t5_missing, t6_tolerance, t7_review_queue,
+         t8_derived_equity, t9_equity_below_parent,
+         t10_wacc_triggered, t11_wacc_passed, t12_wacc_sensitive]
 
 
 def main():

@@ -1,0 +1,59 @@
+{
+  "schema": "finradar.wacc/1.0",
+  "generator": "risk-radar/scripts/compute_wacc.py",
+  "company": {
+    "code": null,
+    "name": "合成数据（离线）",
+    "secid": null,
+    "banking": false
+  },
+  "generated_at": "2026-11-05T01:18:42+08:00",
+  "cost_of_equity": {
+    "low": 0.0765,
+    "point": 0.0815,
+    "high": 0.08650000000000001
+  },
+  "wacc": {
+    "low": 0.0765,
+    "point": 0.0815,
+    "high": 0.08650000000000001,
+    "e_ratio": 1.0,
+    "d_ratio": 0.0,
+    "note": "市值或有息负债不可得，按全权益近似（=股权成本）；全权益假设使门槛偏高、触发偏严，不会把风险藏起来"
+  },
+  "components": {
+    "risk_free_rate": {
+      "value": 0.0165,
+      "as_of": "2026-10-30",
+      "source": "中债国债收益率曲线 10 年期到期收益率（中国债券信息网 yield.chinabond.com.cn，中央国债登记结算有限责任公司编制，每工作日 17:30 发布）"
+    },
+    "beta": {
+      "low": 1.0,
+      "point": 1.0,
+      "high": 1.0,
+      "source": "manual(--beta)",
+      "std_error": null,
+      "n_weeks": null,
+      "r_squared": null
+    },
+    "mrp": {
+      "low": 0.06,
+      "high": 0.07,
+      "basis": "A股股权风险溢价无官方发布数，采用学术与实务惯例区间 6%–7%。不取单点假装精确，区间端点进入 WACC 敏感性上下界"
+    },
+    "tax": {
+      "value": 0.160804,
+      "source": "公司有效税率（所得税费用/利润总额）"
+    },
+    "rd": {
+      "value": 0.034482758620689655,
+      "source": "公司自算：利息费用/平均有息负债"
+    },
+    "capital_structure": {
+      "e_ratio": 1.0,
+      "d_ratio": 0.0,
+      "note": "市值或有息负债不可得，按全权益近似（=股权成本）；全权益假设使门槛偏高、触发偏严，不会把风险藏起来"
+    }
+  },
+  "banking_note": null
+}

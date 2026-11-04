@@ -88,6 +88,29 @@ python scripts/detect_risks.py \
 **同样的公司、同样的数据，换个行业口径，结论从"息差承压的稳健大行"
 变成"资产负债率 91.5% 的重大风险企业"。** 这就是为什么行业剖面不是可选项。
 
+## 多公司风险矩阵
+
+单家诊断要保留完整证据链；横向对比是另一个动作，用 `build_risk_matrix.py`：
+
+```bash
+python scripts/build_risk_matrix.py \
+    --diag-dir demo/matrix/ratios \
+    --rules risk_rules.json \
+    --pretty -o demo/matrix/risk_matrix.json
+```
+
+输出四块：`companies`（每家的综合分与四态计数）、`rules`（列定义）、
+`matrix`（公司 × 规则 → 状态 / 严重度 / 说明）、`summary`（最差公司、最常触发的规则）。
+
+**硬约束：只允许同一行业剖面的公司进同一张矩阵。** 跨行业直接报错退出（退出码 1），
+不生成任何文件。理由同上：阈值与指标适用性不同，混在一起比较会得出错误结论。
+
+演示（3 家**合成**公司，仅验证引擎与呈现）：
+
+```bash
+bash demo/matrix/run_matrix_demo.sh   # 生成输入 → 算指标 → 拼矩阵 → 渲染 HTML
+```
+
 ## 三条不可违背的规则
 
 1. **算不出来 ≠ 没问题。** 输入缺失 → `status: "not_evaluable"` → 进 `review_queue`，
@@ -216,6 +239,11 @@ python scripts/detect_risks.py \
 | **`risk_rules.json`** | **规则库本体（40 条通用规则），【分工文档点名要的】** |
 | `data/industry_calibration.json` | 行业阈值校准表 |
 | `data/industry_profiles/` | **行业剖面（银行业 / 制造业）**：指标屏蔽 + 阈值覆盖 + 专属规则 |
-| `scripts/detect_risks.py` | 风险识别引擎 |
+| `scripts/detect_risks.py` | 风险识别引擎（单公司，保留完整证据链） |
+| `scripts/build_risk_matrix.py` | **多公司风险矩阵**：同行业横向对比，跨行业直接拒绝 |
+| `scripts/calibrate.py` | 阈值校准：样本 → 分位数 → 剖面（默认预演，`--write` 落盘） |
+| `data/peer_samples/` | 校准样本池（同业公司的指标值，带来源与样本量） |
 | `demo/` | 最小可运行案例（输入 + 输出） |
+| `demo/matrix/` | 多公司矩阵演示（合成数据 + 一键脚本 + HTML） |
+| `../../scripts_build_matrix.py` | 矩阵 HTML 渲染器 |
 | `../references/accounting_standards_basis.md` | 风险判定的准则 / 监管依据（与 financial-diagnosis 共享） |

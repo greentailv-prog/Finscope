@@ -26,9 +26,17 @@ echo ""
 echo "[3/3] risk-radar：识别财务风险并生成证据链"
 echo "--------------------------------------------------------------"
 cd "$ROOT/risk-radar"
+
+# WACC 敏感性区间（合成数据无真实行情，β 显式传入并标注 manual）
+"$PY" scripts/compute_wacc.py \
+    --ratios ../financial-diagnosis/demo/output_ratios.json \
+    --beta 1.0 --no-net \
+    --out data/wacc_demo.json --write >/dev/null
+
 "$PY" scripts/detect_risks.py \
     --ratios ../financial-diagnosis/demo/output_ratios.json \
     --rules  risk_rules.json \
+    --wacc   data/wacc_demo.json \
     --output demo/output_risks.json --pretty
 
 # 同步一份 diagnosis 输出作为 risk-radar 的 demo 输入归档
@@ -47,6 +55,11 @@ echo "=============================================================="
 echo " 完成。产出文件："
 echo "   financial-diagnosis/demo/output_ratios.json   （65 个指标 + 三段归因）"
 echo "   risk-radar/demo/output_risks.json             （40 条规则 + 证据链）"
+echo ""
+echo " 交付前先过契约自检（退出码 0 才算能交给 D）："
+echo "   python3 $ROOT/scripts_check_contract.py \\"
+echo "     --ratios $ROOT/financial-diagnosis/demo/output_ratios.json \\"
+echo "     --risks  $ROOT/risk-radar/demo/output_risks.json"
 echo ""
 echo " 下一步：打开可视化看板"
 echo "   python3 scripts_build_dashboard.py && open $ROOT/B_demo_dashboard.html"

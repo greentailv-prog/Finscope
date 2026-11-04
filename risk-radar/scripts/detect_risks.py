@@ -32,6 +32,8 @@ import ast
 import json
 import operator as op
 import os
+import re
+import sys
 from datetime import datetime, timezone, timedelta
 
 SCHEMA_VERSION = "finradar.risk/1.0"
@@ -283,8 +285,272 @@ def build_ctx(diag: dict, meta_extra: dict | None = None) -> tuple[dict, set]:
 # --------------------------------------------------------------------------- #
 # 主流程
 # --------------------------------------------------------------------------- #
+# 动态阈值：只对规范 §6.3 点名的 5 条规则启用，其余一律 fixed。
+# expr 用当期上下文求值；side=upper 表示高于阈值即危险，lower 表示低于阈值即危险。
+# 规则与指标的对应关系写在这里，不散落到各条规则里，改口径只改这张表。
+DYNAMIC_RULE_MAP = {
+    "E01": {"expr": "accounts_receivable_growth - revenue_growth",
+            "metric": "ar_growth_gap", "side": "upper"},
+    "E04": {"expr": "inventory_growth - cost_of_revenue_growth",
+            "metric": "inventory_growth_gap", "side": "upper"},
+    "P06": {"expr": "gross_margin", "metric": "gross_margin", "side": "lower"},
+    "E02": {"expr": "dso_delta", "metric": "dso_delta", "side": "upper"},
+    "S01": {"expr": "debt_to_assets", "metric": "debt_to_assets", "side": "upper"},
+}
+PEER_MIN_SAMPLE = 3     # 同业少于 3 家回退固定阈值
+
+# 行业剖面基准的最小样本量：与 calibrate.py 的分档一致（n>=15 calibrated，5<=n<15
+# indicative），低于 5 视为 missing，不得用分位数判定。这里不 import calibrate.py
+# （各脚本独立运行、零第三方依赖），常量保持同一含义。
+BENCHMARK_MIN_SAMPLE = 5
+
+# 银行专属规则（category=banking）在 D 的 CATEGORY_MAP 里没有对应项。
+# 规范把 7 个类别冻结了，D 的映射表也不含 banking，若不改，D 会把 "banking"
+# 原样透传成英文 slug 出现在报告里。这里按指标性质落到已有类别，只改交出去的
+# category，规则文件本身保持 banking，行业适用性判断不受影响。
+BANKING_RISK_CATEGORY = {
+    "B01": "asset_quality",   # 不良贷款率抬升
+    "B02": "asset_quality",   # 拨备覆盖率低于红线
+    "B03": "asset_quality",   # 拨备覆盖率下降
+    "B10": "asset_quality",   # 信用减值计提强度上升
+    "B11": "asset_quality",   # 不良率降但拨备降
+    "B04": "solvency",        # 资本充足率下滑
+    "B05": "solvency",        # 核心一级逼近底线
+    "B08": "solvency",        # 贷款增速快于存款
+    "B09": "solvency",        # 存贷比抬升
+    "B13": "solvency",        # 分红与资本同时承压
+    "B06": "profitability",   # 净息差收窄
+    "B07": "profitability",   # 成本收入比上升
+    "B12": "profitability",   # RWA 收益率低于资本成本
+}
+
+
+def _out_category(rid: str, cat: str) -> str:
+    """把内部 category 换成 D 的类别 slug。banking 逐条映射，其余原样。"""
+    if cat != "banking":
+        return cat
+    return BANKING_RISK_CATEGORY.get(rid, "solvency")
+
+
+def _peer_threshold_judge(rid: str, ctx: dict, comparison: dict | None):
+    """有同业样本时，用同业分位替代固定阈值判定。
+
+    返回 (fired, threshold_meta) 或 (None, None)。样本不足返回 None，交由固定阈值。
+    """
+    if not comparison or rid not in DYNAMIC_RULE_MAP:
+        return None, None
+    spec_cfg = DYNAMIC_RULE_MAP[rid]
+    spec = ((comparison.get("thresholds") or {}).get(spec_cfg["metric"]) or {})
+    n = int(spec.get("sample_n") or 0)
+    thr = spec.get("value")
+    if thr is None or n < PEER_MIN_SAMPLE:
+        return None, {"threshold_value": thr, "threshold_source": "fixed",
+                      "peer_sample_n": n,
+                      "peer_note": "同业样本仅 %d 家（<%d），回退固定阈值" % (n, PEER_MIN_SAMPLE)}
+    ok, val, _ = eval_expr(spec_cfg["expr"], ctx)
+    if not ok or val is None:
+        return None, {"threshold_value": thr, "threshold_source": "fixed",
+                      "peer_sample_n": n, "peer_note": "本指标不可算，回退固定阈值"}
+    fired = val > thr if spec_cfg["side"] == "upper" else val < thr
+    return bool(fired), {
+        "threshold_value": round(float(thr), 6),
+        "threshold_source": spec.get("basis") or "peer_p75",
+        "peer_sample_n": n,
+        "threshold_metric_value": round(float(val), 6),
+    }
+
+
+def _benchmark_judge(rule: dict, ctx: dict, bmk_values: dict | None):
+    """行业基准判定：规则声明 `benchmark_judge` 时，用离线校准的分位数重判。
+
+    与 _peer_threshold_judge 的区别
+    -------------------------------
+    - 那边用 C 当次指定的同业样本（comparison.thresholds，n>=3）；
+    - 这边用 B 的离线基准池：剖面 benchmarks（B 策展，如银行业的
+      fetch_bank_samples 池）或 --benchmarks 传入的板块池
+      （fetch_industry_samples 生成，覆盖任意东财行业板块），合并后 n>=5 才可用。
+    两者不重叠时互不干扰；若同时命中，comparison 更具体，优先。
+
+    规则文件里的声明形态（放在 rule 或 rule_overrides 的 modify 合并里均可）::
+
+        "benchmark_judge": {
+            "metric": "nim",                      # 基准池里的键
+            "quantile": "median",                 # p10/p25/median/p75/p90
+            "peer_expr": "nim < nim_industry_median",
+            "note": "依据：……"
+        }
+
+    兜底原则：基准缺失、样本不足（n<5 或 status=missing）、或本指标当期不可算时，
+    返回 (None, meta)，交回规则自身的 trigger 判定——绝不因校准数据缺失把本可
+    判定的规则拖成 not_evaluable，也绝不静默当安全。回退原因写进 meta.peer_note。
+    """
+    cfg = rule.get("benchmark_judge")
+    if not cfg:
+        return None, None
+    metric = cfg.get("metric") or ""
+    quantile = cfg.get("quantile") or "median"
+
+    def fallback(note: str):
+        return None, {"threshold_value": rule.get("threshold"),
+                      "threshold_source": "fixed_fallback",
+                      "peer_sample_n": bmk.get("n") or 0, "peer_note": note}
+
+    bmk = (bmk_values or {}).get(metric) or {}
+    n = bmk.get("n") or 0
+    status = bmk.get("status")
+    qv = bmk.get(quantile)
+    if status not in ("calibrated", "indicative") or n < BENCHMARK_MIN_SAMPLE:
+        return fallback("行业基准样本不足（%s，n=%d），回退规则默认阈值" % (status or "未校准", n))
+    if not isinstance(qv, (int, float)):
+        return fallback("行业基准缺 %s 分位值，回退规则默认阈值" % quantile)
+    ctx_var = "%s_industry_%s" % (metric, quantile)
+    if ctx.get(ctx_var) is None:
+        return fallback("行业基准未注入上下文，回退规则默认阈值")
+
+    ok, fired, missing = eval_expr(cfg["peer_expr"], ctx)
+    if not ok or fired is None:
+        return fallback("同业阈值可判，但本指标当期不可算（缺 %s），回退规则默认阈值" % missing)
+
+    meta = {"threshold_value": round(float(qv), 6),
+            "threshold_source": "industry_" + quantile,
+            "peer_sample_n": int(n),
+            "benchmark_status": status,
+            "benchmark_pool": bmk.get("source")}
+    # 本指标当期值：给证据链"计算"层用，写明判定时实际比较的两个数
+    if isinstance(ctx.get(metric), (int, float)):
+        meta["threshold_metric_value"] = round(float(ctx[metric]), 6)
+    if cfg.get("note"):
+        meta["peer_note"] = str(cfg["note"])
+    return bool(fired), meta
+
+
+def _wacc_judge(rule: dict, ctx: dict, wacc: dict | None):
+    """WACC 敏感性判定：规则声明 `wacc_judge` 且 --wacc 传入 compute_wacc.py 产出时启用。
+
+    规则文件里的声明形态::
+
+        "wacc_judge": {
+            "metric": "roe",             # 与资本成本比较的回报指标
+            "side": "lt",                # lt: metric < 资本成本 → 触发
+            "kind": "wacc",              # wacc（经典公式）/ equity_cost（银行 Ke）
+            "transform": "raroc",        # 可选：metric_eff = rwa_return / capital_adequacy_ratio
+                                         # （净利润/资本净额，与 Ke 同尺度可比）
+            "peer_expr": "roe < wacc_point"   # 展示用表达式（wacc_* 已注入 ctx）
+        }
+
+    判定逻辑（敏感性三态，与项目「不猜数」原则对齐）：
+    - metric 越过区间两端（对 low 与 high 同侧）→ triggered / passed，结论明确；
+    - metric 落在假设区间内 → **结论随 WACC 假设翻转** → 返回 "sensitive"，
+      主流程转 not_evaluable + review_queue 转人工——这本身是有信息量的结论
+      （该公司的回报处在资本成本的合理争议区间），绝不取中值假装能判。
+
+    无 --wacc 或本指标不可算时返回 (None, None)，规则维持原状态
+    （P03/B12 因 trigger 引用 wacc 变量自然 not_evaluable，不伪装成安全）。
+    """
+    cfg = rule.get("wacc_judge")
+    if not cfg or not isinstance(wacc, dict):
+        return None, None
+    metric = cfg.get("metric") or ""
+    kind = cfg.get("kind") or "wacc"
+    side = cfg.get("side") or "lt"
+    # 规则声明的 kind 与文档键名对齐：equity_cost（银行 Ke）→ 文档 cost_of_equity
+    band = wacc.get("cost_of_equity") if kind == "equity_cost" else wacc.get(kind)
+    if not isinstance(band, dict):
+        return None, None
+    low, high, point = band.get("low"), band.get("high"), band.get("point")
+    if not all(isinstance(x, (int, float)) for x in (low, high, point)):
+        return None, None
+
+    mv = ctx.get(metric)
+    eff = mv
+    if cfg.get("transform") == "raroc":
+        car = ctx.get("capital_adequacy_ratio")
+        if not isinstance(mv, (int, float)) or not isinstance(car, (int, float)) or car <= 0:
+            return None, None
+        eff = mv / car
+
+    if not isinstance(eff, (int, float)):
+        return None, None
+
+    def fired_at(x):
+        return eff < x if side == "lt" else eff > x
+
+    f_lo, f_hi = fired_at(low), fired_at(high)
+    src = "wacc_sensitivity" if kind == "wacc" else "cost_of_equity_sensitivity"
+    beta_src = ((wacc.get("components") or {}).get("beta") or {}).get("source")
+
+    def meta(extra_note=None):
+        m = {"threshold_value": round(float(point), 6),
+             "threshold_source": src,
+             "wacc_low": low, "wacc_high": high, "wacc_point": point,
+             "peer_note": extra_note}
+        if isinstance(ctx.get(metric), (int, float)):
+            m["threshold_metric_value"] = round(float(eff), 6)
+        if beta_src:
+            m["benchmark_status"] = "wacc_computed"
+        return m
+
+    if f_lo and f_hi:
+        note = "WACC 敏感性判定：回报 %.2f%% 越过假设区间两端（%.2f%%–%.2f%%），结论明确" % (
+            eff * 100, low * 100, high * 100)
+        if beta_src:
+            note += "；β 来源：%s" % beta_src
+        return bool(f_lo), meta(note)
+    if not f_lo and not f_hi:
+        note = "WACC 敏感性判定：回报 %.2f%% 未触及假设区间两端（%.2f%%–%.2f%%），结论明确" % (
+            eff * 100, low * 100, high * 100)
+        if beta_src:
+            note += "；β 来源：%s" % beta_src
+        return False, meta(note)
+    # 区间内：结论随假设翻转
+    return "sensitive", meta(
+        "回报 %.2f%% 落在资本成本假设区间 %.2f%%–%.2f%% 内，结论随 WACC 假设翻转"
+        "（低档 %.2f%% 判触发、高档 %.2f%% 判通过），转人工核验" % (
+            eff * 100, low * 100, high * 100, low * 100, high * 100))
+
+
+_THRESHOLD_BASIS_LABELS = {
+    "peer_p25": "P25", "peer_p75": "P75",
+    "industry_p10": "行业 P10", "industry_p25": "行业 P25",
+    "industry_median": "行业中位数", "industry_p75": "行业 P75",
+    "industry_p90": "行业 P90",
+    "wacc_sensitivity": "WACC 敏感性中值",
+    "cost_of_equity_sensitivity": "股权成本 Ke 中值",
+}
+
+
+def _peer_display(disp, rid: str, thr_meta: dict | None):
+    """把生效阈值写进触发说明，避免页面上还显示写死的 60%。
+
+    规范 §6.3：阈值变了，trigger 文字要同步显示实际阈值。
+    """
+    src = (thr_meta or {}).get("threshold_source")
+    if not thr_meta or src in ("fixed", "fixed_fallback") or not disp:
+        return disp
+    v = thr_meta.get("threshold_value")
+    if v is None:
+        return disp
+    if rid == "E02":
+        shown = "%.1f 天" % v
+    else:
+        shown = "%.2f%%" % (v * 100)
+    basis = _THRESHOLD_BASIS_LABELS.get(src) or src.replace("peer_p", "P").upper()
+    if src in ("wacc_sensitivity", "cost_of_equity_sensitivity"):
+        # WACC 类：展示整个假设区间——单看中值会误以为是精确数
+        lo = thr_meta.get("wacc_low")
+        hi = thr_meta.get("wacc_high")
+        if isinstance(lo, (int, float)) and isinstance(hi, (int, float)):
+            return "本期阈值 = %s %s（假设区间 %.2f%%–%.2f%%）；规则原表述：%s" % (
+                basis, shown, lo * 100, hi * 100, disp)
+        return "本期阈值 = %s %s；规则原表述：%s" % (basis, shown, disp)
+    sample = thr_meta.get("peer_sample_n") or 0
+    # 实际阈值放前面：否则页面上会先看到写死的"5pp"，再看到 8.28%，读者不知道哪个生效。
+    return "本期阈值 = 同业 %s %s（样本 %d 家）；规则原表述：%s" % (basis, shown, sample, disp)
+
+
 def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
-           profile: dict | None = None) -> dict:
+           profile: dict | None = None, comparison: dict | None = None,
+           benchmarks_doc: dict | None = None, wacc: dict | None = None) -> dict:
     ctx, _ = build_ctx(diag, meta_extra)
 
     profile = profile or {}
@@ -310,9 +576,27 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
     categories = dict(rules_doc.get("categories") or {})
     categories.update(profile.get("categories") or {})
 
+    # ---- 行业基准：剖面基准（B 策展）+ 板块池（--benchmarks 传入，任意行业）合并 ----
+    # 板块池更细（东财细分行业），同一指标两者都有时板块池优先；
+    # n<5 或 missing 的板块池指标不参与合并，保持剖面原值（兜底原则）。
+    prof_bmk = ((profile.get("benchmarks") or {}).get("values") or {})
+    eff_bmk = {k: dict(v) for k, v in prof_bmk.items() if isinstance(v, dict)}
+    bmk_origin = {k: "profile" for k in eff_bmk}
+    board_meta = None
+    if benchmarks_doc:
+        board_meta = {"board_code": benchmarks_doc.get("board_code"),
+                      "board_name": benchmarks_doc.get("board_name"),
+                      "as_of": benchmarks_doc.get("as_of")}
+        for m, spec in (benchmarks_doc.get("metrics") or {}).items():
+            if not isinstance(spec, dict):
+                continue
+            if (spec.get("status") in ("calibrated", "indicative")
+                    and (spec.get("n") or 0) >= BENCHMARK_MIN_SAMPLE):
+                eff_bmk[m] = dict(spec)
+                bmk_origin[m] = "board:" + str(board_meta["board_name"] or board_meta["board_code"])
+
     # ---- 行业剖面：把基准分位数注入 ctx，供规则与模板使用 ---- #
-    bmk = (profile.get("benchmarks") or {}).get("values") or {}
-    for name, spec in bmk.items():
+    for name, spec in eff_bmk.items():
         if not isinstance(spec, dict):
             continue
         for q in ("p10", "p25", "median", "p75", "p90"):
@@ -320,6 +604,19 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
             if isinstance(v, (int, float)):
                 ctx[f"{name}_industry_{q}"] = float(v)
                 ctx[f"{name}_industry_{q}_pp"] = float(v) * 100
+
+    # ---- WACC 敏感性区间注入 ctx（compute_wacc.py 产出，--wacc 传入）----
+    # 注入 wacc_low/wacc_point/wacc_high 与 cost_of_equity_* 供规则表达式与
+    # 证据链引用；判定本身走 _wacc_judge 的两端敏感性，不用中值硬判。
+    for kind in ("wacc", "cost_of_equity"):
+        band = (wacc or {}).get(kind)
+        if not isinstance(band, dict):
+            continue
+        for k in ("low", "point", "high"):
+            v = band.get(k)
+            if isinstance(v, (int, float)):
+                ctx[f"{kind}_{k}"] = float(v)
+                ctx[f"{kind}_{k}_pp"] = float(v) * 100
 
     severity_scale = rules_doc.get("severity_scale") or {}
     cur = diag.get("period", {}).get("current")
@@ -368,7 +665,8 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
                 "risk_id": rid,
                 "risk_name": rule.get("risk_name"),
                 "risk_name_en": rule.get("risk_name_en"),
-                "category": cat,
+                "category": _out_category(rid, cat),
+                "category_internal": cat if cat == "banking" else None,
                 "category_label": categories.get(cat),
                 "status": "not_applicable",
                 "severity": None,
@@ -377,6 +675,10 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
                 "trigger": rule.get("trigger"),
                 "trigger_display": rule.get("trigger_display"),
                 "threshold": rule.get("threshold"),
+                "threshold_value": rule.get("threshold"),
+                "threshold_source": "fixed",
+                "threshold_basis": rule.get("threshold_basis"),
+                "peer_sample_n": 0,
                 "evidence_required": rule.get("evidence_required", []),
                 "confidence": rule.get("confidence"),
                 "explanation": f"本行业（{profile.get('label', '未识别')}）不适用：{na_reason}",
@@ -386,6 +688,46 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
             continue
 
         ok, fired, missing = eval_expr(rule["trigger"], ctx)
+        active_rule = rule
+
+        # 阈值来源：默认固定阈值。
+        # ① 规范 §6.3 点名的 5 条规则在同业样本 ≥3 家时改用同业分位重判（C 当次指定的可比组）；
+        # ② 规则声明 benchmark_judge 且行业基准已校准（n≥5）时改用行业分位重判（B 自建样本池）。
+        # comparison 的可比组更具体，两者同时命中时 ① 优先，② 只兜 ① 没覆盖的规则。
+        peer_fired, thr_meta = _peer_threshold_judge(rid, ctx, comparison)
+        if peer_fired is None:
+            bench_fired, bench_meta = _benchmark_judge(rule, ctx, eff_bmk)
+            # 回退（bench_fired=None）也要把 fallback meta 写上卡：
+            # threshold_source=fixed_fallback + 回退原因，读者才知道为什么没用同业阈值。
+            if bench_meta is not None:
+                thr_meta = bench_meta
+            if bench_fired is not None:
+                peer_fired = bench_fired
+                cfg = rule.get("benchmark_judge") or {}
+                if cfg.get("peer_expr"):
+                    # trigger_values 与证据链要反映实际参与判定的表达式，
+                    # 否则卡上写的是 delta 阈值、实际比较的却是行业分位。
+                    # trigger_display 同步换成 _peer_display 处理后的生效阈值文案。
+                    active_rule = dict(rule, trigger=cfg["peer_expr"],
+                                       trigger_display=_peer_display(
+                                           rule.get("trigger_display"), rid, thr_meta))
+        if peer_fired is None:
+            # ③ 规则声明 wacc_judge 且 --wacc 传入时用敏感性区间重判。
+            #    区间内结论翻转 → "sensitive" → not_evaluable + review_queue 转人工。
+            w_fired, w_meta = _wacc_judge(rule, ctx, wacc)
+            if w_meta is not None:
+                thr_meta = w_meta
+            if w_fired == "sensitive":
+                ok, fired, missing = False, None, ["WACC 敏感性区间内结论翻转，转人工核验"]
+            elif w_fired is not None:
+                peer_fired = w_fired
+                cfg = rule.get("wacc_judge") or {}
+                if cfg.get("peer_expr"):
+                    active_rule = dict(rule, trigger=cfg["peer_expr"],
+                                       trigger_display=_peer_display(
+                                           rule.get("trigger_display"), rid, thr_meta))
+        if peer_fired is not None:
+            ok, fired, missing = True, peer_fired, []
 
         if not ok:
             status = "not_evaluable"
@@ -412,15 +754,26 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
             "risk_id": rid,
             "risk_name": rule.get("risk_name"),
             "risk_name_en": rule.get("risk_name_en"),
-            "category": cat,
+            "category": _out_category(rid, cat),
+            "category_internal": cat if cat == "banking" else None,
             "category_label": categories.get(cat),
             "status": status,
             "severity": severity,
             "severity_tag": (severity_scale.get(severity) or {}).get("tag") if severity else None,
             "score": score,
-            "trigger": rule.get("trigger"),
-            "trigger_display": rule.get("trigger_display"),
+            "trigger": active_rule.get("trigger"),
+            "trigger_display": _peer_display(rule.get("trigger_display"), rid, thr_meta),
             "threshold": rule.get("threshold"),
+            "threshold_value": (thr_meta or {}).get("threshold_value", rule.get("threshold")),
+            "threshold_source": (thr_meta or {}).get("threshold_source", "fixed"),
+            "peer_sample_n": (thr_meta or {}).get("peer_sample_n", 0),
+            # threshold_basis 是规则默认阈值的性质（regulatory / self_delta / convention /
+            # peer_percentile），由规则文件声明；threshold_source 是本次判定实际用的来源。
+            # 一个静态、一个动态，不要混。
+            "threshold_basis": rule.get("threshold_basis"),
+            "threshold_note": (thr_meta or {}).get("peer_note"),
+            "benchmark_status": (thr_meta or {}).get("benchmark_status"),
+            "benchmark_pool": (thr_meta or {}).get("benchmark_pool"),
             "evidence_required": rule.get("evidence_required", []),
             "confidence": rule.get("confidence"),
         }
@@ -428,28 +781,41 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
         if status == "triggered":
             item["explanation"] = _render(rule.get("explanation_template", ""), ctx)
             item["suggestions"] = list(rule.get("suggestions", []))
-            item["evidence_chain"] = _evidence_chain(rule, ctx, diag, cur, prev)
+            item["evidence_chain"] = _evidence_chain(active_rule, ctx, diag, cur, prev)
             item["trigger_values"] = {
-                v: ctx.get(v) for v in vars_in(rule["trigger"]) if v in ctx
+                v: ctx.get(v) for v in vars_in(active_rule["trigger"]) if v in ctx
             }
         elif status == "passed":
             item["explanation"] = "规则已执行，条件不成立，本项无异常。"
             item["evidence_chain"] = []
             item["trigger_values"] = {
-                v: ctx.get(v) for v in vars_in(rule["trigger"]) if v in ctx
+                v: ctx.get(v) for v in vars_in(active_rule["trigger"]) if v in ctx
             }
         else:
-            item["explanation"] = (
-                f"无法判定：表达式引用的变量缺失（{missing}），已转人工核验，"
-                "不做'无风险'假设。"
+            miss_txt = ("、".join(str(m) for m in missing)
+                        if isinstance(missing, list) else str(missing))
+            if miss_txt.startswith("WACC 敏感性"):
+                # 敏感性翻转：不是缺数据，是结论不唯一——两种结果都写清楚
+                item["explanation"] = ("结论不唯一：" + miss_txt + "。"
+                                       "已转人工核验，不做单点假设。")
+            else:
+                item["explanation"] = (
+                    f"无法判定：表达式引用的变量缺失（{miss_txt}），已转人工核验，"
+                    "不做'无风险'假设。"
             )
             item["evidence_chain"] = []
+            wj = rule.get("wacc_judge") or {}
             item["trigger_values"] = {}
+            if thr_meta and (thr_meta.get("wacc_low") is not None):
+                if isinstance(ctx.get(wj.get("metric") or ""), (int, float)):
+                    item["trigger_values"][wj["metric"]] = ctx[wj["metric"]]
+                item["trigger_values"]["wacc_low"] = thr_meta["wacc_low"]
+                item["trigger_values"]["wacc_high"] = thr_meta["wacc_high"]
             review_queue.append({
                 "type": "risk_not_evaluable",
                 "item": f"{rid} {rule.get('risk_name')}",
-                "reason": f"缺失变量：{missing}",
-                "missing_inputs": [missing] if missing else [],
+                "reason": miss_txt,
+                "missing_inputs": [miss_txt] if missing else [],
                 "severity_if_triggered": rule.get("severity"),
                 "suggested_action": (
                     rule.get("suggestions", [""])[-1]
@@ -490,6 +856,20 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
             "statement_model": profile.get("statement_model", "general"),
             "resolved_from": profile.get("_resolved_from", "default"),
             "benchmarks_calibrated": bool((profile.get("benchmarks") or {}).get("calibrated")),
+            # 全有全无的布尔看不出进度：把已校准指标与覆盖度一并透出（诚实标注）
+            "benchmarks_coverage": (profile.get("benchmarks") or {}).get("coverage"),
+            "benchmarks_calibrated_metrics": (profile.get("benchmarks") or {}).get("calibrated_metrics") or [],
+            # --benchmarks 板块池信息与逐指标来源（profile=剖面策展 / board:XX=板块池）
+            "benchmarks_board": board_meta,
+            "benchmarks_origin": bmk_origin,
+            # WACC 敏感性区间摘要（compute_wacc.py 产出）：给 D 显示"阈值怎么来的"。
+            # 无 --wacc 时为 null——P03/B12 维持 not_evaluable，诚实缺数。
+            "wacc": ({"company": (wacc or {}).get("company"),
+                      "wacc_band": (wacc or {}).get("wacc"),
+                      "cost_of_equity_band": (wacc or {}).get("cost_of_equity"),
+                      "beta_source": ((wacc or {}).get("components") or {}).get("beta", {}).get("source"),
+                      "risk_free_rate": ((wacc or {}).get("components") or {}).get("risk_free_rate")}
+                     if wacc else None),
             "metrics_marked_not_applicable": sorted(na_metrics),
             "rules_disabled_or_skipped": len(na_reasons),
             "extra_rules_added": len(extra_rules),
@@ -513,6 +893,12 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
                            "score": r["score"]} for r in top],
         },
         "risks": risks,
+        # 规范 §6.1：risks 只放触发的卡，其余进 rules_evaluated。
+        # 但 D 的 from_b.py 是按 status 从 risks 里分流的，直接改结构会把它打断，
+        # 所以 risks 保留全量（向后兼容），另给两个规范字段。D 后续可切到这两个字段。
+        "risks_triggered": [r for r in risks if r["status"] == "triggered"],
+        "rules_evaluated": [r for r in risks if r["status"] != "triggered"],
+        "comparison_status": (comparison or {}).get("status") if comparison else None,
         "review_queue": review_queue,
     }
 
@@ -521,13 +907,30 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
 # 证据链 / 模板渲染
 # --------------------------------------------------------------------------- #
 def _render(tpl: str, ctx: dict) -> str:
+    """渲染说明模板。
+
+    整串 format 会在第一个缺失变量处抛错，导致**本来能填的变量也留成占位符**
+    （例如「财务费用率由 {finance_expense_ratio_prev:.2%} 升至 12.3%」）。
+    所以失败后退化为逐个替换：能填的填，确实缺的写「—」。
+    """
     if not tpl:
         return ""
     try:
         return tpl.format(**ctx)
-    except (KeyError, IndexError, ValueError, TypeError) as e:
-        # 模板引用了缺失变量：降级为"变量占位"文本，并显式标注，绝不静默编造
-        return tpl + f"（模板变量 {e} 缺失，本句需人工补全）"
+    except (KeyError, IndexError, ValueError, TypeError):
+        pass
+
+    def rep(m):
+        name, spec = m.group(1), m.group(2) or ""
+        v = ctx.get(name)
+        if v is None:
+            return "—"
+        try:
+            return format(v, spec[1:] if spec.startswith(":") else "")
+        except (ValueError, TypeError):
+            return str(v)
+
+    return re.sub(r"\{([A-Za-z_]\w*)(:[^}]*)?\}", rep, tpl)
 
 
 def _evidence_chain(rule: dict, ctx: dict, diag: dict, cur, prev):
@@ -657,6 +1060,77 @@ def load_profile(industry: str | None, company_industry: str | None = None,
 
 
 # --------------------------------------------------------------------------- #
+# 板块池自动解析（--benchmarks auto）
+# --------------------------------------------------------------------------- #
+BOARDS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                          "..", "data", "peer_samples", "boards")
+BOARD_CACHE = os.path.join(BOARDS_DIR, "_company_board.json")
+
+
+def resolve_board_pool(diag: dict, ensure: bool = False) -> tuple[dict | None, str]:
+    """按 ratios 里的公司代码自动解析所属板块并读取本地板块池。
+
+    与行业剖面的三级解析对齐：工作台输入公司代码/名称后无需手动指路，
+    引擎自己找到板块池。遵循「离线校准，在线只读本地」原则：
+    - 解析板块码最多几次轻量行情请求（结果缓存到 _company_board.json，
+      第二次起零网络）；同业分位数**只从本地池文件读**。
+    - 本地无池时不抓同业数据，除非显式给 --ensure-pool（一次性建池，
+      之后仍走本地缓存）；否则在说明文字里给出建池命令，判定照常回退。
+    返回 (池文档 | None, 说明文字)。
+    """
+    comp = diag.get("company") or {}
+    code = str(comp.get("ticker_code") or comp.get("ticker") or "")
+    if not re.fullmatch(r"\d{6}", code):
+        return None, "无有效 6 位公司代码（%s），跳过板块池" % (code or "空")
+
+    os.makedirs(BOARDS_DIR, exist_ok=True)
+    cache = {}
+    if os.path.exists(BOARD_CACHE):
+        try:
+            cache = json.load(open(BOARD_CACHE, "r", encoding="utf-8"))
+        except Exception:
+            cache = {}
+
+    bk, bname = cache.get(code) or (None, None)
+    if not bk:
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            import fetch_industry_samples as fis
+            bk, bname = fis.resolve_board(None, code)
+            cache[code] = {"bk": bk, "name": bname}
+            with open(BOARD_CACHE, "w", encoding="utf-8") as f:
+                json.dump(cache, f, ensure_ascii=False, indent=1)
+                f.write("\n")
+        except Exception as e:
+            return None, "板块解析失败（%s），跳过板块池" % e
+
+    pool_path = os.path.join(BOARDS_DIR, "%s.json" % bk)
+    if os.path.exists(pool_path):
+        try:
+            doc = json.load(open(pool_path, "r", encoding="utf-8"))
+            return doc, "板块池 %s %s（本地缓存）" % (bk, bname or "")
+        except Exception as e:
+            return None, "板块池 %s 读取失败（%s）" % (bk, e)
+
+    if ensure:
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            fis_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                    "fetch_industry_samples.py")
+            import subprocess
+            subprocess.run([sys.executable, fis_path, "--code", code, "--write"],
+                           check=True, capture_output=True, text=True, timeout=300)
+            doc = json.load(open(pool_path, "r", encoding="utf-8"))
+            return doc, "板块池 %s %s（--ensure-pool 现场新建）" % (bk, bname or "")
+        except Exception as e:
+            return None, "板块池 %s 现场建池失败（%s），回退固定阈值" % (bk, e)
+
+    return None, ("板块池 %s %s 尚未建立，相关规则回退固定阈值。"
+                  "建池：python3 fetch_industry_samples.py --code %s --write"
+                  % (bk, bname or "", code))
+
+
+# --------------------------------------------------------------------------- #
 def main():
     ap = argparse.ArgumentParser(description="FinRadar / risk-radar 风险识别引擎")
     ap.add_argument("--ratios", required=True, help="financial-diagnosis 的 ratios 输出 JSON")
@@ -665,6 +1139,17 @@ def main():
     ap.add_argument("--industry", default=None,
                     help="行业剖面 id（banking / manufacturing ...）。不给则按 company.industry 自动匹配")
     ap.add_argument("--profile-dir", default=None, help="行业剖面目录（默认 ../data/industry_profiles）")
+    ap.add_argument("--comparison", default=None,
+                    help="同业对比 JSON（build_comparison.py 产出）。给了就对 5 条规则启用同业分位阈值")
+    ap.add_argument("--benchmarks", default=None,
+                    help="板块级同业基准池（fetch_industry_samples.py 产出）。传 'auto' 则按公司代码"
+                         "自动解析所属板块并读取本地池（无池不建，提示建池命令）；也可传池文件路径。"
+                         "任意行业可用：声明了 benchmark_judge 的规则改用板块分位数判定，缺失则回退固定阈值")
+    ap.add_argument("--ensure-pool", action="store_true",
+                    help="配合 --benchmarks auto：本地无池时现场建池（一次性，之后仍走本地缓存）")
+    ap.add_argument("--wacc", default=None,
+                    help="WACC 敏感性区间（compute_wacc.py 产出）。声明了 wacc_judge 的规则"
+                         "（P03/B12）改用区间两端重判，区间内结论翻转则转人工；不给则维持 not_evaluable")
     ap.add_argument("-o", "--output", required=True)
     ap.add_argument("--pretty", action="store_true")
     args = ap.parse_args()
@@ -672,12 +1157,21 @@ def main():
     diag = json.load(open(args.ratios, "r", encoding="utf-8"))
     rules = json.load(open(args.rules, "r", encoding="utf-8"))
     meta_extra = json.load(open(args.meta, "r", encoding="utf-8")) if args.meta else None
+    comparison = json.load(open(args.comparison, "r", encoding="utf-8")) if args.comparison else None
+    wacc_doc = json.load(open(args.wacc, "r", encoding="utf-8")) if args.wacc else None
 
     company_industry = ((diag.get("company") or {}).get("industry")
                         or (diag.get("meta") or {}).get("industry"))
     profile, _how = load_profile(args.industry, company_industry, args.profile_dir)
 
-    result = detect(diag, rules, meta_extra, profile=profile)
+    pool_note = None
+    if args.benchmarks == "auto":
+        benchmarks_doc, pool_note = resolve_board_pool(diag, ensure=args.ensure_pool)
+    else:
+        benchmarks_doc = json.load(open(args.benchmarks, "r", encoding="utf-8")) if args.benchmarks else None
+
+    result = detect(diag, rules, meta_extra, profile=profile, comparison=comparison,
+                    benchmarks_doc=benchmarks_doc, wacc=wacc_doc)
 
     os.makedirs(os.path.dirname(os.path.abspath(args.output)) or ".", exist_ok=True)
     with open(args.output, "w", encoding="utf-8") as f:
@@ -690,6 +1184,8 @@ def main():
     ip = result["industry_profile"]
     print(f"[OK] risks -> {args.output}")
     print(f"     行业剖面：{ip['profile_id']}（{ip['label']}）；{ip['resolved_from']}")
+    if pool_note:
+        print(f"     板块池：{pool_note}")
     print(f"     规则 {s['total_rules']} 条 | 适用 {s['in_scope_rules']} | 不适用 {s['not_applicable']} "
           f"| 触发 {s['triggered']} (重大 {s['by_severity']['high']} / 关注 {s['by_severity']['medium']} "
           f"/ 提示 {s['by_severity']['low']}) | 通过 {s['passed']} | 不可评估 {s['not_evaluable']}")

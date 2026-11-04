@@ -1,0 +1,108 @@
+{
+  "schema_version": "finradar.board-pool/1.0",
+  "board_code": "BK1277",
+  "board_name": "白酒Ⅱ",
+  "industry": "白酒Ⅱ",
+  "as_of": "2025-12-31",
+  "sample_definition": "东方财富行业板块 BK1277（白酒Ⅱ）按市值前 20 家，2025 年报披露值，scripts/fetch_industry_samples.py 生成",
+  "owner": "B",
+  "note": "板块级同业基准池。detect_risks.py --benchmarks 本文件后，benchmark_judge 规则自动改用本板块分位数判定；n<5 的指标不参与判定（如实标 missing）。",
+  "metrics": {
+    "roe": {
+      "unit": "ratio",
+      "n": 20,
+      "status": "calibrated",
+      "source": "东方财富 F10 ROEJQ · 白酒Ⅱ 板块 20 家，2025 年报",
+      "as_of": "2025-12-31",
+      "p10": -0.01013,
+      "p25": 0.04285,
+      "median": 0.07995,
+      "p75": 0.148075,
+      "p90": 0.23647
+    },
+    "gross_margin": {
+      "unit": "ratio",
+      "n": 20,
+      "status": "calibrated",
+      "source": "东方财富 F10 XSMLL · 白酒Ⅱ 板块 20 家，2025 年报",
+      "as_of": "2025-12-31",
+      "p10": 0.498797,
+      "p25": 0.62885818,
+      "median": 0.70354287,
+      "p75": 0.7797039,
+      "p90": 0.80523574
+    },
+    "net_margin": {
+      "unit": "ratio",
+      "n": 20,
+      "status": "calibrated",
+      "source": "东方财富 F10 XSJLL · 白酒Ⅱ 板块 20 家，2025 年报",
+      "as_of": "2025-12-31",
+      "p10": -0.02114308,
+      "p25": 0.07562578,
+      "median": 0.12773698,
+      "p75": 0.2363547,
+      "p90": 0.3396853
+    },
+    "debt_to_assets": {
+      "unit": "ratio",
+      "n": 20,
+      "status": "calibrated",
+      "source": "东方财富 F10 ZCFZL · 白酒Ⅱ 板块 20 家，2025 年报",
+      "as_of": "2025-12-31",
+      "p10": 0.18005837,
+      "p25": 0.22958892,
+      "median": 0.33356575,
+      "p75": 0.36610421,
+      "p90": 0.43702031
+    },
+    "current_ratio": {
+      "unit": "ratio",
+      "n": 20,
+      "status": "calibrated",
+      "source": "东方财富 F10 LD · 白酒Ⅱ 板块 20 家，2025 年报",
+      "as_of": "2025-12-31",
+      "p10": 1.54398672,
+      "p25": 1.70297482,
+      "median": 2.34219156,
+      "p75": 3.6201965,
+      "p90": 3.98686304
+    },
+    "quick_ratio": {
+      "unit": "ratio",
+      "n": 20,
+      "status": "calibrated",
+      "source": "东方财富 F10 SD · 白酒Ⅱ 板块 20 家，2025 年报",
+      "as_of": "2025-12-31",
+      "p10": 0.42816201,
+      "p25": 0.49664263,
+      "median": 0.79110452,
+      "p75": 1.81317153,
+      "p90": 2.19156937
+    },
+    "dso": {
+      "unit": "days",
+      "n": 20,
+      "status": "calibrated",
+      "source": "东方财富 F10 YSZKZZTS · 白酒Ⅱ 板块 20 家，2025 年报",
+      "as_of": "2025-12-31",
+      "p10": 0.1099476,
+      "p25": 0.34582572,
+      "median": 1.55908665,
+      "p75": 7.65057481,
+      "p90": 10.51388846
+    },
+    "dio": {
+      "unit": "days",
+      "n": 20,
+      "status": "calibrated",
+      "source": "东方财富 F10 CHZZTS · 白酒Ⅱ 板块 20 家，2025 年报",
+      "as_of": "2025-12-31",
+      "p10": 607.55780934,
+      "p25": 903.74668568,
+      "median": 1140.69083813,
+      "p75": 1342.32869086,
+      "p90": 1700.43373745
+    }
+  }
+}

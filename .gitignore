@@ -21,3 +21,10 @@ Thumbs.db
 
 # ------- 临时校验脚本 -------
 /tmp/_ld_check*.js
+
+# ------- 在线取数缓存（可由 fetch_eastmoney.py 重新抓，不进版本库） -------
+data-bridge/cache/
+data-bridge/out/
+
+# ------- 临时集成校验产物（可重新生成） -------
+.tmp_integ/

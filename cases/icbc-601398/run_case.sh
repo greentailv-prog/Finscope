@@ -33,7 +33,13 @@ echo "[2/4] 风险诊断 —— 银行业剖面"
       --ratios "$HERE/output_ratios.json" \
       --rules  "$ROOT/risk-radar/risk_rules.json" \
       --industry banking \
+      --wacc   "$ROOT/risk-radar/data/wacc_icbc.json" \
       -o "$HERE/output_risks.json" --pretty
+# wacc_icbc.json 由 compute_wacc.py 生成（β 回归无解释力，回退同业 β 中位数）：
+#   python3 risk-radar/scripts/compute_wacc.py --code 601398 \
+#     --ratios cases/icbc-601398/output_ratios.json --industry banking \
+#     --out risk-radar/data/wacc_icbc.json --write
+# 预生成归档以保证案例离线可复跑；如需刷新（如中债 Rf 更新）用上面命令重算。
 echo
 
 # ---------- 3. 风险（对照组：误用制造业口径） ---------- #

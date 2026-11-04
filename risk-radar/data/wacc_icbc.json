@@ -1,0 +1,45 @@
+{
+  "schema": "finradar.wacc/1.0",
+  "generator": "risk-radar/scripts/compute_wacc.py",
+  "company": {
+    "code": "601398",
+    "name": null,
+    "secid": "1.601398",
+    "banking": true
+  },
+  "generated_at": "2026-11-05T01:10:32+08:00",
+  "cost_of_equity": {
+    "low": 0.03993898494992733,
+    "point": 0.04189223369575461,
+    "high": 0.04384548244158189
+  },
+  "wacc": null,
+  "components": {
+    "risk_free_rate": {
+      "value": 0.0165,
+      "as_of": "2026-10-30",
+      "source": "中债国债收益率曲线 10 年期到期收益率（中国债券信息网 yield.chinabond.com.cn，中央国债登记结算有限责任公司编制，每工作日 17:30 发布）"
+    },
+    "beta": {
+      "low": 0.3906,
+      "point": 0.3906,
+      "high": 0.3906,
+      "source": "本公司回归 R²=0.001 < 0.05 无解释力，改用同业 β 中位数（20 家上市银行逐家回归，13 家 R²≥0.05）",
+      "std_error": null,
+      "n_weeks": 13,
+      "r_squared": null
+    },
+    "mrp": {
+      "low": 0.06,
+      "high": 0.07,
+      "basis": "A股股权风险溢价无官方发布数，采用学术与实务惯例区间 6%–7%。不取单点假装精确，区间端点进入 WACC 敏感性上下界"
+    },
+    "tax": {
+      "value": 0.126448,
+      "source": "公司有效税率（所得税费用/利润总额）"
+    },
+    "rd": null,
+    "capital_structure": null
+  },
+  "banking_note": "银行为存款经营类负债结构，经典 WACC 失真。门槛统一用股权成本 Ke；B12 的 RAROC 口径 = 净利润/资本净额（rwa_return/capital_adequacy_ratio），与 Ke 同尺度可比"
+}
