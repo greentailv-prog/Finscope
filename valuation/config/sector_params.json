@@ -1,0 +1,140 @@
+{
+  "version": "2026-11",
+  "note": "市场默认参数、行业锚点与规则阈值。所有联网数据运行时覆盖，并记录 as-of 日期。",
+  "market_defaults": {
+    "A": {
+      "risk_free": 0.018,
+      "erp": 0.0514,
+      "terminal_growth_cap": 0.04,
+      "default_terminal_growth": 0.025,
+      "cost_of_debt": 0.035,
+      "currency": "CNY",
+      "erp_source": "Damodaran 中国国家风险溢价（成熟市场 ERP + 中国 CRP）"
+    },
+    "US": {
+      "risk_free": 0.0428,
+      "erp": 0.0428,
+      "terminal_growth_cap": 0.03,
+      "default_terminal_growth": 0.025,
+      "cost_of_debt": 0.055,
+      "currency": "USD",
+      "erp_source": "Damodaran 美国隐含 ERP"
+    }
+  },
+  "tax_clamp": {"low": 0.15, "high": 0.30, "fallback": 0.21},
+  "peer_rules": {
+    "target_count": 5,
+    "min_count": 3,
+    "max_count": 6,
+    "outlier_pe_max": 100,
+    "outlier_ev_revenue_max": 50,
+    "dispersion_warn": 0.60,
+    "divergence_warn": 0.50,
+    "divergence_strong_warn": 1.00
+  },
+  "wacc_reconciliation": {
+    "enabled_by_default": true,
+    "trigger_gap": 0.015,
+    "move_fraction": 0.60,
+    "max_adjustment": 0.04,
+    "min_wacc": 0.03,
+    "max_wacc": 0.25
+  },
+  "size_premium": [
+    {"min_market_cap": 20000000000, "premium": 0.0, "label": ">200亿元"},
+    {"min_market_cap": 10000000000, "premium": 0.0, "label": "100–200亿元"},
+    {"min_market_cap": 2000000000, "premium": 0.005, "label": "20–100亿元"},
+    {"min_market_cap": 500000000, "premium": 0.015, "label": "5–20亿元"},
+    {"min_market_cap": 0, "premium": 0.025, "label": "5亿元以下"}
+  ],
+  "sector_anchors": [
+    {"keywords": ["白酒", "食品", "饮料", "乳品", "调味", "啤酒"], "beta": 0.85, "wacc": 0.079, "label": "食品饮料"},
+    {"keywords": ["白色家电", "家电", "厨电"], "beta": 0.95, "wacc": 0.086, "label": "家电"},
+    {"keywords": ["消费电子", "电子"], "beta": 1.15, "wacc": 0.095, "label": "消费电子"},
+    {"keywords": ["半导体", "芯片"], "beta": 1.45, "wacc": 0.110, "label": "半导体"},
+    {"keywords": ["软件", "计算机", "互联网"], "beta": 1.20, "wacc": 0.100, "label": "软件"},
+    {"keywords": ["医药", "生物", "制药"], "beta": 1.00, "wacc": 0.091, "label": "医药"},
+    {"keywords": ["医疗器械"], "beta": 1.05, "wacc": 0.093, "label": "医疗器械"},
+    {"keywords": ["银行"], "beta": 0.60, "wacc": 0.080, "label": "银行"},
+    {"keywords": ["保险"], "beta": 0.85, "wacc": 0.085, "label": "保险"},
+    {"keywords": ["证券", "券商"], "beta": 1.20, "wacc": 0.100, "label": "证券"},
+    {"keywords": ["房地产", "地产"], "beta": 1.10, "wacc": 0.095, "label": "房地产"},
+    {"keywords": ["汽车"], "beta": 1.30, "wacc": 0.105, "label": "汽车"},
+    {"keywords": ["电池", "光伏", "新能源"], "beta": 1.35, "wacc": 0.108, "label": "新能源"},
+    {"keywords": ["机械", "自动化", "机器人"], "beta": 1.15, "wacc": 0.097, "label": "机械"},
+    {"keywords": ["化工", "化学"], "beta": 1.10, "wacc": 0.095, "label": "化工"},
+    {"keywords": ["钢铁", "煤炭", "有色"], "beta": 1.10, "wacc": 0.098, "label": "周期资源"},
+    {"keywords": ["建筑", "建材"], "beta": 1.00, "wacc": 0.092, "label": "建筑建材"},
+    {"keywords": ["交通运输", "物流"], "beta": 0.95, "wacc": 0.088, "label": "交运物流"},
+    {"keywords": ["通信", "公用事业", "电力"], "beta": 0.75, "wacc": 0.078, "label": "通信公用"},
+    {"keywords": ["零售", "商贸"], "beta": 1.05, "wacc": 0.093, "label": "零售"},
+    {"keywords": ["传媒", "游戏"], "beta": 1.25, "wacc": 0.103, "label": "传媒"},
+    {"keywords": ["农业", "养殖"], "beta": 1.05, "wacc": 0.095, "label": "农业"},
+    {"keywords": ["军工", "国防"], "beta": 1.15, "wacc": 0.098, "label": "军工"},
+    {"keywords": ["环保"], "beta": 0.95, "wacc": 0.090, "label": "环保"},
+    {"keywords": ["石油", "石化", "油气"], "beta": 0.90, "wacc": 0.088, "label": "石油石化"}
+  ],
+  "industry_gates": [
+    {
+      "keywords": ["银行"],
+      "support": "unsupported",
+      "reason": "银行的有息负债是经营资金而非融资，WACC 口径不成立，标准 DCF 不适用。",
+      "alternatives": ["comps_pb", "ddm"],
+      "primary_absolute": "ddm"
+    },
+    {
+      "keywords": ["保险"],
+      "support": "unsupported",
+      "reason": "保险负债久期长且含准备金，标准 FCFF 不适用。",
+      "alternatives": ["comps_pb", "ddm"],
+      "primary_absolute": "ddm"
+    },
+    {
+      "keywords": ["证券", "券商"],
+      "support": "unsupported",
+      "reason": "券商资产负债表高度金融化，标准 FCFF 不适用。",
+      "alternatives": ["comps_pb", "ddm"],
+      "primary_absolute": "ddm"
+    },
+    {
+      "keywords": ["房地产", "地产"],
+      "support": "unsupported",
+      "reason": "地产开发需 NAV/项目层面口径，本版未支持标准 DCF。",
+      "alternatives": ["comps_pb"],
+      "primary_absolute": null
+    },
+    {
+      "keywords": ["REIT", "REITs", "房地产信托"],
+      "support": "unsupported",
+      "reason": "REITs 应使用 P/FFO 或 NAV，标准 DCF 不适用。",
+      "alternatives": ["comps_pb"],
+      "primary_absolute": null
+    }
+  ],
+  "multiple_applicability": {
+    "pe": {"requires": "positive_net_income", "label": "市盈率 PE", "basis": "净利润", "category": "equity"},
+    "pe_forward": {"requires": "positive_net_income", "label": "预期市盈率", "basis": "净利润", "category": "equity"},
+    "peg": {"requires": "positive_net_income_and_growth", "label": "PEG", "basis": "净利润", "category": "equity"},
+    "pb": {"requires": "positive_equity", "label": "市净率 PB", "basis": "净资产", "category": "equity"},
+    "ps": {"requires": "positive_revenue", "label": "市销率 PS", "basis": "营业收入", "category": "equity"},
+    "pcf": {"requires": "positive_cfo", "label": "市现率 PCF", "basis": "经营现金流", "category": "equity"},
+    "ev_revenue": {"requires": "positive_revenue", "label": "EV/营业收入", "basis": "营业收入", "category": "enterprise"},
+    "ev_ebitda": {"requires": "positive_ebitda", "label": "EV/EBITDA", "basis": "EBITDA", "category": "enterprise"},
+    "ev_ebit": {"requires": "positive_ebit", "label": "EV/EBIT", "basis": "EBIT", "category": "enterprise"}
+  },
+  "default_multiples": {
+    "profitable": ["pe", "ps", "pb", "ev_ebitda", "ev_revenue"],
+    "high_growth": ["ps", "ev_revenue", "ev_ebitda", "peg"],
+    "loss_making": ["ps", "ev_revenue", "pb"],
+    "financial": ["pb", "pe"],
+    "capital_intensive": ["ev_ebitda", "pe", "pb", "ps"]
+  },
+  "scenario_deltas": {
+    "bull_growth": 0.03,
+    "bull_margin": 0.02,
+    "bull_wacc": -0.01,
+    "bear_growth": -0.03,
+    "bear_margin": -0.02,
+    "bear_wacc": 0.01
+  }
+}

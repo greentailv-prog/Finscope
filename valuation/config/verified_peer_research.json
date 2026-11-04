@@ -1,0 +1,27 @@
+{
+  "database_version": "2026-11-04-r1",
+  "scope": "业务匹配证据库；证券当前倍数、数据口径和业务收入占比仍必须按同一估值日核验。候选不自动视为已批准可比公司。",
+  "profiles": {
+    "300757": {
+      "company": "罗博特科", "ticker": "300757", "business_transition": true,
+      "as_of": "2026-11-04", "approval_status": "review_required",
+      "source_urls": ["https://static.cninfo.com.cn/finalpage/2026-03-31/1225059372.PDF", "https://static.cninfo.com.cn/finalpage/2026-08-26/1225507370.PDF", "https://static.cninfo.com.cn/finalpage/2026-10-28/1225632209.PDF"],
+      "material_events": [
+        {"event":"2025年完成ficonTEC收购并表，2026H1光电子封测设备收入占主营业务81.16%", "source_url":"https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12540182&stockid=300757"},
+        {"event":"2026年9月29日H股上市；需核对全球总股本及募集资金时点", "source_url":"https://static.cninfo.com.cn/finalpage/2026-10-28/1225632209.PDF"},
+        {"event":"截至2026年三季度报告披露日光电子及半导体未确认收入订单23.59亿元", "source_url":"https://static.cninfo.com.cn/finalpage/2026-10-28/1225632209.PDF"}
+      ],
+      "segments": [
+        {"segment_id":"photonics", "name":"光电子与半导体封测自动化设备", "valuation_priority":"forward_EV_Sales_or_segment_DCF", "candidates":[
+          {"ticker":"MYCR.ST", "company":"Mycronic (MRSI Systems)", "market":"SE", "tier":"product_overlap_diversified", "product":"光子器件Die Bonder与Active Alignment精密制造设备", "customer_overlap":"光模块、硅光和光子器件制造厂", "business_overlap":4, "purity":2, "scale_comparability":null,"evidence_url":"https://www.mycronic.com/product-areas/die-bonding/", "evidence_type":"manufacturer_official", "reason":"MRSI产品与光子器件高精度组装、光学主动对准存在直接工艺交集，但Mycronic集团还有PCB等业务，不能直接套集团倍数。", "approved":false},
+          {"ticker":"0522.HK", "company":"ASMPT", "market":"HK", "tier":"adjacent_multisegment", "product":"半导体及光电子先进封装设备", "customer_overlap":"半导体/光电子器件制造商", "business_overlap":3,"purity":1,"scale_comparability":null,"evidence_url":"https://www.asmpt.com/en/company/", "evidence_type":"manufacturer_official", "reason":"半导体与光子封装设备具备技术相邻性，集团多业务板块混合，需剥离产品业务后才能比较。", "approved":false},
+          {"ticker":"688516", "company":"奥特维", "market":"CN", "tier":"adjacent_product", "product":"半导体封测设备、光模块AOI检测设备", "customer_overlap":"封测/光模块制造厂", "business_overlap":2,"purity":1,"scale_comparability":null,"evidence_url":"https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12141239&stockid=688516", "evidence_type":"annual_report_summary", "reason":"存在光模块AOI和封测设备交集，但集团主要还经营光伏和锂电设备，仅作为相邻业务验证。", "approved":false}
+        ]},
+        {"segment_id":"pv_equipment", "name":"光伏自动化设备与整线解决方案", "valuation_priority":"mid_cycle_EV_EBITDA_or_EV_Sales", "candidates":[
+          {"ticker":"300724", "company":"捷佳伟创", "market":"CN","tier":"similar_industry_different_process", "product":"光伏电池湿法、真空工艺与智能制造设备", "customer_overlap":"太阳能电池制造商", "business_overlap":3,"purity":3,"scale_comparability":null,"evidence_url":"https://www.chinasc.com.cn/page-99.html", "evidence_type":"manufacturer_official", "reason":"均提供光伏电池智能制造设备，部分客户和产线场景相近，但具体工艺与产品价值量不同。", "approved":false},
+          {"ticker":"688516", "company":"奥特维", "market":"CN", "tier":"similar_equipment_different_stage", "product":"光伏组件串焊机、硅片分选与智能生产线", "customer_overlap":"光伏产业链制造企业", "business_overlap":2,"purity":2,"scale_comparability":null,"evidence_url":"https://cn.wxautowell.com/about", "evidence_type":"manufacturer_official", "reason":"同属光伏专用设备，但工艺覆盖和业务结构均不一致；需使用分部/规范化周期数据。", "approved":false}
+        ]}
+      ]
+    }
+  }
+}
