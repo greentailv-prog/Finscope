@@ -1,0 +1,44 @@
+{
+  "workbook": "valuation/output/SYNTHETIC_ONLY_three_statement_model.xlsx",
+  "recalculation_engine": "artifact_tool",
+  "five_year_checks": [
+    {
+      "year": 2026,
+      "fcff_ok": true,
+      "bs_ok": true,
+      "sheet_pass": true
+    },
+    {
+      "year": 2027,
+      "fcff_ok": true,
+      "bs_ok": true,
+      "sheet_pass": true
+    },
+    {
+      "year": 2028,
+      "fcff_ok": true,
+      "bs_ok": true,
+      "sheet_pass": true
+    },
+    {
+      "year": 2029,
+      "fcff_ok": true,
+      "bs_ok": true,
+      "sheet_pass": true
+    },
+    {
+      "year": 2030,
+      "fcff_ok": true,
+      "bs_ok": true,
+      "sheet_pass": true
+    }
+  ],
+  "all_checks_pass": true,
+  "engine_value_matches": true,
+  "formula_errors_found": false,
+  "native_excel_com_run": true,
+  "EXCEL_OK": true,
+  "note": "artifact_tool 与 Microsoft Excel COM 均已重算；COM 检查 0 个公式错误。",
+  "native_excel_com_status": "EXCEL_OK",
+  "native_check": "valuation/output/SYNTHETIC_ONLY_three_statement_model.native_check.json"
+}
