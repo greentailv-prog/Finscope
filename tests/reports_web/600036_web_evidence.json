@@ -1,0 +1,165 @@
+{
+ "ok": true,
+ "financials": {
+  "years": [
+   2024,
+   2025
+  ],
+  "revenue": [
+   337488000000.0,
+   337532000000.0
+  ],
+  "cogs": [
+   null,
+   null
+  ],
+  "gross_profit": [
+   null,
+   null
+  ],
+  "ebit": [
+   179019000000.0,
+   179252000000.0
+  ],
+  "operating_profit": [
+   179019000000.0,
+   179252000000.0
+  ],
+  "pretax_income": [
+   178652000000.0,
+   178993000000.0
+  ],
+  "tax_provision": [
+   29093000000.0,
+   27867000000.0
+  ],
+  "net_income": [
+   149559000000.0,
+   151126000000.0
+  ],
+  "net_income_parent": [
+   148391000000.0,
+   150181000000.0
+  ],
+  "finance_expense": [
+   null,
+   null
+  ],
+  "interest_expense": [
+   null,
+   null
+  ],
+  "eps": [
+   5.66,
+   5.7
+  ],
+  "da": [
+   null,
+   null
+  ],
+  "capex": [
+   null,
+   null
+  ],
+  "cfo": [
+   447023000000.0,
+   451457000000.0
+  ],
+  "dividends_paid": [
+   null,
+   null
+  ],
+  "receivables": [
+   null,
+   null
+  ],
+  "inventory": [
+   null,
+   null
+  ],
+  "payables": [
+   null,
+   null
+  ],
+  "delta_nwc": [
+   null,
+   null
+  ],
+  "cash": 14808000000.0,
+  "total_debt": 143487000000.0,
+  "minority": 8024000000.0,
+  "total_equity": 1280899000000.0,
+  "total_assets": 13070523000000.0,
+  "shares": 25220000000.0,
+  "minority_interest": 8024000000.0,
+  "preferred_stock": 0.0
+ },
+ "segments": [],
+ "sources": [
+  {
+   "name": "年报 PDF·2025",
+   "purpose": "财务报表/分部",
+   "as_of": "2025-12-31",
+   "official": true,
+   "note": "https://static.cninfo.com.cn/finalpage/2026-03-28/1225047590.PDF"
+  }
+ ],
+ "reports": [
+  {
+   "ok": true,
+   "pdf": "D:\\研一\\Agent最终产品\\FinScope中期汇报\\final\\Finscope-C-\\Finscope-C-Comps-DCF\\valuation\\.cache\\web\\pdfs\\600036_2025.pdf",
+   "report_year": 2025,
+   "unit_scale": 1.0,
+   "years": {
+    "2025": {
+     "cash": 14808000000.0,
+     "total_assets": 13070523000000.0,
+     "bond": 143487000000.0,
+     "shares": 25220000000.0,
+     "total_equity_parent": 1272875.0,
+     "minority": 8024000000.0,
+     "total_equity": 1280899000000.0,
+     "revenue": 337532000000.0,
+     "operating_profit": 179252000000.0,
+     "pretax_income": 178993000000.0,
+     "tax_provision": 27867000000.0,
+     "net_income": 151126000000.0,
+     "net_income_parent": 150181000000.0,
+     "eps": 5.7,
+     "cfo": 451457000000.0,
+     "ebit": 179252000000.0,
+     "da": null,
+     "total_debt": 143487000000.0
+    },
+    "2024": {
+     "cash": 16622000000.0,
+     "total_assets": 12152036000000.0,
+     "bond": 222921000000.0,
+     "shares": 25220000000.0,
+     "total_equity_parent": 1226014.0,
+     "minority": 7461000000.0,
+     "total_equity": 1233475000000.0,
+     "revenue": 337488000000.0,
+     "operating_profit": 179019000000.0,
+     "pretax_income": 178652000000.0,
+     "tax_provision": 29093000000.0,
+     "net_income": 149559000000.0,
+     "net_income_parent": 148391000000.0,
+     "eps": 5.66,
+     "cfo": 447023000000.0,
+     "ebit": 179019000000.0,
+     "da": null,
+     "total_debt": 222921000000.0
+    }
+   },
+   "segments": [],
+   "segment_pages": [],
+   "text_chars": 380458,
+   "url": "https://static.cninfo.com.cn/finalpage/2026-03-28/1225047590.PDF",
+   "title": "招商银行股份有限公司2025年度报告"
+  }
+ ],
+ "warnings": [],
+ "method": "web_search+annual_report_pdf",
+ "as_of": "2025-12-31"
+}

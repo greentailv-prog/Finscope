@@ -1,0 +1,515 @@
+{
+ "ok": true,
+ "financials": {
+  "years": [
+   2023,
+   2024,
+   2025
+  ],
+  "revenue": [
+   373709804000.0,
+   409084266000.0,
+   458502407000.0
+  ],
+  "cogs": [
+   276409404000.0,
+   299584935000.0,
+   335989528000.0
+  ],
+  "gross_profit": [
+   97300400000.0,
+   109499331000.0,
+   122512879000.0
+  ],
+  "ebit": [
+   37055785000.0,
+   43064504000.0,
+   47075227000.0
+  ],
+  "operating_profit": [
+   40317441000.0,
+   46393752000.0,
+   52978773000.0
+  ],
+  "pretax_income": [
+   40277163000.0,
+   46689746000.0,
+   53085343000.0
+  ],
+  "tax_provision": [
+   6531811000.0,
+   null,
+   null
+  ],
+  "net_income": [
+   33745352000.0,
+   38757214000.0,
+   44520196000.0
+  ],
+  "net_income_parent": [
+   33719935000.0,
+   38537237000.0,
+   43945411000.0
+  ],
+  "finance_expense": [
+   -3261656000.0,
+   -3329248000.0,
+   -5903546000.0
+  ],
+  "interest_expense": [
+   2808104000.0,
+   2453361000.0,
+   2211331000.0
+  ],
+  "eps": [
+   4.93,
+   5.44,
+   5.8
+  ],
+  "da": [
+   734892000.0,
+   7823840000.0,
+   9339695000.0
+  ],
+  "capex": [
+   6314051000.0,
+   7839636000.0,
+   11141889000.0
+  ],
+  "cfo": [
+   57902611000.0,
+   60511572000.0,
+   53345930000.0
+  ],
+  "dividends_paid": [
+   -19643828000.0,
+   -22821861000.0,
+   -33080135000.0
+  ],
+  "receivables": [
+   32884739000.0,
+   35798974000.0,
+   40450097000.0
+  ],
+  "inventory": [
+   47339255000.0,
+   63339188000.0,
+   64628834000.0
+  ],
+  "payables": [
+   72530465000.0,
+   92800426000.0,
+   103680491000.0
+  ],
+  "delta_nwc": [
+   null,
+   -1355793000.0,
+   -4939296000.0
+  ],
+  "cash": 85247150000.0,
+  "total_debt": 65579944000.0,
+  "minority": 13202918000.0,
+  "total_equity": 236424223000.0,
+  "total_assets": 608791766000.0,
+  "shares": 7597145000.0,
+  "minority_interest": 13202918000.0,
+  "preferred_stock": 0.0
+ },
+ "segments": [
+  {
+   "name": "智能家居业务",
+   "level": "top",
+   "parent": "",
+   "revenue": 299927239000.0,
+   "cost": 210259540000.0,
+   "gross_profit": 89667699000.0,
+   "gross_margin": 0.299,
+   "revenue_share": 0.654145396885561,
+   "period": "2025-12-31",
+   "source": "年报第 50 页·分产品"
+  },
+  {
+   "name": "楼宇科技",
+   "level": "top",
+   "parent": "",
+   "revenue": 35790825000.0,
+   "cost": 24846935000.0,
+   "gross_profit": 10943890000.0,
+   "gross_margin": 0.30579999999999996,
+   "revenue_share": 0.07806027722772675,
+   "period": "2025-12-31",
+   "source": "年报第 50 页·分产品"
+  },
+  {
+   "name": "机器人与自动化",
+   "level": "top",
+   "parent": "",
+   "revenue": 31010933000.0,
+   "cost": 24403714000.0,
+   "gross_profit": 6607219000.0,
+   "gross_margin": 0.21309999999999998,
+   "revenue_share": 0.06763526761594514,
+   "period": "2025-12-31",
+   "source": "年报第 50 页·分产品"
+  },
+  {
+   "name": "工业技术",
+   "level": "top",
+   "parent": "",
+   "revenue": 27232432000.0,
+   "cost": 22468055000.0,
+   "gross_profit": 4764377000.0,
+   "gross_margin": 0.175,
+   "revenue_share": 0.05939430542618722,
+   "period": "2025-12-31",
+   "source": "年报第 50 页·分产品"
+  },
+  {
+   "name": "其他业务",
+   "level": "top",
+   "parent": "",
+   "revenue": 28718768000.0,
+   "cost": 25485333000.0,
+   "gross_profit": 3233435000.0,
+   "gross_margin": 0.11259999999999999,
+   "revenue_share": 0.06263602450401094,
+   "period": "2025-12-31",
+   "source": "年报第 50 页·分产品"
+  },
+  {
+   "name": "其他",
+   "level": "top",
+   "parent": "",
+   "revenue": 33771534000.0,
+   "cost": 28525951000.0,
+   "gross_profit": 5245583000.0,
+   "gross_margin": 0.1553,
+   "revenue_share": 0.07365617602962769,
+   "period": "2025-12-31",
+   "source": "年报第 50 页·分产品"
+  }
+ ],
+ "sources": [
+  {
+   "name": "年报 PDF·2025",
+   "purpose": "财务报表/分部",
+   "as_of": "2025-12-31",
+   "official": true,
+   "note": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF"
+  },
+  {
+   "name": "年报 PDF·2024",
+   "purpose": "财务报表/分部",
+   "as_of": "2024-12-31",
+   "official": true,
+   "note": "https://static.cninfo.com.cn/finalpage/2025-03-29/1222951181.PDF"
+  }
+ ],
+ "reports": [
+  {
+   "ok": true,
+   "pdf": "D:\\研一\\Agent最终产品\\FinScope中期汇报\\final\\Finscope-C-\\Finscope-C-Comps-DCF\\valuation\\.cache\\web\\pdfs\\000333_2025.pdf",
+   "report_year": 2025,
+   "unit_scale": 1.0,
+   "years": {
+    "2025": {
+     "revenue": 458502407000.0,
+     "cfo": 53345930000.0,
+     "minority": 13202918000.0,
+     "cash": 85247150000.0,
+     "receivables": 40450097000.0,
+     "inventory": 64628834000.0,
+     "short_debt": 43904550000.0,
+     "long_debt": 12658843000.0,
+     "total_assets": 608791766000.0,
+     "payables": 103680491000.0,
+     "current_portion": 5821777000.0,
+     "bond": 3194774000.0,
+     "shares": 7597145000.0,
+     "total_equity_parent": 223221305000.0,
+     "total_equity": 236424223000.0,
+     "cogs": 335989528000.0,
+     "finance_expense": -5903546000.0,
+     "interest_expense": 2211331000.0,
+     "operating_profit": 52978773000.0,
+     "pretax_income": 53085343000.0,
+     "net_income": 44520196000.0,
+     "net_income_parent": 43945411000.0,
+     "eps": 5.8,
+     "capex": 11141889000.0,
+     "dividends_paid": -33080135000.0,
+     "da_total": 9339695000.0,
+     "gross_profit": 122512879000.0,
+     "ebit": 47075227000.0,
+     "da": 9339695000.0,
+     "total_debt": 65579944000.0
+    },
+    "2024": {
+     "revenue": 409084266000.0,
+     "cfo": 60511572000.0,
+     "minority": 10917334000.0,
+     "cash": 140410308000.0,
+     "receivables": 35798974000.0,
+     "inventory": 63339188000.0,
+     "total_assets": 604351853000.0,
+     "short_debt": 31008549000.0,
+     "payables": 92800426000.0,
+     "current_portion": 39662733000.0,
+     "long_debt": 10491757000.0,
+     "bond": 3266775000.0,
+     "shares": 7655956000.0,
+     "total_equity_parent": 216750057000.0,
+     "total_equity": 227667391000.0,
+     "cogs": 299584935000.0,
+     "finance_expense": -3329248000.0,
+     "interest_expense": 2453361000.0,
+     "operating_profit": 46393752000.0,
+     "pretax_income": 46689746000.0,
+     "net_income": 38757214000.0,
+     "net_income_parent": 38537237000.0,
+     "eps": 5.44,
+     "capex": 7839636000.0,
+     "dividends_paid": -22821861000.0,
+     "da_total": 7823840000.0,
+     "gross_profit": 109499331000.0,
+     "ebit": 43064504000.0,
+     "da": 7823840000.0,
+     "total_debt": 84429814000.0
+    }
+   },
+   "segments": [
+    {
+     "name": "智能家居业务",
+     "level": "top",
+     "parent": "",
+     "revenue": 299927239000.0,
+     "cost": 210259540000.0,
+     "gross_profit": 89667699000.0,
+     "gross_margin": 0.299,
+     "revenue_share": 0.654145396885561,
+     "period": "2025-12-31",
+     "source": "年报第 50 页·分产品"
+    },
+    {
+     "name": "楼宇科技",
+     "level": "top",
+     "parent": "",
+     "revenue": 35790825000.0,
+     "cost": 24846935000.0,
+     "gross_profit": 10943890000.0,
+     "gross_margin": 0.30579999999999996,
+     "revenue_share": 0.07806027722772675,
+     "period": "2025-12-31",
+     "source": "年报第 50 页·分产品"
+    },
+    {
+     "name": "机器人与自动化",
+     "level": "top",
+     "parent": "",
+     "revenue": 31010933000.0,
+     "cost": 24403714000.0,
+     "gross_profit": 6607219000.0,
+     "gross_margin": 0.21309999999999998,
+     "revenue_share": 0.06763526761594514,
+     "period": "2025-12-31",
+     "source": "年报第 50 页·分产品"
+    },
+    {
+     "name": "工业技术",
+     "level": "top",
+     "parent": "",
+     "revenue": 27232432000.0,
+     "cost": 22468055000.0,
+     "gross_profit": 4764377000.0,
+     "gross_margin": 0.175,
+     "revenue_share": 0.05939430542618722,
+     "period": "2025-12-31",
+     "source": "年报第 50 页·分产品"
+    },
+    {
+     "name": "其他业务",
+     "level": "top",
+     "parent": "",
+     "revenue": 28718768000.0,
+     "cost": 25485333000.0,
+     "gross_profit": 3233435000.0,
+     "gross_margin": 0.11259999999999999,
+     "revenue_share": 0.06263602450401094,
+     "period": "2025-12-31",
+     "source": "年报第 50 页·分产品"
+    },
+    {
+     "name": "其他",
+     "level": "top",
+     "parent": "",
+     "revenue": 33771534000.0,
+     "cost": 28525951000.0,
+     "gross_profit": 5245583000.0,
+     "gross_margin": 0.1553,
+     "revenue_share": 0.07365617602962769,
+     "period": "2025-12-31",
+     "source": "年报第 50 页·分产品"
+    }
+   ],
+   "segment_pages": [],
+   "text_chars": 253471,
+   "url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+   "title": "2025年年度报告"
+  },
+  {
+   "ok": true,
+   "pdf": "D:\\研一\\Agent最终产品\\FinScope中期汇报\\final\\Finscope-C-\\Finscope-C-Comps-DCF\\valuation\\.cache\\web\\pdfs\\000333_2024.pdf",
+   "report_year": 2024,
+   "unit_scale": 1.0,
+   "years": {
+    "2024": {
+     "minority": 10917334000.0,
+     "cash": 140410308000.0,
+     "receivables": 35798974000.0,
+     "inventory": 63339188000.0,
+     "short_debt": 31008549000.0,
+     "long_debt": 10491757000.0,
+     "cogs": 299584935000.0,
+     "total_assets": 604351853000.0,
+     "payables": 92800426000.0,
+     "current_portion": 39662733000.0,
+     "bond": 3266775000.0,
+     "shares": 7655956000.0,
+     "total_equity_parent": 216750057000.0,
+     "total_equity": 227667391000.0,
+     "revenue": 409084266000.0,
+     "finance_expense": -3329248000.0,
+     "interest_expense": 2453361000.0,
+     "operating_profit": 46393752000.0,
+     "pretax_income": 46689746000.0,
+     "tax_provision": 7932532000.0,
+     "net_income": 38757214000.0,
+     "net_income_parent": 38537237000.0,
+     "eps": 5.44,
+     "cfo": 60511572000.0,
+     "capex": 7839636000.0,
+     "dividends_paid": -22821861000.0,
+     "da_total": 7823840000.0,
+     "gross_profit": 109499331000.0,
+     "ebit": 43064504000.0,
+     "da": 7823840000.0,
+     "total_debt": 84429814000.0
+    },
+    "2023": {
+     "minority": 11420824000.0,
+     "cash": 81673846000.0,
+     "receivables": 32884739000.0,
+     "inventory": 47339255000.0,
+     "total_assets": 486038184000.0,
+     "short_debt": 8819176000.0,
+     "payables": 72530465000.0,
+     "current_portion": 14457710000.0,
+     "long_debt": 46138736000.0,
+     "bond": 3217969000.0,
+     "shares": 7025769000.0,
+     "total_equity_parent": 162878825000.0,
+     "total_equity": 174299649000.0,
+     "revenue": 373709804000.0,
+     "cogs": 276409404000.0,
+     "finance_expense": -3261656000.0,
+     "interest_expense": 2808104000.0,
+     "operating_profit": 40317441000.0,
+     "pretax_income": 40277163000.0,
+     "tax_provision": 6531811000.0,
+     "net_income": 33745352000.0,
+     "net_income_parent": 33719935000.0,
+     "eps": 4.93,
+     "cfo": 57902611000.0,
+     "capex": 6314051000.0,
+     "dividends_paid": -19643828000.0,
+     "da_total": 734892000.0,
+     "gross_profit": 97300400000.0,
+     "ebit": 37055785000.0,
+     "da": 734892000.0,
+     "total_debt": 72633591000.0
+    }
+   },
+   "segments": [
+    {
+     "name": "智能家居业务",
+     "level": "top",
+     "parent": "",
+     "revenue": 269532353.0,
+     "cost": 188741107.0,
+     "gross_profit": 80791246.0,
+     "gross_margin": 0.29969999999999997,
+     "revenue_share": 0.6619983244488021,
+     "period": "2024-12-31",
+     "source": "年报第 50 页·分产品"
+    },
+    {
+     "name": "新能源与工业技术",
+     "level": "top",
+     "parent": "",
+     "revenue": 33610438.0,
+     "cost": 27648742.0,
+     "gross_profit": 5961696.0,
+     "gross_margin": 0.17739999999999997,
+     "revenue_share": 0.08255058582889434,
+     "period": "2024-12-31",
+     "source": "年报第 50 页·分产品"
+    },
+    {
+     "name": "智能建筑科技",
+     "level": "top",
+     "parent": "",
+     "revenue": 28469710.0,
+     "cost": 19879745.0,
+     "gross_profit": 8589965.0,
+     "gross_margin": 0.3017,
+     "revenue_share": 0.0699244454618155,
+     "period": "2024-12-31",
+     "source": "年报第 50 页·分产品"
+    },
+    {
+     "name": "机器人与自动化",
+     "level": "top",
+     "parent": "",
+     "revenue": 28700565.0,
+     "cost": 22387522.0,
+     "gross_profit": 6313043.0,
+     "gross_margin": 0.22,
+     "revenue_share": 0.07049144835215361,
+     "period": "2024-12-31",
+     "source": "年报第 50 页·分产品"
+    },
+    {
+     "name": "其他业务",
+     "level": "top",
+     "parent": "",
+     "revenue": 13715540.0,
+     "cost": 12230176.0,
+     "gross_profit": 1485364.0,
+     "gross_margin": 0.10830000000000001,
+     "revenue_share": 0.03368673332848663,
+     "period": "2024-12-31",
+     "source": "年报第 50 页·分产品"
+    },
+    {
+     "name": "其他",
+     "level": "top",
+     "parent": "",
+     "revenue": 33120994.0,
+     "cost": 28697643.0,
+     "gross_profit": 4423351.0,
+     "gross_margin": 0.1336,
+     "revenue_share": 0.0813484625798478,
+     "period": "2024-12-31",
+     "source": "年报第 50 页·分产品"
+    }
+   ],
+   "segment_pages": [],
+   "text_chars": 274859,
+   "url": "https://static.cninfo.com.cn/finalpage/2025-03-29/1222951181.PDF",
+   "title": "2024年年度报告"
+  }
+ ],
+ "warnings": [],
+ "method": "web_search+annual_report_pdf",
+ "as_of": "2025-12-31"
+}

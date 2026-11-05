@@ -1,0 +1,243 @@
+{
+ "runs": [
+  {
+   "ticker": "600519",
+   "label": "贵州茅台（消费/高毛利）",
+   "status": "partial",
+   "industry_support": "supported",
+   "methods": [
+    "dcf",
+    "comps",
+    "sotp"
+   ],
+   "dcf": 1815.5893710998182,
+   "comps": 1360.4849199027462,
+   "sotp": 1075.6994476107416,
+   "ddm": null,
+   "blended": 1383.8130969680392,
+   "price": 1480.0,
+   "verdict": "估值分歧较大（区间参考）",
+   "confidence": "低",
+   "weights": {
+    "dcf": 0.147,
+    "comps": 0.7,
+    "sotp": 0.153
+   },
+   "gates": [
+    {
+     "code": "TV_METHOD_DIVERGENCE",
+     "severity": "warn",
+     "message": "Gordon 与退出倍数终值相差 59%，已取中点。",
+     "affected_paths": [
+      "dcf.tv_base"
+     ]
+    },
+    {
+     "code": "METHOD_DIVERGENCE",
+     "severity": "warn",
+     "message": "方法间估值分歧 69%，加权平均的参考价值有限；规则已按可靠性确定主方法并降低其余权重。",
+     "affected_paths": [
+      "valuation.blended"
+     ]
+    },
+    {
+     "code": "DATA_ESTIMATED",
+     "severity": "info",
+     "message": "现金流量表未提供折旧摊销，模型将按收入比例或资本开支关系估算。",
+     "affected_paths": [
+      "valuation.assumptions"
+     ]
+    }
+   ],
+   "excel": null,
+   "elapsed": 0.4
+  },
+  {
+   "ticker": "000333",
+   "label": "美的集团（制造/多分部 SOTP）",
+   "status": "partial",
+   "industry_support": "supported",
+   "methods": [
+    "dcf",
+    "comps",
+    "sotp"
+   ],
+   "dcf": 102.54560159321642,
+   "comps": 66.51276972341809,
+   "sotp": 80.60343923607381,
+   "ddm": null,
+   "blended": 73.6297533596505,
+   "price": 88.88,
+   "verdict": "估值分歧较大（区间参考）",
+   "confidence": "低",
+   "weights": {
+    "dcf": 0.1317,
+    "comps": 0.7,
+    "sotp": 0.1683
+   },
+   "gates": [
+    {
+     "code": "TV_METHOD_DIVERGENCE",
+     "severity": "warn",
+     "message": "Gordon 与退出倍数终值相差 35%，已取中点。",
+     "affected_paths": [
+      "dcf.tv_base"
+     ]
+    },
+    {
+     "code": "WACC_IMPLIED_GAP",
+     "severity": "block",
+     "message": "CAPM 与市场隐含 WACC 相差 362bp，折现率假设与市场定价存在分歧。",
+     "affected_paths": [
+      "dcf.wacc",
+      "valuation.blended"
+     ]
+    },
+    {
+     "code": "METHOD_DIVERGENCE",
+     "severity": "warn",
+     "message": "方法间估值分歧 54%，加权平均的参考价值有限；规则已按可靠性确定主方法并降低其余权重。",
+     "affected_paths": [
+      "valuation.blended"
+     ]
+    },
+    {
+     "code": "DATA_ESTIMATED",
+     "severity": "info",
+     "message": "现金流量表未提供折旧摊销，模型将按收入比例或资本开支关系估算。",
+     "affected_paths": [
+      "valuation.assumptions"
+     ]
+    }
+   ],
+   "excel": null,
+   "elapsed": 0.1
+  },
+  {
+   "ticker": "600036",
+   "label": "招商银行（金融/行业门槛）",
+   "status": "unsupported",
+   "industry_support": "unsupported",
+   "methods": [
+    "ddm",
+    "comps"
+   ],
+   "dcf": null,
+   "comps": 29.225363853272945,
+   "sotp": null,
+   "ddm": 60.574665703418624,
+   "blended": 54.30480533338949,
+   "price": 42.69,
+   "verdict": "估值分歧较大（区间参考）",
+   "confidence": "低",
+   "weights": {
+    "comps": 0.2,
+    "ddm": 0.8
+   },
+   "gates": [
+    {
+     "code": "INDUSTRY_UNSUPPORTED",
+     "severity": "warn",
+     "message": "银行的有息负债是经营资金而非融资，WACC 口径不成立，标准 DCF 不适用。",
+     "affected_paths": [
+      "valuation.status",
+      "valuation.industry_support"
+     ]
+    },
+    {
+     "code": "METHOD_DIVERGENCE",
+     "severity": "block",
+     "message": "方法间估值分歧 107%，加权平均的参考价值有限；规则已按可靠性确定主方法并降低其余权重。",
+     "affected_paths": [
+      "valuation.blended"
+     ]
+    },
+    {
+     "code": "DATA_ESTIMATED",
+     "severity": "info",
+     "message": "现金流量表未提供折旧摊销，模型将按收入比例或资本开支关系估算。",
+     "affected_paths": [
+      "valuation.assumptions"
+     ]
+    }
+   ],
+   "excel": null,
+   "elapsed": 0.1
+  },
+  {
+   "ticker": "000858",
+   "label": "五粮液（数据口径异常回归）",
+   "status": "ok",
+   "industry_support": "supported",
+   "methods": [
+    "dcf",
+    "comps",
+    "sotp"
+   ],
+   "dcf": 165.87777783440143,
+   "comps": 155.14244345980148,
+   "sotp": 140.28347642556506,
+   "ddm": null,
+   "blended": 154.56836221501771,
+   "price": 75.55,
+   "verdict": "显著低估（高不确定性）",
+   "confidence": "低",
+   "weights": {
+    "dcf": 0.3774,
+    "comps": 0.3113,
+    "sotp": 0.3113
+   },
+   "gates": [
+    {
+     "code": "WACC_IMPLIED_GAP",
+     "severity": "block",
+     "message": "CAPM 与市场隐含 WACC 相差 3121bp，折现率假设与市场定价存在分歧。",
+     "affected_paths": [
+      "dcf.wacc",
+      "valuation.blended"
+     ]
+    },
+    {
+     "code": "DATA_ESTIMATED",
+     "severity": "info",
+     "message": "现金流量表未提供折旧摊销，模型将按收入比例或资本开支关系估算。",
+     "affected_paths": [
+      "valuation.assumptions"
+     ]
+    }
+   ],
+   "excel": null,
+   "elapsed": 0.1
+  }
+ ],
+ "method_tests": [
+  {
+   "method": "dcf",
+   "status": "partial",
+   "methods": [
+    "dcf"
+   ],
+   "per_share": 102.54560159321642,
+   "verdict": "低估"
+  },
+  {
+   "method": "comps",
+   "status": "partial",
+   "methods": [
+    "comps"
+   ],
+   "per_share": 66.51276972341809,
+   "verdict": "高估"
+  },
+  {
+   "method": "sotp",
+   "status": "partial",
+   "methods": [
+    "sotp"
+   ],
+   "per_share": 76.95427072153333,
+   "verdict": "高估"
+  }
+ ],
+ "failures": []
+}

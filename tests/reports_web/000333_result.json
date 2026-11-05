@@ -1,0 +1,3843 @@
+{
+ "schema_version": "2.0",
+ "status": "ok",
+ "industry_support": "supported",
+ "industry_gate": {
+  "support": "supported",
+  "reason": "行业适用标准估值方法。",
+  "alternatives": [
+   "dcf",
+   "comps"
+  ],
+  "primary_absolute": "dcf"
+ },
+ "company": {
+  "name": "",
+  "ticker": "000333",
+  "market": "A",
+  "currency": "CNY",
+  "industry": "白色家电",
+  "sector": "",
+  "report_period": "",
+  "price_date": "",
+  "price_time": "",
+  "price_source": "",
+  "listing_date": "",
+  "business": ""
+ },
+ "as_of": 2025,
+ "currency": "CNY",
+ "market_data": {
+  "price": 88.88,
+  "shares_outstanding": 7630457413.0,
+  "market_cap": 678195054867.44,
+  "price_date": "",
+  "price_time": "",
+  "price_source": ""
+ },
+ "method_selection": "auto",
+ "history": {
+  "years": [
+   2023,
+   2024,
+   2025
+  ],
+  "revenue": [
+   373709804000.0,
+   409084266000.0,
+   458502407000.0
+  ],
+  "ebit": [
+   37055785000.0,
+   43064504000.0,
+   47075227000.0
+  ],
+  "net_income": [
+   33745352000.0,
+   38757214000.0,
+   44520196000.0
+  ],
+  "net_income_parent": [
+   33719935000.0,
+   38537237000.0,
+   43945411000.0
+  ],
+  "cogs": [
+   276409404000.0,
+   299584935000.0,
+   335989528000.0
+  ],
+  "gross_profit": [
+   97300400000.0,
+   109499331000.0,
+   122512879000.0
+  ],
+  "da": [
+   734892000.0,
+   7823840000.0,
+   9339695000.0
+  ],
+  "capex": [
+   6314051000.0,
+   7839636000.0,
+   11141889000.0
+  ],
+  "cfo": [
+   57902611000.0,
+   60511572000.0,
+   53345930000.0
+  ],
+  "delta_nwc": [
+   null,
+   -1355793000.0,
+   -4939296000.0
+  ],
+  "revenue_growth": [
+   null,
+   0.09465757018245102,
+   0.12080186188339015
+  ],
+  "ebit_margin": [
+   0.0991565771177895,
+   0.1052704970080663,
+   0.10267171181938856
+  ],
+  "net_margin": [
+   0.09029827860764392,
+   0.09474139491837606,
+   0.09709915437804888
+  ],
+  "gross_margin": [
+   0.2603635199252091,
+   0.26766937792713835,
+   0.2672022592020984
+  ],
+  "capex_pct": [
+   0.01689559902474488,
+   0.019163865862296448,
+   0.02430061179591583
+  ],
+  "da_pct": [
+   0.0019664777111386674,
+   0.019125252790827208,
+   0.020370002114296425
+  ],
+  "nwc_pct": [
+   null,
+   0.003314214485090952,
+   0.01077267190878673
+  ],
+  "tax_rate": [
+   0.16217157598711707,
+   null,
+   null
+  ]
+ },
+ "method_plan": {
+  "methods": [
+   "dcf",
+   "comps",
+   "sotp"
+  ],
+  "reason": "自动模式：运行所有结构上适用的方法，并按规则定权融合。",
+  "status": {
+   "dcf": "ok",
+   "comps": "ok",
+   "sotp": "ok"
+  }
+ },
+ "assumptions": [
+  {
+   "name": "预测期",
+   "value": 5,
+   "unit": "年",
+   "source_type": "model",
+   "source": "标准 5 年显式预测期；可调 3–10 年",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "首年收入增速",
+   "value": 0.11028243811172826,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "规则合成：近 3 年 CAGR 10.8%×50% + 近 5 年 CAGR 10.8%×30% + 最近一年同比 12.1%×20%",
+   "confidence": "中",
+   "overridable": true,
+   "note": "按近 3/5 年 CAGR 与最近一年同比加权，并向永续增速线性衰减"
+  },
+  {
+   "name": "永续增长率 g",
+   "value": 0.025,
+   "unit": "小数",
+   "source_type": "industry",
+   "source": "市场长期名义 GDP 口径默认值；上限 4.0%（长期名义 GDP）",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "EBIT 利润率",
+   "value": 0.10267171181938856,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年 EBIT / 营业收入中位数",
+   "confidence": "高",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "折旧摊销 / 收入",
+   "value": 0.019125252790827208,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年折旧摊销 / 营业收入中位数",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "资本开支 / 收入",
+   "value": 0.019163865862296448,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年资本开支 / 营业收入中位数",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "营运资本增加 / 收入",
+   "value": 0.00704344319693884,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年营运资本变动 / 营业收入中位数",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "所得税率",
+   "value": 0.16217157598711707,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年有效税率中位数 16.2%，夹在 15%–30%",
+   "confidence": "高",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "无风险利率 rf",
+   "value": 0.016343,
+   "unit": "小数",
+   "source_type": "industry",
+   "source": "中债 10 年期国债收益率（2026-11-02）",
+   "confidence": "高",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "股权风险溢价 ERP",
+   "value": 0.0514,
+   "unit": "小数",
+   "source_type": "industry",
+   "source": "Damodaran 中国国家风险溢价（成熟市场 ERP + 中国 CRP）",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "Beta",
+   "value": 0.95,
+   "unit": "倍",
+   "source_type": "model",
+   "source": "数据源 Beta 缺失/异常，使用行业锚点 家电 Beta 0.95",
+   "confidence": "中",
+   "overridable": true,
+   "note": "原始 Beta=None，行业锚点=0.95"
+  },
+  {
+   "name": "股权成本 Ke",
+   "value": 0.065173,
+   "unit": "小数",
+   "source_type": "model",
+   "source": "rf 1.63% + β 0.95 × ERP 5.14% + 规模溢价 0.00%",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "税前债务成本 Kd",
+   "value": 0.03371962318235587,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "利息费用 22.1 亿元 ÷ 有息负债 655.8 亿元",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "所得税率（WACC 用）",
+   "value": 0.16217157598711707,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年有效税率中位数 16.2%，夹在 15%–30%",
+   "confidence": "高",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "资本结构 D/(D+E)",
+   "value": 0.08817175099977789,
+   "unit": "小数",
+   "source_type": "model",
+   "source": "当前市值口径：D/(E+D)，E=总市值",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "WACC（CAPM 口径）",
+   "value": 0.0619175454239546,
+   "unit": "小数",
+   "source_type": "model",
+   "source": "91.2%×Ke 6.52% + 8.8%×Kd 3.37%×(1−16.2%)",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "长期 ROIC（终值再投资率）",
+   "value": 0.1,
+   "unit": "小数",
+   "source_type": "model",
+   "source": "再投资率 = g / ROIC = 25.0%；默认不低于 WACC+2%",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  }
+ ],
+ "reliabilities": {
+  "dcf": {
+   "score": 70.0,
+   "level": "中",
+   "deductions": [
+    {
+     "reason": "Gordon 与退出倍数终值偏离 41%",
+     "points": 15
+    },
+    {
+     "reason": "CAPM 与市场隐含 WACC 相差 253bp",
+     "points": 15
+    }
+   ]
+  },
+  "comps": {
+   "score": 85.0,
+   "level": "高",
+   "deductions": [
+    {
+     "reason": "同业倍数离散度 67% 偏高",
+     "points": 15
+    }
+   ]
+  },
+  "sotp": {
+   "score": 69.0,
+   "level": "中",
+   "deductions": [
+    {
+     "reason": "分部仅有收入口径，EBIT/EBITDA 靠分摊",
+     "points": 10
+    },
+    {
+     "reason": "总部费用为规则估算",
+     "points": 5
+    },
+    {
+     "reason": "2 个分部使用兜底倍数",
+     "points": 16
+    }
+   ]
+  }
+ },
+ "dcf": {
+  "ok": true,
+  "method": "dcf",
+  "status": "ok",
+  "wacc": 0.07707441816958184,
+  "wacc_capm": 0.0619175454239546,
+  "wacc_source": "CAPM 6.19% 与市场隐含 8.72% 相差 253bp，规则校准至 7.71%",
+  "wacc_mode": "reconciled",
+  "wacc_reconciliation": {
+   "capm_wacc": 0.0619175454239546,
+   "implied_wacc": 0.087179,
+   "gap": 0.02526145457604541,
+   "adjustment": 0.015156872745627244,
+   "applied": true,
+   "rule": "CAPM 与市场隐含折现率相差 253bp，按规则向市场隐含值靠拢 152bp"
+  },
+  "implied_wacc": 0.087179,
+  "wacc_block": {
+   "risk_free": 0.016343,
+   "risk_free_source": "中债 10 年期国债收益率（2026-11-02）",
+   "erp": 0.0514,
+   "erp_source": "Damodaran 中国国家风险溢价（成熟市场 ERP + 中国 CRP）",
+   "beta": 0.95,
+   "beta_source": "数据源 Beta 缺失/异常，使用行业锚点 家电 Beta 0.95",
+   "size_premium": 0.0,
+   "cost_of_equity": 0.065173,
+   "cost_of_debt": 0.03371962318235587,
+   "cost_of_debt_source": "利息费用 22.1 亿元 ÷ 有息负债 655.8 亿元",
+   "tax_rate": 0.16217157598711707,
+   "equity_ratio": 0.9118282490002221,
+   "debt_ratio": 0.08817175099977789,
+   "capital_source": "当前市值口径：D/(E+D)，E=总市值",
+   "wacc_capm": 0.0619175454239546,
+   "wacc": 0.07707441816958184
+  },
+  "terminal_growth": 0.025,
+  "terminal_growth_cap": 0.04,
+  "terminal_method": "blend",
+  "terminal_roic": 0.1,
+  "forecast_years": 5,
+  "base_revenue": 458502407000.0,
+  "base_year": 2025,
+  "revenue_growth_y1": 0.11028243811172826,
+  "revenue_growth_path": [
+   0.11028243811172826,
+   0.0889618285837962,
+   0.06764121905586414,
+   0.04632060952793207,
+   0.02500000000000001
+  ],
+  "ebit_margin": 0.10267171181938856,
+  "da_pct": 0.019125252790827208,
+  "capex_pct": 0.019163865862296448,
+  "nwc_pct": 0.00704344319693884,
+  "tax_rate": 0.16217157598711707,
+  "rows": [
+   {
+    "year_index": 1,
+    "year": 2026,
+    "growth": 0.11028243811172826,
+    "revenue": 509067170324.0559,
+    "ebit": 52266797808.22306,
+    "ebit_margin": 0.10267171181938856,
+    "cash_tax": 8476188972.3595295,
+    "nopat": 43790608835.86353,
+    "da": 9736038319.95866,
+    "da_pct": 0.019125252790827208,
+    "capex": 9755694966.989027,
+    "capex_pct": 0.019163865862296448,
+    "delta_nwc": 3585585697.6038775,
+    "nwc_pct": 0.00704344319693884,
+    "fcff": 40185366491.22929,
+    "discount_factor": 0.9635564091891896,
+    "pv_fcff": 38720867438.24048
+   },
+   {
+    "year_index": 2,
+    "year": 2027,
+    "growth": 0.0889618285837962,
+    "revenue": 554354716668.0627,
+    "ebit": 56916547715.462135,
+    "ebit_margin": 0.10267171181938856,
+    "cash_tax": 9230246242.762442,
+    "nopat": 47686301472.69969,
+    "da": 10602174092.064093,
+    "da_pct": 0.019125252790827208,
+    "capex": 10623579430.358107,
+    "capex_pct": 0.019163865862296448,
+    "delta_nwc": 3904565957.806625,
+    "nwc_pct": 0.00704344319693884,
+    "fcff": 43760330176.59905,
+    "discount_factor": 0.894605231481304,
+    "pv_fcff": 39148220307.33469
+   },
+   {
+    "year_index": 3,
+    "year": 2028,
+    "growth": 0.06764121905586414,
+    "revenue": 591851945492.8586,
+    "ebit": 60766452387.387245,
+    "ebit_margin": 0.10267171181938856,
+    "cash_tax": 9854591350.808702,
+    "nopat": 50911861036.578545,
+    "da": 11319318072.293808,
+    "da_pct": 0.019125252790827208,
+    "capex": 11342171293.764332,
+    "capex_pct": 0.019163865862296448,
+    "delta_nwc": 4168675559.0766926,
+    "nwc_pct": 0.00704344319693884,
+    "fcff": 46720332256.03133,
+    "discount_factor": 0.8305881342921759,
+    "pv_fcff": 38805353602.04762
+   },
+   {
+    "year_index": 4,
+    "year": 2029,
+    "growth": 0.04632060952793207,
+    "revenue": 619266888358.3802,
+    "ebit": 63581191500.82108,
+    "ebit_margin": 0.10267171181938856,
+    "cash_tax": 10311062028.826849,
+    "nopat": 53270129471.99423,
+    "da": 11843635784.842993,
+    "da_pct": 0.019125252790827208,
+    "capex": 11867547581.46171,
+    "capex_pct": 0.019163865862296448,
+    "delta_nwc": 4361771151.897318,
+    "nwc_pct": 0.00704344319693884,
+    "fcff": 48884446523.4782,
+    "discount_factor": 0.7711520395254643,
+    "pv_fcff": 37697340637.65371
+   },
+   {
+    "year_index": 5,
+    "year": 2030,
+    "growth": 0.02500000000000001,
+    "revenue": 634748560567.3397,
+    "ebit": 65170721288.341606,
+    "ebit_margin": 0.10267171181938856,
+    "cash_tax": 10568838579.547518,
+    "nopat": 54601882708.79409,
+    "da": 12139726679.464067,
+    "da_pct": 0.019125252790827208,
+    "capex": 12164236270.998251,
+    "capex_pct": 0.019163865862296448,
+    "delta_nwc": 4470815430.69475,
+    "nwc_pct": 0.00704344319693884,
+    "fcff": 50106557686.565155,
+    "discount_factor": 0.7159691350166751,
+    "pv_fcff": 35874748765.51319
+   }
+  ],
+  "forecast": [
+   {
+    "year_index": 1,
+    "year": 2026,
+    "growth": 0.11028243811172826,
+    "revenue": 509067170324.0559,
+    "ebit": 52266797808.22306,
+    "ebit_margin": 0.10267171181938856,
+    "cash_tax": 8476188972.3595295,
+    "nopat": 43790608835.86353,
+    "da": 9736038319.95866,
+    "da_pct": 0.019125252790827208,
+    "capex": 9755694966.989027,
+    "capex_pct": 0.019163865862296448,
+    "delta_nwc": 3585585697.6038775,
+    "nwc_pct": 0.00704344319693884,
+    "fcff": 40185366491.22929,
+    "discount_factor": 0.9635564091891896,
+    "pv_fcff": 38720867438.24048
+   },
+   {
+    "year_index": 2,
+    "year": 2027,
+    "growth": 0.0889618285837962,
+    "revenue": 554354716668.0627,
+    "ebit": 56916547715.462135,
+    "ebit_margin": 0.10267171181938856,
+    "cash_tax": 9230246242.762442,
+    "nopat": 47686301472.69969,
+    "da": 10602174092.064093,
+    "da_pct": 0.019125252790827208,
+    "capex": 10623579430.358107,
+    "capex_pct": 0.019163865862296448,
+    "delta_nwc": 3904565957.806625,
+    "nwc_pct": 0.00704344319693884,
+    "fcff": 43760330176.59905,
+    "discount_factor": 0.894605231481304,
+    "pv_fcff": 39148220307.33469
+   },
+   {
+    "year_index": 3,
+    "year": 2028,
+    "growth": 0.06764121905586414,
+    "revenue": 591851945492.8586,
+    "ebit": 60766452387.387245,
+    "ebit_margin": 0.10267171181938856,
+    "cash_tax": 9854591350.808702,
+    "nopat": 50911861036.578545,
+    "da": 11319318072.293808,
+    "da_pct": 0.019125252790827208,
+    "capex": 11342171293.764332,
+    "capex_pct": 0.019163865862296448,
+    "delta_nwc": 4168675559.0766926,
+    "nwc_pct": 0.00704344319693884,
+    "fcff": 46720332256.03133,
+    "discount_factor": 0.8305881342921759,
+    "pv_fcff": 38805353602.04762
+   },
+   {
+    "year_index": 4,
+    "year": 2029,
+    "growth": 0.04632060952793207,
+    "revenue": 619266888358.3802,
+    "ebit": 63581191500.82108,
+    "ebit_margin": 0.10267171181938856,
+    "cash_tax": 10311062028.826849,
+    "nopat": 53270129471.99423,
+    "da": 11843635784.842993,
+    "da_pct": 0.019125252790827208,
+    "capex": 11867547581.46171,
+    "capex_pct": 0.019163865862296448,
+    "delta_nwc": 4361771151.897318,
+    "nwc_pct": 0.00704344319693884,
+    "fcff": 48884446523.4782,
+    "discount_factor": 0.7711520395254643,
+    "pv_fcff": 37697340637.65371
+   },
+   {
+    "year_index": 5,
+    "year": 2030,
+    "growth": 0.02500000000000001,
+    "revenue": 634748560567.3397,
+    "ebit": 65170721288.341606,
+    "ebit_margin": 0.10267171181938856,
+    "cash_tax": 10568838579.547518,
+    "nopat": 54601882708.79409,
+    "da": 12139726679.464067,
+    "da_pct": 0.019125252790827208,
+    "capex": 12164236270.998251,
+    "capex_pct": 0.019163865862296448,
+    "delta_nwc": 4470815430.69475,
+    "nwc_pct": 0.00704344319693884,
+    "fcff": 50106557686.565155,
+    "discount_factor": 0.7159691350166751,
+    "pv_fcff": 35874748765.51319
+   }
+  ],
+  "pv_explicit": 190246530750.78967,
+  "tv_gordon": 986265875529.833,
+  "tv_exit": 649669712457.049,
+  "tv_roic": 806061763295.9818,
+  "exit_multiple": 8.403388281071535,
+  "exit_multiple_source": "同业中位 EV/EBITDA（5 家）",
+  "tv_base": 817967793993.4409,
+  "tv_divergence": 0.41150295347139687,
+  "pv_terminal": 564296880568.5742,
+  "enterprise_value": 754543411319.3639,
+  "tv_ratio": 0.7478653608304228,
+  "cash": 85247150000.0,
+  "debt": 65579944000.0,
+  "minority_interest": 13202918000.0,
+  "preferred_stock": 0.0,
+  "equity_value": 761007699319.3639,
+  "per_share": 99.73290697132207,
+  "warnings": [
+   "终值两种算法偏离 41%（Gordon 9,863 亿元 vs 退出倍数 6,497 亿元），已取中点。根因多半是 WACC−g 只有 5.21%，分母过小会放大 Gordon 终值。",
+   "CAPM 算出的 WACC（6.19%）低于市场隐含折现率（8.72%）253bp。CAPM 折现率偏低会让 DCF 系统性高于市价；本次已按规则校准。"
+  ],
+  "diagnostics": {
+   "tv_ratio": 0.7478653608304228,
+   "tv_divergence": 0.41150295347139687,
+   "wacc_gap_bp": 253.0,
+   "wacc_minus_g": 0.05207441816958184,
+   "terminal_roic": 0.1
+  }
+ },
+ "relative": {
+  "ok": true,
+  "method": "comps",
+  "status": "ok",
+  "caliber": "LYR（最近年报）",
+  "peer_count": 5,
+  "peers_used": 5,
+  "peers_detail": [
+   {
+    "name": "格力电器",
+    "ticker": "000651",
+    "industry": "白色家电",
+    "pe": 7.6056204377394705,
+    "pe_forward": null,
+    "pb": 1.465499794120307,
+    "ps": 1.2828509221559483,
+    "pcf": 4.732737164244978,
+    "peg": null,
+    "ev_revenue": 1.1546862657865276,
+    "ev_ebitda": 6.458129293303275,
+    "ev_ebit": 6.458129293303275,
+    "revenue_growth": -0.09955852619214922,
+    "net_income_growth": -0.10837835599582701,
+    "gross_margin": 0.3008260939430588,
+    "ebitda_margin": 0.17879578022444886,
+    "ebit_margin": 0.17879578022444886,
+    "roe": 0.19268642264192193,
+    "market_cap": 219519090989.78998,
+    "net_debt": -25793283209.11,
+    "ebitda": 30595205155.809998,
+    "ebit": 30595205155.809998,
+    "revenue": 171118161275.40997,
+    "net_income": 28862746016.16,
+    "equity": 149791280674.7,
+    "cfo": 46383114754.02,
+    "note": "",
+    "selection_reason": "空调与家电龙头，规模、渠道与制造模式最接近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "海尔智家",
+    "ticker": "600690",
+    "industry": "白色家电",
+    "pe": 9.845899357827571,
+    "pe_forward": null,
+    "pb": 1.5758732763040342,
+    "ps": 0.6566095634575858,
+    "pcf": 7.634666493931756,
+    "peg": 3.2238096648955676,
+    "ev_revenue": 0.658007000217734,
+    "ev_ebitda": 8.403388281071535,
+    "ev_ebit": 8.403388281071535,
+    "revenue_growth": 0.05710005468555357,
+    "net_income_growth": 0.030541193126383037,
+    "gross_margin": 0.26660786233787714,
+    "ebitda_margin": 0.07830258203109353,
+    "ebit_margin": 0.07830258203109353,
+    "roe": 0.16005376644960342,
+    "market_cap": 198523789801.40002,
+    "net_debt": -6856089388.370003,
+    "ebitda": 23674533849.6,
+    "ebit": 23674533849.6,
+    "revenue": 302346783918.30005,
+    "net_income": 20163093546.51,
+    "equity": 125977001315.11,
+    "cfo": 26002941969.92,
+    "note": "",
+    "selection_reason": "全球化家电平台，产品矩阵与标的可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "海信家电",
+    "ticker": "000921",
+    "industry": "白色家电",
+    "pe": 6.898569796552886,
+    "pe_forward": null,
+    "pb": 1.517461987864917,
+    "ps": 0.3713988756913645,
+    "pcf": 5.6342954438898305,
+    "peg": null,
+    "ev_revenue": 0.4207354934021195,
+    "ev_ebitda": 6.74410288595194,
+    "ev_ebit": 6.74410288595194,
+    "revenue_growth": -0.05193911768085313,
+    "net_income_growth": -0.07653688260213642,
+    "gross_margin": 0.21310174908288362,
+    "ebitda_margin": 0.062385687246634,
+    "ebit_margin": 0.062385687246634,
+    "roe": 0.21996762120507504,
+    "market_cap": 32656540804.4,
+    "net_debt": 286599570.61000013,
+    "ebitda": 5485479021.41,
+    "ebit": 5485479021.41,
+    "revenue": 87928485899.72,
+    "net_income": 4733813205.85,
+    "equity": 21520500062.31,
+    "cfo": 5796029180.51,
+    "note": "",
+    "selection_reason": "白电与中央空调业务，品类结构相近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "老板电器",
+    "ticker": "002508",
+    "industry": "厨卫电器",
+    "pe": 12.365332175781202,
+    "pe_forward": null,
+    "pb": 1.323795517278883,
+    "ps": 1.514305692101555,
+    "pcf": 9.587286087994093,
+    "peg": null,
+    "ev_revenue": 1.4093130323280887,
+    "ev_ebitda": 10.973794108038268,
+    "ev_ebit": 10.973794108038268,
+    "revenue_growth": -0.09779886211442301,
+    "net_income_growth": -0.20356646154049607,
+    "gross_margin": 0.501917455105368,
+    "ebitda_margin": 0.12842532112897684,
+    "ebit_margin": 0.12842532112897684,
+    "roe": 0.10705701217405829,
+    "market_cap": 15318821468.36,
+    "net_debt": -1136551390.18,
+    "ebitda": 1299159460.77,
+    "ebit": 1299159460.77,
+    "revenue": 10116069396.2,
+    "net_income": 1238852402.07,
+    "equity": 11571894048.9,
+    "cfo": 1597826676.68,
+    "note": "",
+    "selection_reason": "厨电龙头，品牌与渠道模式可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "苏泊尔",
+    "ticker": "002032",
+    "industry": "小家电",
+    "pe": 16.815951737029092,
+    "pe_forward": null,
+    "pb": 5.57356474228868,
+    "ps": 1.546559288231383,
+    "pcf": 13.310951549204004,
+    "peg": null,
+    "ev_revenue": 1.464432317326758,
+    "ev_ebitda": 12.967972907905617,
+    "ev_ebit": 12.967972907905617,
+    "revenue_growth": 0.015356948464822828,
+    "net_income_growth": -0.0672225169249634,
+    "gross_margin": 0.24866795618162532,
+    "ebitda_margin": 0.11292684891668779,
+    "ebit_margin": 0.11292684891668779,
+    "roe": 0.3314450962662772,
+    "market_cap": 35217866822.939995,
+    "net_debt": -1904048287.76,
+    "ebitda": 2571542362.5499997,
+    "ebit": 2571542362.5499997,
+    "revenue": 22771753460.04,
+    "net_income": 2094313029.3,
+    "equity": 6318732884.85,
+    "cfo": 2645781309.68,
+    "note": "",
+    "selection_reason": "小家电龙头，消费属性与盈利结构可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   }
+  ],
+  "peer_companies": [
+   {
+    "name": "格力电器",
+    "ticker": "000651",
+    "industry": "白色家电",
+    "market_cap": 219519090989.78998,
+    "pe": 7.6056204377394705,
+    "pb": 1.465499794120307,
+    "ps": 1.2828509221559483,
+    "pcf": 4.732737164244978,
+    "peg": null,
+    "ev_revenue": 1.1546862657865276,
+    "ev_ebitda": 6.458129293303275,
+    "ev_ebit": 6.458129293303275,
+    "revenue_growth": -0.09955852619214922,
+    "net_income_growth": -0.10837835599582701,
+    "gross_margin": 0.3008260939430588,
+    "ebitda_margin": 0.17879578022444886,
+    "ebit_margin": 0.17879578022444886,
+    "roe": 0.19268642264192193,
+    "selection_reason": "空调与家电龙头，规模、渠道与制造模式最接近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 82.2,
+     "level": "高",
+     "reasons": [
+      "规模为目标公司的 0.32×（-7）",
+      "收入增速差 21%（-11）",
+      "EBIT 利润率接近（差 8%）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "海尔智家",
+    "ticker": "600690",
+    "industry": "白色家电",
+    "market_cap": 198523789801.40002,
+    "pe": 9.845899357827571,
+    "pb": 1.5758732763040342,
+    "ps": 0.6566095634575858,
+    "pcf": 7.634666493931756,
+    "peg": 3.2238096648955676,
+    "ev_revenue": 0.658007000217734,
+    "ev_ebitda": 8.403388281071535,
+    "ev_ebit": 8.403388281071535,
+    "revenue_growth": 0.05710005468555357,
+    "net_income_growth": 0.030541193126383037,
+    "gross_margin": 0.26660786233787714,
+    "ebitda_margin": 0.07830258203109353,
+    "ebit_margin": 0.07830258203109353,
+    "roe": 0.16005376644960342,
+    "selection_reason": "全球化家电平台，产品矩阵与标的可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 92.5,
+     "level": "高",
+     "reasons": [
+      "规模为目标公司的 0.29×（-7）",
+      "收入增速接近（差 5%）",
+      "EBIT 利润率接近（差 2%）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "海信家电",
+    "ticker": "000921",
+    "industry": "白色家电",
+    "market_cap": 32656540804.4,
+    "pe": 6.898569796552886,
+    "pb": 1.517461987864917,
+    "ps": 0.3713988756913645,
+    "pcf": 5.6342954438898305,
+    "peg": null,
+    "ev_revenue": 0.4207354934021195,
+    "ev_ebitda": 6.74410288595194,
+    "ev_ebit": 6.74410288595194,
+    "revenue_growth": -0.05193911768085313,
+    "net_income_growth": -0.07653688260213642,
+    "gross_margin": 0.21310174908288362,
+    "ebitda_margin": 0.062385687246634,
+    "ebit_margin": 0.062385687246634,
+    "roe": 0.21996762120507504,
+    "selection_reason": "白电与中央空调业务，品类结构相近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 75.3,
+     "level": "高",
+     "reasons": [
+      "规模为目标公司的 0.05×（-18）",
+      "收入增速差 16%（-6）",
+      "EBIT 利润率接近（差 4%）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "老板电器",
+    "ticker": "002508",
+    "industry": "厨卫电器",
+    "market_cap": 15318821468.36,
+    "pe": 12.365332175781202,
+    "pb": 1.323795517278883,
+    "ps": 1.514305692101555,
+    "pcf": 9.587286087994093,
+    "peg": null,
+    "ev_revenue": 1.4093130323280887,
+    "ev_ebitda": 10.973794108038268,
+    "ev_ebit": 10.973794108038268,
+    "revenue_growth": -0.09779886211442301,
+    "net_income_growth": -0.20356646154049607,
+    "gross_margin": 0.501917455105368,
+    "ebitda_margin": 0.12842532112897684,
+    "ebit_margin": 0.12842532112897684,
+    "roe": 0.10705701217405829,
+    "selection_reason": "厨电龙头，品牌与渠道模式可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 54.1,
+     "level": "低",
+     "reasons": [
+      "规模为目标公司的 0.02×（-23）",
+      "收入增速差 21%（-11）",
+      "EBIT 利润率接近（差 3%）",
+      "行业为「厨卫电器」（-12）"
+     ]
+    }
+   },
+   {
+    "name": "苏泊尔",
+    "ticker": "002032",
+    "industry": "小家电",
+    "market_cap": 35217866822.939995,
+    "pe": 16.815951737029092,
+    "pb": 5.57356474228868,
+    "ps": 1.546559288231383,
+    "pcf": 13.310951549204004,
+    "peg": null,
+    "ev_revenue": 1.464432317326758,
+    "ev_ebitda": 12.967972907905617,
+    "ev_ebit": 12.967972907905617,
+    "revenue_growth": 0.015356948464822828,
+    "net_income_growth": -0.0672225169249634,
+    "gross_margin": 0.24866795618162532,
+    "ebitda_margin": 0.11292684891668779,
+    "ebit_margin": 0.11292684891668779,
+    "roe": 0.3314450962662772,
+    "selection_reason": "小家电龙头，消费属性与盈利结构可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 70.0,
+     "level": "中",
+     "reasons": [
+      "规模为目标公司的 0.05×（-18）",
+      "收入增速接近（差 9%）",
+      "EBIT 利润率接近（差 1%）",
+      "行业为「小家电」（-12）"
+     ]
+    }
+   }
+  ],
+  "comparability_note": "可比性评分综合考虑行业、规模、收入增速、EBIT 利润率；75 分以上为高，55–74 为中，55 以下为低。评分只用于提示样本质量，不替代人工复核。",
+  "peer_selection": {
+   "peers": [
+    {
+     "name": "格力电器",
+     "ticker": "000651",
+     "industry": "白色家电",
+     "pe": 7.6056204377394705,
+     "pe_forward": null,
+     "pb": 1.465499794120307,
+     "ps": 1.2828509221559483,
+     "pcf": 4.732737164244978,
+     "peg": null,
+     "ev_revenue": 1.1546862657865276,
+     "ev_ebitda": 6.458129293303275,
+     "ev_ebit": 6.458129293303275,
+     "revenue_growth": -0.09955852619214922,
+     "net_income_growth": -0.10837835599582701,
+     "gross_margin": 0.3008260939430588,
+     "ebitda_margin": 0.17879578022444886,
+     "ebit_margin": 0.17879578022444886,
+     "roe": 0.19268642264192193,
+     "market_cap": 219519090989.78998,
+     "net_debt": -25793283209.11,
+     "ebitda": 30595205155.809998,
+     "ebit": 30595205155.809998,
+     "revenue": 171118161275.40997,
+     "net_income": 28862746016.16,
+     "equity": 149791280674.7,
+     "cfo": 46383114754.02,
+     "note": "",
+     "selection_reason": "空调与家电龙头，规模、渠道与制造模式最接近",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "海尔智家",
+     "ticker": "600690",
+     "industry": "白色家电",
+     "pe": 9.845899357827571,
+     "pe_forward": null,
+     "pb": 1.5758732763040342,
+     "ps": 0.6566095634575858,
+     "pcf": 7.634666493931756,
+     "peg": 3.2238096648955676,
+     "ev_revenue": 0.658007000217734,
+     "ev_ebitda": 8.403388281071535,
+     "ev_ebit": 8.403388281071535,
+     "revenue_growth": 0.05710005468555357,
+     "net_income_growth": 0.030541193126383037,
+     "gross_margin": 0.26660786233787714,
+     "ebitda_margin": 0.07830258203109353,
+     "ebit_margin": 0.07830258203109353,
+     "roe": 0.16005376644960342,
+     "market_cap": 198523789801.40002,
+     "net_debt": -6856089388.370003,
+     "ebitda": 23674533849.6,
+     "ebit": 23674533849.6,
+     "revenue": 302346783918.30005,
+     "net_income": 20163093546.51,
+     "equity": 125977001315.11,
+     "cfo": 26002941969.92,
+     "note": "",
+     "selection_reason": "全球化家电平台，产品矩阵与标的可比",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "海信家电",
+     "ticker": "000921",
+     "industry": "白色家电",
+     "pe": 6.898569796552886,
+     "pe_forward": null,
+     "pb": 1.517461987864917,
+     "ps": 0.3713988756913645,
+     "pcf": 5.6342954438898305,
+     "peg": null,
+     "ev_revenue": 0.4207354934021195,
+     "ev_ebitda": 6.74410288595194,
+     "ev_ebit": 6.74410288595194,
+     "revenue_growth": -0.05193911768085313,
+     "net_income_growth": -0.07653688260213642,
+     "gross_margin": 0.21310174908288362,
+     "ebitda_margin": 0.062385687246634,
+     "ebit_margin": 0.062385687246634,
+     "roe": 0.21996762120507504,
+     "market_cap": 32656540804.4,
+     "net_debt": 286599570.61000013,
+     "ebitda": 5485479021.41,
+     "ebit": 5485479021.41,
+     "revenue": 87928485899.72,
+     "net_income": 4733813205.85,
+     "equity": 21520500062.31,
+     "cfo": 5796029180.51,
+     "note": "",
+     "selection_reason": "白电与中央空调业务，品类结构相近",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "老板电器",
+     "ticker": "002508",
+     "industry": "厨卫电器",
+     "pe": 12.365332175781202,
+     "pe_forward": null,
+     "pb": 1.323795517278883,
+     "ps": 1.514305692101555,
+     "pcf": 9.587286087994093,
+     "peg": null,
+     "ev_revenue": 1.4093130323280887,
+     "ev_ebitda": 10.973794108038268,
+     "ev_ebit": 10.973794108038268,
+     "revenue_growth": -0.09779886211442301,
+     "net_income_growth": -0.20356646154049607,
+     "gross_margin": 0.501917455105368,
+     "ebitda_margin": 0.12842532112897684,
+     "ebit_margin": 0.12842532112897684,
+     "roe": 0.10705701217405829,
+     "market_cap": 15318821468.36,
+     "net_debt": -1136551390.18,
+     "ebitda": 1299159460.77,
+     "ebit": 1299159460.77,
+     "revenue": 10116069396.2,
+     "net_income": 1238852402.07,
+     "equity": 11571894048.9,
+     "cfo": 1597826676.68,
+     "note": "",
+     "selection_reason": "厨电龙头，品牌与渠道模式可比",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "苏泊尔",
+     "ticker": "002032",
+     "industry": "小家电",
+     "pe": 16.815951737029092,
+     "pe_forward": null,
+     "pb": 5.57356474228868,
+     "ps": 1.546559288231383,
+     "pcf": 13.310951549204004,
+     "peg": null,
+     "ev_revenue": 1.464432317326758,
+     "ev_ebitda": 12.967972907905617,
+     "ev_ebit": 12.967972907905617,
+     "revenue_growth": 0.015356948464822828,
+     "net_income_growth": -0.0672225169249634,
+     "gross_margin": 0.24866795618162532,
+     "ebitda_margin": 0.11292684891668779,
+     "ebit_margin": 0.11292684891668779,
+     "roe": 0.3314450962662772,
+     "market_cap": 35217866822.939995,
+     "net_debt": -1904048287.76,
+     "ebitda": 2571542362.5499997,
+     "ebit": 2571542362.5499997,
+     "revenue": 22771753460.04,
+     "net_income": 2094313029.3,
+     "equity": 6318732884.85,
+     "cfo": 2645781309.68,
+     "note": "",
+     "selection_reason": "小家电龙头，消费属性与盈利结构可比",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    }
+   ],
+   "theme": "白色家电",
+   "sector": "制造",
+   "tier": "curated",
+   "selection_note": "按行业「白色家电」匹配到配置池「白色家电」，逐家披露选取理由；剔除标的后取 5 家。",
+   "missing": [],
+   "warnings": []
+  },
+  "peer_multiples": {
+   "pe": {
+    "median": 9.845899357827571,
+    "mean": 10.706274700986045,
+    "p25": 7.6056204377394705,
+    "p75": 12.365332175781202,
+    "count": 5,
+    "dispersion": 0.4834207181142595,
+    "used": true,
+    "reason": "适用"
+   },
+   "ps": {
+    "median": 1.2828509221559483,
+    "mean": 1.0743448683275674,
+    "p25": 0.6566095634575858,
+    "p75": 1.514305692101555,
+    "count": 5,
+    "dispersion": 0.6685859703811354,
+    "used": true,
+    "reason": "适用"
+   },
+   "pb": {
+    "median": 1.517461987864917,
+    "mean": 2.291239063571364,
+    "p25": 1.465499794120307,
+    "p75": 1.5758732763040342,
+    "count": 5,
+    "dispersion": 0.07273558287876702,
+    "used": true,
+    "reason": "适用"
+   },
+   "ev_ebitda": {
+    "median": 8.403388281071535,
+    "mean": 9.109477495254128,
+    "p25": 6.74410288595194,
+    "p75": 10.973794108038268,
+    "count": 5,
+    "dispersion": 0.503331642025113,
+    "used": true,
+    "reason": "适用"
+   },
+   "ev_revenue": {
+    "median": 1.1546862657865276,
+    "mean": 1.0214348218122455,
+    "p25": 0.658007000217734,
+    "p75": 1.4093130323280887,
+    "count": 5,
+    "dispersion": 0.6506581522372176,
+    "used": true,
+    "reason": "适用"
+   }
+  },
+  "decisions": [
+   {
+    "source": "规则：盈利稳定，使用 PE/PS/PB/EV-EBITDA",
+    "decisions": [
+     {
+      "multiple": "pe",
+      "label": "市盈率 PE",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "ps",
+      "label": "市销率 PS",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "pb",
+      "label": "市净率 PB",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "ev_ebitda",
+      "label": "EV/EBITDA",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "ev_revenue",
+      "label": "EV/营业收入",
+      "used": true,
+      "reason": "适用"
+     }
+    ]
+   }
+  ],
+  "results": [
+   {
+    "multiple": "pe",
+    "label": "市盈率 PE",
+    "peer_median": 9.845899357827571,
+    "peer_mean": 10.706274700986045,
+    "peer_p25": 7.6056204377394705,
+    "peer_p75": 12.365332175781202,
+    "peer_min": 6.898569796552886,
+    "peer_max": 16.815951737029092,
+    "sample_count": 5,
+    "dispersion": 0.4834207181142595,
+    "excluded": [],
+    "adjustment": 0.1683323336888721,
+    "adjustment_reason": "目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%",
+    "applied_multiple": 11.503282573996453,
+    "applied_multiple_effective": 11.503282573996453,
+    "metric_basis": "net_income",
+    "metric_value": 44520196000.0,
+    "net_debt_deducted": 0.0,
+    "implied_equity_value": 512128394837.70654,
+    "implied_per_share": 67.11634271953265,
+    "category": "equity"
+   },
+   {
+    "multiple": "ps",
+    "label": "市销率 PS",
+    "peer_median": 1.2828509221559483,
+    "peer_mean": 1.0743448683275674,
+    "peer_p25": 0.6566095634575858,
+    "peer_p75": 1.514305692101555,
+    "peer_min": 0.3713988756913645,
+    "peer_max": 1.546559288231383,
+    "sample_count": 5,
+    "dispersion": 0.6685859703811354,
+    "excluded": [],
+    "adjustment": 0.1683323336888721,
+    "adjustment_reason": "目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%",
+    "applied_multiple": 1.4987962116573805,
+    "applied_multiple_effective": 1.4987962116573805,
+    "metric_basis": "revenue",
+    "metric_value": 458502407000.0,
+    "net_debt_deducted": 0.0,
+    "implied_equity_value": 687201670647.3904,
+    "implied_per_share": 90.06035070408831,
+    "category": "equity"
+   },
+   {
+    "multiple": "pb",
+    "label": "市净率 PB",
+    "peer_median": 1.517461987864917,
+    "peer_mean": 2.291239063571364,
+    "peer_p25": 1.465499794120307,
+    "peer_p75": 1.5758732763040342,
+    "peer_min": 1.323795517278883,
+    "peer_max": 5.57356474228868,
+    "sample_count": 5,
+    "dispersion": 0.07273558287876702,
+    "excluded": [],
+    "adjustment": 0.0,
+    "adjustment_reason": "PB/PCF 不做成长性调整，保持同业中位数",
+    "applied_multiple": 1.517461987864917,
+    "applied_multiple_effective": 1.517461987864917,
+    "metric_basis": "equity",
+    "metric_value": 236424223000.0,
+    "net_debt_deducted": 0.0,
+    "implied_equity_value": 358764771412.9984,
+    "implied_per_share": 47.01746592566933,
+    "category": "equity"
+   },
+   {
+    "multiple": "ev_ebitda",
+    "label": "EV/EBITDA",
+    "peer_median": 8.403388281071535,
+    "peer_mean": 9.109477495254128,
+    "peer_p25": 6.74410288595194,
+    "peer_p75": 10.973794108038268,
+    "peer_min": 6.458129293303275,
+    "peer_max": 12.967972907905617,
+    "sample_count": 5,
+    "dispersion": 0.503331642025113,
+    "excluded": [],
+    "adjustment": 0.1683323336888721,
+    "adjustment_reason": "目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%",
+    "applied_multiple": 9.817950241318027,
+    "applied_multiple_effective": 9.817950241318027,
+    "metric_basis": "ebitda",
+    "metric_value": 56414922000.0,
+    "net_debt_deducted": -19667206000.0,
+    "implied_equity_value": 560343185063.8376,
+    "implied_per_share": 73.4350714164503,
+    "category": "enterprise"
+   },
+   {
+    "multiple": "ev_revenue",
+    "label": "EV/营业收入",
+    "peer_median": 1.1546862657865276,
+    "peer_mean": 1.0214348218122455,
+    "peer_p25": 0.658007000217734,
+    "peer_p75": 1.4093130323280887,
+    "peer_min": 0.4207354934021195,
+    "peer_max": 1.464432317326758,
+    "sample_count": 5,
+    "dispersion": 0.6506581522372176,
+    "excluded": [],
+    "adjustment": 0.1683323336888721,
+    "adjustment_reason": "目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%",
+    "applied_multiple": 1.3490572995848629,
+    "applied_multiple_effective": 1.3490572995848629,
+    "metric_basis": "revenue",
+    "metric_value": 458502407000.0,
+    "net_debt_deducted": -19667206000.0,
+    "implied_equity_value": 625010307040.5797,
+    "implied_per_share": 81.90993976006608,
+    "category": "enterprise"
+   }
+  ],
+  "implied_equity_value": 560343185063.8376,
+  "implied_per_share": 73.4350714164503,
+  "range_low": 358764771412.9984,
+  "range_high": 687201670647.3904,
+  "valuation_range": {
+   "low": 358764771412.9984,
+   "mid": 560343185063.8376,
+   "high": 687201670647.3904,
+   "low_per_share": 47.01746592566933,
+   "mid_per_share": 73.4350714164503,
+   "high_per_share": 90.06035070408831,
+   "basis": "各选用倍数隐含股权价值的最小/中位/最大"
+  },
+  "target_multiples": {
+   "pe": 15.23342473306811,
+   "pb": 2.8685514803085126,
+   "ps": 1.4791526598625684,
+   "pcf": 12.71315459056464,
+   "ev_revenue": 1.465053959612997,
+   "ev_ebitda": 11.906969699744332,
+   "ev_ebit": 14.269304890817413,
+   "market_cap": 678195054867.44,
+   "enterprise_value": 671730766867.44,
+   "peg": 1.381310115544868
+  },
+  "positioning": {
+   "pe": {
+    "label": "市盈率 PE",
+    "target": 15.23342473306811,
+    "peer_median": 9.845899357827571,
+    "premium_discount": 0.5471846887158573,
+    "percentile": 80.0,
+    "peer_min": 6.898569796552886,
+    "peer_max": 16.815951737029092
+   },
+   "ps": {
+    "label": "市销率 PS",
+    "target": 1.4791526598625684,
+    "peer_median": 1.2828509221559483,
+    "premium_discount": 0.1530199139403643,
+    "percentile": 60.0,
+    "peer_min": 0.3713988756913645,
+    "peer_max": 1.546559288231383
+   },
+   "pb": {
+    "label": "市净率 PB",
+    "target": 2.8685514803085126,
+    "peer_median": 1.517461987864917,
+    "premium_discount": 0.8903613423256758,
+    "percentile": 80.0,
+    "peer_min": 1.323795517278883,
+    "peer_max": 5.57356474228868
+   },
+   "ev_ebitda": {
+    "label": "EV/EBITDA",
+    "target": 11.906969699744332,
+    "peer_median": 8.403388281071535,
+    "premium_discount": 0.4169248523913316,
+    "percentile": 80.0,
+    "peer_min": 6.458129293303275,
+    "peer_max": 12.967972907905617
+   },
+   "ev_revenue": {
+    "label": "EV/营业收入",
+    "target": 1.465053959612997,
+    "peer_median": 1.1546862657865276,
+    "premium_discount": 0.2687896297225454,
+    "percentile": 100.0,
+    "peer_min": 0.4207354934021195,
+    "peer_max": 1.464432317326758
+   }
+  },
+  "judgment": "市盈率 PE 15.23x，较同业中位 9.85x 溢价 54.7%，位于同业 80 分位；市销率 PS 1.48x，较同业中位 1.28x 溢价 15.3%，位于同业 60 分位；市净率 PB 2.87x，较同业中位 1.52x 溢价 89.0%，位于同业 80 分位；EV/EBITDA 11.91x，较同业中位 8.40x 溢价 41.7%，位于同业 80 分位；EV/营业收入 1.47x，较同业中位 1.15x 溢价 26.9%，位于同业 100 分位",
+  "target_growth": 0.11028243811172826,
+  "warnings": [
+   "市销率 PS 同业离散度（IQR/中位）67% 偏高，说明样本估值分歧大，中位数的代表性下降。",
+   "EV/营业收入 同业离散度（IQR/中位）65% 偏高，说明样本估值分歧大，中位数的代表性下降。"
+  ]
+ },
+ "comps": {
+  "ok": true,
+  "method": "comps",
+  "status": "ok",
+  "caliber": "LYR（最近年报）",
+  "peer_count": 5,
+  "peers_used": 5,
+  "peers_detail": [
+   {
+    "name": "格力电器",
+    "ticker": "000651",
+    "industry": "白色家电",
+    "pe": 7.6056204377394705,
+    "pe_forward": null,
+    "pb": 1.465499794120307,
+    "ps": 1.2828509221559483,
+    "pcf": 4.732737164244978,
+    "peg": null,
+    "ev_revenue": 1.1546862657865276,
+    "ev_ebitda": 6.458129293303275,
+    "ev_ebit": 6.458129293303275,
+    "revenue_growth": -0.09955852619214922,
+    "net_income_growth": -0.10837835599582701,
+    "gross_margin": 0.3008260939430588,
+    "ebitda_margin": 0.17879578022444886,
+    "ebit_margin": 0.17879578022444886,
+    "roe": 0.19268642264192193,
+    "market_cap": 219519090989.78998,
+    "net_debt": -25793283209.11,
+    "ebitda": 30595205155.809998,
+    "ebit": 30595205155.809998,
+    "revenue": 171118161275.40997,
+    "net_income": 28862746016.16,
+    "equity": 149791280674.7,
+    "cfo": 46383114754.02,
+    "note": "",
+    "selection_reason": "空调与家电龙头，规模、渠道与制造模式最接近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "海尔智家",
+    "ticker": "600690",
+    "industry": "白色家电",
+    "pe": 9.845899357827571,
+    "pe_forward": null,
+    "pb": 1.5758732763040342,
+    "ps": 0.6566095634575858,
+    "pcf": 7.634666493931756,
+    "peg": 3.2238096648955676,
+    "ev_revenue": 0.658007000217734,
+    "ev_ebitda": 8.403388281071535,
+    "ev_ebit": 8.403388281071535,
+    "revenue_growth": 0.05710005468555357,
+    "net_income_growth": 0.030541193126383037,
+    "gross_margin": 0.26660786233787714,
+    "ebitda_margin": 0.07830258203109353,
+    "ebit_margin": 0.07830258203109353,
+    "roe": 0.16005376644960342,
+    "market_cap": 198523789801.40002,
+    "net_debt": -6856089388.370003,
+    "ebitda": 23674533849.6,
+    "ebit": 23674533849.6,
+    "revenue": 302346783918.30005,
+    "net_income": 20163093546.51,
+    "equity": 125977001315.11,
+    "cfo": 26002941969.92,
+    "note": "",
+    "selection_reason": "全球化家电平台，产品矩阵与标的可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "海信家电",
+    "ticker": "000921",
+    "industry": "白色家电",
+    "pe": 6.898569796552886,
+    "pe_forward": null,
+    "pb": 1.517461987864917,
+    "ps": 0.3713988756913645,
+    "pcf": 5.6342954438898305,
+    "peg": null,
+    "ev_revenue": 0.4207354934021195,
+    "ev_ebitda": 6.74410288595194,
+    "ev_ebit": 6.74410288595194,
+    "revenue_growth": -0.05193911768085313,
+    "net_income_growth": -0.07653688260213642,
+    "gross_margin": 0.21310174908288362,
+    "ebitda_margin": 0.062385687246634,
+    "ebit_margin": 0.062385687246634,
+    "roe": 0.21996762120507504,
+    "market_cap": 32656540804.4,
+    "net_debt": 286599570.61000013,
+    "ebitda": 5485479021.41,
+    "ebit": 5485479021.41,
+    "revenue": 87928485899.72,
+    "net_income": 4733813205.85,
+    "equity": 21520500062.31,
+    "cfo": 5796029180.51,
+    "note": "",
+    "selection_reason": "白电与中央空调业务，品类结构相近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "老板电器",
+    "ticker": "002508",
+    "industry": "厨卫电器",
+    "pe": 12.365332175781202,
+    "pe_forward": null,
+    "pb": 1.323795517278883,
+    "ps": 1.514305692101555,
+    "pcf": 9.587286087994093,
+    "peg": null,
+    "ev_revenue": 1.4093130323280887,
+    "ev_ebitda": 10.973794108038268,
+    "ev_ebit": 10.973794108038268,
+    "revenue_growth": -0.09779886211442301,
+    "net_income_growth": -0.20356646154049607,
+    "gross_margin": 0.501917455105368,
+    "ebitda_margin": 0.12842532112897684,
+    "ebit_margin": 0.12842532112897684,
+    "roe": 0.10705701217405829,
+    "market_cap": 15318821468.36,
+    "net_debt": -1136551390.18,
+    "ebitda": 1299159460.77,
+    "ebit": 1299159460.77,
+    "revenue": 10116069396.2,
+    "net_income": 1238852402.07,
+    "equity": 11571894048.9,
+    "cfo": 1597826676.68,
+    "note": "",
+    "selection_reason": "厨电龙头，品牌与渠道模式可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "苏泊尔",
+    "ticker": "002032",
+    "industry": "小家电",
+    "pe": 16.815951737029092,
+    "pe_forward": null,
+    "pb": 5.57356474228868,
+    "ps": 1.546559288231383,
+    "pcf": 13.310951549204004,
+    "peg": null,
+    "ev_revenue": 1.464432317326758,
+    "ev_ebitda": 12.967972907905617,
+    "ev_ebit": 12.967972907905617,
+    "revenue_growth": 0.015356948464822828,
+    "net_income_growth": -0.0672225169249634,
+    "gross_margin": 0.24866795618162532,
+    "ebitda_margin": 0.11292684891668779,
+    "ebit_margin": 0.11292684891668779,
+    "roe": 0.3314450962662772,
+    "market_cap": 35217866822.939995,
+    "net_debt": -1904048287.76,
+    "ebitda": 2571542362.5499997,
+    "ebit": 2571542362.5499997,
+    "revenue": 22771753460.04,
+    "net_income": 2094313029.3,
+    "equity": 6318732884.85,
+    "cfo": 2645781309.68,
+    "note": "",
+    "selection_reason": "小家电龙头，消费属性与盈利结构可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   }
+  ],
+  "peer_companies": [
+   {
+    "name": "格力电器",
+    "ticker": "000651",
+    "industry": "白色家电",
+    "market_cap": 219519090989.78998,
+    "pe": 7.6056204377394705,
+    "pb": 1.465499794120307,
+    "ps": 1.2828509221559483,
+    "pcf": 4.732737164244978,
+    "peg": null,
+    "ev_revenue": 1.1546862657865276,
+    "ev_ebitda": 6.458129293303275,
+    "ev_ebit": 6.458129293303275,
+    "revenue_growth": -0.09955852619214922,
+    "net_income_growth": -0.10837835599582701,
+    "gross_margin": 0.3008260939430588,
+    "ebitda_margin": 0.17879578022444886,
+    "ebit_margin": 0.17879578022444886,
+    "roe": 0.19268642264192193,
+    "selection_reason": "空调与家电龙头，规模、渠道与制造模式最接近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 82.2,
+     "level": "高",
+     "reasons": [
+      "规模为目标公司的 0.32×（-7）",
+      "收入增速差 21%（-11）",
+      "EBIT 利润率接近（差 8%）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "海尔智家",
+    "ticker": "600690",
+    "industry": "白色家电",
+    "market_cap": 198523789801.40002,
+    "pe": 9.845899357827571,
+    "pb": 1.5758732763040342,
+    "ps": 0.6566095634575858,
+    "pcf": 7.634666493931756,
+    "peg": 3.2238096648955676,
+    "ev_revenue": 0.658007000217734,
+    "ev_ebitda": 8.403388281071535,
+    "ev_ebit": 8.403388281071535,
+    "revenue_growth": 0.05710005468555357,
+    "net_income_growth": 0.030541193126383037,
+    "gross_margin": 0.26660786233787714,
+    "ebitda_margin": 0.07830258203109353,
+    "ebit_margin": 0.07830258203109353,
+    "roe": 0.16005376644960342,
+    "selection_reason": "全球化家电平台，产品矩阵与标的可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 92.5,
+     "level": "高",
+     "reasons": [
+      "规模为目标公司的 0.29×（-7）",
+      "收入增速接近（差 5%）",
+      "EBIT 利润率接近（差 2%）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "海信家电",
+    "ticker": "000921",
+    "industry": "白色家电",
+    "market_cap": 32656540804.4,
+    "pe": 6.898569796552886,
+    "pb": 1.517461987864917,
+    "ps": 0.3713988756913645,
+    "pcf": 5.6342954438898305,
+    "peg": null,
+    "ev_revenue": 0.4207354934021195,
+    "ev_ebitda": 6.74410288595194,
+    "ev_ebit": 6.74410288595194,
+    "revenue_growth": -0.05193911768085313,
+    "net_income_growth": -0.07653688260213642,
+    "gross_margin": 0.21310174908288362,
+    "ebitda_margin": 0.062385687246634,
+    "ebit_margin": 0.062385687246634,
+    "roe": 0.21996762120507504,
+    "selection_reason": "白电与中央空调业务，品类结构相近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 75.3,
+     "level": "高",
+     "reasons": [
+      "规模为目标公司的 0.05×（-18）",
+      "收入增速差 16%（-6）",
+      "EBIT 利润率接近（差 4%）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "老板电器",
+    "ticker": "002508",
+    "industry": "厨卫电器",
+    "market_cap": 15318821468.36,
+    "pe": 12.365332175781202,
+    "pb": 1.323795517278883,
+    "ps": 1.514305692101555,
+    "pcf": 9.587286087994093,
+    "peg": null,
+    "ev_revenue": 1.4093130323280887,
+    "ev_ebitda": 10.973794108038268,
+    "ev_ebit": 10.973794108038268,
+    "revenue_growth": -0.09779886211442301,
+    "net_income_growth": -0.20356646154049607,
+    "gross_margin": 0.501917455105368,
+    "ebitda_margin": 0.12842532112897684,
+    "ebit_margin": 0.12842532112897684,
+    "roe": 0.10705701217405829,
+    "selection_reason": "厨电龙头，品牌与渠道模式可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 54.1,
+     "level": "低",
+     "reasons": [
+      "规模为目标公司的 0.02×（-23）",
+      "收入增速差 21%（-11）",
+      "EBIT 利润率接近（差 3%）",
+      "行业为「厨卫电器」（-12）"
+     ]
+    }
+   },
+   {
+    "name": "苏泊尔",
+    "ticker": "002032",
+    "industry": "小家电",
+    "market_cap": 35217866822.939995,
+    "pe": 16.815951737029092,
+    "pb": 5.57356474228868,
+    "ps": 1.546559288231383,
+    "pcf": 13.310951549204004,
+    "peg": null,
+    "ev_revenue": 1.464432317326758,
+    "ev_ebitda": 12.967972907905617,
+    "ev_ebit": 12.967972907905617,
+    "revenue_growth": 0.015356948464822828,
+    "net_income_growth": -0.0672225169249634,
+    "gross_margin": 0.24866795618162532,
+    "ebitda_margin": 0.11292684891668779,
+    "ebit_margin": 0.11292684891668779,
+    "roe": 0.3314450962662772,
+    "selection_reason": "小家电龙头，消费属性与盈利结构可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 70.0,
+     "level": "中",
+     "reasons": [
+      "规模为目标公司的 0.05×（-18）",
+      "收入增速接近（差 9%）",
+      "EBIT 利润率接近（差 1%）",
+      "行业为「小家电」（-12）"
+     ]
+    }
+   }
+  ],
+  "comparability_note": "可比性评分综合考虑行业、规模、收入增速、EBIT 利润率；75 分以上为高，55–74 为中，55 以下为低。评分只用于提示样本质量，不替代人工复核。",
+  "peer_selection": {
+   "peers": [
+    {
+     "name": "格力电器",
+     "ticker": "000651",
+     "industry": "白色家电",
+     "pe": 7.6056204377394705,
+     "pe_forward": null,
+     "pb": 1.465499794120307,
+     "ps": 1.2828509221559483,
+     "pcf": 4.732737164244978,
+     "peg": null,
+     "ev_revenue": 1.1546862657865276,
+     "ev_ebitda": 6.458129293303275,
+     "ev_ebit": 6.458129293303275,
+     "revenue_growth": -0.09955852619214922,
+     "net_income_growth": -0.10837835599582701,
+     "gross_margin": 0.3008260939430588,
+     "ebitda_margin": 0.17879578022444886,
+     "ebit_margin": 0.17879578022444886,
+     "roe": 0.19268642264192193,
+     "market_cap": 219519090989.78998,
+     "net_debt": -25793283209.11,
+     "ebitda": 30595205155.809998,
+     "ebit": 30595205155.809998,
+     "revenue": 171118161275.40997,
+     "net_income": 28862746016.16,
+     "equity": 149791280674.7,
+     "cfo": 46383114754.02,
+     "note": "",
+     "selection_reason": "空调与家电龙头，规模、渠道与制造模式最接近",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "海尔智家",
+     "ticker": "600690",
+     "industry": "白色家电",
+     "pe": 9.845899357827571,
+     "pe_forward": null,
+     "pb": 1.5758732763040342,
+     "ps": 0.6566095634575858,
+     "pcf": 7.634666493931756,
+     "peg": 3.2238096648955676,
+     "ev_revenue": 0.658007000217734,
+     "ev_ebitda": 8.403388281071535,
+     "ev_ebit": 8.403388281071535,
+     "revenue_growth": 0.05710005468555357,
+     "net_income_growth": 0.030541193126383037,
+     "gross_margin": 0.26660786233787714,
+     "ebitda_margin": 0.07830258203109353,
+     "ebit_margin": 0.07830258203109353,
+     "roe": 0.16005376644960342,
+     "market_cap": 198523789801.40002,
+     "net_debt": -6856089388.370003,
+     "ebitda": 23674533849.6,
+     "ebit": 23674533849.6,
+     "revenue": 302346783918.30005,
+     "net_income": 20163093546.51,
+     "equity": 125977001315.11,
+     "cfo": 26002941969.92,
+     "note": "",
+     "selection_reason": "全球化家电平台，产品矩阵与标的可比",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "海信家电",
+     "ticker": "000921",
+     "industry": "白色家电",
+     "pe": 6.898569796552886,
+     "pe_forward": null,
+     "pb": 1.517461987864917,
+     "ps": 0.3713988756913645,
+     "pcf": 5.6342954438898305,
+     "peg": null,
+     "ev_revenue": 0.4207354934021195,
+     "ev_ebitda": 6.74410288595194,
+     "ev_ebit": 6.74410288595194,
+     "revenue_growth": -0.05193911768085313,
+     "net_income_growth": -0.07653688260213642,
+     "gross_margin": 0.21310174908288362,
+     "ebitda_margin": 0.062385687246634,
+     "ebit_margin": 0.062385687246634,
+     "roe": 0.21996762120507504,
+     "market_cap": 32656540804.4,
+     "net_debt": 286599570.61000013,
+     "ebitda": 5485479021.41,
+     "ebit": 5485479021.41,
+     "revenue": 87928485899.72,
+     "net_income": 4733813205.85,
+     "equity": 21520500062.31,
+     "cfo": 5796029180.51,
+     "note": "",
+     "selection_reason": "白电与中央空调业务，品类结构相近",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "老板电器",
+     "ticker": "002508",
+     "industry": "厨卫电器",
+     "pe": 12.365332175781202,
+     "pe_forward": null,
+     "pb": 1.323795517278883,
+     "ps": 1.514305692101555,
+     "pcf": 9.587286087994093,
+     "peg": null,
+     "ev_revenue": 1.4093130323280887,
+     "ev_ebitda": 10.973794108038268,
+     "ev_ebit": 10.973794108038268,
+     "revenue_growth": -0.09779886211442301,
+     "net_income_growth": -0.20356646154049607,
+     "gross_margin": 0.501917455105368,
+     "ebitda_margin": 0.12842532112897684,
+     "ebit_margin": 0.12842532112897684,
+     "roe": 0.10705701217405829,
+     "market_cap": 15318821468.36,
+     "net_debt": -1136551390.18,
+     "ebitda": 1299159460.77,
+     "ebit": 1299159460.77,
+     "revenue": 10116069396.2,
+     "net_income": 1238852402.07,
+     "equity": 11571894048.9,
+     "cfo": 1597826676.68,
+     "note": "",
+     "selection_reason": "厨电龙头，品牌与渠道模式可比",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "苏泊尔",
+     "ticker": "002032",
+     "industry": "小家电",
+     "pe": 16.815951737029092,
+     "pe_forward": null,
+     "pb": 5.57356474228868,
+     "ps": 1.546559288231383,
+     "pcf": 13.310951549204004,
+     "peg": null,
+     "ev_revenue": 1.464432317326758,
+     "ev_ebitda": 12.967972907905617,
+     "ev_ebit": 12.967972907905617,
+     "revenue_growth": 0.015356948464822828,
+     "net_income_growth": -0.0672225169249634,
+     "gross_margin": 0.24866795618162532,
+     "ebitda_margin": 0.11292684891668779,
+     "ebit_margin": 0.11292684891668779,
+     "roe": 0.3314450962662772,
+     "market_cap": 35217866822.939995,
+     "net_debt": -1904048287.76,
+     "ebitda": 2571542362.5499997,
+     "ebit": 2571542362.5499997,
+     "revenue": 22771753460.04,
+     "net_income": 2094313029.3,
+     "equity": 6318732884.85,
+     "cfo": 2645781309.68,
+     "note": "",
+     "selection_reason": "小家电龙头，消费属性与盈利结构可比",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    }
+   ],
+   "theme": "白色家电",
+   "sector": "制造",
+   "tier": "curated",
+   "selection_note": "按行业「白色家电」匹配到配置池「白色家电」，逐家披露选取理由；剔除标的后取 5 家。",
+   "missing": [],
+   "warnings": []
+  },
+  "peer_multiples": {
+   "pe": {
+    "median": 9.845899357827571,
+    "mean": 10.706274700986045,
+    "p25": 7.6056204377394705,
+    "p75": 12.365332175781202,
+    "count": 5,
+    "dispersion": 0.4834207181142595,
+    "used": true,
+    "reason": "适用"
+   },
+   "ps": {
+    "median": 1.2828509221559483,
+    "mean": 1.0743448683275674,
+    "p25": 0.6566095634575858,
+    "p75": 1.514305692101555,
+    "count": 5,
+    "dispersion": 0.6685859703811354,
+    "used": true,
+    "reason": "适用"
+   },
+   "pb": {
+    "median": 1.517461987864917,
+    "mean": 2.291239063571364,
+    "p25": 1.465499794120307,
+    "p75": 1.5758732763040342,
+    "count": 5,
+    "dispersion": 0.07273558287876702,
+    "used": true,
+    "reason": "适用"
+   },
+   "ev_ebitda": {
+    "median": 8.403388281071535,
+    "mean": 9.109477495254128,
+    "p25": 6.74410288595194,
+    "p75": 10.973794108038268,
+    "count": 5,
+    "dispersion": 0.503331642025113,
+    "used": true,
+    "reason": "适用"
+   },
+   "ev_revenue": {
+    "median": 1.1546862657865276,
+    "mean": 1.0214348218122455,
+    "p25": 0.658007000217734,
+    "p75": 1.4093130323280887,
+    "count": 5,
+    "dispersion": 0.6506581522372176,
+    "used": true,
+    "reason": "适用"
+   }
+  },
+  "decisions": [
+   {
+    "source": "规则：盈利稳定，使用 PE/PS/PB/EV-EBITDA",
+    "decisions": [
+     {
+      "multiple": "pe",
+      "label": "市盈率 PE",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "ps",
+      "label": "市销率 PS",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "pb",
+      "label": "市净率 PB",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "ev_ebitda",
+      "label": "EV/EBITDA",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "ev_revenue",
+      "label": "EV/营业收入",
+      "used": true,
+      "reason": "适用"
+     }
+    ]
+   }
+  ],
+  "results": [
+   {
+    "multiple": "pe",
+    "label": "市盈率 PE",
+    "peer_median": 9.845899357827571,
+    "peer_mean": 10.706274700986045,
+    "peer_p25": 7.6056204377394705,
+    "peer_p75": 12.365332175781202,
+    "peer_min": 6.898569796552886,
+    "peer_max": 16.815951737029092,
+    "sample_count": 5,
+    "dispersion": 0.4834207181142595,
+    "excluded": [],
+    "adjustment": 0.1683323336888721,
+    "adjustment_reason": "目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%",
+    "applied_multiple": 11.503282573996453,
+    "applied_multiple_effective": 11.503282573996453,
+    "metric_basis": "net_income",
+    "metric_value": 44520196000.0,
+    "net_debt_deducted": 0.0,
+    "implied_equity_value": 512128394837.70654,
+    "implied_per_share": 67.11634271953265,
+    "category": "equity"
+   },
+   {
+    "multiple": "ps",
+    "label": "市销率 PS",
+    "peer_median": 1.2828509221559483,
+    "peer_mean": 1.0743448683275674,
+    "peer_p25": 0.6566095634575858,
+    "peer_p75": 1.514305692101555,
+    "peer_min": 0.3713988756913645,
+    "peer_max": 1.546559288231383,
+    "sample_count": 5,
+    "dispersion": 0.6685859703811354,
+    "excluded": [],
+    "adjustment": 0.1683323336888721,
+    "adjustment_reason": "目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%",
+    "applied_multiple": 1.4987962116573805,
+    "applied_multiple_effective": 1.4987962116573805,
+    "metric_basis": "revenue",
+    "metric_value": 458502407000.0,
+    "net_debt_deducted": 0.0,
+    "implied_equity_value": 687201670647.3904,
+    "implied_per_share": 90.06035070408831,
+    "category": "equity"
+   },
+   {
+    "multiple": "pb",
+    "label": "市净率 PB",
+    "peer_median": 1.517461987864917,
+    "peer_mean": 2.291239063571364,
+    "peer_p25": 1.465499794120307,
+    "peer_p75": 1.5758732763040342,
+    "peer_min": 1.323795517278883,
+    "peer_max": 5.57356474228868,
+    "sample_count": 5,
+    "dispersion": 0.07273558287876702,
+    "excluded": [],
+    "adjustment": 0.0,
+    "adjustment_reason": "PB/PCF 不做成长性调整，保持同业中位数",
+    "applied_multiple": 1.517461987864917,
+    "applied_multiple_effective": 1.517461987864917,
+    "metric_basis": "equity",
+    "metric_value": 236424223000.0,
+    "net_debt_deducted": 0.0,
+    "implied_equity_value": 358764771412.9984,
+    "implied_per_share": 47.01746592566933,
+    "category": "equity"
+   },
+   {
+    "multiple": "ev_ebitda",
+    "label": "EV/EBITDA",
+    "peer_median": 8.403388281071535,
+    "peer_mean": 9.109477495254128,
+    "peer_p25": 6.74410288595194,
+    "peer_p75": 10.973794108038268,
+    "peer_min": 6.458129293303275,
+    "peer_max": 12.967972907905617,
+    "sample_count": 5,
+    "dispersion": 0.503331642025113,
+    "excluded": [],
+    "adjustment": 0.1683323336888721,
+    "adjustment_reason": "目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%",
+    "applied_multiple": 9.817950241318027,
+    "applied_multiple_effective": 9.817950241318027,
+    "metric_basis": "ebitda",
+    "metric_value": 56414922000.0,
+    "net_debt_deducted": -19667206000.0,
+    "implied_equity_value": 560343185063.8376,
+    "implied_per_share": 73.4350714164503,
+    "category": "enterprise"
+   },
+   {
+    "multiple": "ev_revenue",
+    "label": "EV/营业收入",
+    "peer_median": 1.1546862657865276,
+    "peer_mean": 1.0214348218122455,
+    "peer_p25": 0.658007000217734,
+    "peer_p75": 1.4093130323280887,
+    "peer_min": 0.4207354934021195,
+    "peer_max": 1.464432317326758,
+    "sample_count": 5,
+    "dispersion": 0.6506581522372176,
+    "excluded": [],
+    "adjustment": 0.1683323336888721,
+    "adjustment_reason": "目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%",
+    "applied_multiple": 1.3490572995848629,
+    "applied_multiple_effective": 1.3490572995848629,
+    "metric_basis": "revenue",
+    "metric_value": 458502407000.0,
+    "net_debt_deducted": -19667206000.0,
+    "implied_equity_value": 625010307040.5797,
+    "implied_per_share": 81.90993976006608,
+    "category": "enterprise"
+   }
+  ],
+  "implied_equity_value": 560343185063.8376,
+  "implied_per_share": 73.4350714164503,
+  "range_low": 358764771412.9984,
+  "range_high": 687201670647.3904,
+  "valuation_range": {
+   "low": 358764771412.9984,
+   "mid": 560343185063.8376,
+   "high": 687201670647.3904,
+   "low_per_share": 47.01746592566933,
+   "mid_per_share": 73.4350714164503,
+   "high_per_share": 90.06035070408831,
+   "basis": "各选用倍数隐含股权价值的最小/中位/最大"
+  },
+  "target_multiples": {
+   "pe": 15.23342473306811,
+   "pb": 2.8685514803085126,
+   "ps": 1.4791526598625684,
+   "pcf": 12.71315459056464,
+   "ev_revenue": 1.465053959612997,
+   "ev_ebitda": 11.906969699744332,
+   "ev_ebit": 14.269304890817413,
+   "market_cap": 678195054867.44,
+   "enterprise_value": 671730766867.44,
+   "peg": 1.381310115544868
+  },
+  "positioning": {
+   "pe": {
+    "label": "市盈率 PE",
+    "target": 15.23342473306811,
+    "peer_median": 9.845899357827571,
+    "premium_discount": 0.5471846887158573,
+    "percentile": 80.0,
+    "peer_min": 6.898569796552886,
+    "peer_max": 16.815951737029092
+   },
+   "ps": {
+    "label": "市销率 PS",
+    "target": 1.4791526598625684,
+    "peer_median": 1.2828509221559483,
+    "premium_discount": 0.1530199139403643,
+    "percentile": 60.0,
+    "peer_min": 0.3713988756913645,
+    "peer_max": 1.546559288231383
+   },
+   "pb": {
+    "label": "市净率 PB",
+    "target": 2.8685514803085126,
+    "peer_median": 1.517461987864917,
+    "premium_discount": 0.8903613423256758,
+    "percentile": 80.0,
+    "peer_min": 1.323795517278883,
+    "peer_max": 5.57356474228868
+   },
+   "ev_ebitda": {
+    "label": "EV/EBITDA",
+    "target": 11.906969699744332,
+    "peer_median": 8.403388281071535,
+    "premium_discount": 0.4169248523913316,
+    "percentile": 80.0,
+    "peer_min": 6.458129293303275,
+    "peer_max": 12.967972907905617
+   },
+   "ev_revenue": {
+    "label": "EV/营业收入",
+    "target": 1.465053959612997,
+    "peer_median": 1.1546862657865276,
+    "premium_discount": 0.2687896297225454,
+    "percentile": 100.0,
+    "peer_min": 0.4207354934021195,
+    "peer_max": 1.464432317326758
+   }
+  },
+  "judgment": "市盈率 PE 15.23x，较同业中位 9.85x 溢价 54.7%，位于同业 80 分位；市销率 PS 1.48x，较同业中位 1.28x 溢价 15.3%，位于同业 60 分位；市净率 PB 2.87x，较同业中位 1.52x 溢价 89.0%，位于同业 80 分位；EV/EBITDA 11.91x，较同业中位 8.40x 溢价 41.7%，位于同业 80 分位；EV/营业收入 1.47x，较同业中位 1.15x 溢价 26.9%，位于同业 100 分位",
+  "target_growth": 0.11028243811172826,
+  "warnings": [
+   "市销率 PS 同业离散度（IQR/中位）67% 偏高，说明样本估值分歧大，中位数的代表性下降。",
+   "EV/营业收入 同业离散度（IQR/中位）65% 偏高，说明样本估值分歧大，中位数的代表性下降。"
+  ]
+ },
+ "sotp": {
+  "ok": true,
+  "method": "sotp",
+  "status": "ok",
+  "rows": [
+   {
+    "name": "智能家居业务",
+    "level": "top",
+    "parent": "",
+    "metric": "revenue",
+    "metric_basis": "ebitda",
+    "value": 41993223758.36409,
+    "multiple_type": "ev_ebitda",
+    "multiple": 7.573745583511737,
+    "peer_names": [
+     "格力电器",
+     "海尔智家",
+     "海信家电",
+     "老板电器"
+    ],
+    "peer_tickers": [
+     "000651",
+     "600690",
+     "000921",
+     "002508"
+    ],
+    "peer_median_ev_revenue": 0.9063466330021308,
+    "peer_median_ev_ebitda": 7.573745583511737,
+    "segment_ev": 318045992977.3302,
+    "revenue": 299927239000.0,
+    "gross_profit": 89667699000.0,
+    "gross_margin": 0.29896483993572853,
+    "revenue_share": 0.654145396885561,
+    "allocated_ebit": 35041093221.52006,
+    "allocated_ebitda": 41993223758.36409,
+    "note": "纯业务同业：格力电器, 海尔智家, 海信家电, 老板电器；优先 EV/EBITDA，缺失时用 EV/Revenue",
+    "source": "年报第 50 页·分产品",
+    "as_of": "2025-12-31"
+   },
+   {
+    "name": "楼宇科技",
+    "level": "top",
+    "parent": "",
+    "metric": "revenue",
+    "metric_basis": "ebitda",
+    "value": 5125248296.568012,
+    "multiple_type": "ev_ebitda",
+    "multiple": 7.573745583511737,
+    "peer_names": [
+     "格力电器",
+     "海尔智家",
+     "海信家电",
+     "三花智控"
+    ],
+    "peer_tickers": [
+     "000651",
+     "600690",
+     "000921",
+     "002050"
+    ],
+    "peer_median_ev_revenue": 0.9063466330021308,
+    "peer_median_ev_ebitda": 7.573745583511737,
+    "segment_ev": 38817326650.533035,
+    "revenue": 35790825000.0,
+    "gross_profit": 10943890000.0,
+    "gross_margin": 0.30577361656234525,
+    "revenue_share": 0.07806027722772675,
+    "allocated_ebit": 4276744847.6185517,
+    "allocated_ebitda": 5125248296.568012,
+    "note": "纯业务同业：格力电器, 海尔智家, 海信家电, 三花智控；优先 EV/EBITDA，缺失时用 EV/Revenue",
+    "source": "年报第 50 页·分产品",
+    "as_of": "2025-12-31"
+   },
+   {
+    "name": "其他",
+    "level": "top",
+    "parent": "",
+    "metric": "revenue",
+    "metric_basis": "ebitda",
+    "value": 2456614177.88886,
+    "multiple_type": "ev_ebitda",
+    "multiple": 8.403388281071535,
+    "peer_names": [],
+    "peer_tickers": [],
+    "peer_median_ev_revenue": 1.1546862657865276,
+    "peer_median_ev_ebitda": 8.403388281071535,
+    "segment_ev": 20643882793.585434,
+    "revenue": 33771534000.0,
+    "gross_profit": 5245583000.0,
+    "gross_margin": 0.15532557686008577,
+    "revenue_share": 0.07365617602962769,
+    "allocated_ebit": 2049912788.597607,
+    "allocated_ebitda": 2456614177.88886,
+    "note": "分部「其他」未匹配到同业主题；使用公司整体倍数兜底",
+    "source": "年报第 50 页·分产品",
+    "as_of": "2025-12-31"
+   },
+   {
+    "name": "机器人与自动化",
+    "level": "top",
+    "parent": "",
+    "metric": "revenue",
+    "metric_basis": "ebitda",
+    "value": 3094296262.553973,
+    "multiple_type": "ev_ebitda",
+    "multiple": 80.1787158601378,
+    "peer_names": [
+     "汇川技术",
+     "埃斯顿",
+     "拓斯达",
+     "双环传动"
+    ],
+    "peer_tickers": [
+     "300124",
+     "002747",
+     "300607",
+     "002472"
+    ],
+    "peer_median_ev_revenue": 4.482777170119895,
+    "peer_median_ev_ebitda": 80.1787158601378,
+    "segment_ev": 248096700822.40137,
+    "revenue": 31010933000.0,
+    "gross_profit": 6607219000.0,
+    "gross_margin": 0.21306095498642366,
+    "revenue_share": 0.06763526761594514,
+    "allocated_ebit": 2582024290.7537813,
+    "allocated_ebitda": 3094296262.553973,
+    "note": "纯业务同业：汇川技术, 埃斯顿, 拓斯达, 双环传动；优先 EV/EBITDA，缺失时用 EV/Revenue",
+    "source": "年报第 50 页·分产品",
+    "as_of": "2025-12-31"
+   },
+   {
+    "name": "其他业务",
+    "level": "top",
+    "parent": "",
+    "metric": "revenue",
+    "metric_basis": "ebitda",
+    "value": 1514283972.6836972,
+    "multiple_type": "ev_ebitda",
+    "multiple": 8.403388281071535,
+    "peer_names": [],
+    "peer_tickers": [],
+    "peer_median_ev_revenue": 1.1546862657865276,
+    "peer_median_ev_ebitda": 8.403388281071535,
+    "segment_ev": 12725116190.264631,
+    "revenue": 28718768000.0,
+    "gross_profit": 3233435000.0,
+    "gross_margin": 0.11258961387201567,
+    "revenue_share": 0.06263602450401094,
+    "allocated_ebit": 1263588767.4638076,
+    "allocated_ebitda": 1514283972.6836972,
+    "note": "分部「其他业务」未匹配到同业主题；使用公司整体倍数兜底",
+    "source": "年报第 50 页·分产品",
+    "as_of": "2025-12-31"
+   },
+   {
+    "name": "工业技术",
+    "level": "top",
+    "parent": "",
+    "metric": "revenue",
+    "metric_basis": "ebitda",
+    "value": 2231255531.941367,
+    "multiple_type": "ev_ebitda",
+    "multiple": 80.1787158601378,
+    "peer_names": [
+     "汇川技术",
+     "埃斯顿",
+     "拓斯达",
+     "双环传动"
+    ],
+    "peer_tickers": [
+     "300124",
+     "002747",
+     "300607",
+     "002472"
+    ],
+    "peer_median_ev_revenue": 4.482777170119895,
+    "peer_median_ev_ebitda": 80.1787158601378,
+    "segment_ev": 178899203306.8875,
+    "revenue": 27232432000.0,
+    "gross_profit": 4764377000.0,
+    "gross_margin": 0.17495231421123167,
+    "revenue_share": 0.05939430542618722,
+    "allocated_ebit": 1861863084.0461965,
+    "allocated_ebitda": 2231255531.941367,
+    "note": "纯业务同业：汇川技术, 埃斯顿, 拓斯达, 双环传动；优先 EV/EBITDA，缺失时用 EV/Revenue",
+    "source": "年报第 50 页·分产品",
+    "as_of": "2025-12-31"
+   }
+  ],
+  "segment_count": 6,
+  "segment_ev_total": 817228222741.0022,
+  "corporate_cost": 73360385120.0,
+  "corporate_cost_estimated": true,
+  "net_debt": -19667206000.0,
+  "minority_interest": 13202918000.0,
+  "preferred_stock": 0.0,
+  "equity_value": 750332125621.0022,
+  "per_share": 98.33383308616104,
+  "conglomerate_discount": 0.09614018684573704,
+  "revenue_coverage": 0.9955274476890587,
+  "implied_ev_revenue": 1.7823858943034996,
+  "implied_ev_ebitda": 14.486029471794753,
+  "allocation_rule": "按各分部毛利占比分摊公司 EBIT",
+  "warnings": [
+   "未提供总部费用，按「营业收入 × 2% × 8 倍」估算为 733.6 亿元，并从分部价值中扣除。",
+   "SOTP 合计隐含 EV/收入 1.8x，与公司整体同业中位 1.2x 相差 54%，分部倍数或收入口径需复核。"
+  ]
+ },
+ "ddm": {
+  "ok": false,
+  "error": "未运行"
+ },
+ "blended": {
+  "ok": true,
+  "blended_per_share": 90.89953023679374,
+  "blended_equity_value": 693604994333.5605,
+  "current_price": 88.88,
+  "upside": 0.02272198736266584,
+  "verdict": "大致合理",
+  "weights": {
+   "dcf": 0.3883,
+   "comps": 0.3204,
+   "sotp": 0.2913
+  },
+  "components": [
+   {
+    "key": "dcf",
+    "label": "DCF（收益法）",
+    "per_share": 99.73290697132207,
+    "weight": 0.3883,
+    "equity_value": 761007699319.3639
+   },
+   {
+    "key": "comps",
+    "label": "Comps（相对估值）",
+    "per_share": 73.4350714164503,
+    "weight": 0.3204,
+    "equity_value": 560343185063.8376
+   },
+   {
+    "key": "sotp",
+    "label": "SOTP（分部估值）",
+    "per_share": 98.33383308616104,
+    "weight": 0.2913,
+    "equity_value": 750332125621.0022
+   }
+  ],
+  "weight_source": "默认权重：有分部 DCF 40% / Comps 30% / SOTP 30%；已按各方法可靠性调整",
+  "confidence": "中",
+  "primary": "dcf",
+  "divergence": 0.35811002900421696,
+  "trace": [
+   {
+    "rule": "可靠性 70 分 → 权重乘数 1.00",
+    "method": "dcf",
+    "base_weight": 0.4,
+    "weight": 0.4
+   },
+   {
+    "rule": "可靠性 85 分 → 权重乘数 1.10",
+    "method": "comps",
+    "base_weight": 0.3,
+    "weight": 0.33
+   },
+   {
+    "rule": "可靠性 69 分 → 权重乘数 1.00",
+    "method": "sotp",
+    "base_weight": 0.3,
+    "weight": 0.3
+   },
+   {
+    "rule": "方法间分歧 36%，提示但不改权重",
+    "divergence": 0.35811002900421696
+   }
+  ]
+ },
+ "scenarios": {
+  "bull": {
+   "per_share": 146.89005615492013,
+   "equity_value": 1120838317883.2966,
+   "growth_y1": 0.14028243811172825,
+   "ebit_margin": 0.12267171181938856,
+   "wacc": 0.06707441816958185,
+   "terminal_growth": 0.025,
+   "ok": true,
+   "label": "乐观",
+   "levers": "收入增速 +3%、EBIT 利润率 +2%、WACC -1.0%"
+  },
+  "base": {
+   "per_share": 99.73290697132207,
+   "equity_value": 761007699319.3639,
+   "growth_y1": 0.11028243811172826,
+   "ebit_margin": 0.10267171181938856,
+   "wacc": 0.07707441816958184,
+   "terminal_growth": 0.025,
+   "ok": true,
+   "label": "基准",
+   "levers": "历史中位数 / 当前资本结构"
+  },
+  "bear": {
+   "per_share": 67.1245497279268,
+   "equity_value": 512191018065.7462,
+   "growth_y1": 0.08028243811172826,
+   "ebit_margin": 0.08267171181938855,
+   "wacc": 0.08707441816958184,
+   "terminal_growth": 0.025,
+   "ok": true,
+   "label": "悲观",
+   "levers": "收入增速 -3%、EBIT 利润率 -2%、WACC +1.0%"
+  },
+  "warnings": []
+ },
+ "sensitivity": {
+  "wacc_axis": [
+   0.06707441816958185,
+   0.07207441816958184,
+   0.07707441816958184,
+   0.08207441816958184,
+   0.08707441816958184
+  ],
+  "growth_axis": [
+   0.015000000000000001,
+   0.02,
+   0.025,
+   0.030000000000000002,
+   0.035
+  ],
+  "grid": [
+   [
+    101.32716060725541,
+    107.45799152646251,
+    114.94772066615049,
+    124.34479179295904,
+    136.5396202451931
+   ],
+   [
+    95.4353067481028,
+    100.52414448355128,
+    106.60846610354322,
+    114.04200748007975,
+    123.36932040238747
+   ],
+   [
+    90.3831608199484,
+    94.68285776152304,
+    99.73290697132207,
+    105.77138754439335,
+    113.14954142794885
+   ],
+   [
+    85.98701784132159,
+    89.67463504650013,
+    93.94139165118241,
+    98.95321148177575,
+    104.94650597354118
+   ],
+   [
+    82.11398967930923,
+    85.31718030095112,
+    88.97639625640741,
+    93.21068892908677,
+    98.18482738068977
+   ]
+  ],
+  "wacc_g": {
+   "kind": "wacc_g",
+   "title": "WACC × 永续增长率：每股价值",
+   "unit": "元/股",
+   "wacc_axis": [
+    0.06707441816958185,
+    0.07207441816958184,
+    0.07707441816958184,
+    0.08207441816958184,
+    0.08707441816958184
+   ],
+   "growth_axis": [
+    0.015000000000000001,
+    0.02,
+    0.025,
+    0.030000000000000002,
+    0.035
+   ],
+   "grid": [
+    [
+     101.32716060725541,
+     107.45799152646251,
+     114.94772066615049,
+     124.34479179295904,
+     136.5396202451931
+    ],
+    [
+     95.4353067481028,
+     100.52414448355128,
+     106.60846610354322,
+     114.04200748007975,
+     123.36932040238747
+    ],
+    [
+     90.3831608199484,
+     94.68285776152304,
+     99.73290697132207,
+     105.77138754439335,
+     113.14954142794885
+    ],
+    [
+     85.98701784132159,
+     89.67463504650013,
+     93.94139165118241,
+     98.95321148177575,
+     104.94650597354118
+    ],
+    [
+     82.11398967930923,
+     85.31718030095112,
+     88.97639625640741,
+     93.21068892908677,
+     98.18482738068977
+    ]
+   ],
+   "matrix": [
+    [
+     101.32716060725541,
+     107.45799152646251,
+     114.94772066615049,
+     124.34479179295904,
+     136.5396202451931
+    ],
+    [
+     95.4353067481028,
+     100.52414448355128,
+     106.60846610354322,
+     114.04200748007975,
+     123.36932040238747
+    ],
+    [
+     90.3831608199484,
+     94.68285776152304,
+     99.73290697132207,
+     105.77138754439335,
+     113.14954142794885
+    ],
+    [
+     85.98701784132159,
+     89.67463504650013,
+     93.94139165118241,
+     98.95321148177575,
+     104.94650597354118
+    ],
+    [
+     82.11398967930923,
+     85.31718030095112,
+     88.97639625640741,
+     93.21068892908677,
+     98.18482738068977
+    ]
+   ],
+   "base_wacc": 0.07707441816958184,
+   "base_growth": 0.025,
+   "base_index": {
+    "x": 2,
+    "y": 2
+   },
+   "note": "行=WACC，列=永续增长率；WACC≤g 的格子无解，写 null。"
+  },
+  "growth_margin": {
+   "kind": "growth_margin",
+   "title": "首年收入增速 × EBIT 利润率：每股价值",
+   "unit": "元/股",
+   "growth_axis": [
+    0.10028243811172827,
+    0.10528243811172826,
+    0.11028243811172826,
+    0.11528243811172827,
+    0.12028243811172826
+   ],
+   "margin_axis": [
+    0.09267171181938856,
+    0.09767171181938855,
+    0.10267171181938856,
+    0.10767171181938856,
+    0.11267171181938855
+   ],
+   "grid": [
+    [
+     88.01861215953694,
+     88.97728189201571,
+     89.94336921313187,
+     90.91690995445485,
+     91.8979400260886
+    ],
+    [
+     92.80810392617268,
+     93.81921025755288,
+     94.83813809222697,
+     95.86492520669391,
+     96.89960946023861
+    ],
+    [
+     97.59759569280845,
+     98.66113862309008,
+     99.73290697132207,
+     100.81294045893296,
+     101.9012788943886
+    ],
+    [
+     102.3870874594442,
+     103.50306698862727,
+     104.62767585041722,
+     105.76095571117202,
+     106.9029483285386
+    ],
+    [
+     107.17657922607995,
+     108.34499535416444,
+     109.52244472951229,
+     110.70897096341105,
+     111.9046177626886
+    ]
+   ],
+   "matrix": [
+    [
+     88.01861215953694,
+     88.97728189201571,
+     89.94336921313187,
+     90.91690995445485,
+     91.8979400260886
+    ],
+    [
+     92.80810392617268,
+     93.81921025755288,
+     94.83813809222697,
+     95.86492520669391,
+     96.89960946023861
+    ],
+    [
+     97.59759569280845,
+     98.66113862309008,
+     99.73290697132207,
+     100.81294045893296,
+     101.9012788943886
+    ],
+    [
+     102.3870874594442,
+     103.50306698862727,
+     104.62767585041722,
+     105.76095571117202,
+     106.9029483285386
+    ],
+    [
+     107.17657922607995,
+     108.34499535416444,
+     109.52244472951229,
+     110.70897096341105,
+     111.9046177626886
+    ]
+   ],
+   "base_growth": 0.11028243811172826,
+   "base_margin": 0.10267171181938856,
+   "base_index": {
+    "x": 2,
+    "y": 2
+   },
+   "note": "行=EBIT 利润率，列=首年收入增速；WACC 与 g 固定在基准值。"
+  },
+  "base_wacc": 0.07707441816958184,
+  "base_growth": 0.025,
+  "unit": "元/股"
+ },
+ "peer_selection": {
+  "peers": [
+   {
+    "name": "格力电器",
+    "ticker": "000651",
+    "industry": "白色家电",
+    "pe": 7.6056204377394705,
+    "pe_forward": null,
+    "pb": 1.465499794120307,
+    "ps": 1.2828509221559483,
+    "pcf": 4.732737164244978,
+    "peg": null,
+    "ev_revenue": 1.1546862657865276,
+    "ev_ebitda": 6.458129293303275,
+    "ev_ebit": 6.458129293303275,
+    "revenue_growth": -0.09955852619214922,
+    "net_income_growth": -0.10837835599582701,
+    "gross_margin": 0.3008260939430588,
+    "ebitda_margin": 0.17879578022444886,
+    "ebit_margin": 0.17879578022444886,
+    "roe": 0.19268642264192193,
+    "market_cap": 219519090989.78998,
+    "net_debt": -25793283209.11,
+    "ebitda": 30595205155.809998,
+    "ebit": 30595205155.809998,
+    "revenue": 171118161275.40997,
+    "net_income": 28862746016.16,
+    "equity": 149791280674.7,
+    "cfo": 46383114754.02,
+    "note": "",
+    "selection_reason": "空调与家电龙头，规模、渠道与制造模式最接近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "海尔智家",
+    "ticker": "600690",
+    "industry": "白色家电",
+    "pe": 9.845899357827571,
+    "pe_forward": null,
+    "pb": 1.5758732763040342,
+    "ps": 0.6566095634575858,
+    "pcf": 7.634666493931756,
+    "peg": 3.2238096648955676,
+    "ev_revenue": 0.658007000217734,
+    "ev_ebitda": 8.403388281071535,
+    "ev_ebit": 8.403388281071535,
+    "revenue_growth": 0.05710005468555357,
+    "net_income_growth": 0.030541193126383037,
+    "gross_margin": 0.26660786233787714,
+    "ebitda_margin": 0.07830258203109353,
+    "ebit_margin": 0.07830258203109353,
+    "roe": 0.16005376644960342,
+    "market_cap": 198523789801.40002,
+    "net_debt": -6856089388.370003,
+    "ebitda": 23674533849.6,
+    "ebit": 23674533849.6,
+    "revenue": 302346783918.30005,
+    "net_income": 20163093546.51,
+    "equity": 125977001315.11,
+    "cfo": 26002941969.92,
+    "note": "",
+    "selection_reason": "全球化家电平台，产品矩阵与标的可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "海信家电",
+    "ticker": "000921",
+    "industry": "白色家电",
+    "pe": 6.898569796552886,
+    "pe_forward": null,
+    "pb": 1.517461987864917,
+    "ps": 0.3713988756913645,
+    "pcf": 5.6342954438898305,
+    "peg": null,
+    "ev_revenue": 0.4207354934021195,
+    "ev_ebitda": 6.74410288595194,
+    "ev_ebit": 6.74410288595194,
+    "revenue_growth": -0.05193911768085313,
+    "net_income_growth": -0.07653688260213642,
+    "gross_margin": 0.21310174908288362,
+    "ebitda_margin": 0.062385687246634,
+    "ebit_margin": 0.062385687246634,
+    "roe": 0.21996762120507504,
+    "market_cap": 32656540804.4,
+    "net_debt": 286599570.61000013,
+    "ebitda": 5485479021.41,
+    "ebit": 5485479021.41,
+    "revenue": 87928485899.72,
+    "net_income": 4733813205.85,
+    "equity": 21520500062.31,
+    "cfo": 5796029180.51,
+    "note": "",
+    "selection_reason": "白电与中央空调业务，品类结构相近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "老板电器",
+    "ticker": "002508",
+    "industry": "厨卫电器",
+    "pe": 12.365332175781202,
+    "pe_forward": null,
+    "pb": 1.323795517278883,
+    "ps": 1.514305692101555,
+    "pcf": 9.587286087994093,
+    "peg": null,
+    "ev_revenue": 1.4093130323280887,
+    "ev_ebitda": 10.973794108038268,
+    "ev_ebit": 10.973794108038268,
+    "revenue_growth": -0.09779886211442301,
+    "net_income_growth": -0.20356646154049607,
+    "gross_margin": 0.501917455105368,
+    "ebitda_margin": 0.12842532112897684,
+    "ebit_margin": 0.12842532112897684,
+    "roe": 0.10705701217405829,
+    "market_cap": 15318821468.36,
+    "net_debt": -1136551390.18,
+    "ebitda": 1299159460.77,
+    "ebit": 1299159460.77,
+    "revenue": 10116069396.2,
+    "net_income": 1238852402.07,
+    "equity": 11571894048.9,
+    "cfo": 1597826676.68,
+    "note": "",
+    "selection_reason": "厨电龙头，品牌与渠道模式可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "苏泊尔",
+    "ticker": "002032",
+    "industry": "小家电",
+    "pe": 16.815951737029092,
+    "pe_forward": null,
+    "pb": 5.57356474228868,
+    "ps": 1.546559288231383,
+    "pcf": 13.310951549204004,
+    "peg": null,
+    "ev_revenue": 1.464432317326758,
+    "ev_ebitda": 12.967972907905617,
+    "ev_ebit": 12.967972907905617,
+    "revenue_growth": 0.015356948464822828,
+    "net_income_growth": -0.0672225169249634,
+    "gross_margin": 0.24866795618162532,
+    "ebitda_margin": 0.11292684891668779,
+    "ebit_margin": 0.11292684891668779,
+    "roe": 0.3314450962662772,
+    "market_cap": 35217866822.939995,
+    "net_debt": -1904048287.76,
+    "ebitda": 2571542362.5499997,
+    "ebit": 2571542362.5499997,
+    "revenue": 22771753460.04,
+    "net_income": 2094313029.3,
+    "equity": 6318732884.85,
+    "cfo": 2645781309.68,
+    "note": "",
+    "selection_reason": "小家电龙头，消费属性与盈利结构可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   }
+  ],
+  "theme": "白色家电",
+  "sector": "制造",
+  "tier": "curated",
+  "selection_note": "按行业「白色家电」匹配到配置池「白色家电」，逐家披露选取理由；剔除标的后取 5 家。",
+  "missing": [],
+  "warnings": []
+ },
+ "segment_meta": {
+  "raw_count": 6,
+  "chosen_count": 6,
+  "covered_revenue": 456451731000.0,
+  "total_revenue": 458502407000.0,
+  "coverage": 0.9955274476890587,
+  "expanded_children": false
+ },
+ "segment_source": "联网年报·主营业务分产品",
+ "data_source": {
+  "requested": "web",
+  "used": "web_evidence",
+  "fallback": false
+ },
+ "gates": [
+  {
+   "code": "TV_METHOD_DIVERGENCE",
+   "severity": "warn",
+   "message": "Gordon 与退出倍数终值相差 41%，已取中点。",
+   "affected_paths": [
+    "dcf.tv_base"
+   ]
+  },
+  {
+   "code": "WACC_IMPLIED_GAP",
+   "severity": "warn",
+   "message": "CAPM 与市场隐含 WACC 相差 253bp，折现率假设与市场定价存在分歧。",
+   "affected_paths": [
+    "dcf.wacc",
+    "valuation.blended"
+   ]
+  },
+  {
+   "code": "DATA_ESTIMATED",
+   "severity": "info",
+   "message": "未提供总部费用，按「营业收入 × 2% × 8 倍」估算为 733.6 亿元，并从分部价值中扣除。",
+   "affected_paths": [
+    "valuation.assumptions"
+   ]
+  }
+ ],
+ "warnings": [
+  "终值两种算法偏离 41%（Gordon 9,863 亿元 vs 退出倍数 6,497 亿元），已取中点。根因多半是 WACC−g 只有 5.21%，分母过小会放大 Gordon 终值。",
+  "CAPM 算出的 WACC（6.19%）低于市场隐含折现率（8.72%）253bp。CAPM 折现率偏低会让 DCF 系统性高于市价；本次已按规则校准。",
+  "市销率 PS 同业离散度（IQR/中位）67% 偏高，说明样本估值分歧大，中位数的代表性下降。",
+  "EV/营业收入 同业离散度（IQR/中位）65% 偏高，说明样本估值分歧大，中位数的代表性下降。",
+  "未提供总部费用，按「营业收入 × 2% × 8 倍」估算为 733.6 亿元，并从分部价值中扣除。",
+  "SOTP 合计隐含 EV/收入 1.8x，与公司整体同业中位 1.2x 相差 54%，分部倍数或收入口径需复核。"
+ ],
+ "sources": [
+  {
+   "name": "年报 PDF·2025",
+   "purpose": "财务报表/分部",
+   "as_of": "2025-12-31",
+   "official": true,
+   "note": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF"
+  },
+  {
+   "name": "年报 PDF·2024",
+   "purpose": "财务报表/分部",
+   "as_of": "2024-12-31",
+   "official": true,
+   "note": "https://static.cninfo.com.cn/finalpage/2025-03-29/1222951181.PDF"
+  },
+  {
+   "name": "年报 PDF·主营业务分产品",
+   "purpose": "分部收入",
+   "as_of": "2026-11-04",
+   "official": true,
+   "note": ""
+  },
+  {
+   "name": "新浪财经·财务报表",
+   "purpose": "历史财务",
+   "as_of": "2026-11-04",
+   "official": false,
+   "note": ""
+  },
+  {
+   "name": "东方财富·公司信息",
+   "purpose": "行情/行业/股本",
+   "as_of": "2026-11-04",
+   "official": false,
+   "note": ""
+  },
+  {
+   "name": "中债 10 年期国债收益率（2026-11-02）",
+   "purpose": "无风险利率",
+   "as_of": "2026-11-02",
+   "official": true,
+   "note": ""
+  },
+  {
+   "name": "Damodaran 国家风险溢价表",
+   "purpose": "ERP",
+   "as_of": "2026-11-04",
+   "official": true,
+   "note": "取中国/美国市场对应值"
+  }
+ ],
+ "disclaimer": "本结果由模型按既定假设计算，仅供研究与教学用途，不构成投资建议。估值结论依赖假设，假设比模型重要。",
+ "valuation_range": {
+  "low": 358764771412.9984,
+  "mid": 560343185063.8376,
+  "high": 687201670647.3904,
+  "low_per_share": 47.01746592566933,
+  "mid_per_share": 73.4350714164503,
+  "high_per_share": 90.06035070408831,
+  "basis": "各选用倍数隐含股权价值的最小/中位/最大"
+ },
+ "presentation": {
+  "narrative": {
+   "headline": "按规则层选定的方法组合，000333 的每股价值约 90.90 CNY，较现价 88.88 有2.3%上行空间，判断为「大致合理」。综合置信度：中。",
+   "verdict": "大致合理",
+   "confidence": "中",
+   "sections": [
+    {
+     "title": "结论摘要",
+     "kind": "text",
+     "paragraphs": [
+      "按规则层选定的方法组合，000333 的每股价值约 90.90 CNY，较现价 88.88 有2.3%上行空间，判断为「大致合理」。综合置信度：中。",
+      "本次采用：DCF（收益法） 38.8%；Comps（相对估值） 32.0%；SOTP（分部估值） 29.1%。权重规则：默认权重：有分部 DCF 40% / Comps 30% / SOTP 30%；已按各方法可靠性调整。 方法之间的估值分歧为 35.8%；分歧在可接受范围内。 主方法为 DCF（收益法）。"
+     ],
+     "metrics": [
+      {
+       "label": "融合每股价值",
+       "value": 90.89953023679374,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "当前股价",
+       "value": 88.88,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "上行/下行空间",
+       "value": 0.02272198736266584,
+       "unit": "%",
+       "fmt": "pct"
+      },
+      {
+       "label": "估值判断",
+       "value": "大致合理",
+       "unit": "",
+       "fmt": "text"
+      },
+      {
+       "label": "置信度",
+       "value": "中",
+       "unit": "",
+       "fmt": "text"
+      }
+     ]
+    },
+    {
+     "title": "方法选择与权重",
+     "kind": "text",
+     "paragraphs": [
+      "自动模式：运行所有结构上适用的方法，并按规则定权融合。",
+      "行业门槛：支持。行业适用标准估值方法。",
+      "可靠性评分：DCF（收益法） 70.0 分（中）；Comps（相对估值） 85.0 分（高）；SOTP（分部估值） 69.0 分（中）。"
+     ],
+     "metrics": []
+    },
+    {
+     "title": "相对估值（Comps）",
+     "kind": "text",
+     "paragraphs": [
+      "按行业「白色家电」匹配到配置池「白色家电」，逐家披露选取理由；剔除标的后取 5 家。",
+      "可比公司：格力电器（000651）、海尔智家（600690）、海信家电（000921）、老板电器（002508）、苏泊尔（002032）。逐家选取理由见下表。",
+      "市盈率 PE：同业中位 9.85x（5 家），调整 +16.8% 后采用 11.50x，隐含股权价值 5,121.3 亿元、每股 67.12 元。调整理由：目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%。",
+      "市销率 PS：同业中位 1.28x（5 家），调整 +16.8% 后采用 1.50x，隐含股权价值 6,872.0 亿元、每股 90.06 元。调整理由：目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%。",
+      "市净率 PB：同业中位 1.52x（5 家），调整 +0.0% 后采用 1.52x，隐含股权价值 3,587.6 亿元、每股 47.02 元。调整理由：PB/PCF 不做成长性调整，保持同业中位数。",
+      "EV/EBITDA：同业中位 8.40x（5 家），调整 +16.8% 后采用 9.82x，隐含股权价值 5,603.4 亿元、每股 73.44 元。调整理由：目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%。",
+      "EV/营业收入：同业中位 1.15x（5 家），调整 +16.8% 后采用 1.35x，隐含股权价值 6,250.1 亿元、每股 81.91 元。调整理由：目标增速 11.0% 高于同业中位 -5.2% 16pp，上调 17%。",
+      "目标估值水平：市盈率 PE 15.23x，较同业中位 9.85x 溢价 54.7%，位于同业 80 分位；市销率 PS 1.48x，较同业中位 1.28x 溢价 15.3%，位于同业 60 分位；市净率 PB 2.87x，较同业中位 1.52x 溢价 89.0%，位于同业 80 分位；EV/EBITDA 11.91x，较同业中位 8.40x 溢价 41.7%，位于同业 80 分位；EV/营业收入 1.47x，较同业中位 1.15x 溢价 26.9%，位于同业 100 分位。",
+      "相对估值区间：每股 47.02–90.06 元，中位 73.44 元。"
+     ],
+     "metrics": [
+      {
+       "label": "同业中位隐含每股",
+       "value": 73.4350714164503,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "区间下限",
+       "value": 47.01746592566933,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "区间上限",
+       "value": 90.06035070408831,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "采用倍数",
+       "value": 5,
+       "unit": "个",
+       "fmt": "int"
+      }
+     ]
+    },
+    {
+     "title": "绝对估值（DCF / FCFF）",
+     "kind": "text",
+     "paragraphs": [
+      "预测期 5 年；首年收入增速 11.0%，线性衰减至永续增长率 2.5%；EBIT 利润率 10.3%，资本开支/收入 1.9%，折旧摊销/收入 1.9%，营运资本增加/收入 0.7%，所得税率 16.2%。",
+      "WACC：rf 1.6% + β 0.95 × ERP 5.1%（+ 规模溢价 0.0%）= Ke 6.5%；Kd 3.4%，D/(D+E) 8.8%，CAPM WACC 6.2%，最终采用 7.7%。",
+      "折现率校准：CAPM 与市场隐含折现率相差 253bp，规则向市场隐含值靠拢 152bp；市场隐含 WACC 为 8.7%。",
+      "终值：Gordon 9,862.7 亿元、退出倍数 6,496.7 亿元、ROIC 再投资口径 8,060.6 亿元，采用 8,179.7 亿元；终值占企业价值 74.8%。",
+      "DCF 结论：企业价值 7,545.4 亿元，股权价值 7,610.1 亿元，每股 99.73 元。"
+     ],
+     "metrics": [
+      {
+       "label": "DCF 每股价值",
+       "value": 99.73290697132207,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "WACC",
+       "value": 0.07707441816958184,
+       "unit": "%",
+       "fmt": "pct"
+      },
+      {
+       "label": "永续增长率",
+       "value": 0.025,
+       "unit": "%",
+       "fmt": "pct"
+      },
+      {
+       "label": "终值占比",
+       "value": 0.7478653608304228,
+       "unit": "%",
+       "fmt": "pct"
+      }
+     ]
+    },
+    {
+     "title": "分部估值（SOTP）",
+     "kind": "text",
+     "paragraphs": [
+      "分部来源：联网年报·主营业务分产品；收入覆盖 99.6%。",
+      "智能家居业务：收入 2,999.3 亿元，采用 ev_ebitda 7.57x（格力电器, 海尔智家, 海信家电, 老板电器），分部 EV 3,180.5 亿元。",
+      "楼宇科技：收入 357.9 亿元，采用 ev_ebitda 7.57x（格力电器, 海尔智家, 海信家电, 三花智控），分部 EV 388.2 亿元。",
+      "其他：收入 337.7 亿元，采用 ev_ebitda 8.40x（公司整体倍数），分部 EV 206.4 亿元。",
+      "机器人与自动化：收入 310.1 亿元，采用 ev_ebitda 80.18x（汇川技术, 埃斯顿, 拓斯达, 双环传动），分部 EV 2,481.0 亿元。",
+      "其他业务：收入 287.2 亿元，采用 ev_ebitda 8.40x（公司整体倍数），分部 EV 127.3 亿元。",
+      "工业技术：收入 272.3 亿元，采用 ev_ebitda 80.18x（汇川技术, 埃斯顿, 拓斯达, 双环传动），分部 EV 1,789.0 亿元。",
+      "分部 EV 合计 8,172.3 亿元，扣总部费用 733.6 亿元、净负债 -196.7 亿元后，股权价值 7,503.3 亿元，每股 98.33 元。",
+      "SOTP 每股相对现价：+9.6%（SOTP 高于现价，现价相对分部价值折价）。"
+     ],
+     "metrics": [
+      {
+       "label": "SOTP 每股价值",
+       "value": 98.33383308616104,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "分部数量",
+       "value": 6,
+       "unit": "个",
+       "fmt": "int"
+      },
+      {
+       "label": "收入覆盖",
+       "value": 0.9955274476890587,
+       "unit": "%",
+       "fmt": "pct"
+      }
+     ]
+    },
+    {
+     "title": "三情景",
+     "kind": "text",
+     "paragraphs": [
+      "乐观：每股 146.89 元；首年增速 14.0%、EBIT 利润率 12.3%、WACC 6.7%。",
+      "基准：每股 99.73 元；首年增速 11.0%、EBIT 利润率 10.3%、WACC 7.7%。",
+      "悲观：每股 67.12 元；首年增速 8.0%、EBIT 利润率 8.3%、WACC 8.7%。"
+     ],
+     "metrics": []
+    },
+    {
+     "title": "关键风险与待核验",
+     "kind": "text",
+     "paragraphs": [
+      "[warn] Gordon 与退出倍数终值相差 41%，已取中点。",
+      "[warn] CAPM 与市场隐含 WACC 相差 253bp，折现率假设与市场定价存在分歧。",
+      "[info] 未提供总部费用，按「营业收入 × 2% × 8 倍」估算为 733.6 亿元，并从分部价值中扣除。",
+      "终值两种算法偏离 41%（Gordon 9,863 亿元 vs 退出倍数 6,497 亿元），已取中点。根因多半是 WACC−g 只有 5.21%，分母过小会放大 Gordon 终值。",
+      "CAPM 算出的 WACC（6.19%）低于市场隐含折现率（8.72%）253bp。CAPM 折现率偏低会让 DCF 系统性高于市价；本次已按规则校准。",
+      "市销率 PS 同业离散度（IQR/中位）67% 偏高，说明样本估值分歧大，中位数的代表性下降。",
+      "EV/营业收入 同业离散度（IQR/中位）65% 偏高，说明样本估值分歧大，中位数的代表性下降。",
+      "未提供总部费用，按「营业收入 × 2% × 8 倍」估算为 733.6 亿元，并从分部价值中扣除。",
+      "SOTP 合计隐含 EV/收入 1.8x，与公司整体同业中位 1.2x 相差 54%，分部倍数或收入口径需复核。"
+     ],
+     "metrics": []
+    }
+   ],
+   "disclaimer": "本结果由模型按既定假设计算，仅供研究与教学用途，不构成投资建议。估值结论依赖假设，假设比模型重要。"
+  },
+  "charts": {
+   "dcf_forecast": {
+    "title": "未来 5 年收入、EBIT 与自由现金流预测",
+    "unit": "亿元",
+    "years": [
+     2026,
+     2027,
+     2028,
+     2029,
+     2030
+    ],
+    "series": {
+     "revenue": [
+      5090.67,
+      5543.55,
+      5918.52,
+      6192.67,
+      6347.49
+     ],
+     "ebit": [
+      522.67,
+      569.17,
+      607.66,
+      635.81,
+      651.71
+     ],
+     "fcff": [
+      401.85,
+      437.6,
+      467.2,
+      488.84,
+      501.07
+     ],
+     "capex": [
+      97.56,
+      106.24,
+      113.42,
+      118.68,
+      121.64
+     ],
+     "da": [
+      97.36,
+      106.02,
+      113.19,
+      118.44,
+      121.4
+     ],
+     "delta_nwc": [
+      35.86,
+      39.05,
+      41.69,
+      43.62,
+      44.71
+     ]
+    },
+    "ratios": {
+     "growth": [
+      0.11028243811172826,
+      0.0889618285837962,
+      0.06764121905586414,
+      0.04632060952793207,
+      0.02500000000000001
+     ],
+     "ebit_margin": [
+      0.10267171181938856,
+      0.10267171181938856,
+      0.10267171181938856,
+      0.10267171181938856,
+      0.10267171181938856
+     ],
+     "capex_pct": [
+      0.019163865862296448,
+      0.019163865862296448,
+      0.019163865862296448,
+      0.019163865862296448,
+      0.019163865862296448
+     ],
+     "da_pct": [
+      0.019125252790827208,
+      0.019125252790827208,
+      0.019125252790827208,
+      0.019125252790827208,
+      0.019125252790827208
+     ],
+     "nwc_pct": [
+      0.00704344319693884,
+      0.00704344319693884,
+      0.00704344319693884,
+      0.00704344319693884,
+      0.00704344319693884
+     ]
+    },
+    "base_year": 2025
+   },
+   "tv_composition": {
+    "title": "终值三种口径与企业价值构成",
+    "unit": "亿元",
+    "items": [
+     {
+      "label": "Gordon 永续法",
+      "value": 9862.66
+     },
+     {
+      "label": "退出倍数法",
+      "value": 6496.7
+     },
+     {
+      "label": "ROIC 再投资法",
+      "value": 8060.62
+     },
+     {
+      "label": "采用终值",
+      "value": 8179.68
+     }
+    ],
+    "tv_ratio": 0.7478653608304228
+   },
+   "valuation_range": {
+    "title": "估值水平：相对估值区间 vs 现价 vs 融合值",
+    "unit": "CNY",
+    "low": 47.01746592566933,
+    "mid": 73.4350714164503,
+    "high": 90.06035070408831,
+    "price": 88.88,
+    "blended": 90.89953023679374,
+    "dcf": 99.73290697132207,
+    "sotp": 98.33383308616104
+   },
+   "sensitivity_wacc_g": {
+    "kind": "wacc_g",
+    "title": "WACC × 永续增长率：每股价值",
+    "unit": "元/股",
+    "wacc_axis": [
+     0.06707441816958185,
+     0.07207441816958184,
+     0.07707441816958184,
+     0.08207441816958184,
+     0.08707441816958184
+    ],
+    "growth_axis": [
+     0.015000000000000001,
+     0.02,
+     0.025,
+     0.030000000000000002,
+     0.035
+    ],
+    "grid": [
+     [
+      101.32716060725541,
+      107.45799152646251,
+      114.94772066615049,
+      124.34479179295904,
+      136.5396202451931
+     ],
+     [
+      95.4353067481028,
+      100.52414448355128,
+      106.60846610354322,
+      114.04200748007975,
+      123.36932040238747
+     ],
+     [
+      90.3831608199484,
+      94.68285776152304,
+      99.73290697132207,
+      105.77138754439335,
+      113.14954142794885
+     ],
+     [
+      85.98701784132159,
+      89.67463504650013,
+      93.94139165118241,
+      98.95321148177575,
+      104.94650597354118
+     ],
+     [
+      82.11398967930923,
+      85.31718030095112,
+      88.97639625640741,
+      93.21068892908677,
+      98.18482738068977
+     ]
+    ],
+    "matrix": [
+     [
+      101.32716060725541,
+      107.45799152646251,
+      114.94772066615049,
+      124.34479179295904,
+      136.5396202451931
+     ],
+     [
+      95.4353067481028,
+      100.52414448355128,
+      106.60846610354322,
+      114.04200748007975,
+      123.36932040238747
+     ],
+     [
+      90.3831608199484,
+      94.68285776152304,
+      99.73290697132207,
+      105.77138754439335,
+      113.14954142794885
+     ],
+     [
+      85.98701784132159,
+      89.67463504650013,
+      93.94139165118241,
+      98.95321148177575,
+      104.94650597354118
+     ],
+     [
+      82.11398967930923,
+      85.31718030095112,
+      88.97639625640741,
+      93.21068892908677,
+      98.18482738068977
+     ]
+    ],
+    "base_wacc": 0.07707441816958184,
+    "base_growth": 0.025,
+    "base_index": {
+     "x": 2,
+     "y": 2
+    },
+    "note": "行=WACC，列=永续增长率；WACC≤g 的格子无解，写 null。"
+   },
+   "sensitivity_growth_margin": {
+    "kind": "growth_margin",
+    "title": "首年收入增速 × EBIT 利润率：每股价值",
+    "unit": "元/股",
+    "growth_axis": [
+     0.10028243811172827,
+     0.10528243811172826,
+     0.11028243811172826,
+     0.11528243811172827,
+     0.12028243811172826
+    ],
+    "margin_axis": [
+     0.09267171181938856,
+     0.09767171181938855,
+     0.10267171181938856,
+     0.10767171181938856,
+     0.11267171181938855
+    ],
+    "grid": [
+     [
+      88.01861215953694,
+      88.97728189201571,
+      89.94336921313187,
+      90.91690995445485,
+      91.8979400260886
+     ],
+     [
+      92.80810392617268,
+      93.81921025755288,
+      94.83813809222697,
+      95.86492520669391,
+      96.89960946023861
+     ],
+     [
+      97.59759569280845,
+      98.66113862309008,
+      99.73290697132207,
+      100.81294045893296,
+      101.9012788943886
+     ],
+     [
+      102.3870874594442,
+      103.50306698862727,
+      104.62767585041722,
+      105.76095571117202,
+      106.9029483285386
+     ],
+     [
+      107.17657922607995,
+      108.34499535416444,
+      109.52244472951229,
+      110.70897096341105,
+      111.9046177626886
+     ]
+    ],
+    "matrix": [
+     [
+      88.01861215953694,
+      88.97728189201571,
+      89.94336921313187,
+      90.91690995445485,
+      91.8979400260886
+     ],
+     [
+      92.80810392617268,
+      93.81921025755288,
+      94.83813809222697,
+      95.86492520669391,
+      96.89960946023861
+     ],
+     [
+      97.59759569280845,
+      98.66113862309008,
+      99.73290697132207,
+      100.81294045893296,
+      101.9012788943886
+     ],
+     [
+      102.3870874594442,
+      103.50306698862727,
+      104.62767585041722,
+      105.76095571117202,
+      106.9029483285386
+     ],
+     [
+      107.17657922607995,
+      108.34499535416444,
+      109.52244472951229,
+      110.70897096341105,
+      111.9046177626886
+     ]
+    ],
+    "base_growth": 0.11028243811172826,
+    "base_margin": 0.10267171181938856,
+    "base_index": {
+     "x": 2,
+     "y": 2
+    },
+    "note": "行=EBIT 利润率，列=首年收入增速；WACC 与 g 固定在基准值。"
+   },
+   "scenarios": {
+    "title": "Bull / Base / Bear 每股价值",
+    "unit": "CNY",
+    "labels": [
+     "乐观",
+     "基准",
+     "悲观"
+    ],
+    "values": [
+     146.89005615492013,
+     99.73290697132207,
+     67.1245497279268
+    ],
+    "levers": [
+     "收入增速 +3%、EBIT 利润率 +2%、WACC -1.0%",
+     "历史中位数 / 当前资本结构",
+     "收入增速 -3%、EBIT 利润率 -2%、WACC +1.0%"
+    ]
+   },
+   "comps_position": {
+    "title": "目标公司倍数在同业分布中的位置",
+    "items": [
+     {
+      "multiple": "pe",
+      "label": "市盈率 PE",
+      "target": 15.23342473306811,
+      "peer_median": 9.845899357827571,
+      "peer_min": 6.898569796552886,
+      "peer_max": 16.815951737029092,
+      "percentile": 80.0,
+      "premium_discount": 0.5471846887158573
+     },
+     {
+      "multiple": "ps",
+      "label": "市销率 PS",
+      "target": 1.4791526598625684,
+      "peer_median": 1.2828509221559483,
+      "peer_min": 0.3713988756913645,
+      "peer_max": 1.546559288231383,
+      "percentile": 60.0,
+      "premium_discount": 0.1530199139403643
+     },
+     {
+      "multiple": "pb",
+      "label": "市净率 PB",
+      "target": 2.8685514803085126,
+      "peer_median": 1.517461987864917,
+      "peer_min": 1.323795517278883,
+      "peer_max": 5.57356474228868,
+      "percentile": 80.0,
+      "premium_discount": 0.8903613423256758
+     },
+     {
+      "multiple": "ev_ebitda",
+      "label": "EV/EBITDA",
+      "target": 11.906969699744332,
+      "peer_median": 8.403388281071535,
+      "peer_min": 6.458129293303275,
+      "peer_max": 12.967972907905617,
+      "percentile": 80.0,
+      "premium_discount": 0.4169248523913316
+     },
+     {
+      "multiple": "ev_revenue",
+      "label": "EV/营业收入",
+      "target": 1.465053959612997,
+      "peer_median": 1.1546862657865276,
+      "peer_min": 0.4207354934021195,
+      "peer_max": 1.464432317326758,
+      "percentile": 100.0,
+      "premium_discount": 0.2687896297225454
+     }
+    ],
+    "peer_count": 5
+   },
+   "weights": {
+    "title": "方法权重与可靠性",
+    "items": [
+     {
+      "method": "dcf",
+      "label": "DCF（收益法）",
+      "weight": 0.3883,
+      "reliability": 70.0
+     },
+     {
+      "method": "comps",
+      "label": "Comps（相对估值）",
+      "weight": 0.3204,
+      "reliability": 85.0
+     },
+     {
+      "method": "sotp",
+      "label": "SOTP（分部估值）",
+      "weight": 0.2913,
+      "reliability": 69.0
+     }
+    ]
+   }
+  }
+ },
+ "excel_path": null
+}

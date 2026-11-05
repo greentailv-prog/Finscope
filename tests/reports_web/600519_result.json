@@ -1,0 +1,3745 @@
+{
+ "schema_version": "2.0",
+ "status": "partial",
+ "industry_support": "supported",
+ "industry_gate": {
+  "support": "supported",
+  "reason": "行业适用标准估值方法。",
+  "alternatives": [
+   "dcf",
+   "comps"
+  ],
+  "primary_absolute": "dcf"
+ },
+ "company": {
+  "name": "",
+  "ticker": "600519",
+  "market": "A",
+  "currency": "CNY",
+  "industry": "白酒Ⅱ",
+  "sector": "",
+  "report_period": "",
+  "price_date": "",
+  "price_time": "",
+  "price_source": "",
+  "listing_date": "",
+  "business": ""
+ },
+ "as_of": 2025,
+ "currency": "CNY",
+ "market_data": {
+  "price": 1480.0,
+  "shares_outstanding": 1250081601.0,
+  "market_cap": 1850120769480.0,
+  "price_date": "",
+  "price_time": "",
+  "price_source": ""
+ },
+ "method_selection": "auto",
+ "history": {
+  "years": [
+   2023,
+   2024,
+   2025
+  ],
+  "revenue": [
+   150560330316.45,
+   174144069958.25,
+   172054171890.91
+  ],
+  "ebit": [
+   101919151506.90001,
+   118218359589.89,
+   113993709879.52
+  ],
+  "net_income": [
+   64786396951.58,
+   89334728025.9,
+   85310324833.67
+  ],
+  "net_income_parent": [
+   74734071550.75,
+   null,
+   82320067101.68
+  ],
+  "cogs": [
+   11867273851.78,
+   13789482367.98,
+   14892277570.91
+  ],
+  "gross_profit": [
+   138693056464.67,
+   160354587590.27,
+   157161894320.0
+  ],
+  "da": [
+   1937416307.0,
+   2085019615.1200001,
+   2259387054.28
+  ],
+  "capex": [
+   2619755888.79,
+   4678712053.56,
+   3127594916.41
+  ],
+  "cfo": [
+   66593247721.09,
+   92463692168.43,
+   61522204989.35
+  ],
+  "delta_nwc": [
+   null,
+   -760566614.9500008,
+   315258493.40999985
+  ],
+  "revenue_growth": [
+   null,
+   0.15663979743024825,
+   -0.012000971769185353
+  ],
+  "ebit_margin": [
+   0.6769323054265673,
+   0.6788537767506648,
+   0.6625454566239585
+  ],
+  "net_margin": [
+   0.4303019049932406,
+   0.5129932247897816,
+   0.49583409629706937
+  ],
+  "gross_margin": [
+   0.9211792785866159,
+   0.9208156650336359,
+   0.9134442518467244
+  ],
+  "capex_pct": [
+   0.017400040789521096,
+   0.026866904251644595,
+   0.018177966172148584
+  ],
+  "da_pct": [
+   0.012868039694970837,
+   0.011972957882630577,
+   0.013131835336794693
+  ],
+  "nwc_pct": [
+   null,
+   0.004367456297147196,
+   0.0018323211227327155
+  ],
+  "tax_rate": [
+   0.09661971447288932,
+   0.25329497078529517,
+   0.25658899086250286
+  ]
+ },
+ "method_plan": {
+  "methods": [
+   "dcf",
+   "comps",
+   "sotp"
+  ],
+  "reason": "自动模式：运行所有结构上适用的方法，并按规则定权融合。",
+  "status": {
+   "dcf": "ok",
+   "comps": "ok",
+   "sotp": "ok"
+  }
+ },
+ "assumptions": [
+  {
+   "name": "预测期",
+   "value": 5,
+   "unit": "年",
+   "source_type": "model",
+   "source": "标准 5 年显式预测期；可调 3–10 年",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "首年收入增速",
+   "value": 0.05279905573906949,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "规则合成：近 3 年 CAGR 6.9%×50% + 近 5 年 CAGR 6.9%×30% + 最近一年同比 -1.2%×20%",
+   "confidence": "中",
+   "overridable": true,
+   "note": "按近 3/5 年 CAGR 与最近一年同比加权，并向永续增速线性衰减"
+  },
+  {
+   "name": "永续增长率 g",
+   "value": 0.025,
+   "unit": "小数",
+   "source_type": "industry",
+   "source": "市场长期名义 GDP 口径默认值；上限 4.0%（长期名义 GDP）",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "EBIT 利润率",
+   "value": 0.6769323054265673,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年 EBIT / 营业收入中位数",
+   "confidence": "高",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "折旧摊销 / 收入",
+   "value": 0.012868039694970837,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年折旧摊销 / 营业收入中位数",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "资本开支 / 收入",
+   "value": 0.018177966172148584,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年资本开支 / 营业收入中位数",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "营运资本增加 / 收入",
+   "value": 0.003099888709939956,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年营运资本变动 / 营业收入中位数",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "所得税率",
+   "value": 0.25329497078529517,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年有效税率中位数 25.3%，夹在 15%–30%",
+   "confidence": "高",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "无风险利率 rf",
+   "value": 0.016343,
+   "unit": "小数",
+   "source_type": "industry",
+   "source": "中债 10 年期国债收益率（2026-11-02）",
+   "confidence": "高",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "股权风险溢价 ERP",
+   "value": 0.0514,
+   "unit": "小数",
+   "source_type": "industry",
+   "source": "Damodaran 中国国家风险溢价（成熟市场 ERP + 中国 CRP）",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "Beta",
+   "value": 0.85,
+   "unit": "倍",
+   "source_type": "model",
+   "source": "数据源 Beta 缺失/异常，使用行业锚点 食品饮料 Beta 0.85",
+   "confidence": "中",
+   "overridable": true,
+   "note": "原始 Beta=None，行业锚点=0.85"
+  },
+  {
+   "name": "股权成本 Ke",
+   "value": 0.060033,
+   "unit": "小数",
+   "source_type": "model",
+   "source": "rf 1.63% + β 0.85 × ERP 5.14% + 规模溢价 0.00%",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "税前债务成本 Kd",
+   "value": 0.035,
+   "unit": "小数",
+   "source_type": "industry",
+   "source": "A 市场默认税前债务成本（LPR/信用利差口径）",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "所得税率（WACC 用）",
+   "value": 0.25329497078529517,
+   "unit": "小数",
+   "source_type": "history",
+   "source": "近三年有效税率中位数 25.3%，夹在 15%–30%",
+   "confidence": "高",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "资本结构 D/(D+E)",
+   "value": 2.3893132574768055e-05,
+   "unit": "小数",
+   "source_type": "model",
+   "source": "当前市值口径：D/(E+D)，E=总市值",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "WACC（CAPM 口径）",
+   "value": 0.06003219006285115,
+   "unit": "小数",
+   "source_type": "model",
+   "source": "100.0%×Ke 6.00% + 0.0%×Kd 3.50%×(1−25.3%)",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  },
+  {
+   "name": "长期 ROIC（终值再投资率）",
+   "value": 0.1,
+   "unit": "小数",
+   "source_type": "model",
+   "source": "再投资率 = g / ROIC = 25.0%；默认不低于 WACC+2%",
+   "confidence": "中",
+   "overridable": true,
+   "note": ""
+  }
+ ],
+ "reliabilities": {
+  "dcf": {
+   "score": 80.0,
+   "level": "高",
+   "deductions": [
+    {
+     "reason": "Gordon 与退出倍数终值偏离 66%，超过 50%",
+     "points": 20
+    }
+   ]
+  },
+  "comps": {
+   "score": 80.0,
+   "level": "高",
+   "deductions": [
+    {
+     "reason": "仅两个倍数有效",
+     "points": 5
+    },
+    {
+     "reason": "同业倍数离散度 65% 偏高",
+     "points": 15
+    }
+   ]
+  },
+  "sotp": {
+   "score": 70.0,
+   "level": "中",
+   "deductions": [
+    {
+     "reason": "仅两个分部，SOTP 对整体估值的解释力有限",
+     "points": 15
+    },
+    {
+     "reason": "分部仅有收入口径，EBIT/EBITDA 靠分摊",
+     "points": 10
+    },
+    {
+     "reason": "总部费用为规则估算",
+     "points": 5
+    }
+   ]
+  }
+ },
+ "dcf": {
+  "ok": true,
+  "method": "dcf",
+  "status": "ok",
+  "wacc": 0.06003219006285115,
+  "wacc_capm": 0.06003219006285115,
+  "wacc_source": "CAPM 计算值",
+  "wacc_mode": "reconciled",
+  "wacc_reconciliation": null,
+  "implied_wacc": 0.069917,
+  "wacc_block": {
+   "risk_free": 0.016343,
+   "risk_free_source": "中债 10 年期国债收益率（2026-11-02）",
+   "erp": 0.0514,
+   "erp_source": "Damodaran 中国国家风险溢价（成熟市场 ERP + 中国 CRP）",
+   "beta": 0.85,
+   "beta_source": "数据源 Beta 缺失/异常，使用行业锚点 食品饮料 Beta 0.85",
+   "size_premium": 0.0,
+   "cost_of_equity": 0.060033,
+   "cost_of_debt": 0.035,
+   "cost_of_debt_source": "A 市场默认税前债务成本（LPR/信用利差口径）",
+   "tax_rate": 0.25329497078529517,
+   "equity_ratio": 0.9999761068674252,
+   "debt_ratio": 2.3893132574768055e-05,
+   "capital_source": "当前市值口径：D/(E+D)，E=总市值",
+   "wacc_capm": 0.06003219006285115,
+   "wacc": 0.06003219006285115
+  },
+  "terminal_growth": 0.025,
+  "terminal_growth_cap": 0.04,
+  "terminal_method": "blend",
+  "terminal_roic": 0.1,
+  "forecast_years": 5,
+  "base_revenue": 172054171890.91,
+  "base_year": 2025,
+  "revenue_growth_y1": 0.05279905573906949,
+  "revenue_growth_path": [
+   0.05279905573906949,
+   0.04584929180430212,
+   0.038899527869534746,
+   0.031949763934767374,
+   0.025
+  ],
+  "ebit_margin": 0.6769323054265673,
+  "da_pct": 0.012868039694970837,
+  "capex_pct": 0.018177966172148584,
+  "nwc_pct": 0.003099888709939956,
+  "tax_rate": 0.25329497078529517,
+  "rows": [
+   {
+    "year_index": 1,
+    "year": 2026,
+    "growth": 0.05279905573906949,
+    "revenue": 181138469702.7176,
+    "ebit": 122618481897.30104,
+    "ebit_margin": 0.6769323054265673,
+    "cash_tax": 31058644789.914112,
+    "nopat": 91559837107.38693,
+    "da": 2330897018.420842,
+    "da_pct": 0.012868039694970837,
+    "capex": 3292728974.7307615,
+    "capex_pct": 0.018177966172148584,
+    "delta_nwc": 561509097.167255,
+    "nwc_pct": 0.003099888709939956,
+    "fcff": 90036496053.90976,
+    "discount_factor": 0.9712711146964786,
+    "pv_fcff": 87449847885.64603
+   },
+   {
+    "year_index": 2,
+    "year": 2027,
+    "growth": 0.04584929180430212,
+    "revenue": 189443540257.10223,
+    "ebit": 128240452454.41093,
+    "ebit_margin": 0.6769323054265673,
+    "cash_tax": 32482661657.933052,
+    "nopat": 95757790796.47787,
+    "da": 2437766995.984197,
+    "da_pct": 0.012868039694970837,
+    "capex": 3443698266.3256726,
+    "capex_pct": 0.018177966172148584,
+    "delta_nwc": 587253891.6140468,
+    "nwc_pct": 0.003099888709939956,
+    "fcff": 94164605634.52235,
+    "discount_factor": 0.9162656792893151,
+    "pv_fcff": 86279796346.72609
+   },
+   {
+    "year_index": 3,
+    "year": 2028,
+    "growth": 0.038899527869534746,
+    "revenue": 196812804531.0367,
+    "ebit": 133228945508.66304,
+    "ebit_margin": 0.6769323054265673,
+    "cash_tax": 33746221860.372486,
+    "nopat": 99482723648.29056,
+    "da": 2532594981.1839166,
+    "da_pct": 0.012868039694970837,
+    "capex": 3577656503.0108767,
+    "capex_pct": 0.018177966172148584,
+    "delta_nwc": 610097790.7373801,
+    "nwc_pct": 0.003099888709939956,
+    "fcff": 97827564335.72621,
+    "discount_factor": 0.8643753348990169,
+    "pv_fcff": 84559733685.04846
+   },
+   {
+    "year_index": 4,
+    "year": 2029,
+    "growth": 0.031949763934767374,
+    "revenue": 203100927175.14285,
+    "ebit": 137485578866.9428,
+    "ebit_margin": 0.6769323054265673,
+    "cash_tax": 34824405682.50167,
+    "nopat": 102661173184.44113,
+    "da": 2613510792.9751196,
+    "da_pct": 0.012868039694970837,
+    "capex": 3691961783.72176,
+    "capex_pct": 0.018177966172148584,
+    "delta_nwc": 629590271.1285626,
+    "nwc_pct": 0.003099888709939956,
+    "fcff": 100953131922.56593,
+    "discount_factor": 0.8154236663773073,
+    "pv_fcff": 82319572964.5707
+   },
+   {
+    "year_index": 5,
+    "year": 2030,
+    "growth": 0.025,
+    "revenue": 208178450354.5214,
+    "ebit": 140922718338.61636,
+    "ebit_margin": 0.6769323054265673,
+    "cash_tax": 35695015824.56421,
+    "nopat": 105227702514.05215,
+    "da": 2678848562.799497,
+    "da_pct": 0.012868039694970837,
+    "capex": 3784260828.314803,
+    "capex_pct": 0.018177966172148584,
+    "delta_nwc": 645330027.9067765,
+    "nwc_pct": 0.003099888709939956,
+    "fcff": 103476960220.63007,
+    "discount_factor": 0.7692442493929921,
+    "pv_fcff": 79599056594.38707
+   }
+  ],
+  "forecast": [
+   {
+    "year_index": 1,
+    "year": 2026,
+    "growth": 0.05279905573906949,
+    "revenue": 181138469702.7176,
+    "ebit": 122618481897.30104,
+    "ebit_margin": 0.6769323054265673,
+    "cash_tax": 31058644789.914112,
+    "nopat": 91559837107.38693,
+    "da": 2330897018.420842,
+    "da_pct": 0.012868039694970837,
+    "capex": 3292728974.7307615,
+    "capex_pct": 0.018177966172148584,
+    "delta_nwc": 561509097.167255,
+    "nwc_pct": 0.003099888709939956,
+    "fcff": 90036496053.90976,
+    "discount_factor": 0.9712711146964786,
+    "pv_fcff": 87449847885.64603
+   },
+   {
+    "year_index": 2,
+    "year": 2027,
+    "growth": 0.04584929180430212,
+    "revenue": 189443540257.10223,
+    "ebit": 128240452454.41093,
+    "ebit_margin": 0.6769323054265673,
+    "cash_tax": 32482661657.933052,
+    "nopat": 95757790796.47787,
+    "da": 2437766995.984197,
+    "da_pct": 0.012868039694970837,
+    "capex": 3443698266.3256726,
+    "capex_pct": 0.018177966172148584,
+    "delta_nwc": 587253891.6140468,
+    "nwc_pct": 0.003099888709939956,
+    "fcff": 94164605634.52235,
+    "discount_factor": 0.9162656792893151,
+    "pv_fcff": 86279796346.72609
+   },
+   {
+    "year_index": 3,
+    "year": 2028,
+    "growth": 0.038899527869534746,
+    "revenue": 196812804531.0367,
+    "ebit": 133228945508.66304,
+    "ebit_margin": 0.6769323054265673,
+    "cash_tax": 33746221860.372486,
+    "nopat": 99482723648.29056,
+    "da": 2532594981.1839166,
+    "da_pct": 0.012868039694970837,
+    "capex": 3577656503.0108767,
+    "capex_pct": 0.018177966172148584,
+    "delta_nwc": 610097790.7373801,
+    "nwc_pct": 0.003099888709939956,
+    "fcff": 97827564335.72621,
+    "discount_factor": 0.8643753348990169,
+    "pv_fcff": 84559733685.04846
+   },
+   {
+    "year_index": 4,
+    "year": 2029,
+    "growth": 0.031949763934767374,
+    "revenue": 203100927175.14285,
+    "ebit": 137485578866.9428,
+    "ebit_margin": 0.6769323054265673,
+    "cash_tax": 34824405682.50167,
+    "nopat": 102661173184.44113,
+    "da": 2613510792.9751196,
+    "da_pct": 0.012868039694970837,
+    "capex": 3691961783.72176,
+    "capex_pct": 0.018177966172148584,
+    "delta_nwc": 629590271.1285626,
+    "nwc_pct": 0.003099888709939956,
+    "fcff": 100953131922.56593,
+    "discount_factor": 0.8154236663773073,
+    "pv_fcff": 82319572964.5707
+   },
+   {
+    "year_index": 5,
+    "year": 2030,
+    "growth": 0.025,
+    "revenue": 208178450354.5214,
+    "ebit": 140922718338.61636,
+    "ebit_margin": 0.6769323054265673,
+    "cash_tax": 35695015824.56421,
+    "nopat": 105227702514.05215,
+    "da": 2678848562.799497,
+    "da_pct": 0.012868039694970837,
+    "capex": 3784260828.314803,
+    "capex_pct": 0.018177966172148584,
+    "delta_nwc": 645330027.9067765,
+    "nwc_pct": 0.003099888709939956,
+    "fcff": 103476960220.63007,
+    "discount_factor": 0.7692442493929921,
+    "pv_fcff": 79599056594.38707
+   }
+  ],
+  "pv_explicit": 420208007476.37836,
+  "tv_gordon": 3027612148594.105,
+  "tv_exit": 1529798526452.6204,
+  "tv_roic": 2309127581305.8296,
+  "exit_multiple": 10.653076839355414,
+  "exit_multiple_source": "同业中位 EV/EBITDA（6 家）",
+  "tv_base": 2278705337523.363,
+  "tv_divergence": 0.6573090418831425,
+  "pv_terminal": 1702522660413.415,
+  "enterprise_value": 2122730667889.7935,
+  "tv_ratio": 0.8020436535671729,
+  "cash": 51690610946.5,
+  "debt": 44206237.05,
+  "minority_interest": 784112.18,
+  "preferred_stock": 0.0,
+  "equity_value": 2174376288487.0635,
+  "per_share": 1739.387482183304,
+  "warnings": [
+   "终值两种算法偏离 66%（Gordon 30,276 亿元 vs 退出倍数 15,298 亿元），已取中点。根因多半是 WACC−g 只有 3.50%，分母过小会放大 Gordon 终值。"
+  ],
+  "diagnostics": {
+   "tv_ratio": 0.8020436535671729,
+   "tv_divergence": 0.6573090418831425,
+   "wacc_gap_bp": 99.0,
+   "wacc_minus_g": 0.035032190062851146,
+   "terminal_roic": 0.1
+  }
+ },
+ "relative": {
+  "ok": true,
+  "method": "comps",
+  "status": "ok",
+  "caliber": "LYR（最近年报）",
+  "peer_count": 6,
+  "peers_used": 6,
+  "peers_detail": [
+   {
+    "name": "五粮液",
+    "ticker": "000858",
+    "industry": "白酒Ⅱ",
+    "pe": 31.474929945033395,
+    "pe_forward": null,
+    "pb": 2.4001787846389653,
+    "ps": 7.2357825747927995,
+    "pcf": 9.871841341726821,
+    "peg": null,
+    "ev_revenue": 4.166291941134005,
+    "ev_ebitda": 17.608138483723316,
+    "ev_ebit": 17.608138483723316,
+    "revenue_growth": -0.5455180406416607,
+    "net_income_growth": -0.7193087720070271,
+    "gross_margin": 0.7754184152047013,
+    "ebitda_margin": 0.23661172048284712,
+    "ebit_margin": 0.23661172048284712,
+    "roe": 0.07625684278981859,
+    "market_cap": 293255484777.75,
+    "net_debt": -126650293546.02,
+    "ebitda": 9589520425.34,
+    "ebit": 9589520425.34,
+    "revenue": 40528509770.23,
+    "net_income": 9317113184.68,
+    "equity": 122180683645.14,
+    "cfo": 29706259919.13,
+    "note": "",
+    "selection_reason": "高端白酒双寡头之一，产品结构与渠道模式最接近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "泸州老窖",
+    "ticker": "000568",
+    "industry": "白酒Ⅱ",
+    "pe": 10.95125380980926,
+    "pe_forward": null,
+    "pb": 2.3836421582727887,
+    "ps": 4.622035249236783,
+    "pcf": 16.696053229380237,
+    "peg": null,
+    "ev_revenue": 3.824304732118213,
+    "ev_ebitda": 6.9432334561036315,
+    "ev_ebit": 6.9432334561036315,
+    "revenue_growth": -0.17518893696808957,
+    "net_income_growth": -0.19542977956453966,
+    "gross_margin": 0.8662411815119095,
+    "ebitda_margin": 0.5507959304978226,
+    "ebit_margin": 0.5507959304978226,
+    "roe": 0.21765929268644216,
+    "market_cap": 118929638210.4,
+    "net_debt": -20640201174.39,
+    "ebitda": 14172535952.140001,
+    "ebit": 14172535952.140001,
+    "revenue": 25731010647.32,
+    "net_income": 10859910680.17,
+    "equity": 49894082380.46,
+    "cfo": 7123218677.88,
+    "note": "",
+    "selection_reason": "高端白酒全国化品牌，国窖系列与标的价格带重叠",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "山西汾酒",
+    "ticker": "600809",
+    "industry": "白酒Ⅱ",
+    "pe": 13.204511495553518,
+    "pe_forward": null,
+    "pb": 4.045221942074077,
+    "ps": 4.193185553413062,
+    "pcf": 18.01214640531338,
+    "peg": 38.37616579635429,
+    "ev_revenue": 3.958761017853013,
+    "ev_ebitda": 9.210588013965776,
+    "ev_ebit": 9.210588013965776,
+    "revenue_growth": 0.07517885961355919,
+    "net_income_growth": 0.003440810519118598,
+    "gross_margin": 0.7485250456552095,
+    "ebitda_margin": 0.42980545996091085,
+    "ebit_margin": 0.42980545996091085,
+    "roe": 0.3063515029265765,
+    "market_cap": 162352838663.76,
+    "net_debt": -9577839851.35,
+    "ebitda": 16641318541.47,
+    "ebit": 16641318541.47,
+    "revenue": 38718257657.74,
+    "net_income": 12295255202.62,
+    "equity": 40134469996.6,
+    "cfo": 9013519822.15,
+    "note": "",
+    "selection_reason": "清香型龙头，全国化扩张阶段与标的可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "洋河股份",
+    "ticker": "002304",
+    "industry": "白酒Ⅱ",
+    "pe": 26.526237429529015,
+    "pe_forward": null,
+    "pb": 1.2393781760160236,
+    "ps": 3.0252707646579653,
+    "pcf": null,
+    "peg": null,
+    "ev_revenue": 2.3465897733489176,
+    "ev_ebitda": 14.11824586928428,
+    "ev_ebit": 14.11824586928428,
+    "revenue_growth": -0.3347118705236183,
+    "net_income_growth": -0.6713415012981896,
+    "gross_margin": 0.716021728406869,
+    "ebitda_margin": 0.16620972570354292,
+    "ebit_margin": 0.16620972570354292,
+    "roe": 0.046722727989923954,
+    "market_cap": 58118650954.92,
+    "net_debt": -13134401589.710001,
+    "ebitda": 3193064616.34,
+    "ebit": 3193064616.34,
+    "revenue": 19211057613.05,
+    "net_income": 2190987361.45,
+    "equity": 46893395478.16,
+    "cfo": -763040326.79,
+    "note": "",
+    "selection_reason": "次高端龙头，渠道与品牌运作模式相近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "古井贡酒",
+    "ticker": "000596",
+    "industry": "白酒Ⅱ",
+    "pe": 15.285096461692392,
+    "pe_forward": null,
+    "pb": 2.131693355638463,
+    "ps": 2.9548520306026886,
+    "pcf": 28.577111316159844,
+    "peg": null,
+    "ev_revenue": 2.284322652683455,
+    "ev_ebitda": 9.525675450941206,
+    "ev_ebit": 9.525675450941206,
+    "revenue_growth": -0.20128763907782854,
+    "net_income_growth": -0.36205199351606165,
+    "gross_margin": 0.7925603546390718,
+    "ebitda_margin": 0.23980689500162922,
+    "ebit_margin": 0.23980689500162922,
+    "roe": 0.13946221150654342,
+    "market_cap": 55645722000.0,
+    "net_debt": -13681179993.609999,
+    "ebitda": 4516039271.93,
+    "ebit": 4516039271.93,
+    "revenue": 18831982591.24,
+    "net_income": 3640521480.48,
+    "equity": 26103999364.08,
+    "cfo": 1947212977.0,
+    "note": "",
+    "selection_reason": "区域龙头全国化，盈利结构与标的同属白酒",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "今世缘",
+    "ticker": "603369",
+    "industry": "白酒Ⅱ",
+    "pe": 16.822307609464193,
+    "pe_forward": null,
+    "pb": 2.644515087998775,
+    "ps": 4.301668127063955,
+    "pcf": 29.042094780179166,
+    "peg": null,
+    "ev_revenue": 3.910043916844086,
+    "ev_ebitda": 11.78047822776962,
+    "ev_ebit": 11.78047822776962,
+    "revenue_growth": -0.11810355673359707,
+    "net_income_growth": -0.2368852009321032,
+    "gross_margin": 0.7425177449997818,
+    "ebitda_margin": 0.33190875966538486,
+    "ebit_margin": 0.33190875966538486,
+    "roe": 0.15720287307735217,
+    "market_cap": 43800085299.810005,
+    "net_debt": -3987563267.6499996,
+    "ebitda": 3379533603.17,
+    "ebit": 3379533603.17,
+    "revenue": 10182116333.95,
+    "net_income": 2603690665.79,
+    "equity": 16562615013.46,
+    "cfo": 1508158610.16,
+    "note": "",
+    "selection_reason": "区域次高端白酒，增速与利润率可作参照",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   }
+  ],
+  "peer_companies": [
+   {
+    "name": "五粮液",
+    "ticker": "000858",
+    "industry": "白酒Ⅱ",
+    "market_cap": 293255484777.75,
+    "pe": 31.474929945033395,
+    "pb": 2.4001787846389653,
+    "ps": 7.2357825747927995,
+    "pcf": 9.871841341726821,
+    "peg": null,
+    "ev_revenue": 4.166291941134005,
+    "ev_ebitda": 17.608138483723316,
+    "ev_ebit": 17.608138483723316,
+    "revenue_growth": -0.5455180406416607,
+    "net_income_growth": -0.7193087720070271,
+    "gross_margin": 0.7754184152047013,
+    "ebitda_margin": 0.23661172048284712,
+    "ebit_margin": 0.23661172048284712,
+    "roe": 0.07625684278981859,
+    "selection_reason": "高端白酒双寡头之一，产品结构与渠道模式最接近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 68.8,
+     "level": "中",
+     "reasons": [
+      "规模为目标公司的 0.16×（-11）",
+      "收入增速数据异常（同比 <-40%），未计入可比性评分",
+      "EBIT 利润率差 43%（-20）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "泸州老窖",
+    "ticker": "000568",
+    "industry": "白酒Ⅱ",
+    "market_cap": 118929638210.4,
+    "pe": 10.95125380980926,
+    "pb": 2.3836421582727887,
+    "ps": 4.622035249236783,
+    "pcf": 16.696053229380237,
+    "peg": null,
+    "ev_revenue": 3.824304732118213,
+    "ev_ebitda": 6.9432334561036315,
+    "ev_ebit": 6.9432334561036315,
+    "revenue_growth": -0.17518893696808957,
+    "net_income_growth": -0.19542977956453966,
+    "gross_margin": 0.8662411815119095,
+    "ebitda_margin": 0.5507959304978226,
+    "ebit_margin": 0.5507959304978226,
+    "roe": 0.21765929268644216,
+    "selection_reason": "高端白酒全国化品牌，国窖系列与标的价格带重叠",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 69.3,
+     "level": "中",
+     "reasons": [
+      "规模为目标公司的 0.06×（-17）",
+      "收入增速差 23%（-13）",
+      "EBIT 利润率差 11%（-1）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "山西汾酒",
+    "ticker": "600809",
+    "industry": "白酒Ⅱ",
+    "market_cap": 162352838663.76,
+    "pe": 13.204511495553518,
+    "pb": 4.045221942074077,
+    "ps": 4.193185553413062,
+    "pcf": 18.01214640531338,
+    "peg": 38.37616579635429,
+    "ev_revenue": 3.958761017853013,
+    "ev_ebitda": 9.210588013965776,
+    "ev_ebit": 9.210588013965776,
+    "revenue_growth": 0.07517885961355919,
+    "net_income_growth": 0.003440810519118598,
+    "gross_margin": 0.7485250456552095,
+    "ebitda_margin": 0.42980545996091085,
+    "ebit_margin": 0.42980545996091085,
+    "roe": 0.3063515029265765,
+    "selection_reason": "清香型龙头，全国化扩张阶段与标的可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 71.9,
+     "level": "中",
+     "reasons": [
+      "规模为目标公司的 0.09×（-15）",
+      "收入增速接近（差 2%）",
+      "EBIT 利润率差 23%（-13）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "洋河股份",
+    "ticker": "002304",
+    "industry": "白酒Ⅱ",
+    "market_cap": 58118650954.92,
+    "pe": 26.526237429529015,
+    "pb": 1.2393781760160236,
+    "ps": 3.0252707646579653,
+    "pcf": null,
+    "peg": null,
+    "ev_revenue": 2.3465897733489176,
+    "ev_ebitda": 14.11824586928428,
+    "ev_ebit": 14.11824586928428,
+    "revenue_growth": -0.3347118705236183,
+    "net_income_growth": -0.6713415012981896,
+    "gross_margin": 0.716021728406869,
+    "ebitda_margin": 0.16620972570354292,
+    "ebit_margin": 0.16620972570354292,
+    "roe": 0.046722727989923954,
+    "selection_reason": "次高端龙头，渠道与品牌运作模式相近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 39.0,
+     "level": "低",
+     "reasons": [
+      "规模为目标公司的 0.03×（-21）",
+      "收入增速差 39%（-20）",
+      "EBIT 利润率差 50%（-20）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "古井贡酒",
+    "ticker": "000596",
+    "industry": "白酒Ⅱ",
+    "market_cap": 55645722000.0,
+    "pe": 15.285096461692392,
+    "pb": 2.131693355638463,
+    "ps": 2.9548520306026886,
+    "pcf": 28.577111316159844,
+    "peg": null,
+    "ev_revenue": 2.284322652683455,
+    "ev_ebitda": 9.525675450941206,
+    "ev_ebit": 9.525675450941206,
+    "revenue_growth": -0.20128763907782854,
+    "net_income_growth": -0.36205199351606165,
+    "gross_margin": 0.7925603546390718,
+    "ebitda_margin": 0.23980689500162922,
+    "ebit_margin": 0.23980689500162922,
+    "roe": 0.13946221150654342,
+    "selection_reason": "区域龙头全国化，盈利结构与标的同属白酒",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 43.3,
+     "level": "低",
+     "reasons": [
+      "规模为目标公司的 0.03×（-21）",
+      "收入增速差 25%（-15）",
+      "EBIT 利润率差 42%（-20）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "今世缘",
+    "ticker": "603369",
+    "industry": "白酒Ⅱ",
+    "market_cap": 43800085299.810005,
+    "pe": 16.822307609464193,
+    "pb": 2.644515087998775,
+    "ps": 4.301668127063955,
+    "pcf": 29.042094780179166,
+    "peg": null,
+    "ev_revenue": 3.910043916844086,
+    "ev_ebitda": 11.78047822776962,
+    "ev_ebit": 11.78047822776962,
+    "revenue_growth": -0.11810355673359707,
+    "net_income_growth": -0.2368852009321032,
+    "gross_margin": 0.7425177449997818,
+    "ebitda_margin": 0.33190875966538486,
+    "ebit_margin": 0.33190875966538486,
+    "roe": 0.15720287307735217,
+    "selection_reason": "区域次高端白酒，增速与利润率可作参照",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 50.1,
+     "level": "低",
+     "reasons": [
+      "规模为目标公司的 0.02×（-23）",
+      "收入增速差 17%（-7）",
+      "EBIT 利润率差 33%（-20）",
+      "同属一个行业"
+     ]
+    }
+   }
+  ],
+  "comparability_note": "可比性评分综合考虑行业、规模、收入增速、EBIT 利润率；75 分以上为高，55–74 为中，55 以下为低。评分只用于提示样本质量，不替代人工复核。",
+  "peer_selection": {
+   "peers": [
+    {
+     "name": "五粮液",
+     "ticker": "000858",
+     "industry": "白酒Ⅱ",
+     "pe": 31.474929945033395,
+     "pe_forward": null,
+     "pb": 2.4001787846389653,
+     "ps": 7.2357825747927995,
+     "pcf": 9.871841341726821,
+     "peg": null,
+     "ev_revenue": 4.166291941134005,
+     "ev_ebitda": 17.608138483723316,
+     "ev_ebit": 17.608138483723316,
+     "revenue_growth": -0.5455180406416607,
+     "net_income_growth": -0.7193087720070271,
+     "gross_margin": 0.7754184152047013,
+     "ebitda_margin": 0.23661172048284712,
+     "ebit_margin": 0.23661172048284712,
+     "roe": 0.07625684278981859,
+     "market_cap": 293255484777.75,
+     "net_debt": -126650293546.02,
+     "ebitda": 9589520425.34,
+     "ebit": 9589520425.34,
+     "revenue": 40528509770.23,
+     "net_income": 9317113184.68,
+     "equity": 122180683645.14,
+     "cfo": 29706259919.13,
+     "note": "",
+     "selection_reason": "高端白酒双寡头之一，产品结构与渠道模式最接近",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "泸州老窖",
+     "ticker": "000568",
+     "industry": "白酒Ⅱ",
+     "pe": 10.95125380980926,
+     "pe_forward": null,
+     "pb": 2.3836421582727887,
+     "ps": 4.622035249236783,
+     "pcf": 16.696053229380237,
+     "peg": null,
+     "ev_revenue": 3.824304732118213,
+     "ev_ebitda": 6.9432334561036315,
+     "ev_ebit": 6.9432334561036315,
+     "revenue_growth": -0.17518893696808957,
+     "net_income_growth": -0.19542977956453966,
+     "gross_margin": 0.8662411815119095,
+     "ebitda_margin": 0.5507959304978226,
+     "ebit_margin": 0.5507959304978226,
+     "roe": 0.21765929268644216,
+     "market_cap": 118929638210.4,
+     "net_debt": -20640201174.39,
+     "ebitda": 14172535952.140001,
+     "ebit": 14172535952.140001,
+     "revenue": 25731010647.32,
+     "net_income": 10859910680.17,
+     "equity": 49894082380.46,
+     "cfo": 7123218677.88,
+     "note": "",
+     "selection_reason": "高端白酒全国化品牌，国窖系列与标的价格带重叠",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "山西汾酒",
+     "ticker": "600809",
+     "industry": "白酒Ⅱ",
+     "pe": 13.204511495553518,
+     "pe_forward": null,
+     "pb": 4.045221942074077,
+     "ps": 4.193185553413062,
+     "pcf": 18.01214640531338,
+     "peg": 38.37616579635429,
+     "ev_revenue": 3.958761017853013,
+     "ev_ebitda": 9.210588013965776,
+     "ev_ebit": 9.210588013965776,
+     "revenue_growth": 0.07517885961355919,
+     "net_income_growth": 0.003440810519118598,
+     "gross_margin": 0.7485250456552095,
+     "ebitda_margin": 0.42980545996091085,
+     "ebit_margin": 0.42980545996091085,
+     "roe": 0.3063515029265765,
+     "market_cap": 162352838663.76,
+     "net_debt": -9577839851.35,
+     "ebitda": 16641318541.47,
+     "ebit": 16641318541.47,
+     "revenue": 38718257657.74,
+     "net_income": 12295255202.62,
+     "equity": 40134469996.6,
+     "cfo": 9013519822.15,
+     "note": "",
+     "selection_reason": "清香型龙头，全国化扩张阶段与标的可比",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "洋河股份",
+     "ticker": "002304",
+     "industry": "白酒Ⅱ",
+     "pe": 26.526237429529015,
+     "pe_forward": null,
+     "pb": 1.2393781760160236,
+     "ps": 3.0252707646579653,
+     "pcf": null,
+     "peg": null,
+     "ev_revenue": 2.3465897733489176,
+     "ev_ebitda": 14.11824586928428,
+     "ev_ebit": 14.11824586928428,
+     "revenue_growth": -0.3347118705236183,
+     "net_income_growth": -0.6713415012981896,
+     "gross_margin": 0.716021728406869,
+     "ebitda_margin": 0.16620972570354292,
+     "ebit_margin": 0.16620972570354292,
+     "roe": 0.046722727989923954,
+     "market_cap": 58118650954.92,
+     "net_debt": -13134401589.710001,
+     "ebitda": 3193064616.34,
+     "ebit": 3193064616.34,
+     "revenue": 19211057613.05,
+     "net_income": 2190987361.45,
+     "equity": 46893395478.16,
+     "cfo": -763040326.79,
+     "note": "",
+     "selection_reason": "次高端龙头，渠道与品牌运作模式相近",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "古井贡酒",
+     "ticker": "000596",
+     "industry": "白酒Ⅱ",
+     "pe": 15.285096461692392,
+     "pe_forward": null,
+     "pb": 2.131693355638463,
+     "ps": 2.9548520306026886,
+     "pcf": 28.577111316159844,
+     "peg": null,
+     "ev_revenue": 2.284322652683455,
+     "ev_ebitda": 9.525675450941206,
+     "ev_ebit": 9.525675450941206,
+     "revenue_growth": -0.20128763907782854,
+     "net_income_growth": -0.36205199351606165,
+     "gross_margin": 0.7925603546390718,
+     "ebitda_margin": 0.23980689500162922,
+     "ebit_margin": 0.23980689500162922,
+     "roe": 0.13946221150654342,
+     "market_cap": 55645722000.0,
+     "net_debt": -13681179993.609999,
+     "ebitda": 4516039271.93,
+     "ebit": 4516039271.93,
+     "revenue": 18831982591.24,
+     "net_income": 3640521480.48,
+     "equity": 26103999364.08,
+     "cfo": 1947212977.0,
+     "note": "",
+     "selection_reason": "区域龙头全国化，盈利结构与标的同属白酒",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "今世缘",
+     "ticker": "603369",
+     "industry": "白酒Ⅱ",
+     "pe": 16.822307609464193,
+     "pe_forward": null,
+     "pb": 2.644515087998775,
+     "ps": 4.301668127063955,
+     "pcf": 29.042094780179166,
+     "peg": null,
+     "ev_revenue": 3.910043916844086,
+     "ev_ebitda": 11.78047822776962,
+     "ev_ebit": 11.78047822776962,
+     "revenue_growth": -0.11810355673359707,
+     "net_income_growth": -0.2368852009321032,
+     "gross_margin": 0.7425177449997818,
+     "ebitda_margin": 0.33190875966538486,
+     "ebit_margin": 0.33190875966538486,
+     "roe": 0.15720287307735217,
+     "market_cap": 43800085299.810005,
+     "net_debt": -3987563267.6499996,
+     "ebitda": 3379533603.17,
+     "ebit": 3379533603.17,
+     "revenue": 10182116333.95,
+     "net_income": 2603690665.79,
+     "equity": 16562615013.46,
+     "cfo": 1508158610.16,
+     "note": "",
+     "selection_reason": "区域次高端白酒，增速与利润率可作参照",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    }
+   ],
+   "theme": "白酒",
+   "sector": "消费",
+   "tier": "curated",
+   "selection_note": "按行业「白酒Ⅱ」匹配到配置池「白酒」，逐家披露选取理由；剔除标的后取 6 家。",
+   "missing": [],
+   "warnings": []
+  },
+  "peer_multiples": {
+   "pe": {
+    "median": 16.053702035578294,
+    "mean": 19.044056125180298,
+    "p25": 13.724657737088236,
+    "p75": 24.100254974512808,
+    "count": 6,
+    "dispersion": 0.6463055820040836,
+    "used": true,
+    "reason": "适用"
+   },
+   "ps": {
+    "median": 4.247426840238509,
+    "mean": 4.388799049961209,
+    "p25": 3.3172494618467394,
+    "p75": 4.541943468693576,
+    "count": 6,
+    "dispersion": 0.2883378697060891,
+    "used": false,
+    "reason": "目标 EBIT 利润率超过 50%，销售类倍数无法反映高毛利结构的价值，仅作参考，不参与结论"
+   },
+   "pb": {
+    "median": 2.391910471455877,
+    "mean": 2.4741049174398486,
+    "p25": 2.1946805562970444,
+    "p75": 2.5834310121588224,
+    "count": 6,
+    "dispersion": 0.16252717670706063,
+    "used": false,
+    "reason": "目标 ROE 超过 25% 且为轻资产（D&A/收入<5%），PB 主要反映账面价值而非盈利能力，仅作参考，不参与结论"
+   },
+   "ev_ebitda": {
+    "median": 10.653076839355414,
+    "mean": 11.531059916964638,
+    "p25": 9.289359873209634,
+    "p75": 13.533803958905615,
+    "count": 6,
+    "dispersion": 0.39842424397201665,
+    "used": true,
+    "reason": "适用"
+   },
+   "ev_revenue": {
+    "median": 3.8671743244811494,
+    "mean": 3.415052338996948,
+    "p25": 2.7160185130412415,
+    "p75": 3.946581742600781,
+    "count": 6,
+    "dispersion": 0.3182073333931336,
+    "used": false,
+    "reason": "目标 EBIT 利润率超过 50%，销售类倍数无法反映高毛利结构的价值，仅作参考，不参与结论"
+   }
+  },
+  "decisions": [
+   {
+    "source": "规则：盈利稳定，使用 PE/PS/PB/EV-EBITDA",
+    "decisions": [
+     {
+      "multiple": "pe",
+      "label": "市盈率 PE",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "ps",
+      "label": "市销率 PS",
+      "used": false,
+      "reason": "目标 EBIT 利润率超过 50%，销售类倍数无法反映高毛利结构的价值，仅作参考，不参与结论"
+     },
+     {
+      "multiple": "pb",
+      "label": "市净率 PB",
+      "used": false,
+      "reason": "目标 ROE 超过 25% 且为轻资产（D&A/收入<5%），PB 主要反映账面价值而非盈利能力，仅作参考，不参与结论"
+     },
+     {
+      "multiple": "ev_ebitda",
+      "label": "EV/EBITDA",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "ev_revenue",
+      "label": "EV/营业收入",
+      "used": false,
+      "reason": "目标 EBIT 利润率超过 50%，销售类倍数无法反映高毛利结构的价值，仅作参考，不参与结论"
+     }
+    ]
+   }
+  ],
+  "results": [
+   {
+    "multiple": "pe",
+    "label": "市盈率 PE",
+    "peer_median": 16.053702035578294,
+    "peer_mean": 19.044056125180298,
+    "peer_p25": 13.724657737088236,
+    "peer_p75": 24.100254974512808,
+    "peer_min": 10.95125380980926,
+    "peer_max": 31.474929945033395,
+    "sample_count": 6,
+    "dispersion": 0.6463055820040836,
+    "excluded": [],
+    "adjustment": 0.3,
+    "adjustment_reason": "目标增速 5.3% 高于同业中位 -17.5% 23pp，上调 27%；目标 EBIT 利润率 66.3% 高于同业 28.6%，上调 20%",
+    "applied_multiple": 20.869812646251784,
+    "applied_multiple_effective": 20.869812646251784,
+    "metric_basis": "net_income",
+    "metric_value": 85310324833.67,
+    "net_debt_deducted": 0.0,
+    "implied_equity_value": 1780410496069.5737,
+    "implied_per_share": 1424.2354216279468,
+    "category": "equity"
+   },
+   {
+    "multiple": "ev_ebitda",
+    "label": "EV/EBITDA",
+    "peer_median": 10.653076839355414,
+    "peer_mean": 11.531059916964638,
+    "peer_p25": 9.289359873209634,
+    "peer_p75": 13.533803958905615,
+    "peer_min": 6.9432334561036315,
+    "peer_max": 17.608138483723316,
+    "sample_count": 6,
+    "dispersion": 0.39842424397201665,
+    "excluded": [],
+    "adjustment": 0.3,
+    "adjustment_reason": "目标增速 5.3% 高于同业中位 -17.5% 23pp，上调 27%；目标 EBIT 利润率 66.3% 高于同业 28.6%，上调 20%",
+    "applied_multiple": 13.84899989116204,
+    "applied_multiple_effective": 13.84899989116204,
+    "metric_basis": "ebitda",
+    "metric_value": 116253096933.8,
+    "net_debt_deducted": -51646404709.45,
+    "implied_equity_value": 1661634747380.7163,
+    "implied_per_share": 1329.2210252926652,
+    "category": "enterprise"
+   }
+  ],
+  "implied_equity_value": 1721022621725.145,
+  "implied_per_share": 1376.728223460306,
+  "range_low": 1661634747380.7163,
+  "range_high": 1780410496069.5737,
+  "valuation_range": {
+   "low": 1661634747380.7163,
+   "mid": 1721022621725.145,
+   "high": 1780410496069.5737,
+   "low_per_share": 1329.2210252926652,
+   "mid_per_share": 1376.728223460306,
+   "high_per_share": 1424.2354216279468,
+   "basis": "各选用倍数隐含股权价值的最小/中位/最大"
+  },
+  "target_multiples": {
+   "pe": 21.686950238288162,
+   "pb": 10.335913732237321,
+   "ps": 10.753129372841125,
+   "pcf": 30.072406699341663,
+   "ev_revenue": 10.452958676428045,
+   "ev_ebitda": 15.470341834479184,
+   "ev_ebit": 15.776968315037198,
+   "market_cap": 1850120769480.0,
+   "enterprise_value": 1798475148882.73,
+   "peg": 4.107450395602542
+  },
+  "positioning": {
+   "pe": {
+    "label": "市盈率 PE",
+    "target": 21.686950238288162,
+    "peer_median": 16.053702035578294,
+    "premium_discount": 0.3509002590321806,
+    "percentile": 66.66666666666666,
+    "peer_min": 10.95125380980926,
+    "peer_max": 31.474929945033395
+   },
+   "ev_ebitda": {
+    "label": "EV/EBITDA",
+    "target": 15.470341834479184,
+    "peer_median": 10.653076839355414,
+    "premium_discount": 0.4521947102951007,
+    "percentile": 83.33333333333334,
+    "peer_min": 6.9432334561036315,
+    "peer_max": 17.608138483723316
+   }
+  },
+  "judgment": "市盈率 PE 21.69x，较同业中位 16.05x 溢价 35.1%，位于同业 67 分位；EV/EBITDA 15.47x，较同业中位 10.65x 溢价 45.2%，位于同业 83 分位",
+  "target_growth": 0.05279905573906949,
+  "warnings": [
+   "目标首年增速 5.3% 比同业中位 -17.5% 高 23pp，可能偏乐观；若行业处于下行周期，请下调增速或核对一致预期。",
+   "市盈率 PE 同业离散度（IQR/中位）65% 偏高，说明样本估值分歧大，中位数的代表性下降。"
+  ]
+ },
+ "comps": {
+  "ok": true,
+  "method": "comps",
+  "status": "ok",
+  "caliber": "LYR（最近年报）",
+  "peer_count": 6,
+  "peers_used": 6,
+  "peers_detail": [
+   {
+    "name": "五粮液",
+    "ticker": "000858",
+    "industry": "白酒Ⅱ",
+    "pe": 31.474929945033395,
+    "pe_forward": null,
+    "pb": 2.4001787846389653,
+    "ps": 7.2357825747927995,
+    "pcf": 9.871841341726821,
+    "peg": null,
+    "ev_revenue": 4.166291941134005,
+    "ev_ebitda": 17.608138483723316,
+    "ev_ebit": 17.608138483723316,
+    "revenue_growth": -0.5455180406416607,
+    "net_income_growth": -0.7193087720070271,
+    "gross_margin": 0.7754184152047013,
+    "ebitda_margin": 0.23661172048284712,
+    "ebit_margin": 0.23661172048284712,
+    "roe": 0.07625684278981859,
+    "market_cap": 293255484777.75,
+    "net_debt": -126650293546.02,
+    "ebitda": 9589520425.34,
+    "ebit": 9589520425.34,
+    "revenue": 40528509770.23,
+    "net_income": 9317113184.68,
+    "equity": 122180683645.14,
+    "cfo": 29706259919.13,
+    "note": "",
+    "selection_reason": "高端白酒双寡头之一，产品结构与渠道模式最接近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "泸州老窖",
+    "ticker": "000568",
+    "industry": "白酒Ⅱ",
+    "pe": 10.95125380980926,
+    "pe_forward": null,
+    "pb": 2.3836421582727887,
+    "ps": 4.622035249236783,
+    "pcf": 16.696053229380237,
+    "peg": null,
+    "ev_revenue": 3.824304732118213,
+    "ev_ebitda": 6.9432334561036315,
+    "ev_ebit": 6.9432334561036315,
+    "revenue_growth": -0.17518893696808957,
+    "net_income_growth": -0.19542977956453966,
+    "gross_margin": 0.8662411815119095,
+    "ebitda_margin": 0.5507959304978226,
+    "ebit_margin": 0.5507959304978226,
+    "roe": 0.21765929268644216,
+    "market_cap": 118929638210.4,
+    "net_debt": -20640201174.39,
+    "ebitda": 14172535952.140001,
+    "ebit": 14172535952.140001,
+    "revenue": 25731010647.32,
+    "net_income": 10859910680.17,
+    "equity": 49894082380.46,
+    "cfo": 7123218677.88,
+    "note": "",
+    "selection_reason": "高端白酒全国化品牌，国窖系列与标的价格带重叠",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "山西汾酒",
+    "ticker": "600809",
+    "industry": "白酒Ⅱ",
+    "pe": 13.204511495553518,
+    "pe_forward": null,
+    "pb": 4.045221942074077,
+    "ps": 4.193185553413062,
+    "pcf": 18.01214640531338,
+    "peg": 38.37616579635429,
+    "ev_revenue": 3.958761017853013,
+    "ev_ebitda": 9.210588013965776,
+    "ev_ebit": 9.210588013965776,
+    "revenue_growth": 0.07517885961355919,
+    "net_income_growth": 0.003440810519118598,
+    "gross_margin": 0.7485250456552095,
+    "ebitda_margin": 0.42980545996091085,
+    "ebit_margin": 0.42980545996091085,
+    "roe": 0.3063515029265765,
+    "market_cap": 162352838663.76,
+    "net_debt": -9577839851.35,
+    "ebitda": 16641318541.47,
+    "ebit": 16641318541.47,
+    "revenue": 38718257657.74,
+    "net_income": 12295255202.62,
+    "equity": 40134469996.6,
+    "cfo": 9013519822.15,
+    "note": "",
+    "selection_reason": "清香型龙头，全国化扩张阶段与标的可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "洋河股份",
+    "ticker": "002304",
+    "industry": "白酒Ⅱ",
+    "pe": 26.526237429529015,
+    "pe_forward": null,
+    "pb": 1.2393781760160236,
+    "ps": 3.0252707646579653,
+    "pcf": null,
+    "peg": null,
+    "ev_revenue": 2.3465897733489176,
+    "ev_ebitda": 14.11824586928428,
+    "ev_ebit": 14.11824586928428,
+    "revenue_growth": -0.3347118705236183,
+    "net_income_growth": -0.6713415012981896,
+    "gross_margin": 0.716021728406869,
+    "ebitda_margin": 0.16620972570354292,
+    "ebit_margin": 0.16620972570354292,
+    "roe": 0.046722727989923954,
+    "market_cap": 58118650954.92,
+    "net_debt": -13134401589.710001,
+    "ebitda": 3193064616.34,
+    "ebit": 3193064616.34,
+    "revenue": 19211057613.05,
+    "net_income": 2190987361.45,
+    "equity": 46893395478.16,
+    "cfo": -763040326.79,
+    "note": "",
+    "selection_reason": "次高端龙头，渠道与品牌运作模式相近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "古井贡酒",
+    "ticker": "000596",
+    "industry": "白酒Ⅱ",
+    "pe": 15.285096461692392,
+    "pe_forward": null,
+    "pb": 2.131693355638463,
+    "ps": 2.9548520306026886,
+    "pcf": 28.577111316159844,
+    "peg": null,
+    "ev_revenue": 2.284322652683455,
+    "ev_ebitda": 9.525675450941206,
+    "ev_ebit": 9.525675450941206,
+    "revenue_growth": -0.20128763907782854,
+    "net_income_growth": -0.36205199351606165,
+    "gross_margin": 0.7925603546390718,
+    "ebitda_margin": 0.23980689500162922,
+    "ebit_margin": 0.23980689500162922,
+    "roe": 0.13946221150654342,
+    "market_cap": 55645722000.0,
+    "net_debt": -13681179993.609999,
+    "ebitda": 4516039271.93,
+    "ebit": 4516039271.93,
+    "revenue": 18831982591.24,
+    "net_income": 3640521480.48,
+    "equity": 26103999364.08,
+    "cfo": 1947212977.0,
+    "note": "",
+    "selection_reason": "区域龙头全国化，盈利结构与标的同属白酒",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "今世缘",
+    "ticker": "603369",
+    "industry": "白酒Ⅱ",
+    "pe": 16.822307609464193,
+    "pe_forward": null,
+    "pb": 2.644515087998775,
+    "ps": 4.301668127063955,
+    "pcf": 29.042094780179166,
+    "peg": null,
+    "ev_revenue": 3.910043916844086,
+    "ev_ebitda": 11.78047822776962,
+    "ev_ebit": 11.78047822776962,
+    "revenue_growth": -0.11810355673359707,
+    "net_income_growth": -0.2368852009321032,
+    "gross_margin": 0.7425177449997818,
+    "ebitda_margin": 0.33190875966538486,
+    "ebit_margin": 0.33190875966538486,
+    "roe": 0.15720287307735217,
+    "market_cap": 43800085299.810005,
+    "net_debt": -3987563267.6499996,
+    "ebitda": 3379533603.17,
+    "ebit": 3379533603.17,
+    "revenue": 10182116333.95,
+    "net_income": 2603690665.79,
+    "equity": 16562615013.46,
+    "cfo": 1508158610.16,
+    "note": "",
+    "selection_reason": "区域次高端白酒，增速与利润率可作参照",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   }
+  ],
+  "peer_companies": [
+   {
+    "name": "五粮液",
+    "ticker": "000858",
+    "industry": "白酒Ⅱ",
+    "market_cap": 293255484777.75,
+    "pe": 31.474929945033395,
+    "pb": 2.4001787846389653,
+    "ps": 7.2357825747927995,
+    "pcf": 9.871841341726821,
+    "peg": null,
+    "ev_revenue": 4.166291941134005,
+    "ev_ebitda": 17.608138483723316,
+    "ev_ebit": 17.608138483723316,
+    "revenue_growth": -0.5455180406416607,
+    "net_income_growth": -0.7193087720070271,
+    "gross_margin": 0.7754184152047013,
+    "ebitda_margin": 0.23661172048284712,
+    "ebit_margin": 0.23661172048284712,
+    "roe": 0.07625684278981859,
+    "selection_reason": "高端白酒双寡头之一，产品结构与渠道模式最接近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 68.8,
+     "level": "中",
+     "reasons": [
+      "规模为目标公司的 0.16×（-11）",
+      "收入增速数据异常（同比 <-40%），未计入可比性评分",
+      "EBIT 利润率差 43%（-20）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "泸州老窖",
+    "ticker": "000568",
+    "industry": "白酒Ⅱ",
+    "market_cap": 118929638210.4,
+    "pe": 10.95125380980926,
+    "pb": 2.3836421582727887,
+    "ps": 4.622035249236783,
+    "pcf": 16.696053229380237,
+    "peg": null,
+    "ev_revenue": 3.824304732118213,
+    "ev_ebitda": 6.9432334561036315,
+    "ev_ebit": 6.9432334561036315,
+    "revenue_growth": -0.17518893696808957,
+    "net_income_growth": -0.19542977956453966,
+    "gross_margin": 0.8662411815119095,
+    "ebitda_margin": 0.5507959304978226,
+    "ebit_margin": 0.5507959304978226,
+    "roe": 0.21765929268644216,
+    "selection_reason": "高端白酒全国化品牌，国窖系列与标的价格带重叠",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 69.3,
+     "level": "中",
+     "reasons": [
+      "规模为目标公司的 0.06×（-17）",
+      "收入增速差 23%（-13）",
+      "EBIT 利润率差 11%（-1）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "山西汾酒",
+    "ticker": "600809",
+    "industry": "白酒Ⅱ",
+    "market_cap": 162352838663.76,
+    "pe": 13.204511495553518,
+    "pb": 4.045221942074077,
+    "ps": 4.193185553413062,
+    "pcf": 18.01214640531338,
+    "peg": 38.37616579635429,
+    "ev_revenue": 3.958761017853013,
+    "ev_ebitda": 9.210588013965776,
+    "ev_ebit": 9.210588013965776,
+    "revenue_growth": 0.07517885961355919,
+    "net_income_growth": 0.003440810519118598,
+    "gross_margin": 0.7485250456552095,
+    "ebitda_margin": 0.42980545996091085,
+    "ebit_margin": 0.42980545996091085,
+    "roe": 0.3063515029265765,
+    "selection_reason": "清香型龙头，全国化扩张阶段与标的可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 71.9,
+     "level": "中",
+     "reasons": [
+      "规模为目标公司的 0.09×（-15）",
+      "收入增速接近（差 2%）",
+      "EBIT 利润率差 23%（-13）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "洋河股份",
+    "ticker": "002304",
+    "industry": "白酒Ⅱ",
+    "market_cap": 58118650954.92,
+    "pe": 26.526237429529015,
+    "pb": 1.2393781760160236,
+    "ps": 3.0252707646579653,
+    "pcf": null,
+    "peg": null,
+    "ev_revenue": 2.3465897733489176,
+    "ev_ebitda": 14.11824586928428,
+    "ev_ebit": 14.11824586928428,
+    "revenue_growth": -0.3347118705236183,
+    "net_income_growth": -0.6713415012981896,
+    "gross_margin": 0.716021728406869,
+    "ebitda_margin": 0.16620972570354292,
+    "ebit_margin": 0.16620972570354292,
+    "roe": 0.046722727989923954,
+    "selection_reason": "次高端龙头，渠道与品牌运作模式相近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 39.0,
+     "level": "低",
+     "reasons": [
+      "规模为目标公司的 0.03×（-21）",
+      "收入增速差 39%（-20）",
+      "EBIT 利润率差 50%（-20）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "古井贡酒",
+    "ticker": "000596",
+    "industry": "白酒Ⅱ",
+    "market_cap": 55645722000.0,
+    "pe": 15.285096461692392,
+    "pb": 2.131693355638463,
+    "ps": 2.9548520306026886,
+    "pcf": 28.577111316159844,
+    "peg": null,
+    "ev_revenue": 2.284322652683455,
+    "ev_ebitda": 9.525675450941206,
+    "ev_ebit": 9.525675450941206,
+    "revenue_growth": -0.20128763907782854,
+    "net_income_growth": -0.36205199351606165,
+    "gross_margin": 0.7925603546390718,
+    "ebitda_margin": 0.23980689500162922,
+    "ebit_margin": 0.23980689500162922,
+    "roe": 0.13946221150654342,
+    "selection_reason": "区域龙头全国化，盈利结构与标的同属白酒",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 43.3,
+     "level": "低",
+     "reasons": [
+      "规模为目标公司的 0.03×（-21）",
+      "收入增速差 25%（-15）",
+      "EBIT 利润率差 42%（-20）",
+      "同属一个行业"
+     ]
+    }
+   },
+   {
+    "name": "今世缘",
+    "ticker": "603369",
+    "industry": "白酒Ⅱ",
+    "market_cap": 43800085299.810005,
+    "pe": 16.822307609464193,
+    "pb": 2.644515087998775,
+    "ps": 4.301668127063955,
+    "pcf": 29.042094780179166,
+    "peg": null,
+    "ev_revenue": 3.910043916844086,
+    "ev_ebitda": 11.78047822776962,
+    "ev_ebit": 11.78047822776962,
+    "revenue_growth": -0.11810355673359707,
+    "net_income_growth": -0.2368852009321032,
+    "gross_margin": 0.7425177449997818,
+    "ebitda_margin": 0.33190875966538486,
+    "ebit_margin": 0.33190875966538486,
+    "roe": 0.15720287307735217,
+    "selection_reason": "区域次高端白酒，增速与利润率可作参照",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true,
+    "comparability": {
+     "score": 50.1,
+     "level": "低",
+     "reasons": [
+      "规模为目标公司的 0.02×（-23）",
+      "收入增速差 17%（-7）",
+      "EBIT 利润率差 33%（-20）",
+      "同属一个行业"
+     ]
+    }
+   }
+  ],
+  "comparability_note": "可比性评分综合考虑行业、规模、收入增速、EBIT 利润率；75 分以上为高，55–74 为中，55 以下为低。评分只用于提示样本质量，不替代人工复核。",
+  "peer_selection": {
+   "peers": [
+    {
+     "name": "五粮液",
+     "ticker": "000858",
+     "industry": "白酒Ⅱ",
+     "pe": 31.474929945033395,
+     "pe_forward": null,
+     "pb": 2.4001787846389653,
+     "ps": 7.2357825747927995,
+     "pcf": 9.871841341726821,
+     "peg": null,
+     "ev_revenue": 4.166291941134005,
+     "ev_ebitda": 17.608138483723316,
+     "ev_ebit": 17.608138483723316,
+     "revenue_growth": -0.5455180406416607,
+     "net_income_growth": -0.7193087720070271,
+     "gross_margin": 0.7754184152047013,
+     "ebitda_margin": 0.23661172048284712,
+     "ebit_margin": 0.23661172048284712,
+     "roe": 0.07625684278981859,
+     "market_cap": 293255484777.75,
+     "net_debt": -126650293546.02,
+     "ebitda": 9589520425.34,
+     "ebit": 9589520425.34,
+     "revenue": 40528509770.23,
+     "net_income": 9317113184.68,
+     "equity": 122180683645.14,
+     "cfo": 29706259919.13,
+     "note": "",
+     "selection_reason": "高端白酒双寡头之一，产品结构与渠道模式最接近",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "泸州老窖",
+     "ticker": "000568",
+     "industry": "白酒Ⅱ",
+     "pe": 10.95125380980926,
+     "pe_forward": null,
+     "pb": 2.3836421582727887,
+     "ps": 4.622035249236783,
+     "pcf": 16.696053229380237,
+     "peg": null,
+     "ev_revenue": 3.824304732118213,
+     "ev_ebitda": 6.9432334561036315,
+     "ev_ebit": 6.9432334561036315,
+     "revenue_growth": -0.17518893696808957,
+     "net_income_growth": -0.19542977956453966,
+     "gross_margin": 0.8662411815119095,
+     "ebitda_margin": 0.5507959304978226,
+     "ebit_margin": 0.5507959304978226,
+     "roe": 0.21765929268644216,
+     "market_cap": 118929638210.4,
+     "net_debt": -20640201174.39,
+     "ebitda": 14172535952.140001,
+     "ebit": 14172535952.140001,
+     "revenue": 25731010647.32,
+     "net_income": 10859910680.17,
+     "equity": 49894082380.46,
+     "cfo": 7123218677.88,
+     "note": "",
+     "selection_reason": "高端白酒全国化品牌，国窖系列与标的价格带重叠",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "山西汾酒",
+     "ticker": "600809",
+     "industry": "白酒Ⅱ",
+     "pe": 13.204511495553518,
+     "pe_forward": null,
+     "pb": 4.045221942074077,
+     "ps": 4.193185553413062,
+     "pcf": 18.01214640531338,
+     "peg": 38.37616579635429,
+     "ev_revenue": 3.958761017853013,
+     "ev_ebitda": 9.210588013965776,
+     "ev_ebit": 9.210588013965776,
+     "revenue_growth": 0.07517885961355919,
+     "net_income_growth": 0.003440810519118598,
+     "gross_margin": 0.7485250456552095,
+     "ebitda_margin": 0.42980545996091085,
+     "ebit_margin": 0.42980545996091085,
+     "roe": 0.3063515029265765,
+     "market_cap": 162352838663.76,
+     "net_debt": -9577839851.35,
+     "ebitda": 16641318541.47,
+     "ebit": 16641318541.47,
+     "revenue": 38718257657.74,
+     "net_income": 12295255202.62,
+     "equity": 40134469996.6,
+     "cfo": 9013519822.15,
+     "note": "",
+     "selection_reason": "清香型龙头，全国化扩张阶段与标的可比",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "洋河股份",
+     "ticker": "002304",
+     "industry": "白酒Ⅱ",
+     "pe": 26.526237429529015,
+     "pe_forward": null,
+     "pb": 1.2393781760160236,
+     "ps": 3.0252707646579653,
+     "pcf": null,
+     "peg": null,
+     "ev_revenue": 2.3465897733489176,
+     "ev_ebitda": 14.11824586928428,
+     "ev_ebit": 14.11824586928428,
+     "revenue_growth": -0.3347118705236183,
+     "net_income_growth": -0.6713415012981896,
+     "gross_margin": 0.716021728406869,
+     "ebitda_margin": 0.16620972570354292,
+     "ebit_margin": 0.16620972570354292,
+     "roe": 0.046722727989923954,
+     "market_cap": 58118650954.92,
+     "net_debt": -13134401589.710001,
+     "ebitda": 3193064616.34,
+     "ebit": 3193064616.34,
+     "revenue": 19211057613.05,
+     "net_income": 2190987361.45,
+     "equity": 46893395478.16,
+     "cfo": -763040326.79,
+     "note": "",
+     "selection_reason": "次高端龙头，渠道与品牌运作模式相近",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "古井贡酒",
+     "ticker": "000596",
+     "industry": "白酒Ⅱ",
+     "pe": 15.285096461692392,
+     "pe_forward": null,
+     "pb": 2.131693355638463,
+     "ps": 2.9548520306026886,
+     "pcf": 28.577111316159844,
+     "peg": null,
+     "ev_revenue": 2.284322652683455,
+     "ev_ebitda": 9.525675450941206,
+     "ev_ebit": 9.525675450941206,
+     "revenue_growth": -0.20128763907782854,
+     "net_income_growth": -0.36205199351606165,
+     "gross_margin": 0.7925603546390718,
+     "ebitda_margin": 0.23980689500162922,
+     "ebit_margin": 0.23980689500162922,
+     "roe": 0.13946221150654342,
+     "market_cap": 55645722000.0,
+     "net_debt": -13681179993.609999,
+     "ebitda": 4516039271.93,
+     "ebit": 4516039271.93,
+     "revenue": 18831982591.24,
+     "net_income": 3640521480.48,
+     "equity": 26103999364.08,
+     "cfo": 1947212977.0,
+     "note": "",
+     "selection_reason": "区域龙头全国化，盈利结构与标的同属白酒",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    },
+    {
+     "name": "今世缘",
+     "ticker": "603369",
+     "industry": "白酒Ⅱ",
+     "pe": 16.822307609464193,
+     "pe_forward": null,
+     "pb": 2.644515087998775,
+     "ps": 4.301668127063955,
+     "pcf": 29.042094780179166,
+     "peg": null,
+     "ev_revenue": 3.910043916844086,
+     "ev_ebitda": 11.78047822776962,
+     "ev_ebit": 11.78047822776962,
+     "revenue_growth": -0.11810355673359707,
+     "net_income_growth": -0.2368852009321032,
+     "gross_margin": 0.7425177449997818,
+     "ebitda_margin": 0.33190875966538486,
+     "ebit_margin": 0.33190875966538486,
+     "roe": 0.15720287307735217,
+     "market_cap": 43800085299.810005,
+     "net_debt": -3987563267.6499996,
+     "ebitda": 3379533603.17,
+     "ebit": 3379533603.17,
+     "revenue": 10182116333.95,
+     "net_income": 2603690665.79,
+     "equity": 16562615013.46,
+     "cfo": 1508158610.16,
+     "note": "",
+     "selection_reason": "区域次高端白酒，增速与利润率可作参照",
+     "selection_score": null,
+     "tier": "curated",
+     "caliber": "LYR",
+     "source": "新浪财经·年报 + 东方财富·行情",
+     "as_of": "2026-11-04",
+     "data_ok": true
+    }
+   ],
+   "theme": "白酒",
+   "sector": "消费",
+   "tier": "curated",
+   "selection_note": "按行业「白酒Ⅱ」匹配到配置池「白酒」，逐家披露选取理由；剔除标的后取 6 家。",
+   "missing": [],
+   "warnings": []
+  },
+  "peer_multiples": {
+   "pe": {
+    "median": 16.053702035578294,
+    "mean": 19.044056125180298,
+    "p25": 13.724657737088236,
+    "p75": 24.100254974512808,
+    "count": 6,
+    "dispersion": 0.6463055820040836,
+    "used": true,
+    "reason": "适用"
+   },
+   "ps": {
+    "median": 4.247426840238509,
+    "mean": 4.388799049961209,
+    "p25": 3.3172494618467394,
+    "p75": 4.541943468693576,
+    "count": 6,
+    "dispersion": 0.2883378697060891,
+    "used": false,
+    "reason": "目标 EBIT 利润率超过 50%，销售类倍数无法反映高毛利结构的价值，仅作参考，不参与结论"
+   },
+   "pb": {
+    "median": 2.391910471455877,
+    "mean": 2.4741049174398486,
+    "p25": 2.1946805562970444,
+    "p75": 2.5834310121588224,
+    "count": 6,
+    "dispersion": 0.16252717670706063,
+    "used": false,
+    "reason": "目标 ROE 超过 25% 且为轻资产（D&A/收入<5%），PB 主要反映账面价值而非盈利能力，仅作参考，不参与结论"
+   },
+   "ev_ebitda": {
+    "median": 10.653076839355414,
+    "mean": 11.531059916964638,
+    "p25": 9.289359873209634,
+    "p75": 13.533803958905615,
+    "count": 6,
+    "dispersion": 0.39842424397201665,
+    "used": true,
+    "reason": "适用"
+   },
+   "ev_revenue": {
+    "median": 3.8671743244811494,
+    "mean": 3.415052338996948,
+    "p25": 2.7160185130412415,
+    "p75": 3.946581742600781,
+    "count": 6,
+    "dispersion": 0.3182073333931336,
+    "used": false,
+    "reason": "目标 EBIT 利润率超过 50%，销售类倍数无法反映高毛利结构的价值，仅作参考，不参与结论"
+   }
+  },
+  "decisions": [
+   {
+    "source": "规则：盈利稳定，使用 PE/PS/PB/EV-EBITDA",
+    "decisions": [
+     {
+      "multiple": "pe",
+      "label": "市盈率 PE",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "ps",
+      "label": "市销率 PS",
+      "used": false,
+      "reason": "目标 EBIT 利润率超过 50%，销售类倍数无法反映高毛利结构的价值，仅作参考，不参与结论"
+     },
+     {
+      "multiple": "pb",
+      "label": "市净率 PB",
+      "used": false,
+      "reason": "目标 ROE 超过 25% 且为轻资产（D&A/收入<5%），PB 主要反映账面价值而非盈利能力，仅作参考，不参与结论"
+     },
+     {
+      "multiple": "ev_ebitda",
+      "label": "EV/EBITDA",
+      "used": true,
+      "reason": "适用"
+     },
+     {
+      "multiple": "ev_revenue",
+      "label": "EV/营业收入",
+      "used": false,
+      "reason": "目标 EBIT 利润率超过 50%，销售类倍数无法反映高毛利结构的价值，仅作参考，不参与结论"
+     }
+    ]
+   }
+  ],
+  "results": [
+   {
+    "multiple": "pe",
+    "label": "市盈率 PE",
+    "peer_median": 16.053702035578294,
+    "peer_mean": 19.044056125180298,
+    "peer_p25": 13.724657737088236,
+    "peer_p75": 24.100254974512808,
+    "peer_min": 10.95125380980926,
+    "peer_max": 31.474929945033395,
+    "sample_count": 6,
+    "dispersion": 0.6463055820040836,
+    "excluded": [],
+    "adjustment": 0.3,
+    "adjustment_reason": "目标增速 5.3% 高于同业中位 -17.5% 23pp，上调 27%；目标 EBIT 利润率 66.3% 高于同业 28.6%，上调 20%",
+    "applied_multiple": 20.869812646251784,
+    "applied_multiple_effective": 20.869812646251784,
+    "metric_basis": "net_income",
+    "metric_value": 85310324833.67,
+    "net_debt_deducted": 0.0,
+    "implied_equity_value": 1780410496069.5737,
+    "implied_per_share": 1424.2354216279468,
+    "category": "equity"
+   },
+   {
+    "multiple": "ev_ebitda",
+    "label": "EV/EBITDA",
+    "peer_median": 10.653076839355414,
+    "peer_mean": 11.531059916964638,
+    "peer_p25": 9.289359873209634,
+    "peer_p75": 13.533803958905615,
+    "peer_min": 6.9432334561036315,
+    "peer_max": 17.608138483723316,
+    "sample_count": 6,
+    "dispersion": 0.39842424397201665,
+    "excluded": [],
+    "adjustment": 0.3,
+    "adjustment_reason": "目标增速 5.3% 高于同业中位 -17.5% 23pp，上调 27%；目标 EBIT 利润率 66.3% 高于同业 28.6%，上调 20%",
+    "applied_multiple": 13.84899989116204,
+    "applied_multiple_effective": 13.84899989116204,
+    "metric_basis": "ebitda",
+    "metric_value": 116253096933.8,
+    "net_debt_deducted": -51646404709.45,
+    "implied_equity_value": 1661634747380.7163,
+    "implied_per_share": 1329.2210252926652,
+    "category": "enterprise"
+   }
+  ],
+  "implied_equity_value": 1721022621725.145,
+  "implied_per_share": 1376.728223460306,
+  "range_low": 1661634747380.7163,
+  "range_high": 1780410496069.5737,
+  "valuation_range": {
+   "low": 1661634747380.7163,
+   "mid": 1721022621725.145,
+   "high": 1780410496069.5737,
+   "low_per_share": 1329.2210252926652,
+   "mid_per_share": 1376.728223460306,
+   "high_per_share": 1424.2354216279468,
+   "basis": "各选用倍数隐含股权价值的最小/中位/最大"
+  },
+  "target_multiples": {
+   "pe": 21.686950238288162,
+   "pb": 10.335913732237321,
+   "ps": 10.753129372841125,
+   "pcf": 30.072406699341663,
+   "ev_revenue": 10.452958676428045,
+   "ev_ebitda": 15.470341834479184,
+   "ev_ebit": 15.776968315037198,
+   "market_cap": 1850120769480.0,
+   "enterprise_value": 1798475148882.73,
+   "peg": 4.107450395602542
+  },
+  "positioning": {
+   "pe": {
+    "label": "市盈率 PE",
+    "target": 21.686950238288162,
+    "peer_median": 16.053702035578294,
+    "premium_discount": 0.3509002590321806,
+    "percentile": 66.66666666666666,
+    "peer_min": 10.95125380980926,
+    "peer_max": 31.474929945033395
+   },
+   "ev_ebitda": {
+    "label": "EV/EBITDA",
+    "target": 15.470341834479184,
+    "peer_median": 10.653076839355414,
+    "premium_discount": 0.4521947102951007,
+    "percentile": 83.33333333333334,
+    "peer_min": 6.9432334561036315,
+    "peer_max": 17.608138483723316
+   }
+  },
+  "judgment": "市盈率 PE 21.69x，较同业中位 16.05x 溢价 35.1%，位于同业 67 分位；EV/EBITDA 15.47x，较同业中位 10.65x 溢价 45.2%，位于同业 83 分位",
+  "target_growth": 0.05279905573906949,
+  "warnings": [
+   "目标首年增速 5.3% 比同业中位 -17.5% 高 23pp，可能偏乐观；若行业处于下行周期，请下调增速或核对一致预期。",
+   "市盈率 PE 同业离散度（IQR/中位）65% 偏高，说明样本估值分歧大，中位数的代表性下降。"
+  ]
+ },
+ "sotp": {
+  "ok": true,
+  "method": "sotp",
+  "status": "ok",
+  "rows": [
+   {
+    "name": "茅台酒",
+    "level": "top",
+    "parent": "",
+    "metric": "revenue",
+    "metric_basis": "ebitda",
+    "value": 103452434844.2087,
+    "multiple_type": "ev_ebitda",
+    "multiple": 11.664416941625028,
+    "peer_names": [
+     "五粮液",
+     "泸州老窖",
+     "山西汾酒",
+     "洋河股份"
+    ],
+    "peer_tickers": [
+     "000858",
+     "000568",
+     "600809",
+     "002304"
+    ],
+    "peer_median_ev_revenue": 3.8915328749856126,
+    "peer_median_ev_ebitda": 11.664416941625028,
+    "segment_ev": 1206712333649.1472,
+    "revenue": 146499906480.49,
+    "gross_profit": 137015148654.94998,
+    "gross_margin": 0.9352575844353652,
+    "revenue_share": 0.8514754676996582,
+    "allocated_ebit": 101441829551.22581,
+    "allocated_ebitda": 103452434844.2087,
+    "note": "纯业务同业：五粮液, 泸州老窖, 山西汾酒, 洋河股份；优先 EV/EBITDA，缺失时用 EV/Revenue",
+    "source": "年报第 10 页·主营业务分产品",
+    "as_of": "2025-12-31"
+   },
+   {
+    "name": "其他系列酒",
+    "level": "top",
+    "parent": "",
+    "metric": "revenue",
+    "metric_basis": "ebitda",
+    "value": 12800662089.59129,
+    "multiple_type": "ev_ebitda",
+    "multiple": 11.664416941625028,
+    "peer_names": [
+     "五粮液",
+     "泸州老窖",
+     "山西汾酒",
+     "洋河股份"
+    ],
+    "peer_tickers": [
+     "000858",
+     "000568",
+     "600809",
+     "002304"
+    ],
+    "peer_median_ev_revenue": 3.8915328749856126,
+    "peer_median_ev_ebitda": 11.664416941625028,
+    "segment_ev": 149312259741.84586,
+    "revenue": 22274678707.16,
+    "gross_profit": 16953536393.11,
+    "gross_margin": 0.7611124998027664,
+    "revenue_share": 0.12946317117659395,
+    "allocated_ebit": 12551880328.294172,
+    "allocated_ebitda": 12800662089.59129,
+    "note": "纯业务同业：五粮液, 泸州老窖, 山西汾酒, 洋河股份；优先 EV/EBITDA，缺失时用 EV/Revenue",
+    "source": "年报第 10 页·主营业务分产品",
+    "as_of": "2025-12-31"
+   }
+  ],
+  "segment_count": 2,
+  "segment_ev_total": 1356024593390.9932,
+  "corporate_cost": 27528667502.5456,
+  "corporate_cost_estimated": true,
+  "net_debt": -51646404709.45,
+  "minority_interest": 784112.18,
+  "preferred_stock": 0.0,
+  "equity_value": 1380141546485.7175,
+  "per_share": 1104.0411644981227,
+  "conglomerate_discount": -0.34052972623786304,
+  "revenue_coverage": 0.9809386388762522,
+  "implied_ev_revenue": 7.881381651418328,
+  "implied_ev_ebitda": 11.664416941625026,
+  "allocation_rule": "按各分部毛利占比分摊公司 EBIT",
+  "warnings": [
+   "未提供总部费用，按「营业收入 × 2% × 8 倍」估算为 275.3 亿元，并从分部价值中扣除。",
+   "SOTP 合计隐含 EV/收入 7.9x，与公司整体同业中位 3.9x 相差 104%，分部倍数或收入口径需复核。"
+  ]
+ },
+ "ddm": {
+  "ok": false,
+  "error": "未运行"
+ },
+ "blended": {
+  "ok": true,
+  "blended_per_share": 1592.4135163116987,
+  "blended_equity_value": 1990646837924.968,
+  "current_price": 1480.0,
+  "upside": 0.07595507858898554,
+  "verdict": "估值分歧较大（区间参考）",
+  "weights": {
+   "dcf": 0.7,
+   "comps": 0.16,
+   "sotp": 0.14
+  },
+  "components": [
+   {
+    "key": "dcf",
+    "label": "DCF（收益法）",
+    "per_share": 1739.387482183304,
+    "weight": 0.7,
+    "equity_value": 2174376288487.0635
+   },
+   {
+    "key": "comps",
+    "label": "Comps（相对估值）",
+    "per_share": 1376.728223460306,
+    "weight": 0.16,
+    "equity_value": 1721022621725.145
+   },
+   {
+    "key": "sotp",
+    "label": "SOTP（分部估值）",
+    "per_share": 1104.0411644981227,
+    "weight": 0.14,
+    "equity_value": 1380141546485.7175
+   }
+  ],
+  "weight_source": "默认权重：有分部 DCF 40% / Comps 30% / SOTP 30%；已按各方法可靠性调整；方法分歧 58%，改以可靠性更高的 dcf 为主（70%），其余方法降为参考",
+  "confidence": "低",
+  "primary": "dcf",
+  "divergence": 0.575473395481588,
+  "trace": [
+   {
+    "rule": "可靠性 80 分 → 权重乘数 1.10",
+    "method": "dcf",
+    "base_weight": 0.4,
+    "weight": 0.44
+   },
+   {
+    "rule": "可靠性 80 分 → 权重乘数 1.10",
+    "method": "comps",
+    "base_weight": 0.3,
+    "weight": 0.33
+   },
+   {
+    "rule": "可靠性 70 分 → 权重乘数 1.00",
+    "method": "sotp",
+    "base_weight": 0.3,
+    "weight": 0.3
+   },
+   {
+    "rule": "方法间分歧 58%，规则改为以 dcf 为主（70%），其余方法降为参考",
+    "method": "dcf",
+    "weight": 0.7,
+    "divergence": 0.575473395481588
+   }
+  ],
+  "range_low": 1104.0411644981227,
+  "range_high": 1739.387482183304,
+  "range_note": "方法间最高/最低估值相差 58%，规则已按可靠性确定主方法并降权其余方法；建议以区间而非单点作为参考。"
+ },
+ "scenarios": {
+  "bull": {
+   "per_share": 2413.9690428707804,
+   "equity_value": 3017658285876.343,
+   "growth_y1": 0.08279905573906948,
+   "ebit_margin": 0.6969323054265674,
+   "wacc": 0.050032190062851145,
+   "terminal_growth": 0.025,
+   "ok": true,
+   "label": "乐观",
+   "levers": "收入增速 +3%、EBIT 利润率 +2%、WACC -1.0%"
+  },
+  "base": {
+   "per_share": 1739.387482183304,
+   "equity_value": 2174376288487.0635,
+   "growth_y1": 0.05279905573906949,
+   "ebit_margin": 0.6769323054265673,
+   "wacc": 0.06003219006285115,
+   "terminal_growth": 0.025,
+   "ok": true,
+   "label": "基准",
+   "levers": "历史中位数 / 当前资本结构"
+  },
+  "bear": {
+   "per_share": 1342.0409568119346,
+   "equity_value": 1677660707899.0352,
+   "growth_y1": 0.02279905573906949,
+   "ebit_margin": 0.6569323054265673,
+   "wacc": 0.07003219006285115,
+   "terminal_growth": 0.025,
+   "ok": true,
+   "label": "悲观",
+   "levers": "收入增速 -3%、EBIT 利润率 -2%、WACC +1.0%"
+  },
+  "warnings": []
+ },
+ "sensitivity": {
+  "wacc_axis": [
+   0.050032190062851145,
+   0.05503219006285115,
+   0.06003219006285115,
+   0.06503219006285114,
+   0.07003219006285115
+  ],
+  "growth_axis": [
+   0.015000000000000001,
+   0.02,
+   0.025,
+   0.030000000000000002,
+   0.035
+  ],
+  "grid": [
+   [
+    1766.8441579697173,
+    1945.2788698440504,
+    2192.4081044412783,
+    2559.6300112107856,
+    3166.7264891060004
+   ],
+   [
+    1618.5628930329308,
+    1753.0131808242963,
+    1930.1323688804778,
+    2175.4576893577964,
+    2540.0223037993464
+   ],
+   [
+    1500.749475978567,
+    1605.9325233106404,
+    1739.387482183304,
+    1915.2097993936607,
+    2158.7565700876166
+   ],
+   [
+    1404.3595864423942,
+    1489.0885620068327,
+    1593.489090092284,
+    1725.9628812737449,
+    1900.506613370954
+   ],
+   [
+    1323.6323325572764,
+    1393.5045221191876,
+    1477.5996139848498,
+    1581.2287991421638,
+    1712.7353041608944
+   ]
+  ],
+  "wacc_g": {
+   "kind": "wacc_g",
+   "title": "WACC × 永续增长率：每股价值",
+   "unit": "元/股",
+   "wacc_axis": [
+    0.050032190062851145,
+    0.05503219006285115,
+    0.06003219006285115,
+    0.06503219006285114,
+    0.07003219006285115
+   ],
+   "growth_axis": [
+    0.015000000000000001,
+    0.02,
+    0.025,
+    0.030000000000000002,
+    0.035
+   ],
+   "grid": [
+    [
+     1766.8441579697173,
+     1945.2788698440504,
+     2192.4081044412783,
+     2559.6300112107856,
+     3166.7264891060004
+    ],
+    [
+     1618.5628930329308,
+     1753.0131808242963,
+     1930.1323688804778,
+     2175.4576893577964,
+     2540.0223037993464
+    ],
+    [
+     1500.749475978567,
+     1605.9325233106404,
+     1739.387482183304,
+     1915.2097993936607,
+     2158.7565700876166
+    ],
+    [
+     1404.3595864423942,
+     1489.0885620068327,
+     1593.489090092284,
+     1725.9628812737449,
+     1900.506613370954
+    ],
+    [
+     1323.6323325572764,
+     1393.5045221191876,
+     1477.5996139848498,
+     1581.2287991421638,
+     1712.7353041608944
+    ]
+   ],
+   "matrix": [
+    [
+     1766.8441579697173,
+     1945.2788698440504,
+     2192.4081044412783,
+     2559.6300112107856,
+     3166.7264891060004
+    ],
+    [
+     1618.5628930329308,
+     1753.0131808242963,
+     1930.1323688804778,
+     2175.4576893577964,
+     2540.0223037993464
+    ],
+    [
+     1500.749475978567,
+     1605.9325233106404,
+     1739.387482183304,
+     1915.2097993936607,
+     2158.7565700876166
+    ],
+    [
+     1404.3595864423942,
+     1489.0885620068327,
+     1593.489090092284,
+     1725.9628812737449,
+     1900.506613370954
+    ],
+    [
+     1323.6323325572764,
+     1393.5045221191876,
+     1477.5996139848498,
+     1581.2287991421638,
+     1712.7353041608944
+    ]
+   ],
+   "base_wacc": 0.06003219006285115,
+   "base_growth": 0.025,
+   "base_index": {
+    "x": 2,
+    "y": 2
+   },
+   "note": "行=WACC，列=永续增长率；WACC≤g 的格子无解，写 null。"
+  },
+  "growth_margin": {
+   "kind": "growth_margin",
+   "title": "首年收入增速 × EBIT 利润率：每股价值",
+   "unit": "元/股",
+   "growth_axis": [
+    0.04279905573906949,
+    0.04779905573906949,
+    0.05279905573906949,
+    0.05779905573906949,
+    0.06279905573906949
+   ],
+   "margin_axis": [
+    0.6669323054265673,
+    0.6719323054265673,
+    0.6769323054265673,
+    0.6819323054265674,
+    0.6869323054265674
+   ],
+   "grid": [
+    [
+     1676.0838294301334,
+     1695.0243043075193,
+     1714.1184768687572,
+     1733.3671198948052,
+     1752.7710079169601
+    ],
+    [
+     1688.4311788319567,
+     1707.51465038207,
+     1726.7529795260305,
+     1746.1469448750775,
+     1765.6973268039933
+    ],
+    [
+     1700.7785282337798,
+     1720.004996456621,
+     1739.387482183304,
+     1758.9267698553497,
+     1778.6236456910265
+    ],
+    [
+     1713.1258776356035,
+     1732.495342531172,
+     1752.0219848405768,
+     1771.7065948356226,
+     1791.5499645780599
+    ],
+    [
+     1725.473227037427,
+     1744.9856886057232,
+     1764.6564874978503,
+     1784.4864198158948,
+     1804.4762834650933
+    ]
+   ],
+   "matrix": [
+    [
+     1676.0838294301334,
+     1695.0243043075193,
+     1714.1184768687572,
+     1733.3671198948052,
+     1752.7710079169601
+    ],
+    [
+     1688.4311788319567,
+     1707.51465038207,
+     1726.7529795260305,
+     1746.1469448750775,
+     1765.6973268039933
+    ],
+    [
+     1700.7785282337798,
+     1720.004996456621,
+     1739.387482183304,
+     1758.9267698553497,
+     1778.6236456910265
+    ],
+    [
+     1713.1258776356035,
+     1732.495342531172,
+     1752.0219848405768,
+     1771.7065948356226,
+     1791.5499645780599
+    ],
+    [
+     1725.473227037427,
+     1744.9856886057232,
+     1764.6564874978503,
+     1784.4864198158948,
+     1804.4762834650933
+    ]
+   ],
+   "base_growth": 0.05279905573906949,
+   "base_margin": 0.6769323054265673,
+   "base_index": {
+    "x": 2,
+    "y": 2
+   },
+   "note": "行=EBIT 利润率，列=首年收入增速；WACC 与 g 固定在基准值。"
+  },
+  "base_wacc": 0.06003219006285115,
+  "base_growth": 0.025,
+  "unit": "元/股"
+ },
+ "peer_selection": {
+  "peers": [
+   {
+    "name": "五粮液",
+    "ticker": "000858",
+    "industry": "白酒Ⅱ",
+    "pe": 31.474929945033395,
+    "pe_forward": null,
+    "pb": 2.4001787846389653,
+    "ps": 7.2357825747927995,
+    "pcf": 9.871841341726821,
+    "peg": null,
+    "ev_revenue": 4.166291941134005,
+    "ev_ebitda": 17.608138483723316,
+    "ev_ebit": 17.608138483723316,
+    "revenue_growth": -0.5455180406416607,
+    "net_income_growth": -0.7193087720070271,
+    "gross_margin": 0.7754184152047013,
+    "ebitda_margin": 0.23661172048284712,
+    "ebit_margin": 0.23661172048284712,
+    "roe": 0.07625684278981859,
+    "market_cap": 293255484777.75,
+    "net_debt": -126650293546.02,
+    "ebitda": 9589520425.34,
+    "ebit": 9589520425.34,
+    "revenue": 40528509770.23,
+    "net_income": 9317113184.68,
+    "equity": 122180683645.14,
+    "cfo": 29706259919.13,
+    "note": "",
+    "selection_reason": "高端白酒双寡头之一，产品结构与渠道模式最接近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "泸州老窖",
+    "ticker": "000568",
+    "industry": "白酒Ⅱ",
+    "pe": 10.95125380980926,
+    "pe_forward": null,
+    "pb": 2.3836421582727887,
+    "ps": 4.622035249236783,
+    "pcf": 16.696053229380237,
+    "peg": null,
+    "ev_revenue": 3.824304732118213,
+    "ev_ebitda": 6.9432334561036315,
+    "ev_ebit": 6.9432334561036315,
+    "revenue_growth": -0.17518893696808957,
+    "net_income_growth": -0.19542977956453966,
+    "gross_margin": 0.8662411815119095,
+    "ebitda_margin": 0.5507959304978226,
+    "ebit_margin": 0.5507959304978226,
+    "roe": 0.21765929268644216,
+    "market_cap": 118929638210.4,
+    "net_debt": -20640201174.39,
+    "ebitda": 14172535952.140001,
+    "ebit": 14172535952.140001,
+    "revenue": 25731010647.32,
+    "net_income": 10859910680.17,
+    "equity": 49894082380.46,
+    "cfo": 7123218677.88,
+    "note": "",
+    "selection_reason": "高端白酒全国化品牌，国窖系列与标的价格带重叠",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "山西汾酒",
+    "ticker": "600809",
+    "industry": "白酒Ⅱ",
+    "pe": 13.204511495553518,
+    "pe_forward": null,
+    "pb": 4.045221942074077,
+    "ps": 4.193185553413062,
+    "pcf": 18.01214640531338,
+    "peg": 38.37616579635429,
+    "ev_revenue": 3.958761017853013,
+    "ev_ebitda": 9.210588013965776,
+    "ev_ebit": 9.210588013965776,
+    "revenue_growth": 0.07517885961355919,
+    "net_income_growth": 0.003440810519118598,
+    "gross_margin": 0.7485250456552095,
+    "ebitda_margin": 0.42980545996091085,
+    "ebit_margin": 0.42980545996091085,
+    "roe": 0.3063515029265765,
+    "market_cap": 162352838663.76,
+    "net_debt": -9577839851.35,
+    "ebitda": 16641318541.47,
+    "ebit": 16641318541.47,
+    "revenue": 38718257657.74,
+    "net_income": 12295255202.62,
+    "equity": 40134469996.6,
+    "cfo": 9013519822.15,
+    "note": "",
+    "selection_reason": "清香型龙头，全国化扩张阶段与标的可比",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "洋河股份",
+    "ticker": "002304",
+    "industry": "白酒Ⅱ",
+    "pe": 26.526237429529015,
+    "pe_forward": null,
+    "pb": 1.2393781760160236,
+    "ps": 3.0252707646579653,
+    "pcf": null,
+    "peg": null,
+    "ev_revenue": 2.3465897733489176,
+    "ev_ebitda": 14.11824586928428,
+    "ev_ebit": 14.11824586928428,
+    "revenue_growth": -0.3347118705236183,
+    "net_income_growth": -0.6713415012981896,
+    "gross_margin": 0.716021728406869,
+    "ebitda_margin": 0.16620972570354292,
+    "ebit_margin": 0.16620972570354292,
+    "roe": 0.046722727989923954,
+    "market_cap": 58118650954.92,
+    "net_debt": -13134401589.710001,
+    "ebitda": 3193064616.34,
+    "ebit": 3193064616.34,
+    "revenue": 19211057613.05,
+    "net_income": 2190987361.45,
+    "equity": 46893395478.16,
+    "cfo": -763040326.79,
+    "note": "",
+    "selection_reason": "次高端龙头，渠道与品牌运作模式相近",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "古井贡酒",
+    "ticker": "000596",
+    "industry": "白酒Ⅱ",
+    "pe": 15.285096461692392,
+    "pe_forward": null,
+    "pb": 2.131693355638463,
+    "ps": 2.9548520306026886,
+    "pcf": 28.577111316159844,
+    "peg": null,
+    "ev_revenue": 2.284322652683455,
+    "ev_ebitda": 9.525675450941206,
+    "ev_ebit": 9.525675450941206,
+    "revenue_growth": -0.20128763907782854,
+    "net_income_growth": -0.36205199351606165,
+    "gross_margin": 0.7925603546390718,
+    "ebitda_margin": 0.23980689500162922,
+    "ebit_margin": 0.23980689500162922,
+    "roe": 0.13946221150654342,
+    "market_cap": 55645722000.0,
+    "net_debt": -13681179993.609999,
+    "ebitda": 4516039271.93,
+    "ebit": 4516039271.93,
+    "revenue": 18831982591.24,
+    "net_income": 3640521480.48,
+    "equity": 26103999364.08,
+    "cfo": 1947212977.0,
+    "note": "",
+    "selection_reason": "区域龙头全国化，盈利结构与标的同属白酒",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   },
+   {
+    "name": "今世缘",
+    "ticker": "603369",
+    "industry": "白酒Ⅱ",
+    "pe": 16.822307609464193,
+    "pe_forward": null,
+    "pb": 2.644515087998775,
+    "ps": 4.301668127063955,
+    "pcf": 29.042094780179166,
+    "peg": null,
+    "ev_revenue": 3.910043916844086,
+    "ev_ebitda": 11.78047822776962,
+    "ev_ebit": 11.78047822776962,
+    "revenue_growth": -0.11810355673359707,
+    "net_income_growth": -0.2368852009321032,
+    "gross_margin": 0.7425177449997818,
+    "ebitda_margin": 0.33190875966538486,
+    "ebit_margin": 0.33190875966538486,
+    "roe": 0.15720287307735217,
+    "market_cap": 43800085299.810005,
+    "net_debt": -3987563267.6499996,
+    "ebitda": 3379533603.17,
+    "ebit": 3379533603.17,
+    "revenue": 10182116333.95,
+    "net_income": 2603690665.79,
+    "equity": 16562615013.46,
+    "cfo": 1508158610.16,
+    "note": "",
+    "selection_reason": "区域次高端白酒，增速与利润率可作参照",
+    "selection_score": null,
+    "tier": "curated",
+    "caliber": "LYR",
+    "source": "新浪财经·年报 + 东方财富·行情",
+    "as_of": "2026-11-04",
+    "data_ok": true
+   }
+  ],
+  "theme": "白酒",
+  "sector": "消费",
+  "tier": "curated",
+  "selection_note": "按行业「白酒Ⅱ」匹配到配置池「白酒」，逐家披露选取理由；剔除标的后取 6 家。",
+  "missing": [],
+  "warnings": []
+ },
+ "segment_meta": {
+  "raw_count": 2,
+  "chosen_count": 2,
+  "covered_revenue": 168774585187.65,
+  "total_revenue": 172054171890.91,
+  "coverage": 0.9809386388762522,
+  "expanded_children": false
+ },
+ "segment_source": "联网年报·主营业务分产品",
+ "data_source": {
+  "requested": "web",
+  "used": "web_evidence",
+  "fallback": false
+ },
+ "gates": [
+  {
+   "code": "TV_METHOD_DIVERGENCE",
+   "severity": "warn",
+   "message": "Gordon 与退出倍数终值相差 66%，已取中点。",
+   "affected_paths": [
+    "dcf.tv_base"
+   ]
+  },
+  {
+   "code": "METHOD_DIVERGENCE",
+   "severity": "warn",
+   "message": "方法间估值分歧 58%，加权平均的参考价值有限；规则已按可靠性确定主方法并降低其余权重。",
+   "affected_paths": [
+    "valuation.blended"
+   ]
+  },
+  {
+   "code": "DATA_ESTIMATED",
+   "severity": "info",
+   "message": "未提供总部费用，按「营业收入 × 2% × 8 倍」估算为 275.3 亿元，并从分部价值中扣除。",
+   "affected_paths": [
+    "valuation.assumptions"
+   ]
+  }
+ ],
+ "warnings": [
+  "终值两种算法偏离 66%（Gordon 30,276 亿元 vs 退出倍数 15,298 亿元），已取中点。根因多半是 WACC−g 只有 3.50%，分母过小会放大 Gordon 终值。",
+  "目标首年增速 5.3% 比同业中位 -17.5% 高 23pp，可能偏乐观；若行业处于下行周期，请下调增速或核对一致预期。",
+  "市盈率 PE 同业离散度（IQR/中位）65% 偏高，说明样本估值分歧大，中位数的代表性下降。",
+  "未提供总部费用，按「营业收入 × 2% × 8 倍」估算为 275.3 亿元，并从分部价值中扣除。",
+  "SOTP 合计隐含 EV/收入 7.9x，与公司整体同业中位 3.9x 相差 104%，分部倍数或收入口径需复核。"
+ ],
+ "sources": [
+  {
+   "name": "年报 PDF·2025",
+   "purpose": "财务报表/分部",
+   "as_of": "2025-12-31",
+   "official": true,
+   "note": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+  },
+  {
+   "name": "年报 PDF·2024",
+   "purpose": "财务报表/分部",
+   "as_of": "2024-12-31",
+   "official": true,
+   "note": "https://static.cninfo.com.cn/finalpage/2025-04-03/1222993920.PDF"
+  },
+  {
+   "name": "年报 PDF·主营业务分产品",
+   "purpose": "分部收入",
+   "as_of": "2026-11-04",
+   "official": true,
+   "note": ""
+  },
+  {
+   "name": "新浪财经·财务报表",
+   "purpose": "历史财务",
+   "as_of": "2026-11-04",
+   "official": false,
+   "note": ""
+  },
+  {
+   "name": "东方财富·公司信息",
+   "purpose": "行情/行业/股本",
+   "as_of": "2026-11-04",
+   "official": false,
+   "note": ""
+  },
+  {
+   "name": "中债 10 年期国债收益率（2026-11-02）",
+   "purpose": "无风险利率",
+   "as_of": "2026-11-02",
+   "official": true,
+   "note": ""
+  },
+  {
+   "name": "Damodaran 国家风险溢价表",
+   "purpose": "ERP",
+   "as_of": "2026-11-04",
+   "official": true,
+   "note": "取中国/美国市场对应值"
+  }
+ ],
+ "disclaimer": "本结果由模型按既定假设计算，仅供研究与教学用途，不构成投资建议。估值结论依赖假设，假设比模型重要。",
+ "valuation_range": {
+  "low": 1661634747380.7163,
+  "mid": 1721022621725.145,
+  "high": 1780410496069.5737,
+  "low_per_share": 1329.2210252926652,
+  "mid_per_share": 1376.728223460306,
+  "high_per_share": 1424.2354216279468,
+  "basis": "各选用倍数隐含股权价值的最小/中位/最大"
+ },
+ "presentation": {
+  "narrative": {
+   "headline": "按规则层选定的方法组合，600519 的每股价值约 1,592.41 CNY，较现价 1,480.00 有7.6%上行空间，判断为「估值分歧较大（区间参考）」。综合置信度：低。 方法区间为每股 1,104.04–1,739.39 元，现价位于区间 59% 分位；单点加权值仅作参考，不宜直接当作目标价。",
+   "verdict": "估值分歧较大（区间参考）",
+   "confidence": "低",
+   "sections": [
+    {
+     "title": "结论摘要",
+     "kind": "text",
+     "paragraphs": [
+      "按规则层选定的方法组合，600519 的每股价值约 1,592.41 CNY，较现价 1,480.00 有7.6%上行空间，判断为「估值分歧较大（区间参考）」。综合置信度：低。 方法区间为每股 1,104.04–1,739.39 元，现价位于区间 59% 分位；单点加权值仅作参考，不宜直接当作目标价。",
+      "本次采用：DCF（收益法） 70.0%；Comps（相对估值） 16.0%；SOTP（分部估值） 14.0%。权重规则：默认权重：有分部 DCF 40% / Comps 30% / SOTP 30%；已按各方法可靠性调整；方法分歧 58%，改以可靠性更高的 dcf 为主（70%），其余方法降为参考。 方法之间的估值分歧为 57.5%；分歧超过 50%，规则层已降低次要方法权重，以可靠性更高的方法为主。 主方法为 DCF（收益法）。"
+     ],
+     "metrics": [
+      {
+       "label": "融合每股价值",
+       "value": 1592.4135163116987,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "当前股价",
+       "value": 1480.0,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "上行/下行空间",
+       "value": 0.07595507858898554,
+       "unit": "%",
+       "fmt": "pct"
+      },
+      {
+       "label": "估值判断",
+       "value": "估值分歧较大（区间参考）",
+       "unit": "",
+       "fmt": "text"
+      },
+      {
+       "label": "置信度",
+       "value": "低",
+       "unit": "",
+       "fmt": "text"
+      }
+     ]
+    },
+    {
+     "title": "方法选择与权重",
+     "kind": "text",
+     "paragraphs": [
+      "自动模式：运行所有结构上适用的方法，并按规则定权融合。",
+      "行业门槛：支持。行业适用标准估值方法。",
+      "可靠性评分：DCF（收益法） 80.0 分（高）；Comps（相对估值） 80.0 分（高）；SOTP（分部估值） 70.0 分（中）。"
+     ],
+     "metrics": []
+    },
+    {
+     "title": "相对估值（Comps）",
+     "kind": "text",
+     "paragraphs": [
+      "按行业「白酒Ⅱ」匹配到配置池「白酒」，逐家披露选取理由；剔除标的后取 6 家。",
+      "可比公司：五粮液（000858）、泸州老窖（000568）、山西汾酒（600809）、洋河股份（002304）、古井贡酒（000596）、今世缘（603369）。逐家选取理由见下表。",
+      "市盈率 PE：同业中位 16.05x（6 家），调整 +30.0% 后采用 20.87x，隐含股权价值 17,804.1 亿元、每股 1,424.24 元。调整理由：目标增速 5.3% 高于同业中位 -17.5% 23pp，上调 27%；目标 EBIT 利润率 66.3% 高于同业 28.6%，上调 20%。",
+      "EV/EBITDA：同业中位 10.65x（6 家），调整 +30.0% 后采用 13.85x，隐含股权价值 16,616.3 亿元、每股 1,329.22 元。调整理由：目标增速 5.3% 高于同业中位 -17.5% 23pp，上调 27%；目标 EBIT 利润率 66.3% 高于同业 28.6%，上调 20%。",
+      "目标估值水平：市盈率 PE 21.69x，较同业中位 16.05x 溢价 35.1%，位于同业 67 分位；EV/EBITDA 15.47x，较同业中位 10.65x 溢价 45.2%，位于同业 83 分位。",
+      "相对估值区间：每股 1,329.22–1,424.24 元，中位 1,376.73 元。"
+     ],
+     "metrics": [
+      {
+       "label": "同业中位隐含每股",
+       "value": 1376.728223460306,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "区间下限",
+       "value": 1329.2210252926652,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "区间上限",
+       "value": 1424.2354216279468,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "采用倍数",
+       "value": 2,
+       "unit": "个",
+       "fmt": "int"
+      }
+     ]
+    },
+    {
+     "title": "绝对估值（DCF / FCFF）",
+     "kind": "text",
+     "paragraphs": [
+      "预测期 5 年；首年收入增速 5.3%，线性衰减至永续增长率 2.5%；EBIT 利润率 67.7%，资本开支/收入 1.8%，折旧摊销/收入 1.3%，营运资本增加/收入 0.3%，所得税率 25.3%。",
+      "WACC：rf 1.6% + β 0.85 × ERP 5.1%（+ 规模溢价 0.0%）= Ke 6.0%；Kd 3.5%，D/(D+E) 0.0%，CAPM WACC 6.0%，最终采用 6.0%。",
+      "终值：Gordon 30,276.1 亿元、退出倍数 15,298.0 亿元、ROIC 再投资口径 23,091.3 亿元，采用 22,787.1 亿元；终值占企业价值 80.2%。",
+      "DCF 结论：企业价值 21,227.3 亿元，股权价值 21,743.8 亿元，每股 1,739.39 元。"
+     ],
+     "metrics": [
+      {
+       "label": "DCF 每股价值",
+       "value": 1739.387482183304,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "WACC",
+       "value": 0.06003219006285115,
+       "unit": "%",
+       "fmt": "pct"
+      },
+      {
+       "label": "永续增长率",
+       "value": 0.025,
+       "unit": "%",
+       "fmt": "pct"
+      },
+      {
+       "label": "终值占比",
+       "value": 0.8020436535671729,
+       "unit": "%",
+       "fmt": "pct"
+      }
+     ]
+    },
+    {
+     "title": "分部估值（SOTP）",
+     "kind": "text",
+     "paragraphs": [
+      "分部来源：联网年报·主营业务分产品；收入覆盖 98.1%。",
+      "茅台酒：收入 1,465.0 亿元，采用 ev_ebitda 11.66x（五粮液, 泸州老窖, 山西汾酒, 洋河股份），分部 EV 12,067.1 亿元。",
+      "其他系列酒：收入 222.7 亿元，采用 ev_ebitda 11.66x（五粮液, 泸州老窖, 山西汾酒, 洋河股份），分部 EV 1,493.1 亿元。",
+      "分部 EV 合计 13,560.2 亿元，扣总部费用 275.3 亿元、净负债 -516.5 亿元后，股权价值 13,801.4 亿元，每股 1,104.04 元。",
+      "SOTP 每股相对现价：-34.1%（SOTP 低于现价，现价相对分部价值溢价）。"
+     ],
+     "metrics": [
+      {
+       "label": "SOTP 每股价值",
+       "value": 1104.0411644981227,
+       "unit": "CNY",
+       "fmt": "money"
+      },
+      {
+       "label": "分部数量",
+       "value": 2,
+       "unit": "个",
+       "fmt": "int"
+      },
+      {
+       "label": "收入覆盖",
+       "value": 0.9809386388762522,
+       "unit": "%",
+       "fmt": "pct"
+      }
+     ]
+    },
+    {
+     "title": "三情景",
+     "kind": "text",
+     "paragraphs": [
+      "乐观：每股 2,413.97 元；首年增速 8.3%、EBIT 利润率 69.7%、WACC 5.0%。",
+      "基准：每股 1,739.39 元；首年增速 5.3%、EBIT 利润率 67.7%、WACC 6.0%。",
+      "悲观：每股 1,342.04 元；首年增速 2.3%、EBIT 利润率 65.7%、WACC 7.0%。"
+     ],
+     "metrics": []
+    },
+    {
+     "title": "关键风险与待核验",
+     "kind": "text",
+     "paragraphs": [
+      "[warn] Gordon 与退出倍数终值相差 66%，已取中点。",
+      "[warn] 方法间估值分歧 58%，加权平均的参考价值有限；规则已按可靠性确定主方法并降低其余权重。",
+      "[info] 未提供总部费用，按「营业收入 × 2% × 8 倍」估算为 275.3 亿元，并从分部价值中扣除。",
+      "终值两种算法偏离 66%（Gordon 30,276 亿元 vs 退出倍数 15,298 亿元），已取中点。根因多半是 WACC−g 只有 3.50%，分母过小会放大 Gordon 终值。",
+      "目标首年增速 5.3% 比同业中位 -17.5% 高 23pp，可能偏乐观；若行业处于下行周期，请下调增速或核对一致预期。",
+      "市盈率 PE 同业离散度（IQR/中位）65% 偏高，说明样本估值分歧大，中位数的代表性下降。",
+      "未提供总部费用，按「营业收入 × 2% × 8 倍」估算为 275.3 亿元，并从分部价值中扣除。",
+      "SOTP 合计隐含 EV/收入 7.9x，与公司整体同业中位 3.9x 相差 104%，分部倍数或收入口径需复核。"
+     ],
+     "metrics": []
+    }
+   ],
+   "disclaimer": "本结果由模型按既定假设计算，仅供研究与教学用途，不构成投资建议。估值结论依赖假设，假设比模型重要。"
+  },
+  "charts": {
+   "dcf_forecast": {
+    "title": "未来 5 年收入、EBIT 与自由现金流预测",
+    "unit": "亿元",
+    "years": [
+     2026,
+     2027,
+     2028,
+     2029,
+     2030
+    ],
+    "series": {
+     "revenue": [
+      1811.38,
+      1894.44,
+      1968.13,
+      2031.01,
+      2081.78
+     ],
+     "ebit": [
+      1226.18,
+      1282.4,
+      1332.29,
+      1374.86,
+      1409.23
+     ],
+     "fcff": [
+      900.36,
+      941.65,
+      978.28,
+      1009.53,
+      1034.77
+     ],
+     "capex": [
+      32.93,
+      34.44,
+      35.78,
+      36.92,
+      37.84
+     ],
+     "da": [
+      23.31,
+      24.38,
+      25.33,
+      26.14,
+      26.79
+     ],
+     "delta_nwc": [
+      5.62,
+      5.87,
+      6.1,
+      6.3,
+      6.45
+     ]
+    },
+    "ratios": {
+     "growth": [
+      0.05279905573906949,
+      0.04584929180430212,
+      0.038899527869534746,
+      0.031949763934767374,
+      0.025
+     ],
+     "ebit_margin": [
+      0.6769323054265673,
+      0.6769323054265673,
+      0.6769323054265673,
+      0.6769323054265673,
+      0.6769323054265673
+     ],
+     "capex_pct": [
+      0.018177966172148584,
+      0.018177966172148584,
+      0.018177966172148584,
+      0.018177966172148584,
+      0.018177966172148584
+     ],
+     "da_pct": [
+      0.012868039694970837,
+      0.012868039694970837,
+      0.012868039694970837,
+      0.012868039694970837,
+      0.012868039694970837
+     ],
+     "nwc_pct": [
+      0.003099888709939956,
+      0.003099888709939956,
+      0.003099888709939956,
+      0.003099888709939956,
+      0.003099888709939956
+     ]
+    },
+    "base_year": 2025
+   },
+   "tv_composition": {
+    "title": "终值三种口径与企业价值构成",
+    "unit": "亿元",
+    "items": [
+     {
+      "label": "Gordon 永续法",
+      "value": 30276.12
+     },
+     {
+      "label": "退出倍数法",
+      "value": 15297.99
+     },
+     {
+      "label": "ROIC 再投资法",
+      "value": 23091.28
+     },
+     {
+      "label": "采用终值",
+      "value": 22787.05
+     }
+    ],
+    "tv_ratio": 0.8020436535671729
+   },
+   "valuation_range": {
+    "title": "估值水平：相对估值区间 vs 现价 vs 融合值",
+    "unit": "CNY",
+    "low": 1329.2210252926652,
+    "mid": 1376.728223460306,
+    "high": 1424.2354216279468,
+    "price": 1480.0,
+    "blended": 1592.4135163116987,
+    "dcf": 1739.387482183304,
+    "sotp": 1104.0411644981227
+   },
+   "sensitivity_wacc_g": {
+    "kind": "wacc_g",
+    "title": "WACC × 永续增长率：每股价值",
+    "unit": "元/股",
+    "wacc_axis": [
+     0.050032190062851145,
+     0.05503219006285115,
+     0.06003219006285115,
+     0.06503219006285114,
+     0.07003219006285115
+    ],
+    "growth_axis": [
+     0.015000000000000001,
+     0.02,
+     0.025,
+     0.030000000000000002,
+     0.035
+    ],
+    "grid": [
+     [
+      1766.8441579697173,
+      1945.2788698440504,
+      2192.4081044412783,
+      2559.6300112107856,
+      3166.7264891060004
+     ],
+     [
+      1618.5628930329308,
+      1753.0131808242963,
+      1930.1323688804778,
+      2175.4576893577964,
+      2540.0223037993464
+     ],
+     [
+      1500.749475978567,
+      1605.9325233106404,
+      1739.387482183304,
+      1915.2097993936607,
+      2158.7565700876166
+     ],
+     [
+      1404.3595864423942,
+      1489.0885620068327,
+      1593.489090092284,
+      1725.9628812737449,
+      1900.506613370954
+     ],
+     [
+      1323.6323325572764,
+      1393.5045221191876,
+      1477.5996139848498,
+      1581.2287991421638,
+      1712.7353041608944
+     ]
+    ],
+    "matrix": [
+     [
+      1766.8441579697173,
+      1945.2788698440504,
+      2192.4081044412783,
+      2559.6300112107856,
+      3166.7264891060004
+     ],
+     [
+      1618.5628930329308,
+      1753.0131808242963,
+      1930.1323688804778,
+      2175.4576893577964,
+      2540.0223037993464
+     ],
+     [
+      1500.749475978567,
+      1605.9325233106404,
+      1739.387482183304,
+      1915.2097993936607,
+      2158.7565700876166
+     ],
+     [
+      1404.3595864423942,
+      1489.0885620068327,
+      1593.489090092284,
+      1725.9628812737449,
+      1900.506613370954
+     ],
+     [
+      1323.6323325572764,
+      1393.5045221191876,
+      1477.5996139848498,
+      1581.2287991421638,
+      1712.7353041608944
+     ]
+    ],
+    "base_wacc": 0.06003219006285115,
+    "base_growth": 0.025,
+    "base_index": {
+     "x": 2,
+     "y": 2
+    },
+    "note": "行=WACC，列=永续增长率；WACC≤g 的格子无解，写 null。"
+   },
+   "sensitivity_growth_margin": {
+    "kind": "growth_margin",
+    "title": "首年收入增速 × EBIT 利润率：每股价值",
+    "unit": "元/股",
+    "growth_axis": [
+     0.04279905573906949,
+     0.04779905573906949,
+     0.05279905573906949,
+     0.05779905573906949,
+     0.06279905573906949
+    ],
+    "margin_axis": [
+     0.6669323054265673,
+     0.6719323054265673,
+     0.6769323054265673,
+     0.6819323054265674,
+     0.6869323054265674
+    ],
+    "grid": [
+     [
+      1676.0838294301334,
+      1695.0243043075193,
+      1714.1184768687572,
+      1733.3671198948052,
+      1752.7710079169601
+     ],
+     [
+      1688.4311788319567,
+      1707.51465038207,
+      1726.7529795260305,
+      1746.1469448750775,
+      1765.6973268039933
+     ],
+     [
+      1700.7785282337798,
+      1720.004996456621,
+      1739.387482183304,
+      1758.9267698553497,
+      1778.6236456910265
+     ],
+     [
+      1713.1258776356035,
+      1732.495342531172,
+      1752.0219848405768,
+      1771.7065948356226,
+      1791.5499645780599
+     ],
+     [
+      1725.473227037427,
+      1744.9856886057232,
+      1764.6564874978503,
+      1784.4864198158948,
+      1804.4762834650933
+     ]
+    ],
+    "matrix": [
+     [
+      1676.0838294301334,
+      1695.0243043075193,
+      1714.1184768687572,
+      1733.3671198948052,
+      1752.7710079169601
+     ],
+     [
+      1688.4311788319567,
+      1707.51465038207,
+      1726.7529795260305,
+      1746.1469448750775,
+      1765.6973268039933
+     ],
+     [
+      1700.7785282337798,
+      1720.004996456621,
+      1739.387482183304,
+      1758.9267698553497,
+      1778.6236456910265
+     ],
+     [
+      1713.1258776356035,
+      1732.495342531172,
+      1752.0219848405768,
+      1771.7065948356226,
+      1791.5499645780599
+     ],
+     [
+      1725.473227037427,
+      1744.9856886057232,
+      1764.6564874978503,
+      1784.4864198158948,
+      1804.4762834650933
+     ]
+    ],
+    "base_growth": 0.05279905573906949,
+    "base_margin": 0.6769323054265673,
+    "base_index": {
+     "x": 2,
+     "y": 2
+    },
+    "note": "行=EBIT 利润率，列=首年收入增速；WACC 与 g 固定在基准值。"
+   },
+   "scenarios": {
+    "title": "Bull / Base / Bear 每股价值",
+    "unit": "CNY",
+    "labels": [
+     "乐观",
+     "基准",
+     "悲观"
+    ],
+    "values": [
+     2413.9690428707804,
+     1739.387482183304,
+     1342.0409568119346
+    ],
+    "levers": [
+     "收入增速 +3%、EBIT 利润率 +2%、WACC -1.0%",
+     "历史中位数 / 当前资本结构",
+     "收入增速 -3%、EBIT 利润率 -2%、WACC +1.0%"
+    ]
+   },
+   "comps_position": {
+    "title": "目标公司倍数在同业分布中的位置",
+    "items": [
+     {
+      "multiple": "pe",
+      "label": "市盈率 PE",
+      "target": 21.686950238288162,
+      "peer_median": 16.053702035578294,
+      "peer_min": 10.95125380980926,
+      "peer_max": 31.474929945033395,
+      "percentile": 66.66666666666666,
+      "premium_discount": 0.3509002590321806
+     },
+     {
+      "multiple": "ev_ebitda",
+      "label": "EV/EBITDA",
+      "target": 15.470341834479184,
+      "peer_median": 10.653076839355414,
+      "peer_min": 6.9432334561036315,
+      "peer_max": 17.608138483723316,
+      "percentile": 83.33333333333334,
+      "premium_discount": 0.4521947102951007
+     }
+    ],
+    "peer_count": 6
+   },
+   "weights": {
+    "title": "方法权重与可靠性",
+    "items": [
+     {
+      "method": "dcf",
+      "label": "DCF（收益法）",
+      "weight": 0.7,
+      "reliability": 80.0
+     },
+     {
+      "method": "comps",
+      "label": "Comps（相对估值）",
+      "weight": 0.16,
+      "reliability": 80.0
+     },
+     {
+      "method": "sotp",
+      "label": "SOTP（分部估值）",
+      "weight": 0.14,
+      "reliability": 70.0
+     }
+    ]
+   }
+  }
+ },
+ "excel_path": null
+}

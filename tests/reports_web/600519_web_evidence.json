@@ -1,0 +1,372 @@
+{
+ "ok": true,
+ "financials": {
+  "years": [
+   2023,
+   2024,
+   2025
+  ],
+  "revenue": [
+   150560330316.45,
+   174144069958.25,
+   172054171890.91
+  ],
+  "cogs": [
+   11867273851.78,
+   13789482367.98,
+   14892277570.91
+  ],
+  "gross_profit": [
+   138693056464.67,
+   160354587590.27,
+   157161894320.0
+  ],
+  "ebit": [
+   101919151506.90001,
+   118218359589.89,
+   113993709879.52
+  ],
+  "operating_profit": [
+   103708655208.38,
+   119688579453.23,
+   114808950164.24
+  ],
+  "pretax_income": [
+   103662553689.81,
+   119638578194.46,
+   114755261605.08
+  ],
+  "tax_provision": [
+   10015846339.04,
+   30303850168.56,
+   29444936771.41
+  ],
+  "net_income": [
+   64786396951.58,
+   89334728025.9,
+   85310324833.67
+  ],
+  "net_income_parent": [
+   74734071550.75,
+   null,
+   82320067101.68
+  ],
+  "finance_expense": [
+   -1789503701.48,
+   -1470219863.34,
+   -815240284.72
+  ],
+  "interest_expense": [
+   12624628.35,
+   14474584.09,
+   28734948.29
+  ],
+  "eps": [
+   51.57,
+   60.79,
+   68.05
+  ],
+  "da": [
+   1937416307.0,
+   2085019615.1200001,
+   2259387054.28
+  ],
+  "capex": [
+   2619755888.79,
+   4678712053.56,
+   3127594916.41
+  ],
+  "cfo": [
+   66593247721.09,
+   92463692168.43,
+   61522204989.35
+  ],
+  "dividends_paid": [
+   58754786730.01,
+   70951027702.94,
+   67241733345.45
+  ],
+  "receivables": [
+   60373410.41,
+   18974192.75,
+   2609048.49
+  ],
+  "inventory": [
+   -7610810825.29,
+   -7908100095.94,
+   -7084136638.71
+  ],
+  "payables": [
+   3093091103.67,
+   3514969230.31,
+   4007309049.87
+  ],
+  "delta_nwc": [
+   null,
+   -760566614.9500008,
+   315258493.40999985
+  ],
+  "cash": 51690610946.5,
+  "total_debt": 44206237.05,
+  "minority": 784112.18,
+  "total_equity": 178999246453.61,
+  "total_assets": 303834844021.44,
+  "shares": 1252270215.0,
+  "minority_interest": 784112.18,
+  "preferred_stock": 0.0
+ },
+ "segments": [
+  {
+   "name": "茅台酒",
+   "level": "top",
+   "parent": "",
+   "revenue": 146499906480.49,
+   "cost": 9484757825.54,
+   "gross_profit": 137015148654.94998,
+   "gross_margin": 0.9353,
+   "revenue_share": 0.8514754676996582,
+   "period": "2025-12-31",
+   "source": "年报第 10 页·主营业务分产品"
+  },
+  {
+   "name": "其他系列酒",
+   "level": "top",
+   "parent": "",
+   "revenue": 22274678707.16,
+   "cost": 5321142314.05,
+   "gross_profit": 16953536393.11,
+   "gross_margin": 0.7611,
+   "revenue_share": 0.12946317117659395,
+   "period": "2025-12-31",
+   "source": "年报第 10 页·主营业务分产品"
+  }
+ ],
+ "sources": [
+  {
+   "name": "年报 PDF·2025",
+   "purpose": "财务报表/分部",
+   "as_of": "2025-12-31",
+   "official": true,
+   "note": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+  },
+  {
+   "name": "年报 PDF·2024",
+   "purpose": "财务报表/分部",
+   "as_of": "2024-12-31",
+   "official": true,
+   "note": "https://static.cninfo.com.cn/finalpage/2025-04-03/1222993920.PDF"
+  }
+ ],
+ "reports": [
+  {
+   "ok": true,
+   "pdf": "D:\\研一\\Agent最终产品\\FinScope中期汇报\\final\\Finscope-C-\\Finscope-C-Comps-DCF\\valuation\\.cache\\web\\pdfs\\600519_2025.pdf",
+   "report_year": 2025,
+   "unit_scale": 1.0,
+   "years": {
+    "2025": {
+     "revenue": 172054171890.91,
+     "pretax_income": 114755261605.08,
+     "cfo": 61522204989.35,
+     "shares": 1252270215.0,
+     "eps": 68.05,
+     "minority": 784112.18,
+     "cogs": 14892277570.91,
+     "finance_expense": -815240284.72,
+     "capex": 3127594916.41,
+     "cash": 51690610946.5,
+     "receivables": 2609048.49,
+     "inventory": -7084136638.71,
+     "current_portion": 44206237.05,
+     "total_assets": 303834844021.44,
+     "payables": 4007309049.87,
+     "total_equity": 178999246453.61,
+     "revenue_total": 172054171890.91,
+     "interest_expense": 28734948.29,
+     "operating_profit": 114808950164.24,
+     "tax_provision": 29444936771.41,
+     "net_income": 85310324833.67,
+     "net_income_parent": 82320067101.68,
+     "dividends_paid": 67241733345.45,
+     "amort_intangible": 289613682.99,
+     "dep_fixed": 1893338311.91,
+     "dep_use_right": 55797324.89,
+     "amort_lt_prepaid": 20637734.49,
+     "gross_profit": 157161894320.0,
+     "ebit": 113993709879.52,
+     "da": 2259387054.28,
+     "total_debt": 44206237.05
+    },
+    "2024": {
+     "revenue": 174144069958.25,
+     "pretax_income": 119638578194.46,
+     "cfo": 92463692168.43,
+     "shares": 1256197800.0,
+     "eps": 60.79,
+     "minority": 655835.44,
+     "capex": 4678712053.56,
+     "cash": 59295822956.89,
+     "receivables": 18974192.75,
+     "inventory": -7908100095.94,
+     "current_portion": 111951112.2,
+     "total_assets": 298944579918.7,
+     "payables": 3514969230.31,
+     "total_equity": 164486282337.92,
+     "revenue_total": 174144069958.25,
+     "cogs": 13789482367.98,
+     "finance_expense": -1470219863.34,
+     "interest_expense": 14474584.09,
+     "operating_profit": 119688579453.23,
+     "tax_provision": 30303850168.56,
+     "net_income": 89334728025.9,
+     "dividends_paid": 70951027702.94,
+     "amort_intangible": 249170059.35,
+     "dep_fixed": 1721165327.14,
+     "dep_use_right": 94492678.29,
+     "amort_lt_prepaid": 20191550.34,
+     "gross_profit": 160354587590.27,
+     "ebit": 118218359589.89,
+     "da": 2085019615.1200001,
+     "total_debt": 111951112.2
+    }
+   },
+   "segments": [
+    {
+     "name": "茅台酒",
+     "level": "top",
+     "parent": "",
+     "revenue": 146499906480.49,
+     "cost": 9484757825.54,
+     "gross_profit": 137015148654.94998,
+     "gross_margin": 0.9353,
+     "revenue_share": 0.8514754676996582,
+     "period": "2025-12-31",
+     "source": "年报第 10 页·主营业务分产品"
+    },
+    {
+     "name": "其他系列酒",
+     "level": "top",
+     "parent": "",
+     "revenue": 22274678707.16,
+     "cost": 5321142314.05,
+     "gross_profit": 16953536393.11,
+     "gross_margin": 0.7611,
+     "revenue_share": 0.12946317117659395,
+     "period": "2025-12-31",
+     "source": "年报第 10 页·主营业务分产品"
+    }
+   ],
+   "segment_pages": [],
+   "text_chars": 153964,
+   "url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+   "title": "贵州茅台2025年年度报告"
+  },
+  {
+   "ok": true,
+   "pdf": "D:\\研一\\Agent最终产品\\FinScope中期汇报\\final\\Finscope-C-\\Finscope-C-Comps-DCF\\valuation\\.cache\\web\\pdfs\\600519_2024.pdf",
+   "report_year": 2024,
+   "unit_scale": 1.0,
+   "years": {
+    "2024": {
+     "revenue": 174144069958.25,
+     "cfo": 92463692168.43,
+     "shares": 1256197800.0,
+     "eps": 60.79,
+     "cogs": 13789482367.98,
+     "finance_expense": -1470219863.34,
+     "capex": 4678712053.56,
+     "cash": 59295822956.89,
+     "receivables": 18974192.75,
+     "inventory": -7908100095.94,
+     "current_portion": 111951112.2,
+     "total_assets": 298944579918.7,
+     "payables": 3514969230.31,
+     "minority": 8905330721.13,
+     "total_equity": 164486282337.92,
+     "revenue_total": 174144069958.25,
+     "interest_expense": 14474584.09,
+     "operating_profit": 119688579453.23,
+     "pretax_income": 119638578194.46,
+     "tax_provision": 11778037547.21,
+     "net_income": 76370303842.59,
+     "net_income_parent": 86228146421.62,
+     "dividends_paid": 70951027702.94,
+     "amort_intangible": 249170059.35,
+     "dep_fixed": 1721165327.14,
+     "dep_use_right": 94492678.29,
+     "amort_lt_prepaid": 20191550.34,
+     "gross_profit": 160354587590.27,
+     "ebit": 118218359589.89,
+     "da": 2085019615.1200001,
+     "total_debt": 111951112.2
+    },
+    "2023": {
+     "revenue": 150560330316.45,
+     "cfo": 66593247721.09,
+     "shares": 1256197800.0,
+     "eps": 51.57,
+     "minority": 1772852.96,
+     "capex": 2619755888.79,
+     "cash": 69070136376.12,
+     "receivables": 60373410.41,
+     "inventory": -7610810825.29,
+     "current_portion": 57054879.48,
+     "total_assets": 272699660092.25,
+     "payables": 3093091103.67,
+     "total_equity": 156902857627.73,
+     "revenue_total": 150560330316.45,
+     "cogs": 11867273851.78,
+     "finance_expense": -1789503701.48,
+     "interest_expense": 12624628.35,
+     "operating_profit": 103708655208.38,
+     "pretax_income": 103662553689.81,
+     "tax_provision": 10015846339.04,
+     "net_income": 64786396951.58,
+     "net_income_parent": 74734071550.75,
+     "dividends_paid": 58754786730.01,
+     "amort_intangible": 196656866.73,
+     "dep_fixed": 1651428992.2,
+     "dep_use_right": 72443839.21,
+     "amort_lt_prepaid": 16886608.86,
+     "gross_profit": 138693056464.67,
+     "ebit": 101919151506.90001,
+     "da": 1937416307.0,
+     "total_debt": 57054879.48
+    }
+   },
+   "segments": [
+    {
+     "name": "茅台酒",
+     "level": "top",
+     "parent": "",
+     "revenue": 145928075955.31,
+     "cost": 8662079388.78,
+     "gross_profit": 137265996566.53,
+     "gross_margin": 0.9406,
+     "revenue_share": 0.8553221020385241,
+     "period": "2024-12-31",
+     "source": "年报第 9 页·主营业务分产品"
+    },
+    {
+     "name": "其他系列酒",
+     "level": "top",
+     "parent": "",
+     "revenue": 24683762096.71,
+     "cost": 4967916424.11,
+     "gross_profit": 19715845672.6,
+     "gross_margin": 0.7987000000000001,
+     "revenue_share": 0.1446778979614759,
+     "period": "2024-12-31",
+     "source": "年报第 9 页·主营业务分产品"
+    }
+   ],
+   "segment_pages": [],
+   "text_chars": 154890,
+   "url": "https://static.cninfo.com.cn/finalpage/2025-04-03/1222993920.PDF",
+   "title": "贵州茅台2024年年度报告"
+  }
+ ],
+ "warnings": [],
+ "method": "web_search+annual_report_pdf",
+ "as_of": "2025-12-31"
+}
