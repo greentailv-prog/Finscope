@@ -1,0 +1,255 @@
+{
+  "engine": {
+    "engine_checks_total": 45,
+    "engine_checks_failed": 0,
+    "engine_arithmetic_pass": true,
+    "checks": [
+      {
+        "name": "DCF Y1 FCFF identity",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF Y1 PV identity",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF Y2 FCFF identity",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF Y2 PV identity",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF Y3 FCFF identity",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF Y3 PV identity",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF Y4 FCFF identity",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF Y4 PV identity",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF Y5 FCFF identity",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF Y5 PV identity",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF PV explicit",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF enterprise value",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF EV-to-equity bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "DCF share bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2026 segment revenue",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2026 segment EBIT",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2026 FCFF bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2026 balance sheet",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2026 CFO bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2026 cash flow balance",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2027 segment revenue",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2027 segment EBIT",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2027 FCFF bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2027 balance sheet",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2027 CFO bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2027 cash flow balance",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2028 segment revenue",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2028 segment EBIT",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2028 FCFF bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2028 balance sheet",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2028 CFO bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2028 cash flow balance",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2029 segment revenue",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2029 segment EBIT",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2029 FCFF bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2029 balance sheet",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2029 CFO bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2029 cash flow balance",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2030 segment revenue",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2030 segment EBIT",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2030 FCFF bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2030 balance sheet",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2030 CFO bridge",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "2030 cash flow balance",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "Blended weights and share price",
+        "pass": true,
+        "detail": ""
+      }
+    ]
+  },
+  "workbook": {
+    "file": "valuation/output/SYNTHETIC_ONLY_three_statement_model.xlsx",
+    "xlsx_structure_pass": true,
+    "sheet_count": 5,
+    "sheets": [
+      "分部收入与EBIT",
+      "三表驱动参数",
+      "三表联动预测",
+      "财务一致性校验",
+      "DCF验证"
+    ],
+    "formula_count": 217,
+    "formula_cached_count": 217,
+    "issues": [],
+    "native_excel_calculated": "2026-11-05T22:17:47.5580041+08:00",
+    "EXCEL_OK": true,
+    "status": "EXCEL_OK",
+    "native_check": "valuation/output/SYNTHETIC_ONLY_three_statement_model.native_check.json",
+    "native_engine": "Microsoft Excel COM"
+  },
+  "certification": "EXCEL_OK"
+}

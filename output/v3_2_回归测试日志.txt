@@ -1,0 +1,40 @@
+test_comps_ebitda_requires_da_cannot_assume_zero (test_v3_1_integrity.IntegrityTests.test_comps_ebitda_requires_da_cannot_assume_zero) ... ok
+test_comps_ev_needs_net_debt_cannot_treat_unknown_as_zero (test_v3_1_integrity.IntegrityTests.test_comps_ev_needs_net_debt_cannot_treat_unknown_as_zero) ... ok
+test_comps_forward_pe_without_forward_income_does_not_reuse_trailing (test_v3_1_integrity.IntegrityTests.test_comps_forward_pe_without_forward_income_does_not_reuse_trailing) ... ok
+test_comps_market_ev_without_cash_debt_unknown (test_v3_1_integrity.IntegrityTests.test_comps_market_ev_without_cash_debt_unknown) ... ok
+test_comps_missing_peer_provenance_cannot_be_blended (test_v3_1_integrity.IntegrityTests.test_comps_missing_peer_provenance_cannot_be_blended) ... ok
+test_comps_peg_requires_profit_growth_not_revenue_growth (test_v3_1_integrity.IntegrityTests.test_comps_peg_requires_profit_growth_not_revenue_growth) ... ok
+test_comps_proxy_blocked (test_v3_1_integrity.IntegrityTests.test_comps_proxy_blocked) ... ok
+test_comps_trailing_pe_uses_parent_attributable_earnings (test_v3_1_integrity.IntegrityTests.test_comps_trailing_pe_uses_parent_attributable_earnings) ... ok
+test_comps_with_complete_peer_provenance_not_review_blocked (test_v3_1_integrity.IntegrityTests.test_comps_with_complete_peer_provenance_not_review_blocked) ... ok
+test_dcf_blend_blocks_incoherent_terminals (test_v3_1_integrity.IntegrityTests.test_dcf_blend_blocks_incoherent_terminals) ... ok
+test_dcf_default_market_independent_wacc (test_v3_1_integrity.IntegrityTests.test_dcf_default_market_independent_wacc) ... ok
+test_dcf_missing_assets_not_zero (test_v3_1_integrity.IntegrityTests.test_dcf_missing_assets_not_zero) ... ok
+test_dcf_negative_equity_is_diagnostic_not_price (test_v3_1_integrity.IntegrityTests.test_dcf_negative_equity_is_diagnostic_not_price) ... ok
+test_dcf_nwc_driver_revenue_vs_incremental_revenue (test_v3_1_integrity.IntegrityTests.test_dcf_nwc_driver_revenue_vs_incremental_revenue) ... ok
+test_dcf_without_history_capex_is_marked_for_review (test_v3_1_integrity.IntegrityTests.test_dcf_without_history_capex_is_marked_for_review) ... ok
+test_failed_user_selection_does_not_fallback_to_other_peers (test_v3_1_integrity.IntegrityTests.test_failed_user_selection_does_not_fallback_to_other_peers) ... ok
+test_high_volatility_keeps_latest_year_and_flags_review (test_v3_1_integrity.IntegrityTests.test_high_volatility_keeps_latest_year_and_flags_review) ... ok
+test_robotechnik_requires_business_peer_review_no_network (test_v3_1_integrity.IntegrityTests.test_robotechnik_requires_business_peer_review_no_network) ... ok
+test_sotp_ev_ebit_cannot_borrow_ebitda_multiple (test_v3_1_integrity.IntegrityTests.test_sotp_ev_ebit_cannot_borrow_ebitda_multiple) ... ok
+test_sotp_no_corporate_cost_is_blocked (test_v3_1_integrity.IntegrityTests.test_sotp_no_corporate_cost_is_blocked) ... ok
+test_sotp_reported_components_and_zero_corporate (test_v3_1_integrity.IntegrityTests.test_sotp_reported_components_and_zero_corporate) ... ok
+test_sotp_single_segment_is_not_sotp (test_v3_1_integrity.IntegrityTests.test_sotp_single_segment_is_not_sotp) ... ok
+test_unknown_industry_does_not_use_proxy_no_network (test_v3_1_integrity.IntegrityTests.test_unknown_industry_does_not_use_proxy_no_network) ... ok
+test_analyst_approval_dated_same_segment (test_v3_2_upgrade.UpgradeTests.test_analyst_approval_dated_same_segment) ... ok
+test_asof_market_late_blocks (test_v3_2_upgrade.UpgradeTests.test_asof_market_late_blocks) ... ok
+test_cross_segment_multiples_cannot_pool (test_v3_2_upgrade.UpgradeTests.test_cross_segment_multiples_cannot_pool) ... ok
+test_driver_full_3statements_reconcile (test_v3_2_upgrade.UpgradeTests.test_driver_full_3statements_reconcile) ... ok
+test_legacy_proper_returns (test_v3_2_upgrade.UpgradeTests.test_legacy_proper_returns) ... ok
+test_missing_nwc_blocks (test_v3_2_upgrade.UpgradeTests.test_missing_nwc_blocks) ... ok
+test_negative_cash_is_not_silently_financed (test_v3_2_upgrade.UpgradeTests.test_negative_cash_is_not_silently_financed) ... ok
+test_no_fake_peers (test_v3_2_upgrade.UpgradeTests.test_no_fake_peers) ... ok
+test_research_asof_has_lookahead_gate (test_v3_2_upgrade.UpgradeTests.test_research_asof_has_lookahead_gate) ... ok
+test_robotechnik_unapproved_manual_peers_blocked (test_v3_2_upgrade.UpgradeTests.test_robotechnik_unapproved_manual_peers_blocked) ... ok
+test_segment_revenue_mismatch_blocks (test_v3_2_upgrade.UpgradeTests.test_segment_revenue_mismatch_blocks) ... ok
+test_unbalanced_opening_bs_blocks (test_v3_2_upgrade.UpgradeTests.test_unbalanced_opening_bs_blocks) ... ok
+
+----------------------------------------------------------------------
+Ran 35 tests in 0.010s
+
+OK

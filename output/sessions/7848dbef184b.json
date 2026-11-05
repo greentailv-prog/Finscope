@@ -1,0 +1,1894 @@
+{
+ "id": "7848dbef184b",
+ "ticker": "600519",
+ "market": "A",
+ "method_selection": "dcf",
+ "data_source": "canonical",
+ "assumptions": {
+  "wacc_mode": "manual",
+  "wacc_override": 0.075
+ },
+ "peers": [],
+ "peer_set": [],
+ "segments": [],
+ "web_evidence": null,
+ "inputs": {
+  "schema_version": "2.0",
+  "meta": {
+   "source_mode": "online",
+   "period_type": "annual",
+   "currency": "CNY"
+  },
+  "company": {
+   "name": "",
+   "ticker": "600519",
+   "market": "A",
+   "currency": "CNY",
+   "industry": "白酒Ⅱ",
+   "sector": "",
+   "report_period": "2025-12-31",
+   "price_date": "",
+   "price_time": "",
+   "price_source": "",
+   "listing_date": "",
+   "business": ""
+  },
+  "financials": {
+   "revenue": {
+    "value": 172054171890.91,
+    "series": {
+     "2023": 150560330316.45,
+     "2024": 174144069958.25,
+     "2025": 172054171890.91
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "operating_cost": {
+    "value": 14892277570.91,
+    "series": {
+     "2023": 11867273851.78,
+     "2024": 13789482367.98,
+     "2025": 14892277570.91
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "operating_profit": {
+    "value": 113993709879.52,
+    "series": {
+     "2023": 101919151506.90001,
+     "2024": 118218359589.89,
+     "2025": 113993709879.52
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "net_income": {
+    "value": 85310324833.67,
+    "series": {
+     "2023": 64786396951.58,
+     "2024": 89334728025.9,
+     "2025": 85310324833.67
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "net_income_parent": {
+    "value": 82320067101.68,
+    "series": {
+     "2023": 74734071550.75,
+     "2025": 82320067101.68
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "depreciation_amortization": {
+    "value": 2259387054.28,
+    "series": {
+     "2023": 1937416307.0,
+     "2024": 2085019615.1200001,
+     "2025": 2259387054.28
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "capex": {
+    "value": 3127594916.41,
+    "series": {
+     "2023": 2619755888.79,
+     "2024": 4678712053.56,
+     "2025": 3127594916.41
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "total_debt": {
+    "value": 44206237.05,
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "fixture",
+    "source": "same baseline snapshot"
+   },
+   "cash_and_equivalents": {
+    "value": 51690610946.5,
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "fixture",
+    "source": "same baseline snapshot"
+   }
+  },
+  "market_data": {
+   "price": 1480.0,
+   "shares_outstanding": 1250081601.0,
+   "market_cap": 1850120769480.0,
+   "price_date": "",
+   "price_time": "",
+   "price_source": ""
+  },
+  "sources": [
+   {
+    "source_id": "TEST",
+    "source": "local regression fixture",
+    "source_type": "online",
+    "source_url": "https://example.org/not-live",
+    "page": null
+   }
+  ],
+  "method_selection": "dcf"
+ },
+ "created_at": "2026-11-05 22:38:10",
+ "status": "partial",
+ "result": {
+  "schema_version": "2.0",
+  "status": "partial",
+  "industry_support": "supported",
+  "gate_reason": null,
+  "industry_gate": {
+   "support": "supported",
+   "reason": "行业适用标准估值方法。",
+   "alternatives": [
+    "dcf",
+    "comps"
+   ],
+   "primary_absolute": "dcf"
+  },
+  "company": {
+   "name": "",
+   "ticker": "600519",
+   "market": "A",
+   "currency": "CNY",
+   "industry": "白酒Ⅱ",
+   "sector": "",
+   "report_period": "2025-12-31",
+   "price_date": "",
+   "price_time": "",
+   "price_source": "",
+   "listing_date": "",
+   "business": ""
+  },
+  "as_of": 2025,
+  "currency": "CNY",
+  "market_data": {
+   "price": 1480.0,
+   "shares_outstanding": 1250081601.0,
+   "market_cap": 1850120769480.0,
+   "price_date": "",
+   "price_time": "",
+   "price_source": ""
+  },
+  "method_selection": "dcf",
+  "history": {
+   "years": [
+    2023,
+    2024,
+    2025
+   ],
+   "revenue": [
+    150560330316.45,
+    174144069958.25,
+    172054171890.91
+   ],
+   "ebit": [
+    101919151506.90001,
+    118218359589.89,
+    113993709879.52
+   ],
+   "net_income": [
+    64786396951.58,
+    89334728025.9,
+    85310324833.67
+   ],
+   "net_income_parent": [
+    74734071550.75,
+    null,
+    82320067101.68
+   ],
+   "cogs": [
+    11867273851.78,
+    13789482367.98,
+    14892277570.91
+   ],
+   "gross_profit": [
+    null,
+    null,
+    null
+   ],
+   "da": [
+    1937416307.0,
+    2085019615.1200001,
+    2259387054.28
+   ],
+   "capex": [
+    2619755888.79,
+    4678712053.56,
+    3127594916.41
+   ],
+   "cfo": [
+    null,
+    null,
+    null
+   ],
+   "delta_nwc": [
+    null,
+    null,
+    null
+   ],
+   "revenue_growth": [
+    null,
+    0.15663979743024825,
+    -0.012000971769185353
+   ],
+   "ebit_margin": [
+    0.6769323054265673,
+    0.6788537767506648,
+    0.6625454566239585
+   ],
+   "net_margin": [
+    0.4303019049932406,
+    0.5129932247897816,
+    0.49583409629706937
+   ],
+   "gross_margin": [
+    null,
+    null,
+    null
+   ],
+   "capex_pct": [
+    0.017400040789521096,
+    0.026866904251644595,
+    0.018177966172148584
+   ],
+   "da_pct": [
+    0.012868039694970837,
+    0.011972957882630577,
+    0.013131835336794693
+   ],
+   "nwc_pct": [
+    null,
+    null,
+    null
+   ],
+   "tax_rate": [
+    null,
+    null,
+    null
+   ]
+  },
+  "operating_forecast": {
+   "ok": false,
+   "reason": "未启用分业务预测"
+  },
+  "historical_financials": {
+   "years": [
+    2023,
+    2024,
+    2025
+   ],
+   "revenue": [
+    150560330316.45,
+    174144069958.25,
+    172054171890.91
+   ],
+   "cogs": [
+    11867273851.78,
+    13789482367.98,
+    14892277570.91
+   ],
+   "gross_profit": [
+    null,
+    null,
+    null
+   ],
+   "ebit": [
+    101919151506.90001,
+    118218359589.89,
+    113993709879.52
+   ],
+   "pretax_income": [
+    null,
+    null,
+    null
+   ],
+   "tax_provision": [
+    null,
+    null,
+    null
+   ],
+   "net_income": [
+    64786396951.58,
+    89334728025.9,
+    85310324833.67
+   ],
+   "net_income_parent": [
+    74734071550.75,
+    null,
+    82320067101.68
+   ],
+   "interest_expense": [
+    null,
+    null,
+    null
+   ],
+   "finance_expense": [
+    null,
+    null,
+    null
+   ],
+   "sbc": [],
+   "eps": [
+    null,
+    null,
+    null
+   ],
+   "da": [
+    1937416307.0,
+    2085019615.1200001,
+    2259387054.28
+   ],
+   "capex": [
+    2619755888.79,
+    4678712053.56,
+    3127594916.41
+   ],
+   "delta_nwc": [
+    null,
+    null,
+    null
+   ],
+   "cfo": [
+    null,
+    null,
+    null
+   ],
+   "dividends_paid": [
+    null,
+    null,
+    null
+   ],
+   "total_debt": 44206237.05,
+   "cash": 51690610946.5,
+   "minority_interest": null,
+   "preferred_stock": null,
+   "total_assets": null,
+   "total_equity": null,
+   "current_assets": null,
+   "current_liabilities": null,
+   "inventory": null,
+   "receivables": null,
+   "payables": null,
+   "price": 1480.0,
+   "shares_outstanding": 1250081601.0,
+   "market_cap": 1850120769480.0,
+   "beta": null,
+   "beta_note": "",
+   "industry": "白酒Ⅱ",
+   "sector": "",
+   "price_date": "",
+   "price_time": "",
+   "price_source": "",
+   "data_notes": []
+  },
+  "financial_records": {
+   "revenue": {
+    "value": 172054171890.91,
+    "series": {
+     "2023": 150560330316.45,
+     "2024": 174144069958.25,
+     "2025": 172054171890.91
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "operating_cost": {
+    "value": 14892277570.91,
+    "series": {
+     "2023": 11867273851.78,
+     "2024": 13789482367.98,
+     "2025": 14892277570.91
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "operating_profit": {
+    "value": 113993709879.52,
+    "series": {
+     "2023": 101919151506.90001,
+     "2024": 118218359589.89,
+     "2025": 113993709879.52
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "net_income": {
+    "value": 85310324833.67,
+    "series": {
+     "2023": 64786396951.58,
+     "2024": 89334728025.9,
+     "2025": 85310324833.67
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "net_income_parent": {
+    "value": 82320067101.68,
+    "series": {
+     "2023": 74734071550.75,
+     "2025": 82320067101.68
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "depreciation_amortization": {
+    "value": 2259387054.28,
+    "series": {
+     "2023": 1937416307.0,
+     "2024": 2085019615.1200001,
+     "2025": 2259387054.28
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "capex": {
+    "value": 3127594916.41,
+    "series": {
+     "2023": 2619755888.79,
+     "2024": 4678712053.56,
+     "2025": 3127594916.41
+    },
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "online",
+    "source": "test fixture, not live feed"
+   },
+   "total_debt": {
+    "value": 44206237.05,
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "fixture",
+    "source": "same baseline snapshot"
+   },
+   "cash_and_equivalents": {
+    "value": 51690610946.5,
+    "period": "2025",
+    "status": "found",
+    "unit": "元",
+    "source_id": "TEST",
+    "scope": "合并报表",
+    "source_type": "fixture",
+    "source": "same baseline snapshot"
+   }
+  },
+  "method_plan": {
+   "methods": [
+    "dcf"
+   ],
+   "reason": "使用者选择单一方法：DCF（收益法）。",
+   "status": {
+    "dcf": "ok"
+   }
+  },
+  "assumptions": [
+   {
+    "name": "预测期",
+    "value": 5,
+    "unit": "年",
+    "source_type": "model",
+    "source": "标准 5 年显式预测期；可调 3–10 年",
+    "confidence": "中",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "首年收入增速",
+    "value": 0.05279905573906949,
+    "unit": "小数",
+    "source_type": "history",
+    "source": "规则合成：近 3 年 CAGR 6.9%×50% + 近 5 年 CAGR 6.9%×30% + 最近一年同比 -1.2%×20%",
+    "confidence": "中",
+    "overridable": true,
+    "note": "按近 3/5 年 CAGR 与最近一年同比加权，并向永续增速线性衰减"
+   },
+   {
+    "name": "永续增长率 g",
+    "value": 0.025,
+    "unit": "小数",
+    "source_type": "industry",
+    "source": "市场长期名义 GDP 口径默认值；上限 4.0%（长期名义 GDP）",
+    "confidence": "中",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "EBIT 利润率",
+    "value": 0.6769323054265673,
+    "unit": "小数",
+    "source_type": "history",
+    "source": "近三年 EBIT / 营业收入中位数",
+    "confidence": "高",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "折旧摊销 / 收入",
+    "value": 0.012868039694970837,
+    "unit": "小数",
+    "source_type": "history",
+    "source": "近三年折旧摊销 / 营业收入中位数",
+    "confidence": "中",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "资本开支 / 收入",
+    "value": 0.018177966172148584,
+    "unit": "小数",
+    "source_type": "history",
+    "source": "近三年资本开支 / 营业收入中位数",
+    "confidence": "中",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "营运资本变动 / 收入",
+    "value": 0.02,
+    "unit": "小数",
+    "source_type": "history",
+    "source": "缺营运资本变动，按收入 2% 估算",
+    "confidence": "低",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "所得税率",
+    "value": 0.21,
+    "unit": "小数",
+    "source_type": "history",
+    "source": "缺少利润总额/所得税，兜底 21%",
+    "confidence": "高",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "无风险利率 rf",
+    "value": 0.018,
+    "unit": "小数",
+    "source_type": "industry",
+    "source": "A 市场默认",
+    "confidence": "中",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "股权风险溢价 ERP",
+    "value": 0.0514,
+    "unit": "小数",
+    "source_type": "industry",
+    "source": "Damodaran 中国国家风险溢价（成熟市场 ERP + 中国 CRP）",
+    "confidence": "中",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "Beta",
+    "value": 0.85,
+    "unit": "倍",
+    "source_type": "model",
+    "source": "数据源 Beta 缺失/异常，使用行业锚点 食品饮料 Beta 0.85",
+    "confidence": "中",
+    "overridable": true,
+    "note": "原始 Beta=None，行业锚点=0.85"
+   },
+   {
+    "name": "股权成本 Ke",
+    "value": 0.061689999999999995,
+    "unit": "小数",
+    "source_type": "model",
+    "source": "rf 1.80% + β 0.85 × ERP 5.14% + 规模溢价 0.00%",
+    "confidence": "中",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "税前债务成本 Kd",
+    "value": 0.035,
+    "unit": "小数",
+    "source_type": "industry",
+    "source": "A 市场默认税前债务成本（LPR/信用利差口径）",
+    "confidence": "中",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "所得税率（WACC 用）",
+    "value": 0.21,
+    "unit": "小数",
+    "source_type": "history",
+    "source": "缺少利润总额/所得税，兜底 21%",
+    "confidence": "高",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "资本结构 D/(D+E)",
+    "value": 2.3893132574768055e-05,
+    "unit": "小数",
+    "source_type": "model",
+    "source": "当前市值口径：D/(E+D)，E=总市值",
+    "confidence": "中",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "WACC（CAPM 口径）",
+    "value": 0.06168918667776715,
+    "unit": "小数",
+    "source_type": "model",
+    "source": "100.0%×Ke 6.17% + 0.0%×Kd 3.50%×(1−21.0%)",
+    "confidence": "中",
+    "overridable": true,
+    "note": ""
+   },
+   {
+    "name": "长期 ROIC（终值再投资率）",
+    "value": 0.1,
+    "unit": "小数",
+    "source_type": "model",
+    "source": "再投资率 = g / ROIC = 25.0%；默认不低于 WACC+2%",
+    "confidence": "中",
+    "overridable": true,
+    "note": ""
+   }
+  ],
+  "reliabilities": {
+   "dcf": {
+    "score": 79.0,
+    "level": "高",
+    "deductions": [
+     {
+      "reason": "CAPM 与市场隐含 WACC 相差 170bp",
+      "points": 15
+     },
+     {
+      "reason": "营运资本费率由规则估算",
+      "points": 6
+     }
+    ]
+   }
+  },
+  "dcf": {
+   "ok": true,
+   "method": "dcf",
+   "status": "ok",
+   "wacc": 0.075,
+   "wacc_capm": 0.06168918667776715,
+   "wacc_source": "使用者手工指定 WACC",
+   "wacc_mode": "manual",
+   "wacc_reconciliation": null,
+   "implied_wacc": 0.078712,
+   "wacc_block": {
+    "risk_free": 0.018,
+    "risk_free_source": "A 市场默认",
+    "erp": 0.0514,
+    "erp_source": "Damodaran 中国国家风险溢价（成熟市场 ERP + 中国 CRP）",
+    "beta": 0.85,
+    "beta_source": "数据源 Beta 缺失/异常，使用行业锚点 食品饮料 Beta 0.85",
+    "size_premium": 0.0,
+    "cost_of_equity": 0.061689999999999995,
+    "cost_of_debt": 0.035,
+    "cost_of_debt_source": "A 市场默认税前债务成本（LPR/信用利差口径）",
+    "tax_rate": 0.21,
+    "equity_ratio": 0.9999761068674252,
+    "debt_ratio": 2.3893132574768055e-05,
+    "capital_source": "当前市值口径：D/(E+D)，E=总市值",
+    "wacc_capm": 0.06168918667776715,
+    "wacc": 0.075
+   },
+   "terminal_growth": 0.025,
+   "terminal_growth_cap": 0.04,
+   "terminal_method": "gordon",
+   "terminal_roic": 0.1,
+   "forecast_years": 5,
+   "base_revenue": 172054171890.91,
+   "base_year": 2025,
+   "revenue_growth_y1": 0.05279905573906949,
+   "revenue_growth_path": [
+    0.05279905573906949,
+    0.04584929180430212,
+    0.038899527869534746,
+    0.031949763934767374,
+    0.025
+   ],
+   "ebit_margin": 0.6769323054265673,
+   "da_pct": 0.012868039694970837,
+   "capex_pct": 0.018177966172148584,
+   "nwc_pct": 0.02,
+   "nwc_forecast_basis": "revenue",
+   "nwc_investment_ratio": null,
+   "tax_rate": 0.21,
+   "rows": [
+    {
+     "year_index": 1,
+     "year": 2026,
+     "growth": 0.05279905573906949,
+     "revenue": 181138469702.7176,
+     "ebit": 122618481897.30104,
+     "ebit_margin": 0.6769323054265673,
+     "cash_tax": 25749881198.433216,
+     "nopat": 96868600698.86783,
+     "da": 2330897018.420842,
+     "da_pct": 0.012868039694970837,
+     "capex": 3292728974.7307615,
+     "capex_pct": 0.018177966172148584,
+     "delta_nwc": 3622769394.054352,
+     "nwc_pct": 0.02,
+     "fcff": 92283999348.50356,
+     "discount_factor": 0.9644856443408243,
+     "pv_fcff": 89006592573.98965
+    },
+    {
+     "year_index": 2,
+     "year": 2027,
+     "growth": 0.04584929180430212,
+     "revenue": 189443540257.10223,
+     "ebit": 128240452454.41093,
+     "ebit_margin": 0.6769323054265673,
+     "cash_tax": 26930495015.426296,
+     "nopat": 101309957438.98463,
+     "da": 2437766995.984197,
+     "da_pct": 0.012868039694970837,
+     "capex": 3443698266.3256726,
+     "capex_pct": 0.018177966172148584,
+     "delta_nwc": 3788870805.1420445,
+     "nwc_pct": 0.02,
+     "fcff": 96515155363.50111,
+     "discount_factor": 0.8971959482240226,
+     "pv_fcff": 86593006334.34525
+    },
+    {
+     "year_index": 3,
+     "year": 2028,
+     "growth": 0.038899527869534746,
+     "revenue": 196812804531.0367,
+     "ebit": 133228945508.66304,
+     "ebit_margin": 0.6769323054265673,
+     "cash_tax": 27978078556.819237,
+     "nopat": 105250866951.84381,
+     "da": 2532594981.1839166,
+     "da_pct": 0.012868039694970837,
+     "capex": 3577656503.0108767,
+     "capex_pct": 0.018177966172148584,
+     "delta_nwc": 3936256090.620734,
+     "nwc_pct": 0.02,
+     "fcff": 100269549339.39612,
+     "discount_factor": 0.8346008820688583,
+     "pv_fcff": 83685054323.30692
+    },
+    {
+     "year_index": 4,
+     "year": 2029,
+     "growth": 0.031949763934767374,
+     "revenue": 203100927175.14285,
+     "ebit": 137485578866.9428,
+     "ebit_margin": 0.6769323054265673,
+     "cash_tax": 28871971562.057987,
+     "nopat": 108613607304.88483,
+     "da": 2613510792.9751196,
+     "da_pct": 0.012868039694970837,
+     "capex": 3691961783.72176,
+     "capex_pct": 0.018177966172148584,
+     "delta_nwc": 4062018543.502857,
+     "nwc_pct": 0.02,
+     "fcff": 103473137770.63533,
+     "discount_factor": 0.7763729135524263,
+     "pv_fcff": 80333741445.39977
+    },
+    {
+     "year_index": 5,
+     "year": 2030,
+     "growth": 0.025,
+     "revenue": 208178450354.5214,
+     "ebit": 140922718338.61636,
+     "ebit_margin": 0.6769323054265673,
+     "cash_tax": 29593770851.109436,
+     "nopat": 111328947487.50693,
+     "da": 2678848562.799497,
+     "da_pct": 0.012868039694970837,
+     "capex": 3784260828.314803,
+     "capex_pct": 0.018177966172148584,
+     "delta_nwc": 4163569007.090428,
+     "nwc_pct": 0.02,
+     "fcff": 106059966214.9012,
+     "discount_factor": 0.7222073614441176,
+     "pv_fcff": 76597288354.91605
+    }
+   ],
+   "forecast": [
+    {
+     "year_index": 1,
+     "year": 2026,
+     "growth": 0.05279905573906949,
+     "revenue": 181138469702.7176,
+     "ebit": 122618481897.30104,
+     "ebit_margin": 0.6769323054265673,
+     "cash_tax": 25749881198.433216,
+     "nopat": 96868600698.86783,
+     "da": 2330897018.420842,
+     "da_pct": 0.012868039694970837,
+     "capex": 3292728974.7307615,
+     "capex_pct": 0.018177966172148584,
+     "delta_nwc": 3622769394.054352,
+     "nwc_pct": 0.02,
+     "fcff": 92283999348.50356,
+     "discount_factor": 0.9644856443408243,
+     "pv_fcff": 89006592573.98965
+    },
+    {
+     "year_index": 2,
+     "year": 2027,
+     "growth": 0.04584929180430212,
+     "revenue": 189443540257.10223,
+     "ebit": 128240452454.41093,
+     "ebit_margin": 0.6769323054265673,
+     "cash_tax": 26930495015.426296,
+     "nopat": 101309957438.98463,
+     "da": 2437766995.984197,
+     "da_pct": 0.012868039694970837,
+     "capex": 3443698266.3256726,
+     "capex_pct": 0.018177966172148584,
+     "delta_nwc": 3788870805.1420445,
+     "nwc_pct": 0.02,
+     "fcff": 96515155363.50111,
+     "discount_factor": 0.8971959482240226,
+     "pv_fcff": 86593006334.34525
+    },
+    {
+     "year_index": 3,
+     "year": 2028,
+     "growth": 0.038899527869534746,
+     "revenue": 196812804531.0367,
+     "ebit": 133228945508.66304,
+     "ebit_margin": 0.6769323054265673,
+     "cash_tax": 27978078556.819237,
+     "nopat": 105250866951.84381,
+     "da": 2532594981.1839166,
+     "da_pct": 0.012868039694970837,
+     "capex": 3577656503.0108767,
+     "capex_pct": 0.018177966172148584,
+     "delta_nwc": 3936256090.620734,
+     "nwc_pct": 0.02,
+     "fcff": 100269549339.39612,
+     "discount_factor": 0.8346008820688583,
+     "pv_fcff": 83685054323.30692
+    },
+    {
+     "year_index": 4,
+     "year": 2029,
+     "growth": 0.031949763934767374,
+     "revenue": 203100927175.14285,
+     "ebit": 137485578866.9428,
+     "ebit_margin": 0.6769323054265673,
+     "cash_tax": 28871971562.057987,
+     "nopat": 108613607304.88483,
+     "da": 2613510792.9751196,
+     "da_pct": 0.012868039694970837,
+     "capex": 3691961783.72176,
+     "capex_pct": 0.018177966172148584,
+     "delta_nwc": 4062018543.502857,
+     "nwc_pct": 0.02,
+     "fcff": 103473137770.63533,
+     "discount_factor": 0.7763729135524263,
+     "pv_fcff": 80333741445.39977
+    },
+    {
+     "year_index": 5,
+     "year": 2030,
+     "growth": 0.025,
+     "revenue": 208178450354.5214,
+     "ebit": 140922718338.61636,
+     "ebit_margin": 0.6769323054265673,
+     "cash_tax": 29593770851.109436,
+     "nopat": 111328947487.50693,
+     "da": 2678848562.799497,
+     "da_pct": 0.012868039694970837,
+     "capex": 3784260828.314803,
+     "capex_pct": 0.018177966172148584,
+     "delta_nwc": 4163569007.090428,
+     "nwc_pct": 0.02,
+     "fcff": 106059966214.9012,
+     "discount_factor": 0.7222073614441176,
+     "pv_fcff": 76597288354.91605
+    }
+   ],
+   "pv_explicit": 416215683031.95764,
+   "tv_gordon": 2174229307405.4746,
+   "tv_exit": null,
+   "tv_roic": 1711682567620.4192,
+   "exit_multiple": null,
+   "exit_multiple_source": "无有效同业 EV/EBITDA，退出倍数不可用",
+   "tv_base": 2174229307405.4746,
+   "tv_divergence": null,
+   "pv_terminal": 1514478192781.898,
+   "enterprise_value": 1930693875813.8555,
+   "tv_ratio": 0.7844217106368,
+   "cash": 51690610946.5,
+   "debt": 44206237.05,
+   "minority_interest": 0.0,
+   "preferred_stock": 0.0,
+   "equity_value": 1982340280523.3054,
+   "per_share": 1585.7687041690212,
+   "warnings": [
+    "CAPM 算出的 WACC（6.17%）低于市场隐含折现率（7.87%）170bp。CAPM 折现率偏低会让 DCF 系统性高于市价；本次已按规则校准。"
+   ],
+   "review_required": false,
+   "diagnostics": {
+    "tv_ratio": 0.7844217106368,
+    "tv_divergence": null,
+    "wacc_gap_bp": 170.0,
+    "wacc_minus_g": 0.049999999999999996,
+    "terminal_roic": 0.1
+   }
+  },
+  "relative": {
+   "ok": false,
+   "error": "未运行"
+  },
+  "comps": {
+   "ok": false,
+   "error": "未运行"
+  },
+  "sotp": {
+   "ok": false,
+   "skipped": true,
+   "reason": "未运行"
+  },
+  "ddm": {
+   "ok": false,
+   "error": "未运行"
+  },
+  "blended": {
+   "ok": true,
+   "blended_per_share": 1585.7687041690212,
+   "blended_equity_value": 1982340280523.3054,
+   "current_price": 1480.0,
+   "upside": 0.07146534065474408,
+   "verdict": "大致合理",
+   "weights": {
+    "dcf": 1.0
+   },
+   "components": [
+    {
+     "key": "dcf",
+     "label": "DCF（收益法）",
+     "per_share": 1585.7687041690212,
+     "weight": 1.0,
+     "equity_value": 1982340280523.3054
+    }
+   ],
+   "weight_source": "使用者选择仅 DCF",
+   "confidence": "中",
+   "primary": "dcf",
+   "divergence": null,
+   "trace": [
+    {
+     "rule": "使用者选择单一方法",
+     "method": "dcf",
+     "weight": 1.0
+    }
+   ]
+  },
+  "scenarios": {
+   "bull": {
+    "per_share": 2169.1334455497613,
+    "equity_value": 2711593810395.492,
+    "growth_y1": 0.08279905573906948,
+    "ebit_margin": 0.6969323054265674,
+    "wacc": 0.065,
+    "terminal_growth": 0.025,
+    "ok": true,
+    "label": "乐观",
+    "levers": "收入增速 +3%、EBIT 利润率 +2%、WACC -1.0%"
+   },
+   "base": {
+    "per_share": 1585.7687041690212,
+    "equity_value": 1982340280523.3054,
+    "growth_y1": 0.05279905573906949,
+    "ebit_margin": 0.6769323054265673,
+    "wacc": 0.075,
+    "terminal_growth": 0.025,
+    "ok": true,
+    "label": "基准",
+    "levers": "历史中位数 / 当前资本结构"
+   },
+   "bear": {
+    "per_share": 1208.0777020325436,
+    "equity_value": 1510195707889.2432,
+    "growth_y1": 0.02279905573906949,
+    "ebit_margin": 0.6569323054265673,
+    "wacc": 0.08499999999999999,
+    "terminal_growth": 0.025,
+    "ok": true,
+    "label": "悲观",
+    "levers": "收入增速 -3%、EBIT 利润率 -2%、WACC +1.0%"
+   },
+   "scenario_basis": "assumption_deltas",
+   "warnings": []
+  },
+  "sensitivity": {
+   "wacc_axis": [
+    0.065,
+    0.06999999999999999,
+    0.075,
+    0.08,
+    0.08499999999999999
+   ],
+   "growth_axis": [
+    0.015000000000000001,
+    0.02,
+    0.025,
+    0.030000000000000002,
+    0.035
+   ],
+   "grid": [
+    [
+     1605.6517641863882,
+     1767.0463369747492,
+     1968.7526381985529,
+     2228.0469632277495,
+     2573.723136896269
+    ],
+    [
+     1464.4856494259298,
+     1595.6460365933356,
+     1755.9200865094322,
+     1956.2252782061078,
+     2213.717649457153
+    ],
+    [
+     1346.9405820855166,
+     1455.5124589680638,
+     1585.7687041690212,
+     1744.9373080268008,
+     1943.860255404177
+    ],
+    [
+     1247.561516647014,
+     1338.8244878473845,
+     1446.6532617892788,
+     1576.0174567371191,
+     1734.0954095872826
+    ],
+    [
+     1162.4521610467189,
+     1240.1676892172782,
+     1330.8104766441393,
+     1437.9060252057025,
+     1566.3900369748383
+    ]
+   ],
+   "wacc_g": {
+    "kind": "wacc_g",
+    "title": "WACC × 永续增长率：每股价值",
+    "unit": "元/股",
+    "wacc_axis": [
+     0.065,
+     0.06999999999999999,
+     0.075,
+     0.08,
+     0.08499999999999999
+    ],
+    "growth_axis": [
+     0.015000000000000001,
+     0.02,
+     0.025,
+     0.030000000000000002,
+     0.035
+    ],
+    "grid": [
+     [
+      1605.6517641863882,
+      1767.0463369747492,
+      1968.7526381985529,
+      2228.0469632277495,
+      2573.723136896269
+     ],
+     [
+      1464.4856494259298,
+      1595.6460365933356,
+      1755.9200865094322,
+      1956.2252782061078,
+      2213.717649457153
+     ],
+     [
+      1346.9405820855166,
+      1455.5124589680638,
+      1585.7687041690212,
+      1744.9373080268008,
+      1943.860255404177
+     ],
+     [
+      1247.561516647014,
+      1338.8244878473845,
+      1446.6532617892788,
+      1576.0174567371191,
+      1734.0954095872826
+     ],
+     [
+      1162.4521610467189,
+      1240.1676892172782,
+      1330.8104766441393,
+      1437.9060252057025,
+      1566.3900369748383
+     ]
+    ],
+    "matrix": [
+     [
+      1605.6517641863882,
+      1767.0463369747492,
+      1968.7526381985529,
+      2228.0469632277495,
+      2573.723136896269
+     ],
+     [
+      1464.4856494259298,
+      1595.6460365933356,
+      1755.9200865094322,
+      1956.2252782061078,
+      2213.717649457153
+     ],
+     [
+      1346.9405820855166,
+      1455.5124589680638,
+      1585.7687041690212,
+      1744.9373080268008,
+      1943.860255404177
+     ],
+     [
+      1247.561516647014,
+      1338.8244878473845,
+      1446.6532617892788,
+      1576.0174567371191,
+      1734.0954095872826
+     ],
+     [
+      1162.4521610467189,
+      1240.1676892172782,
+      1330.8104766441393,
+      1437.9060252057025,
+      1566.3900369748383
+     ]
+    ],
+    "base_wacc": 0.075,
+    "base_growth": 0.025,
+    "base_index": {
+     "x": 2,
+     "y": 2
+    },
+    "note": "行=WACC，列=永续增长率；WACC≤g 的格子无解，写 null。"
+   },
+   "growth_margin": {
+    "kind": "growth_margin",
+    "title": "首年收入增速 × EBIT 利润率：每股价值",
+    "unit": "元/股",
+    "growth_axis": [
+     0.04279905573906949,
+     0.04779905573906949,
+     0.05279905573906949,
+     0.05779905573906949,
+     0.06279905573906949
+    ],
+    "margin_axis": [
+     0.6669323054265673,
+     0.6719323054265673,
+     0.6769323054265673,
+     0.6819323054265674,
+     0.6869323054265674
+    ],
+    "grid": [
+     [
+      1527.412163514152,
+      1544.5467588085996,
+      1561.8197565518901,
+      1579.231850590932,
+      1596.7837363407273
+     ],
+     [
+      1539.115666341186,
+      1556.385202144259,
+      1573.7942303604557,
+      1591.3434503009544,
+      1609.033562857378
+     ],
+     [
+      1550.81916916822,
+      1568.2236454799179,
+      1585.7687041690212,
+      1603.4550500109776,
+      1621.2833893740287
+     ],
+     [
+      1562.5226719952539,
+      1580.0620888155772,
+      1597.7431779775868,
+      1615.5666497210007,
+      1633.533215890679
+     ],
+     [
+      1574.2261748222882,
+      1591.9005321512368,
+      1609.7176517861524,
+      1627.6782494310237,
+      1645.78304240733
+     ]
+    ],
+    "matrix": [
+     [
+      1527.412163514152,
+      1544.5467588085996,
+      1561.8197565518901,
+      1579.231850590932,
+      1596.7837363407273
+     ],
+     [
+      1539.115666341186,
+      1556.385202144259,
+      1573.7942303604557,
+      1591.3434503009544,
+      1609.033562857378
+     ],
+     [
+      1550.81916916822,
+      1568.2236454799179,
+      1585.7687041690212,
+      1603.4550500109776,
+      1621.2833893740287
+     ],
+     [
+      1562.5226719952539,
+      1580.0620888155772,
+      1597.7431779775868,
+      1615.5666497210007,
+      1633.533215890679
+     ],
+     [
+      1574.2261748222882,
+      1591.9005321512368,
+      1609.7176517861524,
+      1627.6782494310237,
+      1645.78304240733
+     ]
+    ],
+    "base_growth": 0.05279905573906949,
+    "base_margin": 0.6769323054265673,
+    "base_index": {
+     "x": 2,
+     "y": 2
+    },
+    "note": "行=EBIT 利润率，列=首年收入增速；WACC 与 g 固定在基准值。"
+   },
+   "base_wacc": 0.075,
+   "base_growth": 0.025,
+   "unit": "元/股"
+  },
+  "peer_selection": {},
+  "segment_meta": {
+   "coverage": null,
+   "fallback": false,
+   "review_required": true
+  },
+  "segment_source": "缺少分部原始披露",
+  "data_source": {
+   "requested": "canonical",
+   "used": "canonical",
+   "fallback": false
+  },
+  "gates": [
+   {
+    "code": "WACC_IMPLIED_GAP",
+    "severity": "warn",
+    "message": "CAPM 与市场隐含 WACC 相差 170bp，折现率假设与市场定价存在分歧。",
+    "affected_paths": [
+     "dcf.wacc",
+     "valuation.blended"
+    ]
+   }
+  ],
+  "warnings": [
+   "CAPM 算出的 WACC（6.17%）低于市场隐含折现率（7.87%）170bp。CAPM 折现率偏低会让 DCF 系统性高于市价；本次已按规则校准。"
+  ],
+  "sources": [
+   {
+    "source_id": "TEST",
+    "source": "local regression fixture",
+    "source_type": "online",
+    "source_url": "https://example.org/not-live",
+    "page": null
+   },
+   {
+    "name": "Damodaran 国家风险溢价表",
+    "purpose": "ERP",
+    "as_of": "2026-11-05",
+    "official": true,
+    "note": "取中国/美国市场对应值"
+   }
+  ],
+  "disclaimer": "本结果由模型按既定假设计算，仅供研究与教学用途，不构成投资建议。估值结论依赖假设，假设比模型重要。",
+  "valuation_range": null,
+  "presentation": {
+   "narrative": {
+    "headline": "按规则层选定的方法组合，600519 的每股价值约 1,585.77 CNY，较现价 1,480.00 有7.1%上行空间，判断为「大致合理」。综合置信度：中。",
+    "verdict": "大致合理",
+    "confidence": "中",
+    "sections": [
+     {
+      "title": "结论摘要",
+      "kind": "text",
+      "paragraphs": [
+       "按规则层选定的方法组合，600519 的每股价值约 1,585.77 CNY，较现价 1,480.00 有7.1%上行空间，判断为「大致合理」。综合置信度：中。",
+       "本次采用：DCF（收益法） 100.0%。权重规则：使用者选择仅 DCF。 主方法为 DCF（收益法）。"
+      ],
+      "metrics": [
+       {
+        "label": "融合每股价值",
+        "value": 1585.7687041690212,
+        "unit": "CNY",
+        "fmt": "money"
+       },
+       {
+        "label": "当前股价",
+        "value": 1480.0,
+        "unit": "CNY",
+        "fmt": "money"
+       },
+       {
+        "label": "上行/下行空间",
+        "value": 0.07146534065474408,
+        "unit": "%",
+        "fmt": "pct"
+       },
+       {
+        "label": "估值判断",
+        "value": "大致合理",
+        "unit": "",
+        "fmt": "text"
+       },
+       {
+        "label": "置信度",
+        "value": "中",
+        "unit": "",
+        "fmt": "text"
+       }
+      ]
+     },
+     {
+      "title": "方法选择与权重",
+      "kind": "text",
+      "paragraphs": [
+       "使用者选择单一方法：DCF（收益法）。",
+       "行业门槛：支持。行业适用标准估值方法。",
+       "可靠性评分：DCF（收益法） 79.0 分（高）。"
+      ],
+      "metrics": []
+     },
+     {
+      "title": "绝对估值（DCF / FCFF）",
+      "kind": "text",
+      "paragraphs": [
+       "预测期 5 年；首年收入增速 5.3%，线性衰减至永续增长率 2.5%；EBIT 利润率 67.7%，资本开支/收入 1.8%，折旧摊销/收入 1.3%，营运资本增加/收入 2.0%，所得税率 21.0%。",
+       "WACC：rf 1.8% + β 0.85 × ERP 5.1%（+ 规模溢价 0.0%）= Ke 6.2%；Kd 3.5%，D/(D+E) 0.0%，CAPM WACC 6.2%，最终采用 7.5%。",
+       "终值：Gordon 21,742.3 亿元、退出倍数 — 亿元、ROIC 再投资口径 17,116.8 亿元，采用 21,742.3 亿元；终值占企业价值 78.4%。",
+       "DCF 结论：企业价值 19,306.9 亿元，股权价值 19,823.4 亿元，每股 1,585.77 元。"
+      ],
+      "metrics": [
+       {
+        "label": "DCF 每股价值",
+        "value": 1585.7687041690212,
+        "unit": "CNY",
+        "fmt": "money"
+       },
+       {
+        "label": "WACC",
+        "value": 0.075,
+        "unit": "%",
+        "fmt": "pct"
+       },
+       {
+        "label": "永续增长率",
+        "value": 0.025,
+        "unit": "%",
+        "fmt": "pct"
+       },
+       {
+        "label": "终值占比",
+        "value": 0.7844217106368,
+        "unit": "%",
+        "fmt": "pct"
+       }
+      ]
+     },
+     {
+      "title": "三情景",
+      "kind": "text",
+      "paragraphs": [
+       "乐观：每股 2,169.13 元；首年增速 8.3%、EBIT 利润率 69.7%、WACC 6.5%。",
+       "基准：每股 1,585.77 元；首年增速 5.3%、EBIT 利润率 67.7%、WACC 7.5%。",
+       "悲观：每股 1,208.08 元；首年增速 2.3%、EBIT 利润率 65.7%、WACC 8.5%。"
+      ],
+      "metrics": []
+     },
+     {
+      "title": "关键风险与待核验",
+      "kind": "text",
+      "paragraphs": [
+       "[warn] CAPM 与市场隐含 WACC 相差 170bp，折现率假设与市场定价存在分歧。",
+       "CAPM 算出的 WACC（6.17%）低于市场隐含折现率（7.87%）170bp。CAPM 折现率偏低会让 DCF 系统性高于市价；本次已按规则校准。"
+      ],
+      "metrics": []
+     }
+    ],
+    "disclaimer": "本结果由模型按既定假设计算，仅供研究与教学用途，不构成投资建议。估值结论依赖假设，假设比模型重要。"
+   },
+   "charts": {
+    "dcf_forecast": {
+     "title": "未来 5 年收入、EBIT 与自由现金流预测",
+     "unit": "亿元",
+     "years": [
+      2026,
+      2027,
+      2028,
+      2029,
+      2030
+     ],
+     "series": {
+      "revenue": [
+       1811.38,
+       1894.44,
+       1968.13,
+       2031.01,
+       2081.78
+      ],
+      "ebit": [
+       1226.18,
+       1282.4,
+       1332.29,
+       1374.86,
+       1409.23
+      ],
+      "fcff": [
+       922.84,
+       965.15,
+       1002.7,
+       1034.73,
+       1060.6
+      ],
+      "capex": [
+       32.93,
+       34.44,
+       35.78,
+       36.92,
+       37.84
+      ],
+      "da": [
+       23.31,
+       24.38,
+       25.33,
+       26.14,
+       26.79
+      ],
+      "delta_nwc": [
+       36.23,
+       37.89,
+       39.36,
+       40.62,
+       41.64
+      ]
+     },
+     "ratios": {
+      "growth": [
+       0.05279905573906949,
+       0.04584929180430212,
+       0.038899527869534746,
+       0.031949763934767374,
+       0.025
+      ],
+      "ebit_margin": [
+       0.6769323054265673,
+       0.6769323054265673,
+       0.6769323054265673,
+       0.6769323054265673,
+       0.6769323054265673
+      ],
+      "capex_pct": [
+       0.018177966172148584,
+       0.018177966172148584,
+       0.018177966172148584,
+       0.018177966172148584,
+       0.018177966172148584
+      ],
+      "da_pct": [
+       0.012868039694970837,
+       0.012868039694970837,
+       0.012868039694970837,
+       0.012868039694970837,
+       0.012868039694970837
+      ],
+      "nwc_pct": [
+       0.02,
+       0.02,
+       0.02,
+       0.02,
+       0.02
+      ]
+     },
+     "base_year": 2025
+    },
+    "tv_composition": {
+     "title": "终值三种口径与企业价值构成",
+     "unit": "亿元",
+     "items": [
+      {
+       "label": "Gordon 永续法",
+       "value": 21742.29
+      },
+      {
+       "label": "退出倍数法",
+       "value": 0.0
+      },
+      {
+       "label": "ROIC 再投资法",
+       "value": 17116.83
+      },
+      {
+       "label": "采用终值",
+       "value": 21742.29
+      }
+     ],
+     "tv_ratio": 0.7844217106368
+    },
+    "valuation_range": {
+     "title": "估值水平：相对估值区间 vs 现价 vs 融合值",
+     "unit": "CNY",
+     "low": null,
+     "mid": null,
+     "high": null,
+     "price": 1480.0,
+     "blended": 1585.7687041690212,
+     "dcf": 1585.7687041690212,
+     "sotp": null
+    },
+    "sensitivity_wacc_g": {
+     "kind": "wacc_g",
+     "title": "WACC × 永续增长率：每股价值",
+     "unit": "元/股",
+     "wacc_axis": [
+      0.065,
+      0.06999999999999999,
+      0.075,
+      0.08,
+      0.08499999999999999
+     ],
+     "growth_axis": [
+      0.015000000000000001,
+      0.02,
+      0.025,
+      0.030000000000000002,
+      0.035
+     ],
+     "grid": [
+      [
+       1605.6517641863882,
+       1767.0463369747492,
+       1968.7526381985529,
+       2228.0469632277495,
+       2573.723136896269
+      ],
+      [
+       1464.4856494259298,
+       1595.6460365933356,
+       1755.9200865094322,
+       1956.2252782061078,
+       2213.717649457153
+      ],
+      [
+       1346.9405820855166,
+       1455.5124589680638,
+       1585.7687041690212,
+       1744.9373080268008,
+       1943.860255404177
+      ],
+      [
+       1247.561516647014,
+       1338.8244878473845,
+       1446.6532617892788,
+       1576.0174567371191,
+       1734.0954095872826
+      ],
+      [
+       1162.4521610467189,
+       1240.1676892172782,
+       1330.8104766441393,
+       1437.9060252057025,
+       1566.3900369748383
+      ]
+     ],
+     "matrix": [
+      [
+       1605.6517641863882,
+       1767.0463369747492,
+       1968.7526381985529,
+       2228.0469632277495,
+       2573.723136896269
+      ],
+      [
+       1464.4856494259298,
+       1595.6460365933356,
+       1755.9200865094322,
+       1956.2252782061078,
+       2213.717649457153
+      ],
+      [
+       1346.9405820855166,
+       1455.5124589680638,
+       1585.7687041690212,
+       1744.9373080268008,
+       1943.860255404177
+      ],
+      [
+       1247.561516647014,
+       1338.8244878473845,
+       1446.6532617892788,
+       1576.0174567371191,
+       1734.0954095872826
+      ],
+      [
+       1162.4521610467189,
+       1240.1676892172782,
+       1330.8104766441393,
+       1437.9060252057025,
+       1566.3900369748383
+      ]
+     ],
+     "base_wacc": 0.075,
+     "base_growth": 0.025,
+     "base_index": {
+      "x": 2,
+      "y": 2
+     },
+     "note": "行=WACC，列=永续增长率；WACC≤g 的格子无解，写 null。"
+    },
+    "sensitivity_growth_margin": {
+     "kind": "growth_margin",
+     "title": "首年收入增速 × EBIT 利润率：每股价值",
+     "unit": "元/股",
+     "growth_axis": [
+      0.04279905573906949,
+      0.04779905573906949,
+      0.05279905573906949,
+      0.05779905573906949,
+      0.06279905573906949
+     ],
+     "margin_axis": [
+      0.6669323054265673,
+      0.6719323054265673,
+      0.6769323054265673,
+      0.6819323054265674,
+      0.6869323054265674
+     ],
+     "grid": [
+      [
+       1527.412163514152,
+       1544.5467588085996,
+       1561.8197565518901,
+       1579.231850590932,
+       1596.7837363407273
+      ],
+      [
+       1539.115666341186,
+       1556.385202144259,
+       1573.7942303604557,
+       1591.3434503009544,
+       1609.033562857378
+      ],
+      [
+       1550.81916916822,
+       1568.2236454799179,
+       1585.7687041690212,
+       1603.4550500109776,
+       1621.2833893740287
+      ],
+      [
+       1562.5226719952539,
+       1580.0620888155772,
+       1597.7431779775868,
+       1615.5666497210007,
+       1633.533215890679
+      ],
+      [
+       1574.2261748222882,
+       1591.9005321512368,
+       1609.7176517861524,
+       1627.6782494310237,
+       1645.78304240733
+      ]
+     ],
+     "matrix": [
+      [
+       1527.412163514152,
+       1544.5467588085996,
+       1561.8197565518901,
+       1579.231850590932,
+       1596.7837363407273
+      ],
+      [
+       1539.115666341186,
+       1556.385202144259,
+       1573.7942303604557,
+       1591.3434503009544,
+       1609.033562857378
+      ],
+      [
+       1550.81916916822,
+       1568.2236454799179,
+       1585.7687041690212,
+       1603.4550500109776,
+       1621.2833893740287
+      ],
+      [
+       1562.5226719952539,
+       1580.0620888155772,
+       1597.7431779775868,
+       1615.5666497210007,
+       1633.533215890679
+      ],
+      [
+       1574.2261748222882,
+       1591.9005321512368,
+       1609.7176517861524,
+       1627.6782494310237,
+       1645.78304240733
+      ]
+     ],
+     "base_growth": 0.05279905573906949,
+     "base_margin": 0.6769323054265673,
+     "base_index": {
+      "x": 2,
+      "y": 2
+     },
+     "note": "行=EBIT 利润率，列=首年收入增速；WACC 与 g 固定在基准值。"
+    },
+    "scenarios": {
+     "title": "Bull / Base / Bear 每股价值",
+     "unit": "CNY",
+     "labels": [
+      "乐观",
+      "基准",
+      "悲观"
+     ],
+     "values": [
+      2169.1334455497613,
+      1585.7687041690212,
+      1208.0777020325436
+     ],
+     "levers": [
+      "收入增速 +3%、EBIT 利润率 +2%、WACC -1.0%",
+      "历史中位数 / 当前资本结构",
+      "收入增速 -3%、EBIT 利润率 -2%、WACC +1.0%"
+     ]
+    },
+    "weights": {
+     "title": "方法权重与可靠性",
+     "items": [
+      {
+       "method": "dcf",
+       "label": "DCF（收益法）",
+       "weight": 1.0,
+       "reliability": 79.0
+      }
+     ]
+    }
+   }
+  },
+  "excel_format": "professional_18_sheets",
+  "excel_path": "valuation/output/sessions/7848dbef184b_估值底稿.xlsx",
+  "excel_generated_at": "2026-11-05 22:38:27"
+ },
+ "excel_path": "valuation/output/sessions/7848dbef184b_估值底稿.xlsx",
+ "run_at": "2026-11-05 22:38:19"
+}

@@ -1,0 +1,21 @@
+{
+ "version": "3.3",
+ "as_of": "2026-11-05",
+ "status": "research_and_model_engineering_completed",
+ "verified_peer_database": "robotechnik_candidate_evidence_only_unapproved",
+ "driver_forecast": "implemented_and_unit_tested",
+ "three_statements": "synthetic_5_years_balanced",
+ "excel_sheets": 5,
+ "excel_formulas": 217,
+ "engine_independent_math_checks_passed": 45,
+ "unit_regression_tests_passed": 41,
+ "artifact_tool_recalc": "PASS",
+ "excel_formula_errors": 0,
+ "native_ms_excel_com": "EXCEL_OK",
+ "EXCEL_OK": true,
+ "real_300757_price_target": "NOT_CALCULATED_MISSING_VERIFIED_PEER_MARKET_AND_SEGMENT_INPUTS",
+ "excel_native_check": "valuation/output/SYNTHETIC_ONLY_three_statement_model.native_check.json",
+ "bank_semantics": "partial/limited/gate_reason: standard_fcff_unsupported; ddm_used",
+ "no_price_rule": "dcf.per_share=null; equity_value retained",
+ "native_excel_com_reports": "valuation/output/*_估值底稿.native_check.json"
+}
