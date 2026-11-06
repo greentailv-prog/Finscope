@@ -1,6 +1,6 @@
 {
   "schema_version": "finradar.risk-matrix/1.0",
-  "generated_at": "2026-11-04T23:39:19+08:00",
+  "generated_at": "2026-11-06T00:08:31+08:00",
   "generator": "risk-radar/scripts/build_risk_matrix.py",
   "rules_version": "finradar.risk-rules/1.0",
   "industry_profile": {
@@ -959,7 +959,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（wacc），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "wacc",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -1239,7 +1239,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "规则已执行，条件不成立，本项无异常。",
-        "threshold_value": "composite",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -1367,7 +1367,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（roe），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "wacc",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -1653,7 +1653,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（interest_bearing_debt_ratio），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "composite",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -1784,7 +1784,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（wacc），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "wacc",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -2081,7 +2081,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（interest_bearing_debt_ratio），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "composite",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -2203,7 +2203,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（wacc），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "wacc",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -2486,7 +2486,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（interest_bearing_debt_ratio），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "composite",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -2618,7 +2618,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（wacc），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "wacc",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -2918,7 +2918,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "规则已执行，条件不成立，本项无异常。",
-        "threshold_value": "composite",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -3040,7 +3040,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（wacc），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "wacc",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -3340,7 +3340,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "规则已执行，条件不成立，本项无异常。",
-        "threshold_value": "composite",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -3465,7 +3465,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（wacc），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "wacc",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -3755,7 +3755,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "规则已执行，条件不成立，本项无异常。",
-        "threshold_value": "composite",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -3877,7 +3877,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（wacc），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "wacc",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -4157,7 +4157,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（interest_bearing_debt_ratio），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "composite",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -4288,7 +4288,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（wacc），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "wacc",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -4591,7 +4591,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "规则已执行，条件不成立，本项无异常。",
-        "threshold_value": "composite",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -4722,7 +4722,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（wacc），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "wacc",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -5005,7 +5005,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（interest_bearing_debt_ratio），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "composite",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -5134,7 +5134,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "无法判定：表达式引用的变量缺失（wacc），已转人工核验，不做'无风险'假设。",
-        "threshold_value": "wacc",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -5420,7 +5420,7 @@
         "severity_tag": null,
         "score": null,
         "explanation": "规则已执行，条件不成立，本项无异常。",
-        "threshold_value": "composite",
+        "threshold_value": null,
         "threshold_source": "fixed",
         "peer_sample_n": 0
       },
@@ -6166,7 +6166,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P02 ROE 明显下滑",
-      "reason": "缺失变量：roe_delta",
+      "reason": "roe_delta",
       "missing_inputs": [
         "roe_delta"
       ],
@@ -6178,7 +6178,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P03 ROE 低于资本成本",
-      "reason": "缺失变量：wacc",
+      "reason": "wacc",
       "missing_inputs": [
         "wacc"
       ],
@@ -6190,7 +6190,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P04 ROIC 低于 WACC，当期未创造经济价值",
-      "reason": "缺失变量：roic_minus_wacc",
+      "reason": "roic_minus_wacc",
       "missing_inputs": [
         "roic_minus_wacc"
       ],
@@ -6202,7 +6202,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P05 期间费用率明显上升",
-      "reason": "缺失变量：period_expense_ratio_delta",
+      "reason": "period_expense_ratio_delta",
       "missing_inputs": [
         "period_expense_ratio_delta"
       ],
@@ -6214,7 +6214,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P07 财务费用率快速上升",
-      "reason": "缺失变量：finance_expense_ratio_delta",
+      "reason": "finance_expense_ratio_delta",
       "missing_inputs": [
         "finance_expense_ratio_delta"
       ],
@@ -6226,7 +6226,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S04 利息保障倍数偏低",
-      "reason": "缺失变量：interest_coverage",
+      "reason": "interest_coverage",
       "missing_inputs": [
         "interest_coverage"
       ],
@@ -6238,7 +6238,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S07 净负债 / EBITDA 偏高",
-      "reason": "缺失变量：net_debt_to_ebitda",
+      "reason": "net_debt_to_ebitda",
       "missing_inputs": [
         "net_debt_to_ebitda"
       ],
@@ -6250,7 +6250,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S08 受限货币资金占比偏高",
-      "reason": "缺失变量：restricted_cash_ratio",
+      "reason": "restricted_cash_ratio",
       "missing_inputs": [
         "restricted_cash_ratio"
       ],
@@ -6262,7 +6262,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E02 应收账款周转天数明显延长",
-      "reason": "缺失变量：dso_delta",
+      "reason": "dso_delta",
       "missing_inputs": [
         "dso_delta"
       ],
@@ -6274,7 +6274,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E05 现金转换周期明显拉长",
-      "reason": "缺失变量：cash_conversion_cycle_delta",
+      "reason": "cash_conversion_cycle_delta",
       "missing_inputs": [
         "cash_conversion_cycle_delta"
       ],
@@ -6286,7 +6286,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E06 总资产周转率下滑",
-      "reason": "缺失变量：total_asset_turnover_delta",
+      "reason": "total_asset_turnover_delta",
       "missing_inputs": [
         "total_asset_turnover_delta"
       ],
@@ -6298,7 +6298,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E07 应收与存货合计占总资产比例过高",
-      "reason": "缺失变量：ar_and_inventory_to_assets",
+      "reason": "ar_and_inventory_to_assets",
       "missing_inputs": [
         "ar_and_inventory_to_assets"
       ],
@@ -6310,7 +6310,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "C06 经营现金流对利息的覆盖不足",
-      "reason": "缺失变量：ocf_to_interest_paid",
+      "reason": "ocf_to_interest_paid",
       "missing_inputs": [
         "ocf_to_interest_paid"
       ],
@@ -6322,7 +6322,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A03 审计意见为非标准无保留意见",
-      "reason": "缺失变量：audit_opinion_flag",
+      "reason": "audit_opinion_flag",
       "missing_inputs": [
         "audit_opinion_flag"
       ],
@@ -6334,7 +6334,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A04 研发投入资本化率异常",
-      "reason": "缺失变量：rd_capitalization_ratio",
+      "reason": "rd_capitalization_ratio",
       "missing_inputs": [
         "rd_capitalization_ratio"
       ],
@@ -6346,7 +6346,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V01 现金分红比例显著偏低",
-      "reason": "缺失变量：payout_ratio",
+      "reason": "payout_ratio",
       "missing_inputs": [
         "payout_ratio"
       ],
@@ -6358,7 +6358,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V02 分红金额占经营现金流比例过高",
-      "reason": "缺失变量：dividend_to_ocf",
+      "reason": "dividend_to_ocf",
       "missing_inputs": [
         "dividend_to_ocf"
       ],
@@ -6503,7 +6503,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P02 ROE 明显下滑",
-      "reason": "缺失变量：roe_delta",
+      "reason": "roe_delta",
       "missing_inputs": [
         "roe_delta"
       ],
@@ -6515,7 +6515,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P03 ROE 低于资本成本",
-      "reason": "缺失变量：roe",
+      "reason": "roe",
       "missing_inputs": [
         "roe"
       ],
@@ -6527,7 +6527,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P04 ROIC 低于 WACC，当期未创造经济价值",
-      "reason": "缺失变量：roic_minus_wacc",
+      "reason": "roic_minus_wacc",
       "missing_inputs": [
         "roic_minus_wacc"
       ],
@@ -6539,7 +6539,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S02 杠杆水平快速抬升",
-      "reason": "缺失变量：debt_to_assets_delta",
+      "reason": "debt_to_assets_delta",
       "missing_inputs": [
         "debt_to_assets_delta"
       ],
@@ -6551,7 +6551,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S05 有息负债快速扩张",
-      "reason": "缺失变量：interest_bearing_debt_growth",
+      "reason": "interest_bearing_debt_growth",
       "missing_inputs": [
         "interest_bearing_debt_growth"
       ],
@@ -6563,7 +6563,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S07 净负债 / EBITDA 偏高",
-      "reason": "缺失变量：net_debt_to_ebitda",
+      "reason": "net_debt_to_ebitda",
       "missing_inputs": [
         "net_debt_to_ebitda"
       ],
@@ -6575,7 +6575,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S08 受限货币资金占比偏高",
-      "reason": "缺失变量：restricted_cash_ratio",
+      "reason": "restricted_cash_ratio",
       "missing_inputs": [
         "restricted_cash_ratio"
       ],
@@ -6587,7 +6587,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E01 应收账款增速显著高于收入增速",
-      "reason": "缺失变量：accounts_receivable_growth",
+      "reason": "accounts_receivable_growth",
       "missing_inputs": [
         "accounts_receivable_growth"
       ],
@@ -6599,7 +6599,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E02 应收账款周转天数明显延长",
-      "reason": "缺失变量：dso_delta",
+      "reason": "dso_delta",
       "missing_inputs": [
         "dso_delta"
       ],
@@ -6611,7 +6611,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E03 应收账款周转天数绝对水平偏高",
-      "reason": "缺失变量：dso",
+      "reason": "dso",
       "missing_inputs": [
         "dso"
       ],
@@ -6623,7 +6623,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E04 存货增速显著高于营业成本增速",
-      "reason": "缺失变量：inventory_growth",
+      "reason": "inventory_growth",
       "missing_inputs": [
         "inventory_growth"
       ],
@@ -6635,7 +6635,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E05 现金转换周期明显拉长",
-      "reason": "缺失变量：cash_conversion_cycle_delta",
+      "reason": "cash_conversion_cycle_delta",
       "missing_inputs": [
         "cash_conversion_cycle_delta"
       ],
@@ -6647,7 +6647,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E06 总资产周转率下滑",
-      "reason": "缺失变量：total_asset_turnover_delta",
+      "reason": "total_asset_turnover_delta",
       "missing_inputs": [
         "total_asset_turnover_delta"
       ],
@@ -6659,7 +6659,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E07 应收与存货合计占总资产比例过高",
-      "reason": "缺失变量：ar_and_inventory_to_assets",
+      "reason": "ar_and_inventory_to_assets",
       "missing_inputs": [
         "ar_and_inventory_to_assets"
       ],
@@ -6671,7 +6671,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "C06 经营现金流对利息的覆盖不足",
-      "reason": "缺失变量：ocf_to_interest_paid",
+      "reason": "ocf_to_interest_paid",
       "missing_inputs": [
         "ocf_to_interest_paid"
       ],
@@ -6683,7 +6683,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A02 存贷双高（账面资金充裕却大量举债）",
-      "reason": "缺失变量：interest_bearing_debt_ratio",
+      "reason": "interest_bearing_debt_ratio",
       "missing_inputs": [
         "interest_bearing_debt_ratio"
       ],
@@ -6695,7 +6695,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A03 审计意见为非标准无保留意见",
-      "reason": "缺失变量：audit_opinion_flag",
+      "reason": "audit_opinion_flag",
       "missing_inputs": [
         "audit_opinion_flag"
       ],
@@ -6707,7 +6707,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A04 研发投入资本化率异常",
-      "reason": "缺失变量：rd_capitalization_ratio",
+      "reason": "rd_capitalization_ratio",
       "missing_inputs": [
         "rd_capitalization_ratio"
       ],
@@ -6719,7 +6719,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V01 现金分红比例显著偏低",
-      "reason": "缺失变量：payout_ratio",
+      "reason": "payout_ratio",
       "missing_inputs": [
         "payout_ratio"
       ],
@@ -6731,7 +6731,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V02 分红金额占经营现金流比例过高",
-      "reason": "缺失变量：dividend_to_ocf",
+      "reason": "dividend_to_ocf",
       "missing_inputs": [
         "dividend_to_ocf"
       ],
@@ -7001,7 +7001,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P03 ROE 低于资本成本",
-      "reason": "缺失变量：wacc",
+      "reason": "wacc",
       "missing_inputs": [
         "wacc"
       ],
@@ -7013,7 +7013,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P04 ROIC 低于 WACC，当期未创造经济价值",
-      "reason": "缺失变量：roic_minus_wacc",
+      "reason": "roic_minus_wacc",
       "missing_inputs": [
         "roic_minus_wacc"
       ],
@@ -7025,7 +7025,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S03 货币资金无法覆盖短期有息债务",
-      "reason": "缺失变量：cash_to_short_term_debt",
+      "reason": "cash_to_short_term_debt",
       "missing_inputs": [
         "cash_to_short_term_debt"
       ],
@@ -7037,7 +7037,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S05 有息负债快速扩张",
-      "reason": "缺失变量：interest_bearing_debt_growth",
+      "reason": "interest_bearing_debt_growth",
       "missing_inputs": [
         "interest_bearing_debt_growth"
       ],
@@ -7049,7 +7049,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S07 净负债 / EBITDA 偏高",
-      "reason": "缺失变量：net_debt_to_ebitda",
+      "reason": "net_debt_to_ebitda",
       "missing_inputs": [
         "net_debt_to_ebitda"
       ],
@@ -7061,7 +7061,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S08 受限货币资金占比偏高",
-      "reason": "缺失变量：restricted_cash_ratio",
+      "reason": "restricted_cash_ratio",
       "missing_inputs": [
         "restricted_cash_ratio"
       ],
@@ -7073,7 +7073,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E02 应收账款周转天数明显延长",
-      "reason": "缺失变量：dso_delta",
+      "reason": "dso_delta",
       "missing_inputs": [
         "dso_delta"
       ],
@@ -7085,7 +7085,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E05 现金转换周期明显拉长",
-      "reason": "缺失变量：cash_conversion_cycle_delta",
+      "reason": "cash_conversion_cycle_delta",
       "missing_inputs": [
         "cash_conversion_cycle_delta"
       ],
@@ -7097,7 +7097,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E07 应收与存货合计占总资产比例过高",
-      "reason": "缺失变量：ar_and_inventory_to_assets",
+      "reason": "ar_and_inventory_to_assets",
       "missing_inputs": [
         "ar_and_inventory_to_assets"
       ],
@@ -7109,7 +7109,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "C06 经营现金流对利息的覆盖不足",
-      "reason": "缺失变量：ocf_to_interest_paid",
+      "reason": "ocf_to_interest_paid",
       "missing_inputs": [
         "ocf_to_interest_paid"
       ],
@@ -7121,7 +7121,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A02 存贷双高（账面资金充裕却大量举债）",
-      "reason": "缺失变量：interest_bearing_debt_ratio",
+      "reason": "interest_bearing_debt_ratio",
       "missing_inputs": [
         "interest_bearing_debt_ratio"
       ],
@@ -7133,7 +7133,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A03 审计意见为非标准无保留意见",
-      "reason": "缺失变量：audit_opinion_flag",
+      "reason": "audit_opinion_flag",
       "missing_inputs": [
         "audit_opinion_flag"
       ],
@@ -7145,7 +7145,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A04 研发投入资本化率异常",
-      "reason": "缺失变量：rd_capitalization_ratio",
+      "reason": "rd_capitalization_ratio",
       "missing_inputs": [
         "rd_capitalization_ratio"
       ],
@@ -7157,7 +7157,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V01 现金分红比例显著偏低",
-      "reason": "缺失变量：payout_ratio",
+      "reason": "payout_ratio",
       "missing_inputs": [
         "payout_ratio"
       ],
@@ -7169,7 +7169,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V02 分红金额占经营现金流比例过高",
-      "reason": "缺失变量：dividend_to_ocf",
+      "reason": "dividend_to_ocf",
       "missing_inputs": [
         "dividend_to_ocf"
       ],
@@ -7328,7 +7328,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P02 ROE 明显下滑",
-      "reason": "缺失变量：roe_delta",
+      "reason": "roe_delta",
       "missing_inputs": [
         "roe_delta"
       ],
@@ -7340,7 +7340,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P03 ROE 低于资本成本",
-      "reason": "缺失变量：wacc",
+      "reason": "wacc",
       "missing_inputs": [
         "wacc"
       ],
@@ -7352,7 +7352,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P04 ROIC 低于 WACC，当期未创造经济价值",
-      "reason": "缺失变量：roic_minus_wacc",
+      "reason": "roic_minus_wacc",
       "missing_inputs": [
         "roic_minus_wacc"
       ],
@@ -7364,7 +7364,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S05 有息负债快速扩张",
-      "reason": "缺失变量：interest_bearing_debt_growth",
+      "reason": "interest_bearing_debt_growth",
       "missing_inputs": [
         "interest_bearing_debt_growth"
       ],
@@ -7376,7 +7376,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S07 净负债 / EBITDA 偏高",
-      "reason": "缺失变量：net_debt_to_ebitda",
+      "reason": "net_debt_to_ebitda",
       "missing_inputs": [
         "net_debt_to_ebitda"
       ],
@@ -7388,7 +7388,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S08 受限货币资金占比偏高",
-      "reason": "缺失变量：restricted_cash_ratio",
+      "reason": "restricted_cash_ratio",
       "missing_inputs": [
         "restricted_cash_ratio"
       ],
@@ -7400,7 +7400,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E02 应收账款周转天数明显延长",
-      "reason": "缺失变量：dso_delta",
+      "reason": "dso_delta",
       "missing_inputs": [
         "dso_delta"
       ],
@@ -7412,7 +7412,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E05 现金转换周期明显拉长",
-      "reason": "缺失变量：cash_conversion_cycle_delta",
+      "reason": "cash_conversion_cycle_delta",
       "missing_inputs": [
         "cash_conversion_cycle_delta"
       ],
@@ -7424,7 +7424,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E06 总资产周转率下滑",
-      "reason": "缺失变量：total_asset_turnover_delta",
+      "reason": "total_asset_turnover_delta",
       "missing_inputs": [
         "total_asset_turnover_delta"
       ],
@@ -7436,7 +7436,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E07 应收与存货合计占总资产比例过高",
-      "reason": "缺失变量：ar_and_inventory_to_assets",
+      "reason": "ar_and_inventory_to_assets",
       "missing_inputs": [
         "ar_and_inventory_to_assets"
       ],
@@ -7448,7 +7448,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "C06 经营现金流对利息的覆盖不足",
-      "reason": "缺失变量：ocf_to_interest_paid",
+      "reason": "ocf_to_interest_paid",
       "missing_inputs": [
         "ocf_to_interest_paid"
       ],
@@ -7460,7 +7460,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A02 存贷双高（账面资金充裕却大量举债）",
-      "reason": "缺失变量：interest_bearing_debt_ratio",
+      "reason": "interest_bearing_debt_ratio",
       "missing_inputs": [
         "interest_bearing_debt_ratio"
       ],
@@ -7472,7 +7472,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A03 审计意见为非标准无保留意见",
-      "reason": "缺失变量：audit_opinion_flag",
+      "reason": "audit_opinion_flag",
       "missing_inputs": [
         "audit_opinion_flag"
       ],
@@ -7484,7 +7484,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A04 研发投入资本化率异常",
-      "reason": "缺失变量：rd_capitalization_ratio",
+      "reason": "rd_capitalization_ratio",
       "missing_inputs": [
         "rd_capitalization_ratio"
       ],
@@ -7496,7 +7496,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V01 现金分红比例显著偏低",
-      "reason": "缺失变量：payout_ratio",
+      "reason": "payout_ratio",
       "missing_inputs": [
         "payout_ratio"
       ],
@@ -7508,7 +7508,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V02 分红金额占经营现金流比例过高",
-      "reason": "缺失变量：dividend_to_ocf",
+      "reason": "dividend_to_ocf",
       "missing_inputs": [
         "dividend_to_ocf"
       ],
@@ -7654,7 +7654,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "G04 扣非净利润占比偏低，盈利含金量不足",
-      "reason": "缺失变量：deducted_to_parent",
+      "reason": "deducted_to_parent",
       "missing_inputs": [
         "deducted_to_parent"
       ],
@@ -7666,7 +7666,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P03 ROE 低于资本成本",
-      "reason": "缺失变量：wacc",
+      "reason": "wacc",
       "missing_inputs": [
         "wacc"
       ],
@@ -7678,7 +7678,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P04 ROIC 低于 WACC，当期未创造经济价值",
-      "reason": "缺失变量：roic_minus_wacc",
+      "reason": "roic_minus_wacc",
       "missing_inputs": [
         "roic_minus_wacc"
       ],
@@ -7690,7 +7690,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S08 受限货币资金占比偏高",
-      "reason": "缺失变量：restricted_cash_ratio",
+      "reason": "restricted_cash_ratio",
       "missing_inputs": [
         "restricted_cash_ratio"
       ],
@@ -7702,7 +7702,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E02 应收账款周转天数明显延长",
-      "reason": "缺失变量：dso_delta",
+      "reason": "dso_delta",
       "missing_inputs": [
         "dso_delta"
       ],
@@ -7714,7 +7714,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E05 现金转换周期明显拉长",
-      "reason": "缺失变量：cash_conversion_cycle_delta",
+      "reason": "cash_conversion_cycle_delta",
       "missing_inputs": [
         "cash_conversion_cycle_delta"
       ],
@@ -7726,7 +7726,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E07 应收与存货合计占总资产比例过高",
-      "reason": "缺失变量：ar_and_inventory_to_assets",
+      "reason": "ar_and_inventory_to_assets",
       "missing_inputs": [
         "ar_and_inventory_to_assets"
       ],
@@ -7738,7 +7738,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "C06 经营现金流对利息的覆盖不足",
-      "reason": "缺失变量：ocf_to_interest_paid",
+      "reason": "ocf_to_interest_paid",
       "missing_inputs": [
         "ocf_to_interest_paid"
       ],
@@ -7750,7 +7750,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A03 审计意见为非标准无保留意见",
-      "reason": "缺失变量：audit_opinion_flag",
+      "reason": "audit_opinion_flag",
       "missing_inputs": [
         "audit_opinion_flag"
       ],
@@ -7762,7 +7762,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A04 研发投入资本化率异常",
-      "reason": "缺失变量：rd_capitalization_ratio",
+      "reason": "rd_capitalization_ratio",
       "missing_inputs": [
         "rd_capitalization_ratio"
       ],
@@ -7774,7 +7774,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V01 现金分红比例显著偏低",
-      "reason": "缺失变量：payout_ratio",
+      "reason": "payout_ratio",
       "missing_inputs": [
         "payout_ratio"
       ],
@@ -7786,7 +7786,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V02 分红金额占经营现金流比例过高",
-      "reason": "缺失变量：dividend_to_ocf",
+      "reason": "dividend_to_ocf",
       "missing_inputs": [
         "dividend_to_ocf"
       ],
@@ -7898,7 +7898,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P03 ROE 低于资本成本",
-      "reason": "缺失变量：wacc",
+      "reason": "wacc",
       "missing_inputs": [
         "wacc"
       ],
@@ -7910,7 +7910,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P04 ROIC 低于 WACC，当期未创造经济价值",
-      "reason": "缺失变量：roic_minus_wacc",
+      "reason": "roic_minus_wacc",
       "missing_inputs": [
         "roic_minus_wacc"
       ],
@@ -7922,7 +7922,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S08 受限货币资金占比偏高",
-      "reason": "缺失变量：restricted_cash_ratio",
+      "reason": "restricted_cash_ratio",
       "missing_inputs": [
         "restricted_cash_ratio"
       ],
@@ -7934,7 +7934,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E02 应收账款周转天数明显延长",
-      "reason": "缺失变量：dso_delta",
+      "reason": "dso_delta",
       "missing_inputs": [
         "dso_delta"
       ],
@@ -7946,7 +7946,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E05 现金转换周期明显拉长",
-      "reason": "缺失变量：cash_conversion_cycle_delta",
+      "reason": "cash_conversion_cycle_delta",
       "missing_inputs": [
         "cash_conversion_cycle_delta"
       ],
@@ -7958,7 +7958,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E06 总资产周转率下滑",
-      "reason": "缺失变量：total_asset_turnover_delta",
+      "reason": "total_asset_turnover_delta",
       "missing_inputs": [
         "total_asset_turnover_delta"
       ],
@@ -7970,7 +7970,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E07 应收与存货合计占总资产比例过高",
-      "reason": "缺失变量：ar_and_inventory_to_assets",
+      "reason": "ar_and_inventory_to_assets",
       "missing_inputs": [
         "ar_and_inventory_to_assets"
       ],
@@ -7982,7 +7982,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "C06 经营现金流对利息的覆盖不足",
-      "reason": "缺失变量：ocf_to_interest_paid",
+      "reason": "ocf_to_interest_paid",
       "missing_inputs": [
         "ocf_to_interest_paid"
       ],
@@ -7994,7 +7994,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A03 审计意见为非标准无保留意见",
-      "reason": "缺失变量：audit_opinion_flag",
+      "reason": "audit_opinion_flag",
       "missing_inputs": [
         "audit_opinion_flag"
       ],
@@ -8006,7 +8006,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A04 研发投入资本化率异常",
-      "reason": "缺失变量：rd_capitalization_ratio",
+      "reason": "rd_capitalization_ratio",
       "missing_inputs": [
         "rd_capitalization_ratio"
       ],
@@ -8018,7 +8018,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V01 现金分红比例显著偏低",
-      "reason": "缺失变量：payout_ratio",
+      "reason": "payout_ratio",
       "missing_inputs": [
         "payout_ratio"
       ],
@@ -8030,7 +8030,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V02 分红金额占经营现金流比例过高",
-      "reason": "缺失变量：dividend_to_ocf",
+      "reason": "dividend_to_ocf",
       "missing_inputs": [
         "dividend_to_ocf"
       ],
@@ -8108,7 +8108,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P03 ROE 低于资本成本",
-      "reason": "缺失变量：wacc",
+      "reason": "wacc",
       "missing_inputs": [
         "wacc"
       ],
@@ -8120,7 +8120,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P04 ROIC 低于 WACC，当期未创造经济价值",
-      "reason": "缺失变量：roic_minus_wacc",
+      "reason": "roic_minus_wacc",
       "missing_inputs": [
         "roic_minus_wacc"
       ],
@@ -8132,7 +8132,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S08 受限货币资金占比偏高",
-      "reason": "缺失变量：restricted_cash_ratio",
+      "reason": "restricted_cash_ratio",
       "missing_inputs": [
         "restricted_cash_ratio"
       ],
@@ -8144,7 +8144,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E02 应收账款周转天数明显延长",
-      "reason": "缺失变量：dso_delta",
+      "reason": "dso_delta",
       "missing_inputs": [
         "dso_delta"
       ],
@@ -8156,7 +8156,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E05 现金转换周期明显拉长",
-      "reason": "缺失变量：cash_conversion_cycle_delta",
+      "reason": "cash_conversion_cycle_delta",
       "missing_inputs": [
         "cash_conversion_cycle_delta"
       ],
@@ -8168,7 +8168,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E06 总资产周转率下滑",
-      "reason": "缺失变量：total_asset_turnover_delta",
+      "reason": "total_asset_turnover_delta",
       "missing_inputs": [
         "total_asset_turnover_delta"
       ],
@@ -8180,7 +8180,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E07 应收与存货合计占总资产比例过高",
-      "reason": "缺失变量：ar_and_inventory_to_assets",
+      "reason": "ar_and_inventory_to_assets",
       "missing_inputs": [
         "ar_and_inventory_to_assets"
       ],
@@ -8192,7 +8192,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "C06 经营现金流对利息的覆盖不足",
-      "reason": "缺失变量：ocf_to_interest_paid",
+      "reason": "ocf_to_interest_paid",
       "missing_inputs": [
         "ocf_to_interest_paid"
       ],
@@ -8204,7 +8204,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A03 审计意见为非标准无保留意见",
-      "reason": "缺失变量：audit_opinion_flag",
+      "reason": "audit_opinion_flag",
       "missing_inputs": [
         "audit_opinion_flag"
       ],
@@ -8216,7 +8216,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A04 研发投入资本化率异常",
-      "reason": "缺失变量：rd_capitalization_ratio",
+      "reason": "rd_capitalization_ratio",
       "missing_inputs": [
         "rd_capitalization_ratio"
       ],
@@ -8228,7 +8228,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V01 现金分红比例显著偏低",
-      "reason": "缺失变量：payout_ratio",
+      "reason": "payout_ratio",
       "missing_inputs": [
         "payout_ratio"
       ],
@@ -8240,7 +8240,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V02 分红金额占经营现金流比例过高",
-      "reason": "缺失变量：dividend_to_ocf",
+      "reason": "dividend_to_ocf",
       "missing_inputs": [
         "dividend_to_ocf"
       ],
@@ -8318,7 +8318,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P03 ROE 低于资本成本",
-      "reason": "缺失变量：wacc",
+      "reason": "wacc",
       "missing_inputs": [
         "wacc"
       ],
@@ -8330,7 +8330,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P04 ROIC 低于 WACC，当期未创造经济价值",
-      "reason": "缺失变量：roic_minus_wacc",
+      "reason": "roic_minus_wacc",
       "missing_inputs": [
         "roic_minus_wacc"
       ],
@@ -8342,7 +8342,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S05 有息负债快速扩张",
-      "reason": "缺失变量：interest_bearing_debt_growth",
+      "reason": "interest_bearing_debt_growth",
       "missing_inputs": [
         "interest_bearing_debt_growth"
       ],
@@ -8354,7 +8354,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S07 净负债 / EBITDA 偏高",
-      "reason": "缺失变量：net_debt_to_ebitda",
+      "reason": "net_debt_to_ebitda",
       "missing_inputs": [
         "net_debt_to_ebitda"
       ],
@@ -8366,7 +8366,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S08 受限货币资金占比偏高",
-      "reason": "缺失变量：restricted_cash_ratio",
+      "reason": "restricted_cash_ratio",
       "missing_inputs": [
         "restricted_cash_ratio"
       ],
@@ -8378,7 +8378,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E02 应收账款周转天数明显延长",
-      "reason": "缺失变量：dso_delta",
+      "reason": "dso_delta",
       "missing_inputs": [
         "dso_delta"
       ],
@@ -8390,7 +8390,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E05 现金转换周期明显拉长",
-      "reason": "缺失变量：cash_conversion_cycle_delta",
+      "reason": "cash_conversion_cycle_delta",
       "missing_inputs": [
         "cash_conversion_cycle_delta"
       ],
@@ -8402,7 +8402,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E07 应收与存货合计占总资产比例过高",
-      "reason": "缺失变量：ar_and_inventory_to_assets",
+      "reason": "ar_and_inventory_to_assets",
       "missing_inputs": [
         "ar_and_inventory_to_assets"
       ],
@@ -8414,7 +8414,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "C06 经营现金流对利息的覆盖不足",
-      "reason": "缺失变量：ocf_to_interest_paid",
+      "reason": "ocf_to_interest_paid",
       "missing_inputs": [
         "ocf_to_interest_paid"
       ],
@@ -8426,7 +8426,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A02 存贷双高（账面资金充裕却大量举债）",
-      "reason": "缺失变量：interest_bearing_debt_ratio",
+      "reason": "interest_bearing_debt_ratio",
       "missing_inputs": [
         "interest_bearing_debt_ratio"
       ],
@@ -8438,7 +8438,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A03 审计意见为非标准无保留意见",
-      "reason": "缺失变量：audit_opinion_flag",
+      "reason": "audit_opinion_flag",
       "missing_inputs": [
         "audit_opinion_flag"
       ],
@@ -8450,7 +8450,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A04 研发投入资本化率异常",
-      "reason": "缺失变量：rd_capitalization_ratio",
+      "reason": "rd_capitalization_ratio",
       "missing_inputs": [
         "rd_capitalization_ratio"
       ],
@@ -8462,7 +8462,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V01 现金分红比例显著偏低",
-      "reason": "缺失变量：payout_ratio",
+      "reason": "payout_ratio",
       "missing_inputs": [
         "payout_ratio"
       ],
@@ -8474,7 +8474,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V02 分红金额占经营现金流比例过高",
-      "reason": "缺失变量：dividend_to_ocf",
+      "reason": "dividend_to_ocf",
       "missing_inputs": [
         "dividend_to_ocf"
       ],
@@ -8631,7 +8631,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P03 ROE 低于资本成本",
-      "reason": "缺失变量：wacc",
+      "reason": "wacc",
       "missing_inputs": [
         "wacc"
       ],
@@ -8643,7 +8643,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P04 ROIC 低于 WACC，当期未创造经济价值",
-      "reason": "缺失变量：roic_minus_wacc",
+      "reason": "roic_minus_wacc",
       "missing_inputs": [
         "roic_minus_wacc"
       ],
@@ -8655,7 +8655,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S08 受限货币资金占比偏高",
-      "reason": "缺失变量：restricted_cash_ratio",
+      "reason": "restricted_cash_ratio",
       "missing_inputs": [
         "restricted_cash_ratio"
       ],
@@ -8667,7 +8667,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E02 应收账款周转天数明显延长",
-      "reason": "缺失变量：dso_delta",
+      "reason": "dso_delta",
       "missing_inputs": [
         "dso_delta"
       ],
@@ -8679,7 +8679,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E05 现金转换周期明显拉长",
-      "reason": "缺失变量：cash_conversion_cycle_delta",
+      "reason": "cash_conversion_cycle_delta",
       "missing_inputs": [
         "cash_conversion_cycle_delta"
       ],
@@ -8691,7 +8691,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E07 应收与存货合计占总资产比例过高",
-      "reason": "缺失变量：ar_and_inventory_to_assets",
+      "reason": "ar_and_inventory_to_assets",
       "missing_inputs": [
         "ar_and_inventory_to_assets"
       ],
@@ -8703,7 +8703,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "C06 经营现金流对利息的覆盖不足",
-      "reason": "缺失变量：ocf_to_interest_paid",
+      "reason": "ocf_to_interest_paid",
       "missing_inputs": [
         "ocf_to_interest_paid"
       ],
@@ -8715,7 +8715,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A03 审计意见为非标准无保留意见",
-      "reason": "缺失变量：audit_opinion_flag",
+      "reason": "audit_opinion_flag",
       "missing_inputs": [
         "audit_opinion_flag"
       ],
@@ -8727,7 +8727,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A04 研发投入资本化率异常",
-      "reason": "缺失变量：rd_capitalization_ratio",
+      "reason": "rd_capitalization_ratio",
       "missing_inputs": [
         "rd_capitalization_ratio"
       ],
@@ -8739,7 +8739,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V01 现金分红比例显著偏低",
-      "reason": "缺失变量：payout_ratio",
+      "reason": "payout_ratio",
       "missing_inputs": [
         "payout_ratio"
       ],
@@ -8751,7 +8751,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V02 分红金额占经营现金流比例过高",
-      "reason": "缺失变量：dividend_to_ocf",
+      "reason": "dividend_to_ocf",
       "missing_inputs": [
         "dividend_to_ocf"
       ],
@@ -8829,7 +8829,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P03 ROE 低于资本成本",
-      "reason": "缺失变量：wacc",
+      "reason": "wacc",
       "missing_inputs": [
         "wacc"
       ],
@@ -8841,7 +8841,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P04 ROIC 低于 WACC，当期未创造经济价值",
-      "reason": "缺失变量：roic_minus_wacc",
+      "reason": "roic_minus_wacc",
       "missing_inputs": [
         "roic_minus_wacc"
       ],
@@ -8853,7 +8853,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S03 货币资金无法覆盖短期有息债务",
-      "reason": "缺失变量：cash_to_short_term_debt",
+      "reason": "cash_to_short_term_debt",
       "missing_inputs": [
         "cash_to_short_term_debt"
       ],
@@ -8865,7 +8865,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S05 有息负债快速扩张",
-      "reason": "缺失变量：interest_bearing_debt_growth",
+      "reason": "interest_bearing_debt_growth",
       "missing_inputs": [
         "interest_bearing_debt_growth"
       ],
@@ -8877,7 +8877,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S07 净负债 / EBITDA 偏高",
-      "reason": "缺失变量：net_debt_to_ebitda",
+      "reason": "net_debt_to_ebitda",
       "missing_inputs": [
         "net_debt_to_ebitda"
       ],
@@ -8889,7 +8889,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S08 受限货币资金占比偏高",
-      "reason": "缺失变量：restricted_cash_ratio",
+      "reason": "restricted_cash_ratio",
       "missing_inputs": [
         "restricted_cash_ratio"
       ],
@@ -8901,7 +8901,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E02 应收账款周转天数明显延长",
-      "reason": "缺失变量：dso_delta",
+      "reason": "dso_delta",
       "missing_inputs": [
         "dso_delta"
       ],
@@ -8913,7 +8913,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E05 现金转换周期明显拉长",
-      "reason": "缺失变量：cash_conversion_cycle_delta",
+      "reason": "cash_conversion_cycle_delta",
       "missing_inputs": [
         "cash_conversion_cycle_delta"
       ],
@@ -8925,7 +8925,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E07 应收与存货合计占总资产比例过高",
-      "reason": "缺失变量：ar_and_inventory_to_assets",
+      "reason": "ar_and_inventory_to_assets",
       "missing_inputs": [
         "ar_and_inventory_to_assets"
       ],
@@ -8937,7 +8937,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "C06 经营现金流对利息的覆盖不足",
-      "reason": "缺失变量：ocf_to_interest_paid",
+      "reason": "ocf_to_interest_paid",
       "missing_inputs": [
         "ocf_to_interest_paid"
       ],
@@ -8949,7 +8949,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A01 商誉占净资产比例偏高",
-      "reason": "缺失变量：goodwill_to_equity",
+      "reason": "goodwill_to_equity",
       "missing_inputs": [
         "goodwill_to_equity"
       ],
@@ -8961,7 +8961,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A02 存贷双高（账面资金充裕却大量举债）",
-      "reason": "缺失变量：interest_bearing_debt_ratio",
+      "reason": "interest_bearing_debt_ratio",
       "missing_inputs": [
         "interest_bearing_debt_ratio"
       ],
@@ -8973,7 +8973,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A03 审计意见为非标准无保留意见",
-      "reason": "缺失变量：audit_opinion_flag",
+      "reason": "audit_opinion_flag",
       "missing_inputs": [
         "audit_opinion_flag"
       ],
@@ -8985,7 +8985,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A04 研发投入资本化率异常",
-      "reason": "缺失变量：rd_capitalization_ratio",
+      "reason": "rd_capitalization_ratio",
       "missing_inputs": [
         "rd_capitalization_ratio"
       ],
@@ -8997,7 +8997,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V01 现金分红比例显著偏低",
-      "reason": "缺失变量：payout_ratio",
+      "reason": "payout_ratio",
       "missing_inputs": [
         "payout_ratio"
       ],
@@ -9009,7 +9009,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V02 分红金额占经营现金流比例过高",
-      "reason": "缺失变量：dividend_to_ocf",
+      "reason": "dividend_to_ocf",
       "missing_inputs": [
         "dividend_to_ocf"
       ],
@@ -9179,7 +9179,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P02 ROE 明显下滑",
-      "reason": "缺失变量：roe_delta",
+      "reason": "roe_delta",
       "missing_inputs": [
         "roe_delta"
       ],
@@ -9191,7 +9191,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P03 ROE 低于资本成本",
-      "reason": "缺失变量：wacc",
+      "reason": "wacc",
       "missing_inputs": [
         "wacc"
       ],
@@ -9203,7 +9203,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "P04 ROIC 低于 WACC，当期未创造经济价值",
-      "reason": "缺失变量：roic_minus_wacc",
+      "reason": "roic_minus_wacc",
       "missing_inputs": [
         "roic_minus_wacc"
       ],
@@ -9215,7 +9215,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S05 有息负债快速扩张",
-      "reason": "缺失变量：interest_bearing_debt_growth",
+      "reason": "interest_bearing_debt_growth",
       "missing_inputs": [
         "interest_bearing_debt_growth"
       ],
@@ -9227,7 +9227,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S07 净负债 / EBITDA 偏高",
-      "reason": "缺失变量：net_debt_to_ebitda",
+      "reason": "net_debt_to_ebitda",
       "missing_inputs": [
         "net_debt_to_ebitda"
       ],
@@ -9239,7 +9239,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "S08 受限货币资金占比偏高",
-      "reason": "缺失变量：restricted_cash_ratio",
+      "reason": "restricted_cash_ratio",
       "missing_inputs": [
         "restricted_cash_ratio"
       ],
@@ -9251,7 +9251,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E02 应收账款周转天数明显延长",
-      "reason": "缺失变量：dso_delta",
+      "reason": "dso_delta",
       "missing_inputs": [
         "dso_delta"
       ],
@@ -9263,7 +9263,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E05 现金转换周期明显拉长",
-      "reason": "缺失变量：cash_conversion_cycle_delta",
+      "reason": "cash_conversion_cycle_delta",
       "missing_inputs": [
         "cash_conversion_cycle_delta"
       ],
@@ -9275,7 +9275,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E06 总资产周转率下滑",
-      "reason": "缺失变量：total_asset_turnover_delta",
+      "reason": "total_asset_turnover_delta",
       "missing_inputs": [
         "total_asset_turnover_delta"
       ],
@@ -9287,7 +9287,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "E07 应收与存货合计占总资产比例过高",
-      "reason": "缺失变量：ar_and_inventory_to_assets",
+      "reason": "ar_and_inventory_to_assets",
       "missing_inputs": [
         "ar_and_inventory_to_assets"
       ],
@@ -9299,7 +9299,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "C06 经营现金流对利息的覆盖不足",
-      "reason": "缺失变量：ocf_to_interest_paid",
+      "reason": "ocf_to_interest_paid",
       "missing_inputs": [
         "ocf_to_interest_paid"
       ],
@@ -9311,7 +9311,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A03 审计意见为非标准无保留意见",
-      "reason": "缺失变量：audit_opinion_flag",
+      "reason": "audit_opinion_flag",
       "missing_inputs": [
         "audit_opinion_flag"
       ],
@@ -9323,7 +9323,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "A04 研发投入资本化率异常",
-      "reason": "缺失变量：rd_capitalization_ratio",
+      "reason": "rd_capitalization_ratio",
       "missing_inputs": [
         "rd_capitalization_ratio"
       ],
@@ -9335,7 +9335,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V01 现金分红比例显著偏低",
-      "reason": "缺失变量：payout_ratio",
+      "reason": "payout_ratio",
       "missing_inputs": [
         "payout_ratio"
       ],
@@ -9347,7 +9347,7 @@
     {
       "type": "risk_not_evaluable",
       "item": "V02 分红金额占经营现金流比例过高",
-      "reason": "缺失变量：dividend_to_ocf",
+      "reason": "dividend_to_ocf",
       "missing_inputs": [
         "dividend_to_ocf"
       ],

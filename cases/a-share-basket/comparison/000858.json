@@ -1,6 +1,6 @@
 {
  "schema": "finradar.comparison/1.0",
- "generated_at": "2026-11-04T23:39:09+08:00",
+ "generated_at": "2026-11-06T00:08:20+08:00",
  "generator": "risk-radar/scripts/build_comparison.py",
  "status": "ok",
  "comparability": {
@@ -16,51 +16,71 @@
  "peer_set": [
   {
    "ticker": "000333",
+   "ticker_full": "000333.SZ",
+   "exchange_code": "SZ",
    "name": "美的集团股份有限公司",
    "report_period": "2025"
   },
   {
    "ticker": "000651",
+   "ticker_full": "000651.SZ",
+   "exchange_code": "SZ",
    "name": "珠海格力电器股份有限公司",
    "report_period": "2025"
   },
   {
    "ticker": "002415",
+   "ticker_full": "002415.SZ",
+   "exchange_code": "SZ",
    "name": "杭州海康威视数字技术股份有限公司",
    "report_period": "2025"
   },
   {
    "ticker": "002594",
+   "ticker_full": "002594.SZ",
+   "exchange_code": "SZ",
    "name": "比亚迪股份有限公司",
    "report_period": "2025"
   },
   {
    "ticker": "002709",
+   "ticker_full": "002709.SZ",
+   "exchange_code": "SZ",
    "name": "广州天赐高新材料股份有限公司",
    "report_period": "2025"
   },
   {
    "ticker": "300750",
+   "ticker_full": "300750.SZ",
+   "exchange_code": "SZ",
    "name": "宁德时代新能源科技股份有限公司",
    "report_period": "2025"
   },
   {
    "ticker": "600031",
+   "ticker_full": "600031.SH",
+   "exchange_code": "SH",
    "name": "三一重工股份有限公司",
    "report_period": "2025"
   },
   {
    "ticker": "600309",
+   "ticker_full": "600309.SH",
+   "exchange_code": "SH",
    "name": "万华化学集团股份有限公司",
    "report_period": "2025"
   },
   {
    "ticker": "600519",
+   "ticker_full": "600519.SH",
+   "exchange_code": "SH",
    "name": "贵州茅台酒股份有限公司",
    "report_period": "2025"
   },
   {
    "ticker": "600887",
+   "ticker_full": "600887.SH",
+   "exchange_code": "SH",
    "name": "内蒙古伊利实业集团股份有限公司",
    "report_period": "2025"
   }

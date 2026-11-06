@@ -16,7 +16,7 @@
 ```python
 diag = json.load(open("output_ratios.json"))
 
-unified["ratios"] = diag["ratios"]              # 五类指标，直接填
+unified["ratios"] = diag["ratios"]              # 六类指标（含行业专属 banking），直接填
 unified["sources"] += diag["sources"]           # 出处汇总（年报 + 页码）
 unified["review_queue"] += diag["review_queue"] # 待核验队列，合并进去
 ```
@@ -45,7 +45,8 @@ unified["review_queue"] += diag["review_queue"] # 待核验队列，合并进去
 
 ## `ratios` 结构
 
-五类，与统一 Schema 的 `ratios` 段落**一一对应**：
+六类。前五类与统一 Schema 的 `ratios` 段落**一一对应**；`banking` 只在银行业公司出现，
+非银行公司不生成该键：
 
 ```jsonc
 "ratios": {
@@ -53,7 +54,8 @@ unified["review_queue"] += diag["review_queue"] # 待核验队列，合并进去
   "profitability":    { ... },
   "solvency":         { ... },
   "efficiency":       { ... },
-  "cashflow_quality": { ... }
+  "cashflow_quality": { ... },
+  "banking":          { ... }    // 仅银行业：净息差 / 不良率 / 拨备覆盖率 / 资本充足率等
 }
 ```
 
@@ -61,34 +63,50 @@ unified["review_queue"] += diag["review_queue"] # 待核验队列，合并进去
 
 ```jsonc
 "gross_margin": {
-  "value":  0.230949,                                     // 当期值；不可算时为 null
-  "prev":   0.256228,                                     // 上期值；不可算或无 t-2 余额时为 null
-  "delta":  -0.025279,                                    // value - prev
+  "value":  0.267202,                                     // 当期值；不可算时为 null
+  "prev":   0.267669,                                     // 上期值；不可算或缺 t-2 余额时为 null
+  "delta":  -0.000467,                                    // value - prev
   "unit":   "ratio",                                      // ratio | days | x | CNY
   "formula": "(营业收入 - 营业成本) / 营业收入",
-  "inputs": { "revenue": 12860000000.0, "cost_of_revenue": 9890000000.0 },
+  "inputs": { "revenue": 458502407000.0, "cost_of_revenue": 335989528000.0 },
+  "inputs_prev": { "revenue": 409084266000.0, "cost_of_revenue": 299584935000.0 },
   "higher_is_better": true,                               // null = 无方向性
-  "status": "ok"                                          // ok | not_meaningful
+  "status": "ok",                                         // ok | not_evaluable | not_meaningful
+  "name": "毛利率",                                        // 中文指标名，取自 metric_labels.json
+  "role": "core",                                         // core | diagnostic
+  "source_fields": ["revenue", "cost_of_revenue"],         // 该指标用到的原始科目
+  "source_pages": [134]                                   // 上述科目在年报里的印刷页码
 }
 ```
+
+### `role` 怎么分
+
+- `core`：营收增速、归母净利增速、毛利率、归母净利率、加权 ROE、资产负债率、经营现金流收入比、净现比。
+- `diagnostic`：其余。
+
+D 的公司概览页不读 `ratios`，只读 `meta.display.overview_financials`；`role` 只影响财务诊断页的分组与排序。
 
 ### `unit` 取值含义
 
 | unit | 含义 | 例子 |
 |---|---|---|
-| `ratio` | 小数比率，`1.0 = 100%` | `gross_margin = 0.2309` → 23.09% |
+| `ratio` | 小数比率，`1.0 = 100%` | `gross_margin = 0.2672` → 26.72% |
 | `days` | 天 | `dso = 141.2` |
 | `x` | 倍数 | `current_ratio = 1.46` |
 | `CNY` | 元 | `net_debt = 4680000000.0` |
 
 > **给 E 的提示**：前端展示时按 `unit` 决定格式化方式，不要硬编码。
 
-### `status` 的两种状态
+### `status` 的三种状态
 
-| status | 含义 | E 怎么显示 |
-|---|---|---|
-| `ok` | 计算成功 | 正常显示数值 |
-| `not_meaningful` | 输入缺失 / 分母为 0 / 上期为负 | 显示"不可算"，并关联 `review_queue` 的条目 |
+| status | 含义 | 触发条件 | 页面怎么显示 |
+|---|---|---|---|
+| `ok` | 计算成功 | 输入齐全 | 正常显示数值 |
+| `not_evaluable` | 数据不够，**补数据就能算** | 缺科目、分母为 0、缺上期余额 | 显示“不可算”，关联 `review_queue` |
+| `not_meaningful` | 口径本身不适用，**补数据也没意义** | 行业口径不成立（如银行算流动比率、非银算净息差） | 显示“不适用”，不关联 `review_queue` |
+
+两者的区别是判定语义：`not_evaluable` 是待补的缺口，`not_meaningful` 是正确的跳过。
+`review_queue` 只收前者，`reason` 与状态一一对应。
 
 ---
 

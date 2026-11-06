@@ -171,7 +171,7 @@ unified["risks"]  = risks["risks"]
 unified["review_queue"] = diag["review_queue"] + risks["review_queue"]
 ```
 
-**五类 key 与统一 Schema 完全一致，不需要字段映射。**
+**前五类 key 与统一 Schema 完全一致，不需要字段映射；`banking` 是行业专属第六类，只有银行业公司才出现。**
 
 ### 交付前先跑契约自检
 
@@ -224,12 +224,65 @@ null。这里按每条指标的 `source_fields` 把科目页码汇总到指标�
 3. **证据链多一个「建议」步骤**。D 只读数据/计算/判断/出处，多出来的不影响；
    删掉反而丢掉可执行的整改动作。
 
-### D 侧还需补两处（规范 6.2 与 6.3 都点名了）
+### 工作台接入：D 的六步调用与 `peer_financials`
 
-自检会把这两项报成 WARN，不是 FAIL，因为 B 的字段已经在了，是 `from_b.py` 没透传：
+2026-11-06 与 D 对齐的口径，B 不起服务，D 用子进程调，输入输出全走 JSON 文件。
 
-- `_ratio_record` 丢 `name` / `role` / `source_fields` / `source_pages` → E 拿不到中文名与出处。
-- `_adapt_risk_card` 丢 `threshold_value` / `threshold_source` / `peer_sample_n` → 页面上看不到阈值来源。
+**输入**：D 写的 `b_input.json`，顶层比原来的抽取结果多一个数组 `peer_financials`，与
+`company` / `financials` 平级：
+
+```json
+"peer_financials": [
+  {"company": {"name": "宜宾五粮液股份有限公司", "ticker": "000858"},
+   "financials": {"revenue": {"2025": {"value": 89175178322.7, "unit": "元", "page": 12}}}}
+]
+```
+
+一家一条，结构与目标 `financials` 完全一样（指标 → 期间 → `{value, unit, source, page}`），
+只放当期需要的那三年。没有同业就是空数组 `[]`，B 回退固定阈值，不报错。
+
+**调用顺序**（D 侧实际执行，B 的入口都已就绪）：
+
+```bash
+# 1. D 写 b_input.json（含 peer_financials）
+# 2. 目标公司指标
+python3 financial-diagnosis/scripts/compute_ratios.py -i b_input.json -o b_ratios.json --pretty
+# 3. D 为每个 peer 写 peer_inputs/<ticker>.json（company + financials 即可，无需 meta）
+# 4. 同业指标
+python3 financial-diagnosis/scripts/compute_ratios.py -i peer_inputs/<ticker>.json -o peer_ratios/<ticker>.json
+# 5. 同业对比
+python3 risk-radar/scripts/build_comparison.py --target b_ratios.json --peers peer_ratios --out comparison.json
+# 6. 风险判定
+python3 risk-radar/scripts/detect_risks.py --ratios b_ratios.json --rules risk_rules.json \
+        --comparison comparison.json -o b_risks.json --pretty
+```
+
+第 2 步会忽略顶层的 `peer_financials`（只读 `meta` 与 `financials`）；第 4 步的 peer 输入即使
+没有 `meta.periods`，也能从 `financials` 的期间键推断，实测 4 家全过。
+
+**链路自检**（联调时一条命令判断有没有断）：
+
+```bash
+python3 scripts_link_check.py --b-input b_input.json
+# 逐步打印 6 步退出码，最后汇总 comparison 状态、peer_set、当次同业阈值条数
+```
+
+`comparison` 放统一对象顶层，B 输出单独文件，D 原样合并；`comparison.multiples` 由 D 在 C 跑完后补，
+B 不碰。`peer_set` 里每家同时给 `ticker`（6 位）与 `ticker_full`（`000858.SZ`），
+D 拿 `ticker_full` 就能和 C 的 `valuation.comps.peer_companies` 对齐，不必自己拼后缀。
+
+**两条阈值通道不要混**：`peer_*` 是这次请求用 `peer_financials` 现场算的，
+`industry_*` 是本地池（年报季后刷新）的历史基准，D 页面上分开显示。优先级：
+当次同业 → 离线池 → `fixed_fallback`。
+
+### D 侧两处透传：已补齐
+
+下面两项 2026-11-06 已由 D 改好，B 按原字段输出即可：
+
+- `_ratio_record` 现在透传 `name` / `role` / `source_fields` / `source_pages`；
+- `_adapt_risk_card` 现在透传 `threshold_value` / `threshold_source` / `peer_sample_n`。
+
+自检里这两项不再报 WARN。若换新版本适配器后又出现，说明改动被回退，照「交接字段」那张表核对。
 
 ---
 
@@ -259,9 +312,10 @@ null。这里按每条指标的 `source_fields` 把科目页码汇总到指标�
 1. 调用顺序：`financial-extraction` → **`financial-diagnosis`** → **`risk-radar`** → `valuation` → `report`。
 2. 我的两个模块都是**纯 Python 脚本**，无第三方依赖，用 `subprocess` 或 `exec` 调用都行，输入输出都是 JSON 文件。
 3. `review_queue` 记得**合并**两段的（`diag["review_queue"] + risks["review_queue"]`），我这边已经用 `inherited_from` 标记了来源。
-4. **`from_b.py` 要补两个透传**（规范 6.2 / 6.3 点名了，我用你的真实适配器跑过，确认现在会被丢掉）：
-   - `_ratio_record` 加上 `name`、`role`、`source_fields`、`source_pages` 四个键；
-   - `_adapt_risk_card` 加上 `threshold_value`、`threshold_source`、`peer_sample_n`。
+4. **`from_b.py` 的两处透传已补齐**（2026-11-06 确认）：
+   `_ratio_record` 透传 `name`、`role`、`source_fields`、`source_pages`；
+   `_adapt_risk_card` 透传 `threshold_value`、`threshold_source`、`peer_sample_n`。
+   换适配器版本时留意别回退，这两项一丢，页面就分不出核心指标、也看不到阈值来源。
 5. **`involved_values[].page` 已经能取到**：我加了 `metric_evidence`，并把指标名以别名并进
    `evidence`（带 `kind="metric_alias"`），你现有的 `_evidence_page(evidence, metric, period)`
    不改也能命中。实测 4 条触发卡的 4 个变量全部拿到页码。
@@ -608,7 +662,7 @@ python3 risk-radar/scripts/compute_wacc.py --code <公司代码> --ratios <ratio
 python3 risk-radar/scripts/detect_risks.py --ratios ... --rules ... --wacc risk-radar/data/wacc_<code>.json -o ...
 ```
 
-无 `--wacc` 时 P03/B12 维持 not_evaluable（不伪装）；风险卡 `threshold_source=wacc_sensitivity / cost_of_equity_sensitivity`，`industry_profile.wacc` 透出区间与 β 出处给 D。
+无 `--wacc` 时 P03/B12 维持 not_evaluable（不伪装）；风险卡 `threshold_source=wacc_sensitivity`（银行用 Ke 替代 WACC，差异写在 `threshold_note` 里，不给 D 留第二套取值），`industry_profile.wacc` 透出区间与 β 出处给 D。
 
 **与 C 的对齐请求**：C 的估值（戈登模型 r）建议读同一份 wacc 输出——否则 B 判"ROE 低于资本成本"而 C 估值用的 r 更低，两处结论会打架。
 

@@ -1,6 +1,6 @@
 {
   "schema_version": "finradar.diagnosis/1.0",
-  "generated_at": "2026-11-05T01:18:41+08:00",
+  "generated_at": "2026-11-06T09:20:28+08:00",
   "generator": "financial-diagnosis/scripts/compute_ratios.py",
   "company": {
     "name": "华衍智能装备股份有限公司",

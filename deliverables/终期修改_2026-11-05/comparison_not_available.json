@@ -1,0 +1,208 @@
+{
+ "schema": "finradar.comparison/1.0",
+ "generated_at": "2026-11-05T22:35:21+08:00",
+ "generator": "risk-radar/scripts/build_comparison.py",
+ "status": "not_available",
+ "comparability": {
+  "level": "weak",
+  "note": "行业剖面未识别（general），同业只在同一剖面内可比，不能当作严格同行业对比"
+ },
+ "industry_profile": "general",
+ "target": {
+  "ticker": "000333",
+  "name": "美的集团股份有限公司",
+  "report_period": "2025"
+ },
+ "peer_set": [],
+ "sample_n": 0,
+ "metrics": [
+  {
+   "metric": "revenue_growth",
+   "label": "营业收入增速",
+   "target": 0.120802,
+   "peer_median": null,
+   "peer_p25": null,
+   "peer_p75": null,
+   "percentile": null,
+   "sample_n": 0,
+   "better": "higher",
+   "flag": null
+  },
+  {
+   "metric": "gross_margin",
+   "label": "毛利率",
+   "target": 0.267202,
+   "peer_median": null,
+   "peer_p25": null,
+   "peer_p75": null,
+   "percentile": null,
+   "sample_n": 0,
+   "better": "higher",
+   "flag": null
+  },
+  {
+   "metric": "net_margin_parent",
+   "label": "归母净利率",
+   "target": 0.095846,
+   "peer_median": null,
+   "peer_p25": null,
+   "peer_p75": null,
+   "percentile": null,
+   "sample_n": 0,
+   "better": "higher",
+   "flag": null
+  },
+  {
+   "metric": "roe",
+   "label": "净资产收益率",
+   "target": 0.199765,
+   "peer_median": null,
+   "peer_p25": null,
+   "peer_p75": null,
+   "percentile": null,
+   "sample_n": 0,
+   "better": "higher",
+   "flag": null
+  },
+  {
+   "metric": "debt_to_assets",
+   "label": "资产负债率",
+   "target": 0.61165,
+   "peer_median": null,
+   "peer_p25": null,
+   "peer_p75": null,
+   "percentile": null,
+   "sample_n": 0,
+   "better": "lower",
+   "flag": null
+  },
+  {
+   "metric": "dso",
+   "label": "应收账款周转天数",
+   "target": 30.349798,
+   "peer_median": null,
+   "peer_p25": null,
+   "peer_p75": null,
+   "percentile": null,
+   "sample_n": 0,
+   "better": "lower",
+   "flag": null
+  },
+  {
+   "metric": "dio",
+   "label": "存货周转天数",
+   "target": 69.508607,
+   "peer_median": null,
+   "peer_p25": null,
+   "peer_p75": null,
+   "percentile": null,
+   "sample_n": 0,
+   "better": "lower",
+   "flag": null
+  },
+  {
+   "metric": "ocf_to_net_income",
+   "label": "净现比",
+   "target": 1.198241,
+   "peer_median": null,
+   "peer_p25": null,
+   "peer_p75": null,
+   "percentile": null,
+   "sample_n": 0,
+   "better": "higher",
+   "flag": null
+  }
+ ],
+ "risk_matrix": [
+  {
+   "dimension": "成长",
+   "target_level": null,
+   "peer_level": "中",
+   "note": "同业数据不足，本维度不做判断",
+   "metrics": [
+    "revenue_growth"
+   ]
+  },
+  {
+   "dimension": "盈利",
+   "target_level": null,
+   "peer_level": "中",
+   "note": "同业数据不足，本维度不做判断",
+   "metrics": [
+    "gross_margin",
+    "net_margin_parent",
+    "roe"
+   ]
+  },
+  {
+   "dimension": "偿债",
+   "target_level": null,
+   "peer_level": "中",
+   "note": "同业数据不足，本维度不做判断",
+   "metrics": [
+    "debt_to_assets"
+   ]
+  },
+  {
+   "dimension": "营运",
+   "target_level": null,
+   "peer_level": "中",
+   "note": "同业数据不足，本维度不做判断",
+   "metrics": [
+    "dso",
+    "dio"
+   ]
+  },
+  {
+   "dimension": "现金流",
+   "target_level": null,
+   "peer_level": "中",
+   "note": "同业数据不足，本维度不做判断",
+   "metrics": [
+    "ocf_to_net_income"
+   ]
+  }
+ ],
+ "thresholds": {
+  "ar_growth_gap": {
+   "label": "应收增速 − 收入增速",
+   "basis": "peer_p75",
+   "value": null,
+   "sample_n": 0,
+   "expr": "accounts_receivable_growth - revenue_growth"
+  },
+  "inventory_growth_gap": {
+   "label": "存货增速 − 成本增速",
+   "basis": "peer_p75",
+   "value": null,
+   "sample_n": 0,
+   "expr": "inventory_growth - cost_of_revenue_growth"
+  },
+  "gross_margin": {
+   "label": "毛利率",
+   "basis": "peer_p25",
+   "value": null,
+   "sample_n": 0,
+   "expr": "gross_margin"
+  },
+  "dso_delta": {
+   "label": "应收周转天数变动",
+   "basis": "peer_p75",
+   "value": null,
+   "sample_n": 0,
+   "expr": "dso_delta"
+  },
+  "debt_to_assets": {
+   "label": "资产负债率",
+   "basis": "peer_p75",
+   "value": null,
+   "sample_n": 0,
+   "expr": "debt_to_assets"
+  }
+ },
+ "notes": {
+  "status_rule": "同业 3 家及以上才标 ok；1–2 家标 partial；没有同业标 not_available",
+  "no_fake_score": "五维只给相对位置（高/中/低）与质量分位，不给 0–100 评分",
+  "peers_not_selected_here": "同业名单由 C 决定，本脚本只算分位与位置，不自己选同业"
+ }
+}

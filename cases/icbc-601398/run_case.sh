@@ -70,10 +70,12 @@ echo
 
 # ---------- 4. 看板 ---------- #
 echo "[4/4] 生成可视化看板"
+# --peer ""：不嵌同业对比板块。银行的同业基准走离线行业池（industry_*），
+# 没有当次同业篮子；默认的 A 股篮子（白酒等）嵌进银行页面语义不对。
 "$PY" "$ROOT/scripts_build_dashboard.py" \
       --diag "$HERE/output_ratios.json" \
       --risk "$HERE/output_risks.json" \
-      --out  "$HERE/dashboard.html" --note real
+      --out  "$HERE/dashboard.html" --note real --peer ""
 echo
 
 echo "全部完成。产物："

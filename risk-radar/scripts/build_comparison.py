@@ -15,6 +15,7 @@
 
 用法：
     python3 build_comparison.py --target r_600519.json --peers peers/ --out comparison.json
+    python3 build_comparison.py --target r_600519.json --out comparison.json   # 无同业，输出 not_available
 """
 from __future__ import annotations
 
@@ -237,7 +238,8 @@ def load(p):
 def main():
     ap = argparse.ArgumentParser(description="同业对比（规范 §6.4）")
     ap.add_argument("--target", required=True, help="目标公司的 ratios JSON")
-    ap.add_argument("--peers", required=True, nargs="+", help="同业 ratios JSON 文件或目录")
+    ap.add_argument("--peers", nargs="*", default=[],
+                    help="同业 ratios JSON 文件或目录；不传或目录为空时输出 status=not_available，退出码 0")
     ap.add_argument("--out", required=True)
     ap.add_argument("--allow-cross-industry", action="store_true",
                     help="允许跨行业对比（默认拒绝）")
@@ -245,15 +247,20 @@ def main():
 
     target = load(args.target)
     files = []
-    for p in args.peers:
+    for p in (args.peers or []):
         if os.path.isdir(p):
             files.extend(sorted(glob.glob(os.path.join(p, "*.json"))))
         else:
             files.append(p)
     files = [f for f in files if os.path.abspath(f) != os.path.abspath(args.target)]
     if not files:
-        print("[FAIL] 没有找到同业文件", file=sys.stderr)
-        return 1
+        # 规范 §6.4 / §10.2：没有同业不是错误，降级为 not_available，不中断整条链路。
+        out = build(target, [], [])
+        with open(args.out, "w", encoding="utf-8") as f:
+            json.dump(out, f, ensure_ascii=False, indent=1)
+        print("[OK] comparison -> %s" % args.out)
+        print("     status=not_available（未提供同业，全部指标与阈值置空，规则回退固定阈值）")
+        return 0
 
     peers, meta = [], []
     for f in files:
@@ -264,9 +271,15 @@ def main():
                   % (target.get("industry_profile"), os.path.basename(f), prof), file=sys.stderr)
             return 1
         peers.append(d)
+        c = d.get("company") or {}
         meta.append({
-            "ticker": (d.get("company") or {}).get("ticker"),
-            "name": (d.get("company") or {}).get("name"),
+            "ticker": c.get("ticker"),
+            # D 要求 peer_set 的代码能和 C 的 valuation.comps.peer_companies 对上；
+            # C 用带后缀全码，B 的 ticker 按约定恒为 6 位，所以在这里透传 ticker_full，
+            # 让 D 直接匹配，不必自己拼后缀（拼错市场后缀比不匹配更糟）。
+            "ticker_full": c.get("ticker_full"),
+            "exchange_code": c.get("exchange_code"),
+            "name": c.get("name"),
             "report_period": (d.get("period") or {}).get("current"),
         })
 

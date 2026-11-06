@@ -47,7 +47,7 @@ financial-diagnosis/
 
 ## 它算什么
 
-五类共 **65 个指标**，每个都带 `formula` / `inputs` / `prev` / `delta` / `unit` / `status`：
+六类共 **65 个指标**（前五类通用 + 行业专属 `banking`），每个都带 `formula` / `inputs` / `prev` / `delta` / `unit` / `status`：
 
 | 类别 | 数量 | 代表指标 |
 |---|---|---|
@@ -74,7 +74,7 @@ unified["sources"]     += diag["sources"]           # 出处（年报 + 页码�
 unified["review_queue"] += diag["review_queue"]     # 待核验队列
 ```
 
-**注意**：`data.ratios` 里的五类 key（`growth` / `profitability` / `solvency` / `efficiency` / `cashflow_quality`）
+**注意**：`data.ratios` 里的前五类 key（`growth` / `profitability` / `solvency` / `efficiency` / `cashflow_quality`）
 与 D 的统一 Schema 完全一致，**不需要做字段映射**。
 
 ---

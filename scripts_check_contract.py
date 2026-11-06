@@ -44,13 +44,18 @@ RISK_STATUS = {"triggered", "passed", "not_evaluable", "not_applicable"}
 SEVERITY = {"high", "medium", "low", None}
 SEVERITY_TAG = {"重大", "关注", "提示", None}
 THRESHOLD_SOURCE = {
-    "fixed", "peer_p25", "peer_p75", "regulatory", "convention",
-    # 行业剖面离线校准（calibrate.py + peer_samples）：规则 benchmark_judge 生效时的来源
+    # 当次同业分位（--comparison，D 传 peer_financials 现场算）。规范 §6.3 的取值表
+    # 只有 peer_p25 / peer_p75；peer_median 供 B06 净息差这类按中位数判的规则，
+    # D 已确认接收三种。
+    "fixed", "peer_p25", "peer_median", "peer_p75",
+    # 离线行业基准（industry_profiles / peer_samples / 板块池，年报季后刷新）。
+    # 与 peer_* 是两条通道，D 也接收，页面分开显示「行业基准」与「同业」。
     "industry_p10", "industry_p25", "industry_median", "industry_p75", "industry_p90",
     # benchmark_judge 声明了但基准缺失/样本不足时的如实回退标注（不伪装成同业判定）
     "fixed_fallback",
-    # WACC 敏感性判定（compute_wacc.py 产出，--wacc 传入）：P03/B12 两端重判的来源
-    "wacc_sensitivity", "cost_of_equity_sensitivity",
+    # 折现率敏感性判定（compute_wacc.py 产出，--wacc 传入）：P03/B12 两端重判的来源。
+    # 银行用 Ke 的差异写在 threshold_note 里，不给 D 留第二套取值。
+    "wacc_sensitivity",
 }
 # 行业基准注入的上下文变量（{指标}_industry_{分位}[_pp]）：外部校准量，没有年报页码，
 # 出处由 threshold_source / peer_sample_n 标注，不参与 metric_evidence 回溯检查
@@ -371,11 +376,13 @@ def check_risks(doc: dict, ratios_doc: dict | None) -> None:
     bad_src = sorted({str(c.get("threshold_source")) for c in cards} - THRESHOLD_SOURCE)
     if bad_src:
         fail("threshold_source 取值非法", "、".join(bad_src))
+    # 两条通道按前缀分开，样本门槛不同（与 D 对齐的口径）：
+    #   peer_*     当次同业分位（--comparison），n≥3 可用；
+    #   industry_* 离线行业基准池，n≥5 才算校准/参考，不足不得当分位用。
     peer = [c for c in cards if str(c.get("threshold_source", "")).startswith("peer_")]
     small = [c["risk_id"] for c in peer if (c.get("peer_sample_n") or 0) < 3]
     if small:
         fail("同业阈值样本不足 3 家", "、".join(small[:6]))
-    # 行业剖面基准（detect_risks.BENCHMARK_MIN_SAMPLE 同口径）：n≥5 才允许用分位数判定
     ind = [c for c in cards if str(c.get("threshold_source", "")).startswith("industry_")]
     small_ind = [c["risk_id"] for c in ind if (c.get("peer_sample_n") or 0) < 5]
     if small_ind:
@@ -385,7 +392,13 @@ def check_risks(doc: dict, ratios_doc: dict | None) -> None:
         if noval:
             fail("同业阈值缺数值", "、".join(noval[:6]))
         else:
-            ok("同业阈值都带数值与样本量", f"{len(peer)} 条取分位数")
+            ok("同业阈值都带数值与样本量", f"{len(peer)} 条取当次同业分位")
+    if ind:
+        noval_i = [c["risk_id"] for c in ind if c.get("threshold_value") is None]
+        if noval_i:
+            fail("行业基准阈值缺数值", "、".join(noval_i[:6]))
+        else:
+            ok("行业基准阈值都带数值与样本量", f"{len(ind)} 条取离线池分位")
 
     # ---- 证据链（只有触发卡需要；未触发的卡 D 走 rules_evaluated，不读证据链） ----
     # 规范没规定步骤词表，但 D 的 from_b 明确读「数据 / 判断 / 出处」三类，

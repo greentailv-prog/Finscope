@@ -31,7 +31,7 @@ python scripts/detect_risks.py \
 
 ### 1. `ratios`（✅ 必需）
 
-五类指标，结构见 `../financial-diagnosis/OUTPUT_SCHEMA.md`。
+六类指标（含行业专属 `banking`），结构见 `../financial-diagnosis/OUTPUT_SCHEMA.md`。
 每个指标条目需要：`value` / `prev` / `delta` / `unit` / `formula` / `status`。
 
 > **为什么需要 `unit`**：引擎靠 `unit` 判断这个指标是比率（`ratio`）还是天数（`days`）还是金额（`CNY`），

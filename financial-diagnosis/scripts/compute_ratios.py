@@ -246,6 +246,8 @@ def _decorate_ratios(ratios: dict, evidence: dict, t: str, t1: str) -> dict:
             # 规范 6.2 的指标 status 只有 ok / not_evaluable / not_meaningful。
             # 引擎内部把「行业口径不成立、主动跳过」写成 not_applicable，这里
             # 转成 not_meaningful 再交出去，原值留在 status_raw 里备查。
+            # 注意与 not_evaluable 的分工：缺数据 / 分母为 0 在 put() 里就判
+            # not_evaluable，不会走到这里；这里只处理「口径不适用」。
             # 风险卡是另一套四态（含 not_applicable），不在这里改。
             if rec.get("status") == "not_applicable":
                 rec["status_raw"] = "not_applicable"
@@ -543,7 +545,11 @@ class RatioBook:
         if higher_is_better is not None:
             entry["higher_is_better"] = higher_is_better
         if value is None:
-            entry["status"] = "not_meaningful"
+            # 规范 §6.2：算不出来分两种，不能混成一种状态。
+            # 缺科目 / 分母为 0 / 上期缺 → not_evaluable（数据不够，补数据就能算）；
+            # 口径本身不适用（如银行算流动比率）→ not_meaningful，由调用方显式声明，
+            # 见 BANKING_NA_METRICS 与文件末尾的 not_applicable → not_meaningful 映射。
+            entry["status"] = "not_evaluable"
             missing = [k for k, x in (inputs or {}).items() if x is None]
             self.notes.append({
                 "metric": f"{cat}.{key}",

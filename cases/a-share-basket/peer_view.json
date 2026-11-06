@@ -1,6 +1,6 @@
 {
   "schema": "finradar.peer_view/1.0",
-  "generated_at": "2026-11-05T01:43:59+08:00",
+  "generated_at": "2026-11-06T00:08:32+08:00",
   "target": {
     "code": "600519",
     "name": "贵州茅台酒"
@@ -74,7 +74,7 @@
           "code": "000651",
           "name": "珠海格力电器",
           "value": null,
-          "missing_reason": "not_meaningful"
+          "missing_reason": "not_evaluable"
         },
         {
           "code": "000858",
@@ -507,7 +507,7 @@
           "code": "000651",
           "name": "珠海格力电器",
           "value": null,
-          "missing_reason": "not_meaningful"
+          "missing_reason": "not_evaluable"
         },
         {
           "code": "000858",
@@ -580,7 +580,7 @@
           "code": "000651",
           "name": "珠海格力电器",
           "value": null,
-          "missing_reason": "not_meaningful"
+          "missing_reason": "not_evaluable"
         },
         {
           "code": "000858",
@@ -651,7 +651,7 @@
     {
       "code": "000651",
       "name": "珠海格力电器",
-      "missing_reason": "not_meaningful"
+      "missing_reason": "not_evaluable"
     },
     {
       "code": "000858",
@@ -753,9 +753,9 @@
     }
   ],
   "notes": [
-    "ROE（归母，加权）：缺 珠海格力电器（not_meaningful）",
-    "应收账款周转天数：缺 珠海格力电器（not_meaningful）",
-    "存货周转天数：缺 珠海格力电器（not_meaningful）",
-    "杜邦三因子：珠海格力电器 缺（not_meaningful）"
+    "ROE（归母，加权）：缺 珠海格力电器（not_evaluable）",
+    "应收账款周转天数：缺 珠海格力电器（not_evaluable）",
+    "存货周转天数：缺 珠海格力电器（not_evaluable）",
+    "杜邦三因子：珠海格力电器 缺（not_evaluable）"
   ]
 }

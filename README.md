@@ -8,10 +8,11 @@
 
 | 目录 | 作用 | 一键运行 |
 |---|---|---|
-| `financial-diagnosis/` | 指标计算引擎（88 个指标，纯 Python 标准库实算） | `bash run_demo.sh` |
+| `financial-diagnosis/` | 指标计算引擎（65 个指标，纯 Python 标准库实算） | `bash run_demo.sh` |
 | `risk-radar/` | 风险诊断引擎（53 条规则，含 13 条银行业专属） | `bash run_demo.sh` |
 | `report-fetcher/` | 从巨潮资讯网公开接口抓取年报 PDF | `python3 report-fetcher/scripts/fetch_report.py` |
 | `cases/icbc-601398/` | 真实案例：工商银行 2023–2025 三期年报 | `cd cases/icbc-601398 && bash run_case.sh` |
+| 同业对比看板 | 主看板内置「同业对比」板块（逐指标点图 / 差距条形图 / 杜邦并排，数据来自 A 股篮子 11 家） | `python3 scripts_build_dashboard.py`（自动读 `cases/a-share-basket/peer_view.json`，缺文件自动隐藏该板块） |
 | `references/` | 口径与阈值的会计准则 / 监管依据（可复核） | — |
 
 ## 核心约定（不可违背）
@@ -26,8 +27,13 @@
 
 ## 对接 D 的统一数据对象
 
-本模块输出 `ratios`（五类指标）与 `risks`（风险卡片），字段名对齐 D 定义的 `Schema.json`，
-供 D 直接填入统一数据对象。金额统一折算「百万元」、比率用百分数数值保留一位小数。
+本模块输出 `ratios` 与 `risks`（风险卡片），字段名对齐 D 定义的 `Schema.json`，供 D 直接填入统一数据对象。
+
+- **`ratios` 分六类**：`growth`、`profitability`、`solvency`、`efficiency`、`cashflow_quality`，以及行业专属的 `banking`（仅银行业公司有该键）。
+- **金额单位一律为元**（输入侧的年报原始单位在计算时已归一到元，`meta.amount_unit="元"`）。
+- **比率一律为小数**：`0.2309` 即 23.09%，不要写成 `23.1` 这种以 100 为基数的数值。
+- **每个指标三种状态**：`ok`（算出）／`not_evaluable`（缺科目、分母为 0、缺上期）／`not_meaningful`（口径本身不适用，如银行算流动比率）。
+- **每个指标带出处**：`name`、`role`（core / diagnostic）、`source_fields`、`source_pages`。
 
 ## 快速开始
 
@@ -43,12 +49,21 @@ python3 scripts_check_coverage.py --all
 
 # 4) 三表勾稽回归测试
 python3 scripts_test_checks.py
+
+# 5) 工作台链路自检：按 D 的六步顺序跑 b_input（含 peer_financials）→ 指标 → 同业对比 → 风险卡
+python3 scripts_link_check.py --b-input <b_input.json>
 ```
+
+`b_input.json` 由 D 写，顶层比抽取结果多一个 `peer_financials` 数组。结构、调用顺序与
+`peer_*` / `industry_*` 两条阈值通道的区分，见 `B_README.md` 的「工作台接入」一节。
 
 详细设计见各子目录的 `SKILL.md` / `RULES.md`，以及根目录 `B_README.md`。
 
 ## 已知限制（诚实标注）
 
-- 行业阈值**未做统计校准**（需 C 提供可比公司分位数），当前仅 banking / manufacturing 两个剖面。
-- WACC 缺失 → 部分折现类规则 `not_evaluable`（未随手填数）。
+- 行业阈值**只做了部分校准**：银行业 3 项（ROE、净息差、成本收入比，样本 20 家 / 18 家，`peer_samples/banking.json`）；
+  板块池按需建（已有 `boards/BK1277.json` 白酒Ⅱ，20 家 8 项），其余行业无池时回退固定阈值并在
+  `threshold_source` 标注 `fixed_fallback`，不假装是同业校准。
+- 同业对比的应收周转天数变动（E02）需三期应收，A 侧目前只给两期，该规则本轮走固定阈值。
+- WACC 由 `compute_wacc.py` 现场算敏感性区间；β 回归 R²<0.05 时拒采信（银行回退同业 β 中位数，非银行要求显式传入）。
 - 仅覆盖 A 股；银行 LCR / NSFR 等流动性指标未纳入。

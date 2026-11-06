@@ -343,7 +343,18 @@ def _peer_threshold_judge(rid: str, ctx: dict, comparison: dict | None):
     spec = ((comparison.get("thresholds") or {}).get(spec_cfg["metric"]) or {})
     n = int(spec.get("sample_n") or 0)
     thr = spec.get("value")
-    if thr is None or n < PEER_MIN_SAMPLE:
+    if thr is None:
+        # 阈值算不出来和「样本太少」是两回事，别用同一句话糊过去。
+        if comparison.get("status") == "not_available":
+            note = "本次未提供同业样本（status=not_available），用固定阈值"
+        elif n == 0:
+            note = ("同业阈值不可算：该指标在同业内均缺上期数据"
+                    "（应收周转天数变动需三期应收），用固定阈值")
+        else:
+            note = "同业阈值缺数值（样本 %d 家），用固定阈值" % n
+        return None, {"threshold_value": None, "threshold_source": "fixed",
+                      "peer_sample_n": n, "peer_note": note}
+    if n < PEER_MIN_SAMPLE:
         return None, {"threshold_value": thr, "threshold_source": "fixed",
                       "peer_sample_n": n,
                       "peer_note": "同业样本仅 %d 家（<%d），回退固定阈值" % (n, PEER_MIN_SAMPLE)}
@@ -412,6 +423,11 @@ def _benchmark_judge(rule: dict, ctx: dict, bmk_values: dict | None):
         return fallback("同业阈值可判，但本指标当期不可算（缺 %s），回退规则默认阈值" % missing)
 
     meta = {"threshold_value": round(float(qv), 6),
+            # 两条通道分开标注（与 D 对齐的口径）：
+            #   本函数吃的是离线行业池（industry_profiles / peer_samples，年报季后刷新），
+            #   不是当次请求的同业 —— 写 industry_*；
+            #   _peer_threshold_judge 吃当次 --comparison 现场算的分位 —— 写 peer_*。
+            # 混标会让人以为行业基准是这次请求算出来的，D 页面也要分开展示。
             "threshold_source": "industry_" + quantile,
             "peer_sample_n": int(n),
             "benchmark_status": status,
@@ -476,7 +492,9 @@ def _wacc_judge(rule: dict, ctx: dict, wacc: dict | None):
         return eff < x if side == "lt" else eff > x
 
     f_lo, f_hi = fired_at(low), fired_at(high)
-    src = "wacc_sensitivity" if kind == "wacc" else "cost_of_equity_sensitivity"
+    # 折现率敏感性统一叫 wacc_sensitivity：银行用 Ke 替代 WACC，差异写在
+    # threshold_note 里（口径说明属内容，不属枚举），不给 D 留两套取值。
+    src = "wacc_sensitivity"
     beta_src = ((wacc.get("components") or {}).get("beta") or {}).get("source")
 
     def meta(extra_note=None):
@@ -490,15 +508,17 @@ def _wacc_judge(rule: dict, ctx: dict, wacc: dict | None):
             m["benchmark_status"] = "wacc_computed"
         return m
 
+    cap_label = "股权成本 Ke（CAPM，银行不用经典 WACC）" if kind == "equity_cost" else "WACC"
+
     if f_lo and f_hi:
-        note = "WACC 敏感性判定：回报 %.2f%% 越过假设区间两端（%.2f%%–%.2f%%），结论明确" % (
-            eff * 100, low * 100, high * 100)
+        note = "%s 敏感性判定：回报 %.2f%% 越过假设区间两端（%.2f%%–%.2f%%），结论明确" % (
+            cap_label, eff * 100, low * 100, high * 100)
         if beta_src:
             note += "；β 来源：%s" % beta_src
         return bool(f_lo), meta(note)
     if not f_lo and not f_hi:
-        note = "WACC 敏感性判定：回报 %.2f%% 未触及假设区间两端（%.2f%%–%.2f%%），结论明确" % (
-            eff * 100, low * 100, high * 100)
+        note = "%s 敏感性判定：回报 %.2f%% 未触及假设区间两端（%.2f%%–%.2f%%），结论明确" % (
+            cap_label, eff * 100, low * 100, high * 100)
         if beta_src:
             note += "；β 来源：%s" % beta_src
         return False, meta(note)
@@ -510,12 +530,13 @@ def _wacc_judge(rule: dict, ctx: dict, wacc: dict | None):
 
 
 _THRESHOLD_BASIS_LABELS = {
-    "peer_p25": "P25", "peer_p75": "P75",
-    "industry_p10": "行业 P10", "industry_p25": "行业 P25",
-    "industry_median": "行业中位数", "industry_p75": "行业 P75",
-    "industry_p90": "行业 P90",
-    "wacc_sensitivity": "WACC 敏感性中值",
-    "cost_of_equity_sensitivity": "股权成本 Ke 中值",
+    # 当次同业分位：--comparison 由 D 传的 peer_financials 现场算出
+    "peer_p25": "同业 P25", "peer_p75": "同业 P75", "peer_median": "同业中位数",
+    # 离线行业基准：年报季后刷新的样本池，与当次请求无关
+    "industry_p10": "行业基准 P10", "industry_p25": "行业基准 P25",
+    "industry_median": "行业基准中位数", "industry_p75": "行业基准 P75",
+    "industry_p90": "行业基准 P90",
+    "wacc_sensitivity": "折现率敏感性中值",
 }
 
 
@@ -534,9 +555,9 @@ def _peer_display(disp, rid: str, thr_meta: dict | None):
         shown = "%.1f 天" % v
     else:
         shown = "%.2f%%" % (v * 100)
-    basis = _THRESHOLD_BASIS_LABELS.get(src) or src.replace("peer_p", "P").upper()
-    if src in ("wacc_sensitivity", "cost_of_equity_sensitivity"):
-        # WACC 类：展示整个假设区间——单看中值会误以为是精确数
+    basis = _THRESHOLD_BASIS_LABELS.get(src) or src
+    if src == "wacc_sensitivity":
+        # 折现率类：展示整个假设区间——单看中值会误以为是精确数
         lo = thr_meta.get("wacc_low")
         hi = thr_meta.get("wacc_high")
         if isinstance(lo, (int, float)) and isinstance(hi, (int, float)):
@@ -545,7 +566,11 @@ def _peer_display(disp, rid: str, thr_meta: dict | None):
         return "本期阈值 = %s %s；规则原表述：%s" % (basis, shown, disp)
     sample = thr_meta.get("peer_sample_n") or 0
     # 实际阈值放前面：否则页面上会先看到写死的"5pp"，再看到 8.28%，读者不知道哪个生效。
-    return "本期阈值 = 同业 %s %s（样本 %d 家）；规则原表述：%s" % (basis, shown, sample, disp)
+    if src.startswith("industry_"):
+        # 离线池的样本是年报季后刷新的历史样本，不是本次请求的同业，措辞要分开，
+        # 否则读者会以为是这次现场算出来的分位
+        return "本期阈值 = %s %s（离线样本 %d 家）；原表述：%s" % (basis, shown, sample, disp)
+    return "本期阈值 = %s %s（样本 %d 家）；原表述：%s" % (basis, shown, sample, disp)
 
 
 def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
@@ -675,7 +700,8 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
                 "trigger": rule.get("trigger"),
                 "trigger_display": rule.get("trigger_display"),
                 "threshold": rule.get("threshold"),
-                "threshold_value": rule.get("threshold"),
+                "threshold_value": (rule.get("threshold")
+                                    if isinstance(rule.get("threshold"), (int, float)) else None),
                 "threshold_source": "fixed",
                 "threshold_basis": rule.get("threshold_basis"),
                 "peer_sample_n": 0,
@@ -750,6 +776,12 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
             cat_stat[cat]["triggered"] += 1
             cat_stat[cat][severity] += 1
 
+        # threshold_value 只放数值。P06 这类规则的 threshold 在规则文件里写的是
+        # 变量名（"industry_gross_margin_benchmark"），原样抄进数值字段会让
+        # 页面把变量名当阈值显示，所以非数值一律置 null，表达式原文留在 trigger 里。
+        _tv = (thr_meta or {}).get("threshold_value", rule.get("threshold"))
+        if not isinstance(_tv, (int, float)):
+            _tv = None
         item = {
             "risk_id": rid,
             "risk_name": rule.get("risk_name"),
@@ -764,7 +796,7 @@ def detect(diag: dict, rules_doc: dict, meta_extra: dict | None = None,
             "trigger": active_rule.get("trigger"),
             "trigger_display": _peer_display(rule.get("trigger_display"), rid, thr_meta),
             "threshold": rule.get("threshold"),
-            "threshold_value": (thr_meta or {}).get("threshold_value", rule.get("threshold")),
+            "threshold_value": _tv,
             "threshold_source": (thr_meta or {}).get("threshold_source", "fixed"),
             "peer_sample_n": (thr_meta or {}).get("peer_sample_n", 0),
             # threshold_basis 是规则默认阈值的性质（regulatory / self_delta / convention /

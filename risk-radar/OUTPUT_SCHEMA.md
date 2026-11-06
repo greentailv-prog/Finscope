@@ -95,12 +95,45 @@ overall_risk_score = round(100 × raw / (raw + 40), 1)
   "severity_tag": "重大",           // 重大 | 关注 | 提示
   "score": 85,
   "trigger": "(accounts_receivable_growth - revenue_growth) > 0.05",
-  "trigger_display": "应收账款增速 - 收入增速 > 5pp；超过 15pp 升级为重大",
-  "threshold": 0.05,
+  "trigger_display": "本期阈值 = 同业 P75 8.28%（样本 9 家）；原表述：应收增速 - 收入增速 > 5pp",
+  "threshold": 0.05,                      // 规则文件里写死的固定阈值
+  "threshold_value": 0.082773,            // 本次判定实际用的阈值（数值或 null）
+  "threshold_source": "peer_p75",         // 见下表
+  "peer_sample_n": 9,                     // 参与算分位的同业家数
+  "threshold_basis": "peer_percentile",   // 阈值性质：regulatory / self_delta / convention / peer_percentile
+  "threshold_note": "……",                 // 回退或口径说明，仅在需要时出现
   "evidence_required": ["revenue", "accounts_receivable"],
   "confidence": 0.9
 }
 ```
+
+### 阈值三件套：`threshold` / `threshold_basis` / `threshold_source`
+
+三者不要混：
+
+| 字段 | 含义 | 谁写 |
+|---|---|---|
+| `threshold` | 规则文件里写死的固定阈值，原样保留 | `risk_rules.json` |
+| `threshold_basis` | 阈值的**性质**：法规硬线 / 自比 / 惯例 / 同业分位 | 规则文件或行业剖面 |
+| `threshold_source` | 本次判定**实际用了哪个来源** | 引擎运行时填 |
+
+`threshold_source` 的取值分**两条通道**，都能被 D 接收，页面分开显示：
+
+| 取值 | 通道 | 含义 | `peer_sample_n` |
+|---|---|---|---|
+| `fixed` | — | 用规则文件里的固定阈值 | 0 |
+| `peer_p25` / `peer_p75` | 当次同业 | 用本次请求传入的 `peer_financials` 现场算的分位（规范 §6.3 的 5 条规则） | ≥3 |
+| `peer_median` | 当次同业 | 同上，取中位数（B06 净息差这类按中位数判的规则） | ≥3 |
+| `industry_p10` / `industry_p25` / `industry_median` / `industry_p75` / `industry_p90` | 离线行业基准 | 用年报季后刷新的样本池（`industry_profiles` / `peer_samples` / 板块池），与本次请求无关 | ≥5 |
+| `fixed_fallback` | — | 声明了同业判定但基准缺失/样本不足，如实回退并写明原因 | 保持实际样本数 |
+| `wacc_sensitivity` | — | 折现率敏感性区间两端重判（P03/B12，银行用 Ke） | 0 |
+
+**为什么分两套前缀**：`peer_*` 是这次请求现算的，`industry_*` 是本地池里的历史基准。
+两者混标，页面上就分不清「这家公司的同业」和「行业库里的样本」，出问题时也无从追溯。
+同一张卡只有一种来源，优先用当次同业；没有当次同业才落到离线池；两者都没有才 `fixed_fallback`。
+
+`threshold_value` 只放数值。规则里写成变量名的（如 P06 的 `industry_gross_margin_benchmark`）输出 `null`，
+变量表达式留在 `trigger` 里，不把变量名抄进数值字段。
 
 ### `status: "triggered"` 额外字段
 

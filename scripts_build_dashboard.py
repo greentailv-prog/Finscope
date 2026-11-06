@@ -28,6 +28,8 @@ ap.add_argument("--rules", default=os.path.join("risk-radar", "risk_rules.json")
 ap.add_argument("-o", "--out", default="B_demo_dashboard.html")
 ap.add_argument("--note", choices=["synthetic", "real"], default="synthetic",
                 help="页脚数据来源说明口径")
+ap.add_argument("--peer", default=os.path.join("cases", "a-share-basket", "peer_view.json"),
+                help="同业对比视图数据（build_peer_view.py 产出）。文件不存在时该板块自动隐藏。")
 args = ap.parse_args()
 
 
@@ -50,6 +52,101 @@ labels = _load_json(os.path.join("financial-diagnosis", "data", "field_labels.js
 # 指标中文名（报表 / 年报披露口径）
 metric_labels = _load_json(os.path.join("financial-diagnosis", "data", "metric_labels.json"),
                            {"metrics": {}})
+
+# ---- 同业对比视图（可选板块） ----
+# 复用 scripts_build_peer_view.py 的三个 SVG 生成函数，不重新实现；
+# 样式用 #s6 作用域并入本页，避免与本页 .bar/.legend 等类名冲突。
+import sys
+sys.path.insert(0, ROOT)
+try:
+    import scripts_build_peer_view as _pv
+except ImportError:
+    _pv = None
+peer_doc = None
+if _pv is not None and os.path.exists(_p(args.peer)):
+    try:
+        peer_doc = json.load(io.open(_p(args.peer), encoding="utf-8"))
+    except (ValueError, OSError):
+        peer_doc = None  # 同业视图是增强板块，数据坏了也不能拖垮主看板
+
+PEER_CSS = """
+/* ---------- peer view（#s6 作用域，避免与本页 .bar/.legend 冲突） ---------- */
+#s6 .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin-bottom:12px;overflow-x:auto}
+#s6 .pblock{padding:6px 0;border-bottom:1px dashed var(--line2)}
+#s6 .pblock:last-child{border-bottom:none}
+#s6 .rowhead b{font-size:13px}
+#s6 .rowhead span{color:var(--tx3);font-size:11px;margin-left:10px}
+#s6 svg.strip{display:block}
+#s6 .axis{stroke:#c9cfd8;stroke-width:1}
+#s6 .qline{stroke:var(--blue);stroke-width:1;stroke-dasharray:4 3;opacity:.75}
+#s6 .mline{stroke:var(--blue);stroke-width:1.6}
+#s6 .qlab{font-size:10px;fill:var(--blue)}
+#s6 .cdot{fill:#9aa6b5;opacity:.85}
+#s6 .tdot{fill:var(--red);stroke:#fff;stroke-width:1.5}
+#s6 .plab{font-size:10px;fill:var(--tx3)}
+#s6 .tlab{font-size:11px;fill:var(--red);font-weight:600}
+#s6 .cnote{color:var(--tx3);font-size:11px;margin:2px 0 0}
+#s6 .legend{color:var(--tx2);font-size:11px;margin:6px 0}
+#s6 .c-r{color:var(--red)}#s6 .c-g{color:var(--grn)}
+#s6 .rbar{fill:var(--red);opacity:.85}#s6 .gbar{fill:var(--grn);opacity:.85}
+#s6 .rlab{fill:var(--red);font-size:11px}#s6 .glab{fill:var(--grn);font-size:11px}
+#s6 .mlab{font-size:11.5px;fill:var(--tx2)}
+#s6 .chd{font-size:11.5px;fill:var(--tx2);font-weight:600}
+#s6 .bar{fill:#8fa8c8;opacity:.85}#s6 .tbar{fill:var(--org)}
+#s6 .trow{fill:var(--org-l)}
+#s6 .vlab{font-size:10.5px;fill:var(--tx2)}
+#s6 .tlab2{font-size:12px;fill:var(--tx);font-weight:600}
+#s6 .pbanner{background:var(--org-l);border:1px solid #f2ddb8;border-left:4px solid var(--org);
+  border-radius:0 8px 8px 0;padding:10px 14px;color:#7a4c00;font-size:12px;margin-bottom:6px}
+#s6 .pnotes{background:var(--red-l);border:1px solid #f2c6c2;border-left:4px solid var(--red);
+  border-radius:0 8px 8px 0;padding:10px 14px;font-size:12px;color:#7a2e23;margin:6px 0 14px}
+#s6 .pnotes ul{margin:4px 0 0;padding-left:18px}
+#s6 .psub{color:var(--tx2);font-size:12px;font-weight:600;margin:14px 0 6px}
+"""
+
+def _peer_section() -> tuple:
+    """渲染同业对比板块，返回 (nav按钮, section HTML)。数据缺失返回 ("", "")。"""
+    if not peer_doc or _pv is None:
+        return "", ""
+    tgt = peer_doc["target"]
+    board = peer_doc.get("board") or {}
+    strips = []
+    for ind in peer_doc["indicators"]:
+        strips.append('<div class="pblock">%s%s</div>'
+                      % (_pv.dot_strip(ind, tgt["code"]),
+                         ('<p class="cnote">口径：%s</p>' % _pv.esc(ind["convert_note"]))
+                         if ind.get("convert_note") else ""))
+    banner = ""
+    if board:
+        banner = ('<div class="pbanner"><b>数据独立于主看板：</b>本板块来自 A 股真实篮子 11 家'
+                  '（目标公司 <b>%s</b>），分位线来自离线板块池 <b>%s %s</b>（%s）。'
+                  '主看板其余板块为合成样本，两批数据互不混用。'
+                  '池线只对同板块公司严格可比，篮子里其他行业的公司仅作参照；'
+                  '分位线是实测分布，不是合格线。</div>'
+                  % (_pv.esc(tgt["name"]), _pv.esc(board.get("code") or ""),
+                     _pv.esc(board.get("name") or ""), _pv.esc(board.get("as_of") or "")))
+    notes = ""
+    if peer_doc.get("notes"):
+        notes = ('<div class="pnotes"><b>缺值说明（不猜数）：</b><ul>%s</ul></div>'
+                 % "".join("<li>%s</li>" % _pv.esc(n) for n in peer_doc["notes"]))
+    body = (
+        '<div class="card">'
+        '<h2><span class="dot" style="background:#0ba5a5"></span>同业对比 · 三视图</h2>'
+        '<div class="desc">逐指标点位 → 相对行业中位数的偏离 → 杜邦三因子并排。'
+        '所有 SVG 静态生成、零运行时 JS，数据来自 <code>scripts_build_peer_view.py</code>。</div>'
+        '%s%s'
+        '<div class="psub">一、逐指标点位（篮子全员 + 板块池分位线）</div>'
+        '<div class="panel">%s</div>'
+        '<div class="psub">二、目标公司相对行业中位数的偏离（红 = 不利、绿 = 有利）</div>'
+        '<div class="panel">%s</div>'
+        '<div class="psub">三、杜邦三因子并排（跨公司，按 ROE 排序）</div>'
+        '<div class="panel">%s</div>'
+        '</div>'
+    ) % (banner, notes, "".join(strips),
+         _pv.gap_chart(peer_doc["indicators"], tgt["name"]),
+         _pv.dupont_chart(peer_doc["dupont"], peer_doc["dupont_factors"], tgt["code"]))
+    return ('<button data-s="s6">同业对比</button>', '<section id="s6">%s</section>' % body)
 
 FOOT_NOTE = (
     "本看板数据来自 B 两个引擎的<b>脚本实算结果</b>，非人工填写。"
@@ -278,6 +375,7 @@ ul.acts li{font-size:12.5px;color:var(--tx2);margin-bottom:5px;line-height:1.65}
 .empty{padding:26px;text-align:center;color:var(--tx3);font-size:13px;background:var(--gry-l);
   border-radius:10px;border:1px dashed var(--line)}
 .foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--tx3);line-height:1.8}
+__PEER_CSS__
 </style>
 </head>
 <body>
@@ -302,7 +400,7 @@ ul.acts li{font-size:12.5px;color:var(--tx2);margin-bottom:5px;line-height:1.65}
   <div class="nav">
     <button class="on" data-s="s1">指标总览</button>
     <button data-s="s2">风险雷达</button>
-    <button data-s="s3">业绩归因</button>
+    <button data-s="s3">业绩归因</button>__NAV_PEER__
     <button data-s="s5">三表勾稽</button>
     <button data-s="s4">待核验队列</button>
   </div>
@@ -371,7 +469,7 @@ ul.acts li{font-size:12.5px;color:var(--tx2);margin-bottom:5px;line-height:1.65}
       </div>
     </div>
   </section>
-
+__SECTION_PEER__
   <!-- ============ 4. 待核验队列 ============ -->
   <section id="s4">
     <div class="card">
@@ -968,8 +1066,14 @@ ul.acts li{font-size:12.5px;color:var(--tx2);margin-bottom:5px;line-height:1.65}
 """
 
 out = _p(args.out)
+peer_nav, peer_section = _peer_section()
+html_out = (HTML.replace("__DATA__", payload)
+                .replace("__NAV_PEER__", peer_nav)
+                .replace("__SECTION_PEER__", peer_section)
+                .replace("__PEER_CSS__", PEER_CSS))
 with io.open(out, "w", encoding="utf-8") as f:
-    f.write(HTML.replace("__DATA__", payload))
+    f.write(html_out)
 
 print("已生成:", out)
 print("大小: %.1f KB" % (os.path.getsize(out) / 1024))
+print("同业对比板块: %s" % ("已嵌入（%s，%d 家同业）" % (peer_doc["target"]["name"], len(peer_doc["companies"])) if peer_doc else "未嵌入（缺 peer_view.json）"))

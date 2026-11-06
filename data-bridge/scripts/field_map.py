@@ -100,6 +100,7 @@ A_TO_B = {
     "current_liabilities": "total_current_liabilities",
     "net_income_excl_nonrecurring": "net_income_deducted",
     "rnd_expense": "rd_expense",
+    "rd_capitalized": "rd_capitalized",     # 规范 §4 P1：开发支出本期资本化金额
     "total_equity": "total_equity",
 }
 
@@ -109,6 +110,7 @@ B_FIELDS = [
     "income_tax_expense", "net_income", "net_income_parent", "net_income_deducted",
     "selling_expense", "admin_expense", "rd_expense", "finance_expense",
     "interest_expense", "depreciation_amortization", "impairment_loss",
+    "rd_capitalized",
     "cash_and_equivalents", "restricted_cash", "accounts_receivable",
     "notes_receivable", "contract_assets", "inventory", "total_current_assets",
     "fixed_assets", "goodwill", "total_assets", "accounts_payable",
