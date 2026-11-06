@@ -1,0 +1,2 @@
+# shell 脚本必须 LF：CRLF 会让 set -euo pipefail 读成 pipefail\r 报错
+*.sh text eol=lf
